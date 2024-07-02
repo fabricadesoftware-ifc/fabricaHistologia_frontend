@@ -14,7 +14,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Fake Store',
+        name: 'Fabrica Histologia',
         short_name: 'FabricaHistologia',
         description: 'Fabrica Histologia, atlas de medvet.',
         theme_color: '#ffffff',
