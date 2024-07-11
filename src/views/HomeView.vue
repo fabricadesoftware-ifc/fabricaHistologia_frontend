@@ -26,4 +26,5 @@ onMounted(() => {
 </script>
 
 <template>
+  ola vc entrou
 </template>
