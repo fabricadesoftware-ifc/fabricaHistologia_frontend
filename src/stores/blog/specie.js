@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, computed, reactive } from "vue";
+import { computed, reactive } from "vue";
 import { SpecieService } from "@/services";
 
 /**
@@ -29,7 +29,8 @@ export const useSpecieStore = defineStore("specie",
             species: [],
             selectedSpecie: null,
             loading: false,
-            error: null
+            error: null,
+            connection: false,
         });
         const isLoading = computed(() => state.loading);
         const speciesCount = computed(() => state.species.length);
@@ -47,6 +48,7 @@ export const useSpecieStore = defineStore("specie",
                 state.error = error;
             } finally {
                 state.loading = false;
+                state.connection = true; // just to see if the connection is established
             }
         };
 
@@ -66,7 +68,7 @@ export const useSpecieStore = defineStore("specie",
                 state.loading = false;
             }
         };
-
+        
         /**
          * Updates an existing specie.
          * @async
@@ -90,20 +92,20 @@ export const useSpecieStore = defineStore("specie",
          * @async
          * @function deleteSpecie
          * @param {number} id - The ID of the specie to delete.
-         */
-        const deleteSpecie = async (id) => {
-            state.loading = true;
-            try {
-                const index = state.species.findIndex((s) => s.id === id);
-                state.species.splice(index, 1);
-                await SpecieService.deleteSpecie(id);
+        */
+       const deleteSpecie = async (id) => {
+           state.loading = true;
+           try {
+               const index = state.species.findIndex((s) => s.id === id);
+               state.species.splice(index, 1);
+               await SpecieService.deleteSpecie(id);
             } catch (error) {
                 state.error = error;
             } finally {
                 state.loading = false;
             }
         };
-
+        
         return {
             state,
             isLoading,
@@ -113,6 +115,6 @@ export const useSpecieStore = defineStore("specie",
             updateSpecie,
             deleteSpecie
         };
-
+        
     }
 )
