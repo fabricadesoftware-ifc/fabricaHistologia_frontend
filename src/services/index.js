@@ -3,4 +3,5 @@ import SlideService from './blog/slide';
 
 export {
     SpecieService,
+    SlideService
 };
