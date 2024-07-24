@@ -9,7 +9,6 @@ class SpecieService {
      * @returns {Promise<Array>} A promise that resolves to an array of species.
      * @throws {Error} If an error occurs while retrieving the species.
      */
-
     async getSpecies() {
         try {
             const { data } = await api.get(`/species`);
