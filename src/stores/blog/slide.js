@@ -23,7 +23,6 @@ import { SlideService } from "@/services";
  * @function useSlideStore
  * @returns {SlideStore} the SlideStore instance
  */
-
 export const useSlideStore = defineStore("slide",
     () => {
         const state = reactive({
@@ -41,7 +40,6 @@ export const useSlideStore = defineStore("slide",
          * @async
          * @function getSlides
          */
-
         const getSlides = async () => {
             state.loading = true;
             try {
@@ -60,7 +58,6 @@ export const useSlideStore = defineStore("slide",
          * @function createSlide
          * @param {Object} newSlide - the new slide object to create 
          */
-
         const createSlide = async (newSlide) => {
             state.loading = true;
             try {
@@ -78,7 +75,6 @@ export const useSlideStore = defineStore("slide",
          * @function updateSlideSlide
          * @param {Object} slide - the updated slide object.
          */
-
         const updateSlide = async (slide) => {
             state.loading = true;
             try {
@@ -97,7 +93,6 @@ export const useSlideStore = defineStore("slide",
          * @function createSlide
          * @param {number} id - The id of the slide will be deleted
          */
-
         const deleteSlide = async (id) => {
 
             try {
