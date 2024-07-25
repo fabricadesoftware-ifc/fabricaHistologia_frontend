@@ -23,6 +23,7 @@ import { SpecieService } from "@/services";
  * @function useSpecieStore
  * @returns {SpecieStore} The SpecieStore instance.
  */
+
 export const useSpecieStore = defineStore("specie",
     () => {
         const state = reactive({
@@ -61,7 +62,7 @@ export const useSpecieStore = defineStore("specie",
         const createSpecie = async (newSpecie) => {
             state.loading = true;
             try {
-                state.species.push(await SpecieService.createSpecie(newSpecie));
+                state.species.push(await SpecieService.createSpecies(newSpecie));
             } catch (error) {
                 state.error = error;
             } finally {
@@ -79,7 +80,7 @@ export const useSpecieStore = defineStore("specie",
             state.loading = true;
             try {
                 const index = state.species.findIndex((s) => s.id === specie.id);
-                state.species[index] = await SpecieService.updateSpecie(specie);
+                state.species[index] = await SpecieService.updateSpecies(specie);
             } catch (error) {
                 state.error = error;
             } finally {
@@ -98,7 +99,7 @@ export const useSpecieStore = defineStore("specie",
            try {
                const index = state.species.findIndex((s) => s.id === id);
                state.species.splice(index, 1);
-               await SpecieService.deleteSpecie(id);
+               await SpecieService.deleteSpecies(id);
             } catch (error) {
                 state.error = error;
             } finally {
