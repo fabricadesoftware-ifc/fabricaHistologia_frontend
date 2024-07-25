@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { computed, reactive } from "vue";
 import { SystemService } from '@/services/'
 
+
 /**
  * Store for managing system data.
  * @typedef {Object} SpecieStore

@@ -1,5 +1,12 @@
 import api from "@/plugins/api";
+import { useAuthStore } from "@/stores/auth/auth";
+import { PassageUser } from '@passageidentity/passage-elements/passage-user';
 
+const authStore = useAuthStore()
+
+const authToken = localStorage.getItem('psg_auth_token');
+const passageUser = new PassageUser(authToken);
+const user = await passageUser.userInfo(authToken);
 /**
  * Service class for handling systems related operations.
  */
@@ -13,7 +20,6 @@ class SystemService {
     async getSystems () {
         try {
             const {data} = await api.get('/systems')
-
             return data.results
         } catch (error) {
             console.log("error in getSystem", error)
@@ -30,6 +36,7 @@ class SystemService {
 
     async createSystems (newSystem) {
         try {
+            authStore.setToken(authToken)
             const {data} = await api.post('/systems/', newSystem)
             return data.results
         } catch (error) {
