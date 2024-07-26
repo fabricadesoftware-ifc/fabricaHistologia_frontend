@@ -51,6 +51,7 @@ const putsystem = reactive({
 
             <div>
             <label for="delete">DELETE</label>
+            <input type="text" name="delete" placeholder="id" v-model="system.id">
             <button for="delete" @click="systemStore.deleteSystem(system.id)">Delete</button>
             </div>
         

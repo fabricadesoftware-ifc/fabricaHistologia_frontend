@@ -11,7 +11,7 @@ const getUserInfo = async () => {
     const passageUser = new PassageUser(authToken);
     const user = await passageUser.userInfo(authToken);
     if (user) {
-      await authStore.setToken(authToken);
+      await authStore.setToken(authToken);     
     } else {
       authStore.unsetToken();
     }
