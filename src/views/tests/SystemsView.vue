@@ -1,10 +1,11 @@
 <script setup>
 import { onMounted } from 'vue';
-import { useSystemStore } from '@/stores/blog/system';
+import { useSystemStore } from '@/stores';
 
 const systemStore = useSystemStore();
+
 onMounted(()=>{
-systemStore.getSystem()
+    systemStore.getSystem()
 })
 </script>
 <template>

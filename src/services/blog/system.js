@@ -9,15 +9,13 @@ class SystemService {
      * @returns {Promise<Array>} A promise that resolves to an array of systems.
      * @throws {Error} If an error occurs while retrieving the systems.
      */
-
     async getSystems () {
         try {
-            const {data} = await api.get('/systems')
-
-            return data.results
+            const {data} = await api.get('/systems');
+            return data.results;
         } catch (error) {
-            console.log("error in getSystem", error)
-            throw error
+            console.log("error in getSystem", error);
+            throw error;
         }
     }
 
@@ -27,14 +25,13 @@ class SystemService {
      * @returns {Promise<Object>} A promise that resolves to the created systems object.
      * @throws {Error} If an error occurs while creating the systems.
      */
-
     async createSystems (newSystem) {
         try {
-            const {data} = await api.post('/systems/', newSystem)
-            return data.results
+            const {data} = await api.post('/systems/', newSystem);
+            return data.results;
         } catch (error) {
-            console.log("error in postSystem", error)
-            throw error
+            console.log("error in postSystem", error);
+            throw error;
         }
     }
 
@@ -44,14 +41,13 @@ class SystemService {
      * @returns {Promise<Object>} A promise that resolves to the updated systems object.
      * @throws {Error} If an error occurs while updating the systems.
      */
-
     async updateSystems (system) {
         try {
-            const {data} = await api.put(`/systems/${system.id}/`)
-            return data.results
+            const {data} = await api.put(`/systems/${system.id}/`);
+            return data.results;
         } catch (error) {
-            console.log("error in putSystem", error)
-            throw error
+            console.log("error in putSystem", error);
+            throw error;
         }
     }
 
@@ -61,14 +57,13 @@ class SystemService {
      * @returns {Promise<Object>} A promise that resolves to the deleted system object.
      * @throws {Error} If an error occurs while deleting the system.
      */
-
     async deleteSystems (id) {
         try {
-            const {data} = await api.delete(`/systems/${id}/`)
-            return data.results
+            const {data} = await api.delete(`/systems/${id}/`);
+            return data.results;
         } catch (error) {
-            console.log("error in deleteSystem", error)
-            throw error
+            console.log("error in deleteSystem", error);
+            throw error;
         }
     }
 }

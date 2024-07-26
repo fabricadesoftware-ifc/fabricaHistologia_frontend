@@ -23,8 +23,7 @@ import { SystemService } from '@/services/'
  * @function useSystemStore
  * @returns {SystemStore} The SpecieStore instance.
  */
-
-export const useSystemStore = defineStore('system', ()=>{
+export const useSystemStore = defineStore('system', () => {
 
     const state = reactive({
         systems: [],
@@ -32,96 +31,89 @@ export const useSystemStore = defineStore('system', ()=>{
         conected: false,
         error: null,
         selectedSystem: null,
-    })
+    });
+    const isLoading = computed(() => state.loading);
+    const systemsCount = computed(() => state.systems.length);
 
-    const isLoading = computed(()=> state.loading)
-    const systemsCount = computed(()=> state.systems.length)
-
-     /**
-         * Fetches system data.
-         * @async
-         * @function getSystem
-         */
-
+    /**
+     * Fetches system data.
+     * @async
+     * @function getSystem
+     */
     const getSystem = async () => {
         state.loading = true
         try {
-            state.systems = await SystemService.getSystems()
+            state.systems = await SystemService.getSystems();
         }
         catch (error) {
-            state.error = error
+            state.error = error;
         }
         finally {
-            state.conected = true  // just to see if the connection is established
-            state.loading = false
+            state.conected = true;  // just to see if the connection is established
+            state.loading = false;
         }
-    }
-
-
-        /**
-         * Creates a new system.
-         * @async
-         * @function createSystem
-         * @param {Object} newsystem - The new system object to create.
-         */
-
-    const createSystem = async (newSystem)=> {
-        state.loading = true
-        try {
-            state.systems.push(await SystemService.createSystems(newSystem))
-        }
-        catch (error) {
-            state.error = error
-        }
-        finally {
-            state.conected = true
-            state.loading = false
-        }
-    }
-
-       /**
-         * Updates an existing system.
-         * @async
-         * @function updateSystem
-         * @param {Object} system - The system object to update.
-         */
-
-    const updateSystem = async (system) => {
-        state.loading = true
-        try {
-            const index = state.systems.findIndex((s) => s.id === system.id)
-            state.systems[index] = await SystemService.updateSystems(system) 
-        }
-        catch (error) {
-            state.error = error
-        }
-        finally {
-            state.loading = false
-        }
-    }
+    };
 
     /**
-         * Deletes a system.
-         * @async
-         * @function deleteSystem
-         * @param {number} id - The ID of the system to delete.
-        */
-
-    const deleteSystem = async (id) => {
-        state.loading = true
+     * Creates a new system.
+     * @async
+     * @function createSystem
+     * @param {Object} newsystem - The new system object to create.
+     */
+    const createSystem = async (newSystem) => {
+        state.loading = true;
         try {
-            const index = state.systems.findIndex((s) => s.id === id)
-            state.systems.splice(index, 1)
-            await SystemService.deleteSystems(id)
+            state.systems.push(await SystemService.createSystems(newSystem));
         }
         catch (error) {
-            state.error = error
+            state.error = error;
         }
         finally {
-            state.loading = false
+            state.conected = true;
+            state.loading = false;
+        }
+    };
+
+    /**
+     * Updates an existing system.
+     * @async
+     * @function updateSystem
+     * @param {Object} system - The system object to update.
+     */
+    const updateSystem = async (system) => {
+        state.loading = true;
+        try {
+            const index = state.systems.findIndex((s) => s.id === system.id);
+            state.systems[index] = await SystemService.updateSystems(system);
+        }
+        catch (error) {
+            state.error = error;
+        }
+        finally {
+            state.loading = false;
+        }
+    };
+
+    /**
+     * Deletes a system.
+     * @async
+     * @function deleteSystem
+     * @param {number} id - The ID of the system to delete.
+     */
+    const deleteSystem = async (id) => {
+        state.loading = true;
+        try {
+            const index = state.systems.findIndex((s) => s.id === id);
+            state.systems.splice(index, 1);
+            await SystemService.deleteSystems(id);
+        }
+        catch (error) {
+            state.error = error;
+        }
+        finally {
+            state.loading = false;
         }
     }
-    
 
-    return {state, isLoading, systemsCount, getSystem, createSystem, updateSystem, deleteSystem, systemsCount}
+    return { state, isLoading, systemsCount, getSystem, createSystem, updateSystem, deleteSystem, systemsCount };
 })
