@@ -10,5 +10,5 @@ onMounted(()=>{
 </script>
 <template>
     <p>systems</p>
-    <p> systems: {{ systemStore.state.systems }}</p>
+    <p> systems: {{ systemStore.state }}</p>
 </template>

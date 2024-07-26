@@ -1,5 +1,8 @@
 import api from "@/plugins/api";
+import { useAuthStore } from "@/stores/auth/auth";
+import { PassageUser } from '@passageidentity/passage-elements/passage-user';
 
+const authToken = localStorage.getItem('psg_auth_token'); 
 /**
  * Service class for handling systems related operations.
  */
@@ -27,7 +30,12 @@ class SystemService {
      */
     async createSystems (newSystem) {
         try {
-            const {data} = await api.post('/systems/', newSystem);
+            const {data} = await api.post('/systems/', newSystem, {
+                 headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
             return data.results;
         } catch (error) {
             console.log("error in postSystem", error);
@@ -43,7 +51,12 @@ class SystemService {
      */
     async updateSystems (system) {
         try {
-            const {data} = await api.put(`/systems/${system.id}/`);
+            const {data} = await api.put(`/systems/${system.id}/`, system, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
             return data.results;
         } catch (error) {
             console.log("error in putSystem", error);
@@ -59,7 +72,12 @@ class SystemService {
      */
     async deleteSystems (id) {
         try {
-            const {data} = await api.delete(`/systems/${id}/`);
+            const {data} = await api.delete(`/systems/${id}/`, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
             return data.results;
         } catch (error) {
             console.log("error in deleteSystem", error);
