@@ -8,7 +8,7 @@ Commits should be added by Issues, with the default:
 
 Branches should be added by Issues, always created by __"dev"__, with the default:
 
-`feature/<branch-name>`
+`<feat>-<issue-id>`
 
 ### Run
 ```sh
