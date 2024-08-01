@@ -1,4 +1,5 @@
 <script setup>
+import MainContainer from '@/components/MainContainer.vue';
 
 </script>
 
@@ -6,4 +7,7 @@
     <h1>Biblioteca de Componentes</h1>
     <!-- <p>component name</p> -->
     <!-- <Component -->
+
+     <p>Main Container</p>
+     <MainContainer />
 </template>
