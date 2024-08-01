@@ -79,7 +79,7 @@ export const useSlideStore = defineStore("slide",
             state.loading = true;
             try {
                 const index = state.slides.findIndex((s) => s.id === slide.id);
-                state.slides[index] = await SlideService.updateSlide(slide);
+                state.slides[index] = await SlideService.updateSlides(slide);
             } catch (error) {
                 state.error = error;
             } finally {
@@ -98,7 +98,7 @@ export const useSlideStore = defineStore("slide",
             try {
             const index = state.slides.findIndex((s) => s.id === id.id);
             state.slides.splice(index, 1);
-            await SlideService.deleteSlide(index)
+            await SlideService.deleteSlides(index)
             } catch (error) {
                 state.error = error;
             } finally {

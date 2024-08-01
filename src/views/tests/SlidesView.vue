@@ -1,8 +1,10 @@
 <script setup>
 import { onMounted } from 'vue';
 import { useSlideStore } from '@/stores';
+import { useOrganStore } from '@/stores';
 
 const slideStore = useSlideStore()
+const organStore = useOrganStore()
 
 onMounted(() => {
     slideStore.getSlides();
@@ -13,7 +15,7 @@ onMounted(() => {
     <h1>Slide test</h1>
     <p>Slide: {{ slideStore.state }}</p>
     <h1>Organ</h1>
-    <p></p>
+    <p>{{ organStore.state }}</p>
     <h1>specie</h1>
     <p></p>
     <h1>usuario</h1>

@@ -1,4 +1,5 @@
 import api from "@/plugins/api";
+const token = localStorage.getItem('psg_auth_token')
 
 /**
  * Service class for handling slides related options
@@ -12,7 +13,7 @@ class SlideService {
      */
     async getSlides() {
         try {
-            const { data } = await api.get('/slide');
+            const { data } = await api.get('/slide', {headers: {authorization: `Bearer ${token}`}});
             return data.results;
         } catch (error) {
             console.log("error in get Slide", error);
@@ -28,7 +29,7 @@ class SlideService {
      */
     async postSlides(newSlide) {
         try {
-            const { data } = await api.post('/slide/', newSlide);
+            const { data } = await api.post('/slide/', newSlide, {headers: {authorization: `Bearer ${token}`}});
             return data.results;
         } catch (error) {
             console.log("error in post Slide", error);
@@ -44,7 +45,7 @@ class SlideService {
      */
     async updateSlides(slide) {
         try {
-            const { data } = await api.put(`/slide/${slide}`);
+            const { data } = await api.put(`/slide/${slide}`, {headers: {authorization: `Bearer ${token}`}});
             return data.results;
         } catch (error) {
             console.log("error in update Slide", error);
@@ -60,7 +61,7 @@ class SlideService {
      */
     async deleteSlides(idSlide) {
         try {
-            const { data } = await api.post(`/slide/${idSlide}`);
+            const { data } = await api.post(`/slide/${idSlide}`, {headers: {authorization: `Bearer ${token}`}});
             return data.results;
         } catch (error) {
             console.log("error in delete Slide", error);
