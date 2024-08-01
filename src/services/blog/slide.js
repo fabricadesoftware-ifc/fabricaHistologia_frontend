@@ -14,9 +14,10 @@ class SlideService {
     async getSlides() {
         try {
             const { data } = await api.get('/slide', {headers: {authorization: `Bearer ${token}`}});
+            console.log( "Service: AddSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
-            console.log("error in get Slide", error);
+            console.log("Service: AddSlideMicroscopyPost - return error", error);
             throw error;
         }
     }
@@ -30,9 +31,10 @@ class SlideService {
     async postSlides(newSlide) {
         try {
             const { data } = await api.post('/slide/', newSlide, {headers: {authorization: `Bearer ${token}`}});
+            console.log( "Service: AddSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
-            console.log("error in post Slide", error);
+            console.log("Service: AddSlideMicroscopyPost - return error", error);
             throw error;
         }
     }
@@ -46,9 +48,10 @@ class SlideService {
     async updateSlides(slide) {
         try {
             const { data } = await api.put(`/slide/${slide}`, {headers: {authorization: `Bearer ${token}`}});
+            console.log( "Service: AddSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
-            console.log("error in update Slide", error);
+            console.log("Service: AddSlideMicroscopyPost - return error", error);
             throw error;
         }
     }
@@ -62,9 +65,10 @@ class SlideService {
     async deleteSlides(idSlide) {
         try {
             const { data } = await api.post(`/slide/${idSlide}`, {headers: {authorization: `Bearer ${token}`}});
+            console.log( "Service: AddSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
-            console.log("error in delete Slide", error);
+            console.log("Service: AddSlideMicroscopyPost - return error", error);
             throw error;
         }
     }

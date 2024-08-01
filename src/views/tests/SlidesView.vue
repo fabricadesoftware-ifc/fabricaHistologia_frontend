@@ -8,6 +8,7 @@ const organStore = useOrganStore()
 
 onMounted(() => {
     slideStore.getSlides();
+    organStore.getOrgans();
 })
 </script>
 
