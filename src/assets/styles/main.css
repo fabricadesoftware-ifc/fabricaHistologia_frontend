@@ -3,8 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import './presets.css';
-
 * {
     margin: 0;
     padding: 0;
