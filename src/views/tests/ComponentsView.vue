@@ -2,6 +2,7 @@
 import ContainerDefault from '@/components/ContainerDefault.vue';
 import AdditionalInfo from '@/components/AdditionalInfo.vue';
 import BackButton from '../../components/BackButton.vue';
+import MainButton from '../../components/MainButton.vue';
 
 </script>
 
@@ -29,5 +30,9 @@ import BackButton from '../../components/BackButton.vue';
         <p>Back Button</p> 
         <BackButton />
         <hr>
+        <br>
+        <hr>
+        <p>Main button</p>
+        <MainButton text="Dificil" :background="'red'" :stroke="true" :color="'blue'" />
     </main>
 </template>

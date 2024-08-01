@@ -37,7 +37,7 @@ const router = createRouter({
       path: '/test-components',
       name: 'test-components',
       component: () => import('@/views/tests/ComponentsView.vue')
-    },
+    }
   ]
 })
 
