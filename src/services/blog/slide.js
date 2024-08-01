@@ -14,10 +14,10 @@ class SlideService {
     async getSlides() {
         try {
             const { data } = await api.get('/slide', {headers: {authorization: `Bearer ${token}`}});
-            console.log( "Service: AddSlideMicroscopyPost - return success")
+            console.log( "Service: GetSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
-            console.log("Service: AddSlideMicroscopyPost - return error", error);
+            console.log("Service: GetSlideMicroscopyPost - return error", error);
             throw error;
         }
     }
@@ -48,10 +48,10 @@ class SlideService {
     async updateSlides(slide) {
         try {
             const { data } = await api.put(`/slide/${slide}`, {headers: {authorization: `Bearer ${token}`}});
-            console.log( "Service: AddSlideMicroscopyPost - return success")
+            console.log( "Service: UpdateSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
-            console.log("Service: AddSlideMicroscopyPost - return error", error);
+            console.log("Service: UpdateSlideMicroscopyPost - return error", error);
             throw error;
         }
     }
@@ -65,10 +65,10 @@ class SlideService {
     async deleteSlides(idSlide) {
         try {
             const { data } = await api.post(`/slide/${idSlide}`, {headers: {authorization: `Bearer ${token}`}});
-            console.log( "Service: AddSlideMicroscopyPost - return success")
+            console.log( "Service: DeleteSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
-            console.log("Service: AddSlideMicroscopyPost - return error", error);
+            console.log("Service: DeleteSlideMicroscopyPost - return error", error);
             throw error;
         }
     }
