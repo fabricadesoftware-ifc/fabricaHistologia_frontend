@@ -29,6 +29,7 @@ const putspecie = reactive({
     <p>{{ specieStore.state.specie }}</p>
   </div>
 
+<div>
   <div class="post-specie">
     <input type="text" name="post" placeholder="nome" v-model="specie.name" />
     <input type="text" name="post" placeholder="description" v-model="specie.description" />
@@ -43,19 +44,10 @@ const putspecie = reactive({
   </div>
 
   <div class="delete-specie">
-    <input type="text" name="delete" placeholder="nome" v-model="specie.id" />
+    <input type="text" name="delete" placeholder="id" v-model="specie.id" />
     <button @click="specieStore.deleteSpecie(deletespecie)">Delete</button>
   </div>
 
-<div>
-  <ul>
-    <li v-for="specie in species" :key="specie.id">
-      <span>
-        ({{ specie.id }}) - {{ specie.description }} -
-      </span>
-      <button @click="delete(specie.id)">X</button>
-    </li>
-  </ul>
 </div>
 </template>
 
