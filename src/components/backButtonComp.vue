@@ -1,4 +1,5 @@
 <script setup>
+import router, {toBackPage} from '@/router';
 
 const props = defineProps({
     tittle: {
@@ -6,10 +7,6 @@ const props = defineProps({
         required: true
     }
 })
-
-function toBackPage() {
-  history.back()
-}
 
 </script>
 <template>
