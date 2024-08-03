@@ -33,23 +33,34 @@ const router = createRouter({
       path: '/test-components',
       name: 'test-components',
       component: () => import('@/views/tests/ComponentsView.vue')
-    }
+    },
+    { 
+      path: '/test-one',
+      name: 'test-one',
+      component: () => import('@/views/tests/oneView.vue')
+    },
+    { 
+      path: '/test-two',
+      name: 'test-two',
+      component: () => import('@/views/tests/twoView.vue')
+    },
+    { 
+      path: '/test-three',
+      name: 'test-three',
+      component: () => import('@/views/tests/ThreeView.vue')
+    },
   ]
 })
 
 const savePrevious = ref([])
-const index = (savePrevious.value.length - 1)
-let it = ref(0)
 
 router.beforeEach((to, from)=>{
-  if (router.path != '/' && to.path != from.path) {
+  if (router.path != '/') {
   savePrevious.value.push(to.path)
   }
   if (to.path == '/') {
     savePrevious.value = []
   }
-
-  console.log(savePrevious.value)
 })
 
 function toBackPage() {
@@ -59,18 +70,10 @@ function toBackPage() {
     router.push('/')
     savePrevious.value.splice(0, 2)
   } else {
-  if(it.value == 0 ) {
   router.push(savePrevious.value[savePrevious.value.length - 2])
-  } else {
-  router.push(savePrevious.value[savePrevious.value.length - 2])
+  savePrevious.value.splice((savePrevious.value.length - 2), 2)
   }
-  savePrevious.value.splice(savePrevious.value[savePrevious.value.length - 2], 2)
-  it.value++
-  }
-
-  } else {
-    it.value = 0
-  }
+}
 }
 
 export {toBackPage}
