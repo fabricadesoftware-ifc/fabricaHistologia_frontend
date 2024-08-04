@@ -1,5 +1,5 @@
-import { ref, computed } from 'vue'
-import { createRouter, createWebHistory, useRoute } from 'vue-router'
+import { ref } from 'vue'
+import { createRouter, createWebHistory} from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,21 +33,6 @@ const router = createRouter({
       path: '/test-components',
       name: 'test-components',
       component: () => import('@/views/tests/ComponentsView.vue')
-    },
-    { 
-      path: '/test-one',
-      name: 'test-one',
-      component: () => import('@/views/tests/oneView.vue')
-    },
-    { 
-      path: '/test-two',
-      name: 'test-two',
-      component: () => import('@/views/tests/twoView.vue')
-    },
-    { 
-      path: '/test-three',
-      name: 'test-three',
-      component: () => import('@/views/tests/ThreeView.vue')
     },
   ]
 })
