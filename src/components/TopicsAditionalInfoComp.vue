@@ -1,26 +1,20 @@
 <script setup>
 const props = defineProps({
-    tittle: {
-        type: String
-    },
     informations: {
         type: Object
     },
-    subInformations: {
-        type: Object
-    }
 })
 </script>
 
 <template>
   <div class="w-full h-6/12 mt-4" v-for="(item, index) in props.informations" :key="index">
-    <h4 class="text-2xl font-medium">{{ props.tittle }}</h4> 
+    <h4 class="text-xl font-medium">{{ item.tittle }}</h4> 
 
     <ul>
-      <li v-for="(itens,index) in subInformations" :key="index">
-        <a href="#">{{ itens }}</a>
+      <li v-for="(itens,index) in item.informations" :key="index" class="mt-3">
+        <a href="#" class="text-stone-700 font-normal font-poppins">{{ itens.link }}</a>
         <ul class="list-disc ml-5">
-            <li>{{ itens }}</li>
+            <li class="text-stone-700 font-normal font-poppins">{{ itens.desc }}</li>
         </ul>   
       </li>
     </ul>
