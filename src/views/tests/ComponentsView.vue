@@ -19,7 +19,6 @@ import AditionalInfoComp from '@/components/AditionalInfoComp.vue';
 
     <hr>
     <p>AditionalInfo</p>
-    <AditionalInfoComp />
+    <AditionalInfoComp :tittle="'Materiais de Apoio'" :description="'Que tal estudar com um quiz interativo ou talvez com um mapa menta. Clique no botão e aproveite nossos materias adicionais'" />
     <hr>
-    
 </template>
