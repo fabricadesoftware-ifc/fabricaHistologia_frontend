@@ -42,6 +42,7 @@ class SlideService {
     /**
      * Updates an existing slide
      * @param {Object} slide - The updated slide to be saved
+     * @param {Object} id - The slide id to be saved
      * @returns {Promise<Object>} A promise that resolves to the updated slides Object
      * @throws {Error} If an error occurs while updating the slide
      */
