@@ -3,6 +3,7 @@ import TitleInitialPageComp from '@/components/TitleInitialPageComp.vue'
 import InitialButtonComp from '@/components/InitialButtonComp.vue'
 import IFC_LogoComp from '@/components/IFC_LogoComp.vue'
 import BoxButtonComp from '@/components/BoxButtonComp.vue'
+import InitialSearchButtonComp from './InitialSearchButtonComp.vue'
 </script>
 <template>
     <main class=" grid grid-cols-5 grid-rows-3 w-dvw h-dvh bg-cover bg-top md:flex main-Initial-Page">
@@ -19,6 +20,7 @@ import BoxButtonComp from '@/components/BoxButtonComp.vue'
         <div class="col-start-1 row-start-3 flex items-end z-10 xl:hidden">
             <IFC_LogoComp :isGreen="false" :margin="'0px 0px 50px 30px'" />
         </div>
+       <InitialSearchButtonComp class="absolute bottom-0 right-0 mb-10 mr-10 z-10" />
         <div class="absolute w-dvw h-dvh z-0 overlay"></div> 
     </main>
 </template>
