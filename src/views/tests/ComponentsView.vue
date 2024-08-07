@@ -1,5 +1,5 @@
 <script setup>
-import MainContainer from '@/components/MainContainer.vue';
+import ContainerDefault from '@/components/ContainerDefault.vue';
 
 </script>
 
@@ -9,5 +9,9 @@ import MainContainer from '@/components/MainContainer.vue';
     <!-- <Component -->
 
      <p>Main Container</p>
-     <MainContainer />
+     <hr>
+     <ContainerDefault>
+        test
+    </ContainerDefault>
+    <hr>
 </template>
