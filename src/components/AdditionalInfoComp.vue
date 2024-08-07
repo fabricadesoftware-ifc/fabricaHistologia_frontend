@@ -1,4 +1,5 @@
 <script setup>
+import ContainerDefault from './ContainerDefault.vue';
 import TopicsAdditionalInfoComp from './TopicsAdditionalInfoComp.vue'
 
 const datas = [
@@ -28,11 +29,11 @@ const props = defineProps({
 })
 </script>
 <template>
-  <section> <!-- aqui vai entrar o container q o tarzan esta fazendo -->
+  <ContainerDefault>
     <div>
       <h3 class="text-2xl font-medium font-poppins">{{ props.title }}</h3>
       <p class="text-stone-700 font-normal font-poppins">{{ props.description }}</p>
     </div>
     <TopicsAdditionalInfoComp :datas="datas" />
-  </section>
+  </ContainerDefault>
 </template>
