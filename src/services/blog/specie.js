@@ -1,4 +1,5 @@
 import api from '../../plugins/api';
+const token = localStorage.getItem('psg_auth_token')
 
 /**
  * Service class for handling species related operations.
@@ -11,7 +12,7 @@ class SpecieService {
      */
     async getSpecies() {
         try {
-            const { data } = await api.get(`/species`);
+            const { data } = await api.get(`/species`, {headers: {authorization: `Bearer ${token}`}});
             return data.results;
         } catch (error) {
             console.log("error in getSpecies", error);
@@ -27,7 +28,7 @@ class SpecieService {
      */
     async createSpecies(newSpecie) {
         try {
-            const { data } = await api.post(`/species/`, newSpecie);
+            const { data } = await api.post(`/species/`, newSpecie, {headers: {authorization: `Bearer ${token}`}});
             return data.results;
         } catch (error) {
             console.log("error in createSpecies", error);
@@ -43,7 +44,7 @@ class SpecieService {
      */
     async updateSpecies(specie) {
         try {
-            const { data } = await api.put(`/species/${specie.id}/`);
+            const { data } = await api.put(`/species/${specie.id}/`, {headers: {authorization: `Bearer ${token}`}});
             return data.results;
         } catch (error) {
             console.log("error in updateSpecies", error);
@@ -59,7 +60,7 @@ class SpecieService {
      */
     async deleteSpecies(id) {
         try {
-            const { data } = await api.delete(`/species/${id}/`);
+            const { data } = await api.delete(`/species/${id}/`, {headers: {authorization: `Bearer ${token}`}});
             return data.results;
         } catch (error) {
             console.log("error in deleteSpecies", error);
