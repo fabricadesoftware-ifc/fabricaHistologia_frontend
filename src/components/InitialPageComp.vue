@@ -5,8 +5,8 @@ import IFC_LogoComp from '@/components/IFC_LogoComp.vue'
 import BoxButtonComp from '@/components/BoxButtonComp.vue'
 </script>
 <template>
-    <main class=" grid grid-cols-5 grid-rows-3 w-dvw h-dvh bg-cover bg-top md:flex  main-Initial-Page">
-        <div class="col-start-5 row-start-1 2xl:col-start-3 2xl:col-end-6 md:hidden flex items-start justify-end absolute w-full z-10">
+    <main class=" grid grid-cols-5 grid-rows-3 w-dvw h-dvh bg-cover bg-top md:flex main-Initial-Page">
+        <div class="row-start-1 col-start-3 col-end-6 md:hidden flex items-start justify-end absolute w-full z-10">
         <div class="h-20 w-12/12 flex items-center mt-5 mr-8">
         <BoxButtonComp />
         </div>
