@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 import { createRouter, createWebHistory} from 'vue-router'
 
 const router = createRouter({
@@ -37,30 +36,5 @@ const router = createRouter({
   ]
 })
 
-const savePrevious = ref([])
-
-router.beforeEach((to, from)=>{
-  if (router.path != '/') {
-  savePrevious.value.push(to.path)
-  }
-  if (to.path == '/') {
-    savePrevious.value = []
-  }
-})
-
-function toBackPage() {
-
-  if (router.path != '/') {
-  if (savePrevious.value.length == 1) { 
-    router.push('/')
-    savePrevious.value.splice(0, 2)
-  } else {
-  router.push(savePrevious.value[savePrevious.value.length - 2])
-  savePrevious.value.splice((savePrevious.value.length - 2), 2)
-  }
-}
-}
-
-export {toBackPage}
 export default router
 
