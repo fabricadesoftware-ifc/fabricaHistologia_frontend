@@ -83,12 +83,11 @@ export const useSlideStore = defineStore("slide",
          * @function updateSlideSlide
          * @param {Object} slide - the updated slide object.
          */
-        const updateSlide = async (slide) => {
+        const updateSlide = async (slide, index) => {
             state.loading = true;
             console.log("Pinia: UpdateSlideMicroscopyPost - open loader")
             try {
-                const index = state.slides.findIndex((s) => s.id === slide.id);
-                state.slides[index] = await SlideService.updateSlides(slide);
+                state.slides = await SlideService.updateSlides(slide, index);
                 console.log("Pinia: UpdateSlideMicroscopyPost - send")
             } catch (error) {
                 state.error = error;
@@ -111,7 +110,7 @@ export const useSlideStore = defineStore("slide",
             try {
             const index = state.slides.findIndex((s) => s.id === id.id);
             state.slides.splice(index, 1);
-            await SlideService.deleteSlides(index)
+            await SlideService.deleteSlides(id)
             console.log("Pinia: DeleteSlideMicroscopyPost - send")
             } catch (error) {
                 state.error = error;

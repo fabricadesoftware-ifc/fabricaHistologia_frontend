@@ -1,14 +1,14 @@
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useSlideStore } from '@/stores';
 import { useOrganStore } from '@/stores';
 
 const slideStore = useSlideStore()
 const organStore = useOrganStore()
 
-const newObject = reactive({
-    "date_analysis": null,
-    "post_date": null,
+const upObject = reactive({
+    "date_analysis": '',
+    "post_date": '',
     "species": 1,
     "type_cut": '',
     "increase": '',
@@ -16,6 +16,19 @@ const newObject = reactive({
     "autor_user": 1,
     "organ": 1
 });
+
+const newObject = reactive({
+    "date_analysis": '',
+    "post_date": '',
+    "species": 1,
+    "type_cut": '',
+    "increase": '',
+    "coloring": '',
+    "autor_user": 1,
+    "organ": 1
+});
+
+const deleteId = ref(0)
 
 onMounted(() => {
     slideStore.getSlides();
@@ -34,9 +47,13 @@ onMounted(() => {
         <input type="text" v-model="newObject.coloring">
         <input type="submit">
     </form>
-    <h1>Organ</h1>
-    <p>{{ organStore.state }}</p>
-    <h1>specie</h1>
-    <p></p>
-    <h1>usuario</h1>
+    <form @submit.prevent="slideStore.updateSlide(upObject, 2)">
+        <input type="date" v-model="upObject.date_analysis">
+        <input type="date" v-model="upObject.post_date">
+        <input type="text" v-model="upObject.type_cut">
+        <input type="text" v-model="upObject.increase">
+        <input type="text" v-model="upObject.coloring">
+        <input type="submit">
+    </form>
+    <input type="number" v-model="deleteId"><button @click="slideStore.deleteSlide(deleteId)">delete</button>
 </template>

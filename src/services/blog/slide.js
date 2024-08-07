@@ -13,7 +13,7 @@ class SlideService {
      */
     async getSlides() {
         try {
-            const { data } = await api.get('/slide', {headers: {authorization: `Bearer ${token}`}});
+            const { data } = await api.get('/slide', {headers: {'authorization': `Bearer ${token}`}});
             console.log( "Service: GetSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
@@ -30,7 +30,7 @@ class SlideService {
      */
     async postSlides(newSlide) {
         try {
-            const { data } = await api.post('/slide/', newSlide, {headers: {authorization: `Bearer ${token}`}});
+            const { data } = await api.post('/slide/', newSlide, {headers: {'authorization': `Bearer ${token}`}});
             console.log( "Service: AddSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
@@ -45,9 +45,9 @@ class SlideService {
      * @returns {Promise<Object>} A promise that resolves to the updated slides Object
      * @throws {Error} If an error occurs while updating the slide
      */
-    async updateSlides(slide) {
+    async updateSlides(slide, id) {
         try {
-            const { data } = await api.put(`/slide/${slide}`, {headers: {authorization: `Bearer ${token}`}});
+            const { data } = await api.put(`/slide/${id}/`, slide, {headers: {'authorization': `Bearer ${token}`}});
             console.log( "Service: UpdateSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
@@ -64,7 +64,7 @@ class SlideService {
      */
     async deleteSlides(idSlide) {
         try {
-            const { data } = await api.post(`/slide/${idSlide}`, {headers: {authorization: `Bearer ${token}`}});
+            const { data } = await api.delete(`/slide/${idSlide}`, {headers: {'authorization': `Bearer ${token}`}});
             console.log( "Service: DeleteSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
