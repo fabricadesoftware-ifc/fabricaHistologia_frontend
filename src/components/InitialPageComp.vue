@@ -15,7 +15,7 @@ import InitialSearchButtonComp from './InitialSearchButtonComp.vue'
         <div class="col-start-1 col-end-6 w-full h-full row-span-3 md:justify-between flex flex-col items-center justify-center absolute">
             <TitleInitialPageComp  class="z-10" />
             <InitialButtonComp :title="'Aproveite nosso sistema interativo'" class="z-10 mt-14 px-4 py-1.5 xl:hidden" />
-            <InitialButtonComp class="hidden z-10 mb-12 p-4 xl:flex xl:absolute xl:bottom-0 xl:mb-5" :hasArrowIcon="true" />
+            <InitialButtonComp class="hidden z-10 mb-12 p-4 xl:flex xl:absolute xl:bottom-0 xl:mb-0" :hasArrowIcon="true" />
         </div>
         <div class="col-start-1 row-start-3 flex items-end z-10 xl:hidden">
             <IFC_LogoComp :isGreen="false" :margin="'0px 0px 50px 30px'" />
