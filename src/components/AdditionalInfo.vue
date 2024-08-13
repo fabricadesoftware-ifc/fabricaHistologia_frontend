@@ -2,29 +2,18 @@
 import ContainerDefault from './ContainerDefault.vue';
 import TopicsAdditionalInfo from './TopicsAdditionalInfo.vue'
 
-const datas = [
-  {
-    title: 'Aulas',
-    refs: [
-      { link: 'link para a aula 1', desc: 'breve descricao' },
-      { link: 'link para a aula 2', desc: 'breve descricao' }
-    ]
-  },
-  {
-    title: 'PDF"s',
-    refs: [
-      { link: 'link para o mapa mental/documento 1', desc: 'breve descricao' },
-      { link: 'link para o mapa mental/documento 2', desc: 'breve descricao' }
-    ]
-  }
-]
-
 const props = defineProps({
   title: {
-    type: String
+    type: String,
+    required: true
   },
   description: {
-    type: String
+    type: String,
+    required: false
+  },
+  data: {
+    type: Object,
+    required: false
   }
 })
 </script>
@@ -32,8 +21,8 @@ const props = defineProps({
   <ContainerDefault>
     <div>
       <h3 class="text-2xl font-medium font-poppins">{{ props.title }}</h3>
-      <p class="text-stone-700 font-normal font-poppins">{{ props.description }}</p>
+      <p class="text-stone-700 mt-1 font-normal font-poppins">{{ props.description }}</p>
     </div>
-    <TopicsAdditionalInfo :datas="datas" />
+    <TopicsAdditionalInfo :datas="props.data" />
   </ContainerDefault>
 </template>

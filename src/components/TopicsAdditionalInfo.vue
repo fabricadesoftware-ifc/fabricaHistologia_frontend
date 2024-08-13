@@ -1,7 +1,8 @@
 <script setup>
 const props = defineProps({
   datas: {
-    type: Object
+    type: Object,
+    required: false
   },
 })
 </script>
