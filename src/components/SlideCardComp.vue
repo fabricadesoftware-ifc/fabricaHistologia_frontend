@@ -17,8 +17,10 @@ const props = defineProps({
                     <li v-for="(item, index) in items.tags" :key="index" :class="`${item.background} ${item.color}  px-3 py-1 rounded-lg`"><p>{{ item.content }}</p></li>
                 </ul>
             </div>
-            <div class="w-full h-4/6 flex flex-col items-center justify-evenly font-poppins">
-                <p class="font-normal text-xl mb-3">{{items.name}}</p>
+            <div class="w-full h-4/6 flex flex-col items-center justify-evenly font-poppins text-center">
+                <div class="w-full overflow-x-hidden overflow-y-hidden">
+                <p class="font-normal text-xl mb-2">{{items.name}}</p>
+                </div>
                 <p class="text-sm italic text-slate-600">{{items.date[0]}} de {{items.date[1]}} de {{items.date[2]}}</p>
             </div>
         </div>
