@@ -5,12 +5,12 @@ export default {
     fontFamily: {
       poppins: ["Poppins", "sans-serif"]  
     },
-    screens: {
-      'sm': { 'max': '640px' },
-      'md': { 'max': '768px' },
-      'lg': { 'max': '1024px' },
-      'xl': { 'max': '1280px' },
+    screens: {  
       '2xl': { 'max': '1536px' },
+      'xl': { 'max': '1280px' },
+      'lg': { 'max': '1024px' },
+      'md': { 'max': '768px' },
+      'sm': { 'max': '640px' },
     },
     extend: {},
   },
