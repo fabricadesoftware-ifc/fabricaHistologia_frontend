@@ -2,29 +2,29 @@
 const props = defineProps({
     'color': {
         type: String,
-        default: '#181A2A'
+        default: 'text-[#181A2A]'
     },
     'weight': {
         type: String,
-        default: 'bold'
+        default: 'font-bold'
     },
     'content': {
         type: String,
-        default: 'Tittle'
+        default: 'Selecione'
     },
     'size': {
         type: String,
-        default: '4xl'
+        default: 'text-4xl'
     },
     'boxSize': {
         type: String,
-        default: '1/2'
+        default: 'w-1/2'
     }
 })
 </script>
 
 <template>
-    <div :class="`w-${props.boxSize} flex justify-center flex-wrap flex-row`">
-        <span :class="`font-${props.weight} text-[${props.color}] font-poppins text-${props.size}`">{{ props.content }}</span>
+    <div :class="`${props.boxSize} flex justify-center flex-wrap flex-row`">
+        <span :class="`${props.weight} ${props.color} font-poppins ${props.size}`">{{ props.content }}</span>
     </div>
 </template>
