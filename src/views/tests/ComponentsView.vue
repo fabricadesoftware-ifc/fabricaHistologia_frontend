@@ -3,6 +3,7 @@ import ContainerDefault from '@/components/ContainerDefault.vue';
 import AdditionalInfo from '@/components/AdditionalInfo.vue';
 import BackButton from '../../components/BackButton.vue';
 import DefaultTitle from '@/components/DefaultTitle.vue';
+import CardsContainer from '@/components/CardsContainer.vue';
 
 const datas_AdditionalInfo = [
   {
@@ -57,5 +58,14 @@ const datas_AdditionalInfo = [
         <DefaultTitle />
         <hr>
 
+        <br>
+
+        <hr>
+        <p>CardsContainer with SlideCard</p>
+        <CardsContainer>
+          <SlideCard :details="objs" />
+        </CardsContainer>
+        <hr>
+        <br>
     </main>
 </template>
