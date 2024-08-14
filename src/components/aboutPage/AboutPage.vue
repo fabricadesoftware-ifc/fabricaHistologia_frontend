@@ -2,6 +2,7 @@
 import AboutHeader from './AboutHeader.vue';
 import AboutContent from './AboutContent.vue';
 import AboutCollaborators from './AboutCollaborators.vue';
+import AboutFooter from './AboutFooter.vue';
 </script>
 
 <template>
@@ -14,7 +15,7 @@ import AboutCollaborators from './AboutCollaborators.vue';
         <AboutCollaborators position="Professores participantes" :collaborators="['Gilson Herbert de Faria;', 'Mara Rubia Marques']" />
         <AboutCollaborators position="Estagiário" :collaborators="['Miller Caldas Barradas']" />
         <AboutCollaborators position="Prestadores de serviços" :collaborators="['Web-Master e Web-Designer:', 'Swami Luiz Monteiro Silva', 'Editoração de imagens:', 'Julia Cavasin Oliveira']" />
-        
+        <AboutFooter />
     </div>
 </template>
 
