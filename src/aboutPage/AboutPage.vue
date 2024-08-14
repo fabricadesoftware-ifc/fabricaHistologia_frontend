@@ -4,10 +4,13 @@ import AboutHeader from './AboutHeader.vue';
 </script>
 
 <template>
-    <ContainerDefault>
+    <div class="bg-[#571480] py-8">
         <AboutHeader />
-    </ContainerDefault>
+    </div>
 </template>
 
 <style scoped>
+* {
+    color: white;
+}
 </style>
