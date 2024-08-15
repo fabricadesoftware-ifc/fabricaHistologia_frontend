@@ -2,6 +2,7 @@
 import ContainerDefault from '@/components/ContainerDefault.vue';
 import AdditionalInfo from '@/components/AdditionalInfo.vue';
 import BackButton from '../../components/BackButton.vue';
+import DefaultTitle from '@/components/DefaultTitle.vue';
 
 </script>
 
@@ -29,5 +30,9 @@ import BackButton from '../../components/BackButton.vue';
         <p>Back Button</p> 
         <BackButton />
         <hr>
+
+        <hr class="mt-10">
+        <p>Title Component</p>
+        <DefaultTitle />
     </main>
 </template>
