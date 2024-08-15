@@ -29,6 +29,11 @@ const router = createRouter({
       component: () => import('@/views/tests/SlidesView.vue')
     },
     {
+      path: '/test-initial',
+      name: 'test-initial',
+      component: () => import('@/views/tests/InitialPageView.vue')
+    },
+    {
       path: '/test-systems',
       name: 'test-systems',
       component: () => import('@/views/tests/SystemsView.vue')
@@ -37,7 +42,7 @@ const router = createRouter({
       path: '/test-components',
       name: 'test-components',
       component: () => import('@/views/tests/ComponentsView.vue')
-    },
+    }
   ]
 })
 
