@@ -6,8 +6,8 @@ const props = defineProps({
 })
 </script>
 <template>
-    <div class="w-1/5  xl:w-2/6 md:w-3/6 sm:w-5/6 h-80 flex justify-center" v-for="(items, index) in props.details" :key="index">
-    <div class="group/container w-52 h-64 flex flex-col rounded-2xl shadow-lg duration-200 ease-out hover:shadow-xl cursor-default">
+    <div class="w-1/5 xl:w-2/6 md:w-3/6 sm:w-5/6 h-80 flex justify-center" v-for="(items, index) in props.details" :key="index">
+    <div class="group/container w-52 h-64 flex flex-col rounded-2xl shadow-lg duration-200 ease-out hover:cursor-pointer hover:shadow-xl cursor-default">
         <div class="w-full h-3/6 rounded-t-xl">
             <img src="../assets/media/cellImg.jpg" class="rounded-t-2xl" alt="">
         </div>
