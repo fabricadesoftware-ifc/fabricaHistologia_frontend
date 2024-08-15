@@ -42,14 +42,18 @@ export const useSlideStore = defineStore("slide",
          */
         const getSlides = async () => {
             state.loading = true;
+            console.log("Pinia: getSlideMicroscopyPost - open loader")
             try {
                 state.slides = await SlideService.getSlides();
+                 console.log("Pinia: getSlideMicroscopyPost - send")
             } catch (error) {
                 state.error = error;
+                console.log( "Pinia: getSlideMicroscopyPost - return error", error)
             } finally {
                 state.loading = false;
                 state.connection = true;
             }
+            console.log("Pinia: getSlideMicroscopyPost - close loader")
         };
 
         /**
@@ -60,13 +64,17 @@ export const useSlideStore = defineStore("slide",
          */
         const createSlide = async (newSlide) => {
             state.loading = true;
+            console.log("Pinia: AddSlideMicroscopyPost - open loader")
             try {
-                state.slides.push(await SlideService.createSlide(newSlide));
+                state.slides.push(await SlideService.postSlides(newSlide));
+                console.log("Pinia: AddSlideMicroscopyPost - send")
             } catch (error) {
                 state.error = error;
+                console.log( "Pinia: AddSlideMicroscopyPost - return error", error)
             } finally {
                 state.loading = false;
             }
+            console.log("Pinia: AddSlideMicroscopyPost - close loader")
         };
 
         /**
@@ -75,16 +83,19 @@ export const useSlideStore = defineStore("slide",
          * @function updateSlideSlide
          * @param {Object} slide - the updated slide object.
          */
-        const updateSlide = async (slide) => {
+        const updateSlide = async (slide, index) => {
             state.loading = true;
+            console.log("Pinia: UpdateSlideMicroscopyPost - open loader")
             try {
-                const index = state.slides.findIndex((s) => s.id === slide.id);
-                state.slides[index] = await SlideService.updateSlide(slide);
+                state.slides = await SlideService.updateSlides(slide, index);
+                console.log("Pinia: UpdateSlideMicroscopyPost - send")
             } catch (error) {
                 state.error = error;
+                console.log( "Pinia: UpdateSlideMicroscopyPost - return error", error)
             } finally {
                 state.loading = false;
             }
+            console.log("Pinia: UpdateSlideMicroscopyPost - close loader")
         };
 
         /**
@@ -94,16 +105,20 @@ export const useSlideStore = defineStore("slide",
          * @param {number} id - The id of the slide will be deleted
          */
         const deleteSlide = async (id) => {
-
+            state.loading = true;
+            console.log("Pinia: DeleteSlideMicroscopyPost - open loader")
             try {
             const index = state.slides.findIndex((s) => s.id === id.id);
             state.slides.splice(index, 1);
-            await SlideService.deleteSlide(index)
+            await SlideService.deleteSlides(id)
+            console.log("Pinia: DeleteSlideMicroscopyPost - send")
             } catch (error) {
                 state.error = error;
+                console.log( "Pinia: DeleteSlideMicroscopyPost - return error", error)
             } finally {
                 state.loading = false;
             }
+            console.log("Pinia: DeleteSlideMicroscopyPost - close loader")
         };
 
         return {

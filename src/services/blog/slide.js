@@ -1,4 +1,5 @@
 import api from "@/plugins/api";
+const token = localStorage.getItem('psg_auth_token')
 
 /**
  * Service class for handling slides related options
@@ -12,10 +13,11 @@ class SlideService {
      */
     async getSlides() {
         try {
-            const { data } = await api.get('/slide');
+            const { data } = await api.get('/slide', {headers: {'authorization': `Bearer ${token}`}});
+            console.log( "Service: GetSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
-            console.log("error in get Slide", error);
+            console.log("Service: GetSlideMicroscopyPost - return error", error);
             throw error;
         }
     }
@@ -28,10 +30,11 @@ class SlideService {
      */
     async postSlides(newSlide) {
         try {
-            const { data } = await api.post('/slide/', newSlide);
+            const { data } = await api.post('/slide/', newSlide, {headers: {'authorization': `Bearer ${token}`}});
+            console.log( "Service: AddSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
-            console.log("error in post Slide", error);
+            console.log("Service: AddSlideMicroscopyPost - return error", error);
             throw error;
         }
     }
@@ -39,15 +42,17 @@ class SlideService {
     /**
      * Updates an existing slide
      * @param {Object} slide - The updated slide to be saved
+     * @param {Object} id - The slide id to be saved
      * @returns {Promise<Object>} A promise that resolves to the updated slides Object
      * @throws {Error} If an error occurs while updating the slide
      */
-    async updateSlides(slide) {
+    async updateSlides(slide, id) {
         try {
-            const { data } = await api.put(`/slide/${slide}`);
+            const { data } = await api.put(`/slide/${id}/`, slide, {headers: {'authorization': `Bearer ${token}`}});
+            console.log( "Service: UpdateSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
-            console.log("error in update Slide", error);
+            console.log("Service: UpdateSlideMicroscopyPost - return error", error);
             throw error;
         }
     }
@@ -60,10 +65,11 @@ class SlideService {
      */
     async deleteSlides(idSlide) {
         try {
-            const { data } = await api.post(`/slide/${idSlide}`);
+            const { data } = await api.delete(`/slide/${idSlide}`, {headers: {'authorization': `Bearer ${token}`}});
+            console.log( "Service: DeleteSlideMicroscopyPost - return success")
             return data.results;
         } catch (error) {
-            console.log("error in delete Slide", error);
+            console.log("Service: DeleteSlideMicroscopyPost - return error", error);
             throw error;
         }
     }
