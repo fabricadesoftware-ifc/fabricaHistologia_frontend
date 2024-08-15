@@ -7,6 +7,7 @@ import BackButton from '../../components/BackButton.vue';
 import DefaultTitle from '@/components/DefaultTitle.vue';
 import CardsContainer from '@/components/CardsContainer.vue';
 import SlideCard from '@/components/SlideCard.vue';
+import SmallCardDefault from '@/components/cards/SmallCardDefault.vue';
 import MediumCardDefault from '@/components/cards/MediumCardDefault.vue';
 
 const objs = ref([
@@ -81,10 +82,18 @@ const datas_AdditionalInfo = [
         <br>
 
         <hr class="mt-10">
-        <p class="py-4">Medium Card</p>
+        <p class="py-4">Small Card</p>
         <ContainerDefault>
-          <MediumCardDefault />
+          <SmallCardDefault />
         </ContainerDefault>
-        
+        <hr class="mt-20">
+        <br>
+
+        <hr class="mt-10">
+        <p class="py-4">Medium Card</p>
+          <ContainerDefault>
+            <MediumCardDefault />
+          </ContainerDefault>
+        <hr class="mt-20">
     </main>
 </template>
