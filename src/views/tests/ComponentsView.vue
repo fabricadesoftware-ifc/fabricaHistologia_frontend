@@ -2,7 +2,7 @@
 import ContainerDefault from '@/components/ContainerDefault.vue';
 import AdditionalInfo from '@/components/AdditionalInfo.vue';
 import BackButton from '../../components/BackButton.vue';
-import MainTittle from '@/components/MainTittle.vue';
+import DefaultTitle from '@/components/DefaultTitle.vue';
 
 </script>
 
@@ -32,7 +32,7 @@ import MainTittle from '@/components/MainTittle.vue';
         <hr>
 
         <hr class="mt-10">
-        <p>Tittle Component</p>
-        <MainTittle />
+        <p>Title Component</p>
+        <DefaultTitle />
     </main>
 </template>
