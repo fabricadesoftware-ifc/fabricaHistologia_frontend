@@ -11,7 +11,9 @@ onMounted(() => {
 function updateSpecie() {
   specieStore.updateSpecie(specie)
 }
-
+function deleteSpecie(){
+  specieStore.deleteSpecie(specie.id)
+}
 const specie = reactive({
   id: '',
   name: '',
@@ -59,22 +61,16 @@ const specie = reactive({
 
       <div class="delete-specie">
         <input type="text" name="delete" placeholder="id" v-model="specie.id" />
+        {{ specie }}
         <button
           @click="
-            specieStore.deleteSpecie({
-              id: specie.id
-            })
+            specieStore.deleteSpecie()
           "
         >
           Delete
         </button>
       </div>
     </div>
-    <ul>
-      <li v-for="specie in species" :key="specie.id">
-        ({{ specie.id }}) - {{ specie.category }} -
-      </li>
-    </ul>
   </div>
 </template>
 

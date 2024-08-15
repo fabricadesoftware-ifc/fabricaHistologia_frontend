@@ -47,7 +47,6 @@ class SpecieService {
             const { data } = await api.put(`/species/${specie.id}/`, specie);
             return data.results;
         } catch (error) {
-            console.log("error in updateSpecies", error);
             throw error;
         }
     }
@@ -60,10 +59,9 @@ class SpecieService {
      */
     async deleteSpecie(id) {
         try {
-            const { data } = await api.delete(`/species/${id}/`);
+            const { data } = await api.delete(`/species/${specie.id}/`);
             return data.results;
         } catch (error) {
-            console.log("error in deleteSpecies", error);
             throw error;
         }
     }
