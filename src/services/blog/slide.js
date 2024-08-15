@@ -24,12 +24,7 @@ class SlideService {
      * Creates a new Slide
      * @param {Object} newSlide - The new slide to be created 
      * @returns {Promise<Object>} A promise that resolves to the created slides Object
-     * @throws {Error} If an error occurs while creating the slide
-     */
-    async postSlides(newSlide) {
-        try {
-            const { data } = await api.post('/slide/', newSlide);
-            return data.results;
+     * @throws {ErrocreateSpecieata.results;
         } catch (error) {
             console.log("error in post Slide", error);
             throw error;

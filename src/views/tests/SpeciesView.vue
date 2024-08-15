@@ -1,23 +1,21 @@
 <script setup>
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useSpecieStore } from '@/stores'
 
 const specieStore = useSpecieStore()
-
 
 onMounted(() => {
   specieStore.getSpecies()
 })
 
-const specie = reactive({
-  name: '',
-  descripition: ''
-})
+function updateSpecie() {
+  specieStore.updateSpecie(specie)
+}
 
-const putspecie = reactive({
+const specie = reactive({
   id: '',
   name: '',
-  descripition: ''
+  category: ''
 })
 </script>
 
@@ -26,40 +24,69 @@ const putspecie = reactive({
 
   <div class="get-specie">
     <h2>Get Specie</h2>
-    <p>{{ specieStore.state.specie }}</p>
+    <p>{{ specieStore.state.species }}</p>
   </div>
 
-<div>
-  <div class="post-specie">
-    <input type="text" name="post" placeholder="nome" v-model="specie.name" />
-    <input type="text" name="post" placeholder="description" v-model="specie.description" />
-    <button @click="specieStore.createSpecie(postspecie)">Post</button>
-  </div>
+  <div>
+    <div class="form">
+      <div class="post-specie">
+        <input type="text" name="post" placeholder="Nome" v-model="specie.name" />
+        <input type="text" name="post" placeholder="Categoria" v-model="specie.category" />
+        {{ specie }}
+        <button
+          @click="
+            specieStore.createSpecie({
+              name: specie.name,
+              category: specie.category
+            })
+          "
+        >
+          Post
+        </button>
+      </div>
 
-  <div class="put-specie">
-    <input type="text" name="put" placeholder="id" v-model="putspecie .id" />
-    <input type="text" name="put" placeholder="nome" v-model="putspecie .name" />
-    <input type="text" name="put" placeholder="description" v-model="putspecie.description" />
-    <button @click="specieStore.updateSpecie(putspecie)">Put</button>
-  </div>
+      <div class="put-specie">
+        <input type="text" name="put" placeholder="id" v-model="specie.id"/>
+        <input type="text" name="put" placeholder="nome" v-model="specie.name" />
+        <input type="text" name="put" placeholder="category" v-model="specie.category" />
+        {{ specie }}
+        <button
+          @click="updateSpecie()"
+        >
+          Put
+        </button>
+      </div>
 
-  <div class="delete-specie">
-    <input type="text" name="delete" placeholder="id" v-model="specie.id" />
-    <button @click="specieStore.deleteSpecie(deletespecie)">Delete</button>
+      <div class="delete-specie">
+        <input type="text" name="delete" placeholder="id" v-model="specie.id" />
+        <button
+          @click="
+            specieStore.deleteSpecie({
+              id: specie.id
+            })
+          "
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+    <ul>
+      <li v-for="specie in species" :key="specie.id">
+        ({{ specie.id }}) - {{ specie.category }} -
+      </li>
+    </ul>
   </div>
-
-</div>
 </template>
 
 <style scoped>
-input{
+input {
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.39);
   border-style: none;
   height: 20px;
   border-radius: 2px;
   margin: 5px;
 }
-button{
+button {
   margin: 5px;
   border-style: none;
   border-radius: 2px;
@@ -67,12 +94,10 @@ button{
   background-color: #373c5759;
   color: white;
 }
-input:hover{
+input:hover {
   box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.39);
-
 }
-button:hover{
+button:hover {
   background-color: #4d547a73;
 }
-
 </style>

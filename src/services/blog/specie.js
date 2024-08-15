@@ -25,10 +25,11 @@ class SpecieService {
      * @returns {Promise<Object>} A promise that resolves to the created species object.
      * @throws {Error} If an error occurs while creating the species.
      */
-    async createSpecies(newSpecie) {
+    async createSpecie(newSpecie) {
+        console.log('Dados enviados:', newSpecie);
         try {
             const { data } = await api.post(`/species/`, newSpecie);
-            return data.results;
+            return data;
         } catch (error) {
             console.log("error in createSpecies", error);
             throw error;
@@ -41,9 +42,9 @@ class SpecieService {
      * @returns {Promise<Object>} A promise that resolves to the updated species object.
      * @throws {Error} If an error occurs while updating the species.
      */
-    async updateSpecies(specie) {
+    async updateSpecie(specie) {
         try {
-            const { data } = await api.put(`/species/${specie.id}/`);
+            const { data } = await api.put(`/species/${specie.id}/`, specie);
             return data.results;
         } catch (error) {
             console.log("error in updateSpecies", error);
@@ -57,7 +58,7 @@ class SpecieService {
      * @returns {Promise<Object>} A promise that resolves to the deleted species object.
      * @throws {Error} If an error occurs while deleting the species.
      */
-    async deleteSpecies(id) {
+    async deleteSpecie(id) {
         try {
             const { data } = await api.delete(`/species/${id}/`);
             return data.results;
