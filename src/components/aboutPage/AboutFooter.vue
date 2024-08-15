@@ -4,8 +4,8 @@ import ContainerDefault from '@/components/ContainerDefault.vue';
 
 <template>
     <ContainerDefault>
-        <footer class="flex justify-center w-full">
-            <img src="@/assets/media/ifcLogo.png" alt="IFC-LOGO" class="h-16">
+        <footer class="flex justify-center w-full m">
+            <img src="@/assets/media/ifcLogo.png" alt="IFC-LOGO" class="h-14 mt-5">
         </footer>
     </ContainerDefault>
 </template>

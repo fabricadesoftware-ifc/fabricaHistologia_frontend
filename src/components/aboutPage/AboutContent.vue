@@ -14,7 +14,7 @@ const props = defineProps({
 
 <template>
     <ContainerDefault>
-        <div class="flex flex-col">
+        <div class="flex flex-col bg-black md:bg-gray-50">
         <div class="my-4">
             <span class="text-2xl font-semibold leading-8 font-poppins">{{ props.title }}</span>
         </div>
