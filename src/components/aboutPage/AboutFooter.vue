@@ -5,7 +5,7 @@ import ContainerDefault from '@/components/ContainerDefault.vue';
 <template>
     <ContainerDefault>
         <footer class="flex justify-center w-full m">
-            <img src="@/assets/media/ifcLogo.png" alt="IFC-LOGO" class="h-14 mt-5">
+            <img src="@/assets/media/ifcLogo.png" alt="IFC-LOGO" class="h-14 md:h-10 mt-5">
         </footer>
     </ContainerDefault>
 </template>
