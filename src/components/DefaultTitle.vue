@@ -16,15 +16,15 @@ const props = defineProps({
         type: String,
         default: 'text-4xl'
     },
-    'boxSize': {
+    'position': {
         type: String,
-        default: 'w-1/2'
+        default: 'justify-start'
     }
 })
 </script>
 
 <template>
-    <div :class="`${props.boxSize} flex justify-center flex-wrap flex-row`">
+    <div :class="`${props.position} flex  flex-wrap flex-row`">
         <span :class="`${props.weight} ${props.color} font-poppins ${props.size}`">{{ props.content }}</span>
     </div>
 </template>
