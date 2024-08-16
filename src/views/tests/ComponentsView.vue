@@ -8,6 +8,7 @@ import DefaultTitle from '@/components/DefaultTitle.vue';
 import CardsContainer from '@/components/CardsContainer.vue';
 import SlideCard from '@/components/SlideCard.vue';
 import SearchBar from '@/components/search/SearchBar.vue'
+import SearchResults from '@/components/search/SearchResults.vue';
 
 const objs = ref([
     {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
@@ -81,8 +82,15 @@ const datas_AdditionalInfo = [
         <br>
 
         <hr class="mt-10">
-        <p class="py-4">Search component</p>
+        <p class="py-4">Search Bar</p>
         <SearchBar />
+        <hr>
+
+        <br>
+
+        <hr class="mt-10">
+        <p class="py-4">Search Results</p>
+        <SearchResults />
         <hr>
     </main>
 </template>
