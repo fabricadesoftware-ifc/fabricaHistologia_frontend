@@ -20,12 +20,12 @@ import { OrganService } from '@/services'
 
 /**
  * Creates a new instance of the OrganStore.
- * @function useSpecieStore
- * @returns {SpecieStore} The OrganStore instance.
+ * @function useOrganStore
+ * @returns {OrganStore} The OrganStore instance.
  */
 export const useOrganStore = defineStore('organ', () => {
   const state = reactive({
-    species: [],
+    organs: [],
     selectedOrgan: null,
     loading: false,
     error: null,
@@ -54,8 +54,8 @@ export const useOrganStore = defineStore('organ', () => {
   /**
    * Creates a new organ.
    * @async
-   * @function createSpecie
-   * @param {Object} newSpecie - The new organ object to create.
+   * @function createOrgan
+   * @param {Object} newOrgan - The new organ object to create.
    */
   const createOrgan = async (newOrgan) => {
     state.loading = true
@@ -72,13 +72,13 @@ export const useOrganStore = defineStore('organ', () => {
    * Updates an existing organ.
    * @async
    * @function updateSpecie
-   * @param {Object} specie - The organ object to update.
+   * @param {Object} organ - The organ object to update.
    */
   const updateOrgan = async (organ) => {
     state.loading = true
     try {
       const index = state.organs.frindIndex((s) => s.id === organ.id)
-      state.organs[index] = await OrganService.getOrgans()
+      state.organs[index] = await OrganService.getOrgans(organ)
     } catch (error) {
       state.error = error
     } finally {
@@ -96,6 +96,7 @@ export const useOrganStore = defineStore('organ', () => {
     try {
       const index = state.organs.findIndex((s) => s.id === id)
       state.organ.splice(index, 1)
+      await OrganService.deleteOrgans(id);
     } catch (error) {
       state.error = error
     } finally {

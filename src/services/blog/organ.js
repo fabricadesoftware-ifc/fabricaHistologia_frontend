@@ -1,5 +1,5 @@
 import api from '../../plugins/api'
-
+const token = localStorage.getItem('psg_auth_token')
 /**
  * Service class for handling organs related operations.
  */
@@ -11,11 +11,11 @@ class OrganService {
    */
   async getOrgans() {
     try {
-      const { data } = await api.get(`/organs`)
-      return data.results
+        const { data } = await api.get(`/organs`,)
+        return data.results
     } catch (error) {
-      console.log('error in getOrgans', error)
-      throw error
+        console.log('error in getOrgans', error)
+        throw error
     }
   }
 
