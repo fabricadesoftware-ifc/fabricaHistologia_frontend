@@ -64,6 +64,12 @@ const router = createRouter({
       name: 'test-components',
       component: () => import('@/views/tests/ComponentsView.vue')
     },
+    {
+      path: '/test-welcome',
+      name: 'test-welcome',
+      component: () => import('@/views/tests/WelcomeView.vue'
+      )
+    }
   ]
 })
 
