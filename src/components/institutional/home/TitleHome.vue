@@ -8,7 +8,7 @@ import { BoxButton } from '@/components/index';
         <h1 class="text-7xl font-semibold font-poppins text-white text-center leading-tight xl:hidden">Atlas Digital de Histologia</h1>
         <h1 class="hidden xl:block text-7xl font-semibold font-poppins text-white text-center leading-tight">Atlas de Histologia</h1>
 
-        <BoxButton :title="'Aproveite nosso sistema interativo'" class="z-10 mt-14 px-8 py-2 md:hidden" />
+        <BoxButton title="Aproveite nosso sistema interativo" link="/portal" class="z-10 mt-14 px-8 py-2 md:hidden" hasArrowIcon />
     </div>
 </template>
 <style scoped>

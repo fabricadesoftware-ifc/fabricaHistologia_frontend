@@ -1,7 +1,7 @@
 <template>
   <div class="w-auto h-auto xl:flex items-center gap-5 hidden">
     <div class="w-20 h-20 sm:w-16 sm:h-16  rounded-full bg-purple-900 hover:bg-purple-800 ease-in duration-100 p-3 items-center justify-center flex roundbtn">
-      <img src="../assets/media/search.svg" class="w-7 h-7 sm:w-5 sm:h-5" />
+      <img src="../assets/images/icons/search.svg" class="w-7 h-7 sm:w-5 sm:h-5" />
       <div class="flex container-alt absolute w-96 right-10 sm:w-48 sm:right-20">
         <div class="w-auto p-5 flex items-center bg-white h-9 sm:h-20 rounded-l-md">
           <p class="font-poppins font-light">Clique para pesquisar uma lâmina</p>

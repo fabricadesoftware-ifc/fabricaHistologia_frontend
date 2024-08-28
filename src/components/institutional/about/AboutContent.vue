@@ -1,5 +1,4 @@
 <script setup>
-import ContainerDefault from '@/components/layout/ContainerDefault.vue';
 const props = defineProps({
     'title': {
         type: String,
@@ -13,14 +12,12 @@ const props = defineProps({
 </script>
 
 <template>
-    <ContainerDefault>
-        <div class="flex flex-col ">
+    <div class="flex flex-col w-full p-0 m-0">
         <div class="my-4">
-            <span class="text-2xl font-semibold leading-8 font-poppins ">{{ props.title }}</span>
+            <h1 class="text-2xl font-semibold leading-8 font-poppins">{{ props.title }}</h1>
         </div>
-        <div>
+        <div> 
             <p class="font-normal font-poppins leading-7 mb-7">{{ props.description }}</p>
         </div>
     </div>
-    </ContainerDefault>
 </template>

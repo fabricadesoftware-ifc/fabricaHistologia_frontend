@@ -1,12 +1,12 @@
 <script setup>
-import ContainerDefault from '@/components/layout/ContainerDefault.vue'
+import ContainerGlobal from '@/components/layout/ContainerGlobal.vue'
 import { ref } from 'vue';
 
 const history = ref('Pulmão de Cachorro')
 </script>
 
 <template>
-    <ContainerDefault>
+    <ContainerGlobal>
         <div class="w-3/4 mx-auto">
             <div class="bg-[#F1F1F1] w-full rounded-lg h-12 flex">
                 <input type="text" placeholder="pesquisar..." class="bg-transparent my-auto ml-10 outline-none w-5/6">
@@ -17,5 +17,5 @@ const history = ref('Pulmão de Cachorro')
                 <RouterLink to="#" class="text-[#787878] underline decoration-1 text-sm sm:text-sm">{{ history }}</RouterLink>
             </div>
         </div>
-    </ContainerDefault>
+    </ContainerGlobal>
 </template>

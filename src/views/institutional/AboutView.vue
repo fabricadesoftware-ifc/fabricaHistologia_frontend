@@ -3,7 +3,8 @@ import {
     AboutHeader,
     AboutContent,
     AboutCollaborators,
-    AboutFooter
+    AboutFooter,
+    ContainerGlobal
 } from '@/components/index'
 
 const content = {
@@ -43,11 +44,13 @@ const content = {
 </script>
 
 <template>
-    <div class="bg-[#571480] py-8 text-white h-full over">
-        <AboutHeader />
-        <AboutContent v-for="(article, index) in content.about" :key="index" :title="article.title" :description="article.description"/>
-        <AboutCollaborators v-for="(collaborator, index) in content.collaborators" :key="index" :position="collaborator.position" :collaborators="collaborator.collaborators" />
-        <AboutFooter />
+    <div class="bg-[#571480] py-8 text-white h-full w-screen">
+        <ContainerGlobal>
+            <AboutHeader />
+            <AboutContent v-for="(article, index) in content.about" :key="index" :title="article.title" :description="article.description"/>
+            <AboutCollaborators v-for="(collaborator, index) in content.collaborators" :key="index" :position="collaborator.position" :collaborators="collaborator.collaborators" />
+            <AboutFooter />
+        </ContainerGlobal>
     </div>
 </template>
 

@@ -3,12 +3,17 @@ import '@passageidentity/passage-elements/passage-auth';
 </script>
 
 <template>
-  <h1>Login</h1>
-  <div class="authContainer">
-    <passage-auth
-      app-id="2TXjjhFWhntb7WqVkG46xAmb"
-    ></passage-auth>
-  </div>
+  <main class="w-screen h-screen flex justify-center items-center">
+    <div class="authContainer">
+      <passage-auth
+        app-id="2TXjjhFWhntb7WqVkG46xAmb"
+      ></passage-auth>
+    </div>
+  </main>
 </template>
 
-<style></style>
+<style>
+.authContainer {
+  min-width: 400px;
+}
+</style>

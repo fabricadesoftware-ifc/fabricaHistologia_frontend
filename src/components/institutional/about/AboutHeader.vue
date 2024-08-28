@@ -1,16 +1,13 @@
 <script setup>
-import BackButton from '@/components/layout/BackButton.vue';
-import ContainerDefault from '@/components/layout/ContainerDefault.vue';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
+import { BackButton } from '@/components/index';
 
 const screen = computed(() => {
     return window.innerWidth
 })
-
 </script>
 
 <template>
-    <ContainerDefault>
     <header class="flex flex-col w-full">
         <div class="flex justify-between flex-row">
             <div class="w-1/2 md:w-auto">
@@ -26,5 +23,4 @@ const screen = computed(() => {
             </div>
         </div>
     </header>
-</ContainerDefault>
 </template>
