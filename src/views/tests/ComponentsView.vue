@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-
 import ContainerDefault from '@/components/ContainerDefault.vue';
 import AdditionalInfo from '@/components/AdditionalInfo.vue';
 import BackButton from '../../components/BackButton.vue';
@@ -9,14 +8,6 @@ import CardsContainer from '@/components/CardsContainer.vue';
 import SlideCard from '@/components/SlideCard.vue';
 import SearchBar from '@/components/search/SearchBar.vue'
 import SearchResults from '@/components/search/SearchResults.vue';
-
-const objs = ref([
-    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
-    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
-    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
-    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
-    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
-])
 
 const datas_AdditionalInfo = [
   {
@@ -34,6 +25,22 @@ const datas_AdditionalInfo = [
     ]
   }
 ]
+
+const objs = ref([
+    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]}
+])
 </script>
 
 <template>
@@ -70,7 +77,6 @@ const datas_AdditionalInfo = [
         <p class="py-4">Title Component</p>
         <DefaultTitle />
         <hr>
-
         <br>
 
         <hr>
