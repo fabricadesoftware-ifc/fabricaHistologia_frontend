@@ -42,7 +42,12 @@ const router = createRouter({
       path: '/test-components',
       name: 'test-components',
       component: () => import('@/views/tests/ComponentsView.vue')
-    }
+    },
+    {
+      path: '/test-about',
+      name: 'test-about',
+      component: () => import('@/views/tests/page-test/AboutView.vue')
+    },
   ]
 })
 
