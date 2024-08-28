@@ -15,7 +15,7 @@ const props = defineProps({
   >
     {{ props.title }}
     <a href="#" class="w-9 h-9 md:hidden" v-if="props.hasArrowIcon">
-        <img src="../assets/media/arrowRight.svg" class="w-full h-full md:hidden" />
+        <img src="../assets/images/icons/arrowRight.svg" class="w-full h-full md:hidden" />
     </a>
   </button>
 </template>

@@ -1,27 +1,26 @@
 <script setup>
 import { ref } from 'vue';
-import ContainerDefault from '@/components/ContainerDefault.vue';
-import AdditionalInfo from '@/components/AdditionalInfo.vue';
-import BackButton from '../../components/BackButton.vue';
-import DefaultTitle from '@/components/DefaultTitle.vue';
-import CardsContainer from '@/components/CardsContainer.vue';
-import SlideCard from '@/components/SlideCard.vue';
-import BtnDefault from '../../components/buttons/BtnDefault.vue';
-import BtnStroke from '../../components/buttons/BtnStroke.vue';
-
-import SmallCardDefault from '@/components/cards/SmallCardDefault.vue';
-import MediumCardDefault from '@/components/cards/MediumCardDefault.vue';
-
-const objs = ref([
-    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
-    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
-    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
-    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
-    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
-])
-
-import SearchBar from '@/components/search/SearchBar.vue'
-import SearchResults from '@/components/search/SearchResults.vue';
+import {
+  AddInfoGlobal,
+  BackButton,
+  BoxButton,
+  BtnDefault,
+  BtnStroke,
+  CardsContainer,
+  ContainerGlobal,
+  DefaultTitle,
+  InitialSearchButton,
+  MediumCardDefault,
+  NavbarHome,
+  SearchBar,
+  SearchButtonGlobal,
+  SearchResults,
+  SlideCard,
+  SmallCardDefault,
+  TitleGlobal,
+  TitleHome,
+  TopicsAdditionalInfo
+} from '@/components/index'
 
 const datas_AdditionalInfo = [
   {
@@ -60,81 +59,26 @@ const objs = ref([
 <template>
     <main>
         <h1>Biblioteca de Componentes</h1>
-        <!-- <hr> -->
-        <!-- <p>component name</p> -->
-        <!-- <Component -->
-        <!-- <hr> -->
-
-        <hr class="mt-10">
-        <p class="py-4">Main Container</p>
-        <ContainerDefault>
-            test
-        </ContainerDefault>
-        <hr>
-            
-        <hr class="mt-10">
-        <p class="py-4">AditionalInfo</p>
-        <AdditionalInfo title="Materiais de Apoio" description="Que tal estudar com um quiz interativo ou talvez com um mapa menta. Clique no botão e aproveite nossos materias adicionais" :datas="datas_AdditionalInfo" />
-        <hr>
-
-        <hr class="mt-10">
-        <p class="py-4">AditionalInfo with BUTTONS <span class="text-red-500">(INCOMPLETO)</span></p>
-        <AdditionalInfo title="Não Achou oque procurava?" description="Nós ajude a melhorar fazendo parte do grupo de colaboradores! acesse o link a baixo e solicite uma conta. Nós ajude a melhorar fazendo parte do grupo de colaboradores! acesse o link a baixo e solicite uma conta. " buttons />
-        <hr>
-        
-        <hr class="mt-10">
-        <p class="py-4">Back Button</p> 
+        <div class="my-10">
+          <AddInfoGlobal title="TITULO" description="lorem ispsum" :data="datas_AdditionalInfo" buttons />
+        </div>
         <BackButton />
-        <hr>
-
-        <hr class="mt-10">
-        <p class="py-4">Title Component</p>
-        <DefaultTitle />
-        <hr>
-        <br>
-
-        <hr>
-        <p>CardsContainer with SlideCard</p>
-        <CardsContainer>
-          <SlideCard :details="objs" />
-        </CardsContainer>
-        <hr>
-        <br>
-        <br>
-        <hr>
-        <p>BtnDefault</p>
-        <BtnDefault :block="true" />
-        <BtnDefault color="text-red-500" background="bg-blue-500" />
-        <hr>
-        
-        <hr>
-        <p>BtnStroke</p>
-        <BtnStroke :block="true" />
+        <BoxButton />
+        <BtnDefault />
         <BtnStroke />
-
-        <hr class="mt-10">
-        <p class="py-4">Small Card</p>
-        <ContainerDefault>
-          <SmallCardDefault />
-        </ContainerDefault>
-        <hr class="mt-20">
-        <br>
-
-        <hr class="mt-10">
-        <p class="py-4">Medium Card</p>
-          <ContainerDefault>
-            <MediumCardDefault />
-          </ContainerDefault>
-        <hr class="mt-20">
-        <p class="py-4">Search Bar</p>
+        <CardsContainer />
+        <ContainerGlobal />
+        <DefaultTitle />
+        <InitialSearchButton />
+        <MediumCardDefault />
+        <NavbarHome />
         <SearchBar />
-        <hr>
-
-        <br>
-
-        <hr class="mt-10">
-        <p class="py-4">Search Results</p>
+        <SearchButtonGlobal />
         <SearchResults />
-        <hr>
+        <SlideCard />
+        <SmallCardDefault />
+        <TitleGlobal />
+        <TitleHome />
+        <TopicsAdditionalInfo />
     </main>
 </template>

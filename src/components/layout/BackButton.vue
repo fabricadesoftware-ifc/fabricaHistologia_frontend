@@ -1,6 +1,6 @@
 <script setup>
 import { useNavigationStore } from '@/stores/blog/navigation';
-import IconBack from './icons/IconBack.vue';
+import { IconBack } from '@/components/index';
 
 const navigationStore = useNavigationStore();
 const props = defineProps({

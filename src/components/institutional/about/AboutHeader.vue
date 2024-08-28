@@ -1,6 +1,6 @@
 <script setup>
-import BackButton from '@/components/BackButton.vue';
-import ContainerDefault from '@/components/ContainerDefault.vue';
+import BackButton from '@/components/layout/BackButton.vue';
+import ContainerDefault from '@/components/layout/ContainerDefault.vue';
 import { computed, ref } from 'vue';
 
 const screen = computed(() => {

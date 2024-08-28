@@ -1,5 +1,5 @@
 <script setup>
-import ContainerDefault from '../ContainerDefault.vue';
+import { ContainerGlobal } from '@/components/index';
 
 const searchResults = [
     {
@@ -21,7 +21,7 @@ const searchResults = [
 </script>
 
 <template>
-    <ContainerDefault>
+    <ContainerGlobal>
         <div class="w-3/4 mx-auto flex flex-col my-4 font-poppins">
             <div v-for="(result, index) in searchResults" :key="index" class="w-full flex h-12 my-4 justify-between">
                 <div class="flex flex-col my">
@@ -33,5 +33,5 @@ const searchResults = [
                 <RouterLink class="my-auto text-[#267A7A] text-base sm:text-xs">ver relacionados</RouterLink>
             </div>
         </div>
-    </ContainerDefault>
+    </ContainerGlobal>
 </template>

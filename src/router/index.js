@@ -6,12 +6,17 @@ const router = createRouter({
     {
       path: '/',
       name: '',
-      component: () => import('@/views/HomeView.vue')
+      component: () => import('@/views/institutional/HomeView.vue')
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: () => import('@/views/institutional/AboutView.vue')
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/LoginView.vue')
+      component: () => import('@/views/auth/LoginView.vue')
     },
     {
       path: '/test-species',
@@ -42,11 +47,6 @@ const router = createRouter({
       path: '/test-components',
       name: 'test-components',
       component: () => import('@/views/tests/ComponentsView.vue')
-    },
-    {
-      path: '/test-about',
-      name: 'test-about',
-      component: () => import('@/views/tests/page-test/AboutView.vue')
     },
   ]
 })

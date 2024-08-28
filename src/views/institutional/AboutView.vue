@@ -1,8 +1,10 @@
 <script setup>
-import AboutHeader from './AboutHeader.vue';
-import AboutContent from './AboutContent.vue';
-import AboutCollaborators from './AboutCollaborators.vue';
-import AboutFooter from './AboutFooter.vue';
+import { 
+    AboutHeader,
+    AboutContent,
+    AboutCollaborators,
+    AboutFooter
+} from '@/components/index'
 
 const content = {
     about: [

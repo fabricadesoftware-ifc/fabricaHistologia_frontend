@@ -1,5 +1,5 @@
 <script setup>
-import ContainerDefault from '@/components/ContainerDefault.vue'
+import ContainerDefault from '@/components/layout/ContainerDefault.vue'
 
 const props = defineProps({
     'position': {
