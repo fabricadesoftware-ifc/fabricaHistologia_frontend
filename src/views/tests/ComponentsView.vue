@@ -6,6 +6,8 @@ import BackButton from '../../components/BackButton.vue';
 import DefaultTitle from '@/components/DefaultTitle.vue';
 import CardsContainer from '@/components/CardsContainer.vue';
 import SlideCard from '@/components/SlideCard.vue';
+import BtnDefault from '../../components/buttons/BtnDefault.vue';
+import BtnStroke from '../../components/buttons/BtnStroke.vue';
 
 import SmallCardDefault from '@/components/cards/SmallCardDefault.vue';
 import MediumCardDefault from '@/components/cards/MediumCardDefault.vue';
@@ -98,6 +100,17 @@ const objs = ref([
         </CardsContainer>
         <hr>
         <br>
+        <br>
+        <hr>
+        <p>BtnDefault</p>
+        <BtnDefault :block="true" />
+        <BtnDefault color="text-red-500" background="bg-blue-500" />
+        <hr>
+        
+        <hr>
+        <p>BtnStroke</p>
+        <BtnStroke :block="true" />
+        <BtnStroke />
 
         <hr class="mt-10">
         <p class="py-4">Small Card</p>
