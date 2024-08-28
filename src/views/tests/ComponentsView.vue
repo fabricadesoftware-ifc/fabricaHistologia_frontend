@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-
 import ContainerDefault from '@/components/ContainerDefault.vue';
 import AdditionalInfo from '@/components/AdditionalInfo.vue';
 import BackButton from '../../components/BackButton.vue';
@@ -10,6 +9,9 @@ import SlideCard from '@/components/SlideCard.vue';
 import BtnDefault from '../../components/buttons/BtnDefault.vue';
 import BtnStroke from '../../components/buttons/BtnStroke.vue';
 
+import SmallCardDefault from '@/components/cards/SmallCardDefault.vue';
+import MediumCardDefault from '@/components/cards/MediumCardDefault.vue';
+
 const objs = ref([
     {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
     {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
@@ -17,6 +19,9 @@ const objs = ref([
     {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
     {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
 ])
+
+import SearchBar from '@/components/search/SearchBar.vue'
+import SearchResults from '@/components/search/SearchResults.vue';
 
 const datas_AdditionalInfo = [
   {
@@ -34,6 +39,22 @@ const datas_AdditionalInfo = [
     ]
   }
 ]
+
+const objs = ref([
+    {name: 'Nome da lâmina', date: ['10', 'agosto', '2028'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]},
+
+    {name: 'Pulmão', date: ['10', 'junho', '2024'], tags: [{color: 'text-white', background: 'bg-purple-700', content: '2x'}, {color: 'text-white', background: 'bg-green-600', content: 'Boi'}, {color: 'text-black', background: 'bg-gray-400', content: 'tag'} ]}
+])
 </script>
 
 <template>
@@ -70,7 +91,6 @@ const datas_AdditionalInfo = [
         <p class="py-4">Title Component</p>
         <DefaultTitle />
         <hr>
-
         <br>
 
         <hr>
@@ -91,6 +111,30 @@ const datas_AdditionalInfo = [
         <p>BtnStroke</p>
         <BtnStroke :block="true" />
         <BtnStroke />
+
+        <hr class="mt-10">
+        <p class="py-4">Small Card</p>
+        <ContainerDefault>
+          <SmallCardDefault />
+        </ContainerDefault>
+        <hr class="mt-20">
+        <br>
+
+        <hr class="mt-10">
+        <p class="py-4">Medium Card</p>
+          <ContainerDefault>
+            <MediumCardDefault />
+          </ContainerDefault>
+        <hr class="mt-20">
+        <p class="py-4">Search Bar</p>
+        <SearchBar />
+        <hr>
+
+        <br>
+
+        <hr class="mt-10">
+        <p class="py-4">Search Results</p>
+        <SearchResults />
         <hr>
     </main>
 </template>
