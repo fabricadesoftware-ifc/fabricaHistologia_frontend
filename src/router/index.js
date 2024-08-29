@@ -5,7 +5,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: '',
+      name: 'home',
       component: () => import('@/views/institutional/HomeView.vue')
     },
     {
@@ -17,6 +17,22 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('@/views/auth/LoginView.vue')
+    },
+    {
+      path: '/portal',
+      name: 'portal',
+      children: [
+        {
+          path: '',
+          name: 'welcome-portal', 
+          component: () => import('@/views/institutional/AboutView.vue')
+        },
+        {
+          path: 'post/:id',
+          name: 'post-id',
+          component: () => import('@/views/portal/PostView.vue')
+        }
+      ]
     },
     {
       path: '/test-species',
