@@ -17,6 +17,7 @@ import BackButton from '@/components/layout/BackButton.vue';
 import ContainerGlobal from '@/components/layout/ContainerGlobal.vue';
 import InitialSearchButton from '@/components/layout/InitialSearchButton.vue';
 import SearchButtonGlobal from '@/components/layout/SearchButtonGlobal.vue';
+import FooterComp from '@/components/layout/FooterComp.vue'
 
 // portal
 import AddInfoGlobal from '@/components/portal/globals/AddInfoGlobal.vue';
@@ -45,6 +46,7 @@ export {
   MediumCardDefault,
   NavbarHome,
   SearchBar,
+  FooterComp,
   SearchButtonGlobal,
   SearchResults,
   SlideCard,
