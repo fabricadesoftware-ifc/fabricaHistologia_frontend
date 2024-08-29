@@ -11,7 +11,8 @@ class OrganService {
    */
   async getOrgans() {
     try {
-        const { data } = await api.get(`/organs`,)
+      console.log('get')
+        const { data } = await api.get(`/organs`)
         return data.results
     } catch (error) {
         console.log('error in getOrgans', error)
@@ -26,13 +27,9 @@ class OrganService {
    * @throws {Error} If an error occurs while creating the organs.
    */
   async createOrgan(newOrgan) {
-    try {
-      const { data } = await api.post(`/organs/`, newOrgan)
+      const { data } = await api.post(`/organs/`, newOrgan, {headers: {authorization: `Bearer ${token}`}})
+      console.log(token)
       return data.results
-    } catch (error) {
-      console.log('error in createOrgans', error)
-      throw error
-    }
   }
 
   /**
@@ -43,10 +40,11 @@ class OrganService {
    */
   async updateOrgans(organ) {
     try {
-      const { data } = await api.put(`/organs/${organ.id}/`)
+      console.log(organ)
+      const { data } = await api.put(`/organs/${organ.id}/`, organ, {headers: {'authorization': `Bearer ${token}`}})
       return data.results
     } catch (error) {
-      console.log('error in updateOrgans')
+      console.log('error in updateOrgans', error)
       throw error
     }
   }
@@ -59,7 +57,7 @@ class OrganService {
    */
   async deleteOrgans(id) {
     try {
-      const { data } = await api.delete(`/organ/${id}/`)
+      const { data } = await api.delete(`/organs/${id}/`, {headers: {'authorization': `Bearer ${token}`}})
       return data.results
     } catch (error) {
       console.log('error in deleteOrgan', error)

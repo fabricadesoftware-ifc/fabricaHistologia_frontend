@@ -60,8 +60,10 @@ export const useOrganStore = defineStore('organ', () => {
   const createOrgan = async (newOrgan) => {
     state.loading = true
     try {
-      state.organs.push(await OrganService.createOrgan(newOrgan))
+      await OrganService.createOrgan(newOrgan)
+      getOrgans()
     } catch (error) {
+      console.log(error)
       state.error = error
     } finally {
       state.loading = false
@@ -76,9 +78,11 @@ export const useOrganStore = defineStore('organ', () => {
    */
   const updateOrgan = async (organ) => {
     state.loading = true
+    console.log(organ)  
     try {
-      const index = state.organs.frindIndex((s) => s.id === organ.id)
-      state.organs[index] = await OrganService.getOrgans(organ)
+      const index = state.organs.findIndex((s) => s.id === organ.id);
+      state.organs = await OrganService.updateOrgans(organ);
+      getOrgans();
     } catch (error) {
       state.error = error
     } finally {
@@ -94,9 +98,10 @@ export const useOrganStore = defineStore('organ', () => {
   const deleteOrgan = async (id) => {
     state.loading = true
     try {
-      const index = state.organs.findIndex((s) => s.id === id)
-      state.organ.splice(index, 1)
-      await OrganService.deleteOrgans(id);
+      const index = state.organs.findIndex((s) => s.id === id);
+      console.log(index)
+      await OrganService.deleteOrgans(id)
+      getOrgans()
     } catch (error) {
       state.error = error
     } finally {
