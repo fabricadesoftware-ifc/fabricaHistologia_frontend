@@ -45,6 +45,7 @@ export const useSpecieStore = defineStore("specie",
             state.loading = true;
             try {
                 state.species = await SpecieService.getSpecies();
+                console.log("test")
             } catch (error) {
                 state.error = error;
             } finally {

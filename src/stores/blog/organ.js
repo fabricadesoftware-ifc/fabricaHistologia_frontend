@@ -20,12 +20,12 @@ import { OrganService } from '@/services'
 
 /**
  * Creates a new instance of the OrganStore.
- * @function useSpecieStore
- * @returns {SpecieStore} The OrganStore instance.
+ * @function useOrganStore
+ * @returns {OrganStore} The OrganStore instance.
  */
 export const useOrganStore = defineStore('organ', () => {
   const state = reactive({
-    species: [],
+    organs: [],
     selectedOrgan: null,
     loading: false,
     error: null,
@@ -54,14 +54,16 @@ export const useOrganStore = defineStore('organ', () => {
   /**
    * Creates a new organ.
    * @async
-   * @function createSpecie
-   * @param {Object} newSpecie - The new organ object to create.
+   * @function createOrgan
+   * @param {Object} newOrgan - The new organ object to create.
    */
   const createOrgan = async (newOrgan) => {
     state.loading = true
     try {
-      state.organs.push(await OrganService.createOrgan(newOrgan))
+      await OrganService.createOrgan(newOrgan)
+      getOrgans()
     } catch (error) {
+      console.log(error)
       state.error = error
     } finally {
       state.loading = false
@@ -72,13 +74,15 @@ export const useOrganStore = defineStore('organ', () => {
    * Updates an existing organ.
    * @async
    * @function updateSpecie
-   * @param {Object} specie - The organ object to update.
+   * @param {Object} organ - The organ object to update.
    */
   const updateOrgan = async (organ) => {
     state.loading = true
+    console.log(organ)  
     try {
-      const index = state.organs.frindIndex((s) => s.id === organ.id)
-      state.organs[index] = await OrganService.getOrgans()
+      const index = state.organs.findIndex((s) => s.id === organ.id);
+      state.organs = await OrganService.updateOrgans(organ);
+      getOrgans();
     } catch (error) {
       state.error = error
     } finally {
@@ -94,8 +98,10 @@ export const useOrganStore = defineStore('organ', () => {
   const deleteOrgan = async (id) => {
     state.loading = true
     try {
-      const index = state.organs.findIndex((s) => s.id === id)
-      state.organ.splice(index, 1)
+      const index = state.organs.findIndex((s) => s.id === id);
+      console.log(index)
+      await OrganService.deleteOrgans(id)
+      getOrgans()
     } catch (error) {
       state.error = error
     } finally {
