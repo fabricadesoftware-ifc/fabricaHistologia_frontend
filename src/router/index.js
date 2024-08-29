@@ -65,9 +65,9 @@ const router = createRouter({
       component: () => import('@/views/tests/ComponentsView.vue')
     },
     {
-      path: '/test-welcome',
-      name: 'test-welcome',
-      component: () => import('@/views/tests/WelcomeView.vue'
+      path: '/welcome',
+      name: 'welcome',
+      component: () => import('@/views/portal/WelcomeView.vue'
       )
     }
   ]
