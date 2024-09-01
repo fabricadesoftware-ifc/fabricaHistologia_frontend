@@ -31,10 +31,16 @@ import SearchResults from '@/components/portal/search/SearchResults.vue';
 import SlideCard from '@/components/portal/cards/SlideCard.vue';
 import SmallCardDefault from '@/components/portal/cards/SmallCardDefault.vue';
 import TitleGlobal from '@/components/portal/globals/TitleGlobal.vue';
+import HeaderPortal from '@/components/portal/globals/HeaderPortal.vue';
 import TopicsAdditionalInfo from '@/components/portal/globals/TopicsAdditionalInfo.vue';
+
+// post
+import CheckList from '@/components/portal/post/CheckList.vue';
+import PostInfo from '@/components/portal/post/PostInfo.vue';
 
 export {
   AddInfoGlobal,
+  PostInfo,
   BackButton,
   BoxButton,
   BtnDefault,
@@ -58,5 +64,7 @@ export {
   AboutCollaborators,
   AboutContent,
   AboutFooter,
-  AboutHeader
+  AboutHeader,
+  HeaderPortal,
+  CheckList
 };
