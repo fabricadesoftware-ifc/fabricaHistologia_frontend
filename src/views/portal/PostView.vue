@@ -31,7 +31,7 @@ const datas_AdditionalInfo = [
             <div class="md:w-full w-1/2">
               <div class="rounded-xl overflow-hidden">
                 <img
-                  src="https://th.bing.com/th/id/OIP.s_vGI_uIYXbmNE6f35HSmgHaHa?rs=1&pid=ImgDetMain"
+                  src="https://th.bing.com/th/id/R.70f72e90f21fa0b9a884ba9b2a9e72c7?rik=5gT0EQaWi7iYew&riu=http%3a%2f%2fcv.udl.cat%2fcursos%2f100302%2fhistologia%2fbasicos%2f3.1.jpg&ehk=3Z8Bs%2f8b7ok3P2ODm7080hnW8Q5LgxSaPrVvQACAiKE%3d&risl=&pid=ImgRaw&r=0"
                   class="w-full"
                 />
               </div>
