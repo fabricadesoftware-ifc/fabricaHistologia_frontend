@@ -25,7 +25,7 @@ const router = createRouter({
         {
           path: '',
           name: 'welcome-portal', 
-          component: () => import('@/views/institutional/AboutView.vue')
+          component: () => import('@/views/portal/WelcomeView.vue')
         },
         {
           path: 'post/:id',
