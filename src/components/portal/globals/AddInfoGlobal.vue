@@ -1,5 +1,5 @@
 <script setup>
-import { ContainerGlobal, TopicsAdditionalInfo} from '@/components/index';
+import { ContainerGlobal, TopicsAdditionalInfo, BtnDefault, BtnStroke} from '@/components/index';
 
 const props = defineProps({
   title: {
@@ -26,8 +26,8 @@ const props = defineProps({
       <p class="text-stone-700 mt-1 font-normal font-poppins">{{ props.description }}</p>
     </div>
     <TopicsAdditionalInfo :datas="props.data" />
-    <div class="w-full flex justify-end gap-6" v-show="props.buttons">
-       <button class="bg-red-500">Perguntas Frequentes</button>
-       <button class="bg-red-500">Ser um Colaborador</button>
+    <div class="w-full flex justify-end gap-6 flex-wrap min-w-4/5 sm:justify-center" v-show="props.buttons">
+      <BtnStroke :text="'Perguntas Frequentes'" :border="'border-black'" :color="'text-black'" /> 
+      <BtnDefault :text="'Ser um Colaborador'" :color="'text-white'" :background="'bg-black'" />
     </div>
 </template>
