@@ -25,7 +25,7 @@ const router = createRouter({
         {
           path: '',
           name: 'welcome-portal', 
-          component: () => import('@/views/institutional/AboutView.vue')
+          component: () => import('@/views/portal/WelcomeView.vue')
         },
         {
           path: 'post/:id',
@@ -64,12 +64,6 @@ const router = createRouter({
       name: 'test-components',
       component: () => import('@/views/tests/ComponentsView.vue')
     },
-    {
-      path: '/welcome',
-      name: 'welcome',
-      component: () => import('@/views/portal/WelcomeView.vue'
-      )
-    }
   ]
 })
 

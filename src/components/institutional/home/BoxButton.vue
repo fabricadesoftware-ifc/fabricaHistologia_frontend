@@ -22,8 +22,8 @@ const props = defineProps({
     @click="router.push(link)"
   >
     {{ props.title }}
-    <a href="#" class="w-9 h-9 md:hidden" v-if="props.hasArrowIcon">
-        <img src="@/assets/images/icons/arrowRight.svg" class="w-full h-full md:hidden" />
+    <a href="#" class="w-9 h-9" v-if="props.hasArrowIcon">
+        <img src="@/assets/images/icons/arrowRight.svg" class="w-full h-full" />
     </a>
   </button>
 </template>
