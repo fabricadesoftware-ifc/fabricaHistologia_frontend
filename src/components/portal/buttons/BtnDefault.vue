@@ -1,5 +1,4 @@
 <script setup>
-import { computed } from 'vue';
 
 const props = defineProps({
     text: {
@@ -8,7 +7,7 @@ const props = defineProps({
     },
     background: {
         type: String,
-        default: "bg-primary"
+        default: "bg-[#267A7A]"
     },
     color: {
         type: String,
@@ -26,7 +25,7 @@ const props = defineProps({
 </script>
 <template>
     <router-link :to="props.link">
-        <button :class="[`rounded-2xl h-14 font-poppins px-16 ${props.background} ${props.color}`, {'w-full': block}]">
+        <button :class="[`rounded-2xl h-14 font-poppins px-16 hover:opacity-75 ${props.background} ${props.color}`, {'w-full': block}]">
             {{ props.text }}
         </button>
     </router-link>

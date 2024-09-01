@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import { HeaderPortal, ContainerGlobal, CheckList, PostInfo, AddInfoGlobal, FooterComp } from '@/components/index'
+import { HeaderPortal, ContainerGlobal, CheckList, PostInfo, AddInfoGlobal, FooterComp, BtnDefault } from '@/components/index';
 
 const route = useRoute()
 const id = route.params.id
@@ -27,8 +27,8 @@ const datas_AdditionalInfo = [
     <main>
         <HeaderPortal :title="`Dados da Lâmina ${id}`" />
         <ContainerGlobal class="mb-12">
-          <section class="w-full flex gap-8 relative">
-            <div class="w-1/2">
+          <section class="w-full md:block flex gap-8 relative">
+            <div class="md:w-full w-1/2">
               <div class="rounded-xl overflow-hidden">
                 <img
                   src="https://th.bing.com/th/id/OIP.s_vGI_uIYXbmNE6f35HSmgHaHa?rs=1&pid=ImgDetMain"
@@ -36,7 +36,7 @@ const datas_AdditionalInfo = [
                 />
               </div>
             </div>
-            <div class="w-1/2 pb-1000 pr-8 relative">
+            <div class="md:w-full w-1/2 pb-1000 pr-8 relative md:mt-8">
               <CheckList />
               <PostInfo />
             </div>
@@ -50,6 +50,12 @@ const datas_AdditionalInfo = [
                 />
             </div>
           </section>
+          <section class="mt-8">
+            <BtnDefault 
+              text="Acessar Quiz deste Sistema"
+              block
+            />
+          </section>
         </ContainerGlobal>
         <FooterComp />
     </main>
@@ -58,5 +64,10 @@ const datas_AdditionalInfo = [
 <style scoped>
 .pb-1000 {
   padding-bottom: 400px;
+}
+@media screen and (max-width: 768px) {
+  .pb-1000 {
+    padding-bottom: 0;
+  }
 }
 </style>

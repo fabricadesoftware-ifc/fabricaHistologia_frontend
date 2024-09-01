@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="absolute bottom-0 left-0">
+  <div class="md:relative absolute bottom-0 left-0">
     <h2 class="pt-4 font-semibold text-lg">Dados da Lâmina {{ props.id }}</h2>
     <ul class="text-gray-400 pt-4 pb-4">
       <li>
