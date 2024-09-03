@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <section class="w-4/5 h-full mx-auto">
+    <section class="w-4/5 mx-auto">
         <slot></slot>
     </section> 
 </template>
