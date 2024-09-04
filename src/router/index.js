@@ -59,6 +59,11 @@ const router = createRouter({
       name: 'test-components',
       component: () => import('@/views/tests/ComponentsView.vue')
     },
+    {
+      path: '/organs',
+      name: 'organ',
+      component: () => import('@/views/tests/SelectOrgansView.vue')
+    },
   ]
 })
 

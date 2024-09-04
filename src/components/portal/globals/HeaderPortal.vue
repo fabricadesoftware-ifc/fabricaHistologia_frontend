@@ -7,6 +7,11 @@ const props = defineProps({
         required: false,
         default: 'Sem título',
     },
+    size: {
+        type: String,
+        required: false,
+        default: 'text-4xl'
+    }
 })
 
 </script>
@@ -14,6 +19,6 @@ const props = defineProps({
 <template>
     <ContainerGlobal class="pt-8 pb-12">
         <BackButton />
-        <TitleGlobal :content="props.title" position="justify-center" class="md:mt-16" />
+        <TitleGlobal :content="props.title" :size="props.size" position="justify-center" class="md:mt-16" />
     </ContainerGlobal>
 </template>

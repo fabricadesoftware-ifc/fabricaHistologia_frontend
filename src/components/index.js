@@ -33,6 +33,8 @@ import SmallCardDefault from '@/components/portal/cards/SmallCardDefault.vue';
 import TitleGlobal from '@/components/portal/globals/TitleGlobal.vue';
 import HeaderPortal from '@/components/portal/globals/HeaderPortal.vue';
 import TopicsAdditionalInfo from '@/components/portal/globals/TopicsAdditionalInfo.vue';
+import SelectCardsGlobal from '@/components/portal/globals/SelectCardsGlobal.vue'
+import OrganAdditionalInfo from '@/components/portal/OrganPage/OrgansAdditionalInfo.vue'
 
 // post
 import CheckList from '@/components/portal/post/CheckList.vue';
@@ -66,5 +68,7 @@ export {
   AboutFooter,
   AboutHeader,
   HeaderPortal,
-  CheckList
+  CheckList,
+  SelectCardsGlobal,
+  OrganAdditionalInfo
 };
