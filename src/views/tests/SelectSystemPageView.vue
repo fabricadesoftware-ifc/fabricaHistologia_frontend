@@ -3,6 +3,7 @@ import {
     SystemsHeader,
     SystemsCards,
     SystemsSupportMaterial,
+    FooterComp
 } from '@/components';
 </script>
 
@@ -10,4 +11,5 @@ import {
    <SystemsHeader />
    <SystemsCards />
    <SystemsSupportMaterial />
+   <FooterComp />
 </template>
