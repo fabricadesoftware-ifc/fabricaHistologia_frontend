@@ -34,6 +34,8 @@ import TitleGlobal from '@/components/portal/globals/TitleGlobal.vue';
 import HeaderPortal from '@/components/portal/globals/HeaderPortal.vue';
 import TopicsAdditionalInfo from '@/components/portal/globals/TopicsAdditionalInfo.vue';
 import SystemsHeader from '@/components/portal/SystemsPage/SystemsHeader.vue';
+import SystemsCards from '@/components/portal/SystemsPage/SystemsCards.vue';
+import SystemsSupportMaterial from '@/components/portal/SystemsPage/SystemsSupportMaterials.vue';
 
 // post
 import CheckList from '@/components/portal/post/CheckList.vue';
@@ -69,4 +71,6 @@ export {
   HeaderPortal,
   CheckList,
   SystemsHeader,
+  SystemsCards,
+  SystemsSupportMaterial,
 };
