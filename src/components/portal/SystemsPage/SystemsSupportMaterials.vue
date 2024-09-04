@@ -18,7 +18,7 @@ const props = defineProps({
     <ContainerGlobal>
         <h3 class="text-2xl font-medium font-poppins mt-14">{{ props.title }}</h3>
         <p class="text-stone-700 mt-1 font-normal font-poppins">{{ props.description }}</p>
-        <div class="flex justify-end flex-row gap-10 mt-10 mb-16">
+        <div class="flex justify-end flex-row flex-wrap lg:justify-center gap-10 mt-10 mb-16">
             <BtnDefault background="bg-[#267A7A]" text="Acessar Aulas" />
             <BtnDefault background="bg-[#4B4BEB]" text="Acessar Conteúdos" />
             <BtnDefault background="bg-[#D94E4E]" text="Acessar Quiz" />
