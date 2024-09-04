@@ -33,6 +33,7 @@ import SmallCardDefault from '@/components/portal/cards/SmallCardDefault.vue';
 import TitleGlobal from '@/components/portal/globals/TitleGlobal.vue';
 import HeaderPortal from '@/components/portal/globals/HeaderPortal.vue';
 import TopicsAdditionalInfo from '@/components/portal/globals/TopicsAdditionalInfo.vue';
+import SearchAddInfo from '@/components/portal/search/SearchAddInfo.vue'
 
 // post
 import CheckList from '@/components/portal/post/CheckList.vue';
@@ -52,6 +53,7 @@ export {
   MediumCardDefault,
   NavbarHome,
   SearchBar,
+  SearchAddInfo,
   FooterComp,
   SearchButtonGlobal,
   SearchResults,
