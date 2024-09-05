@@ -33,8 +33,8 @@ const objs = [
 <template>
 <main class="w-dvh">
     <ContainerGlobal class="flex justify-center flex-col">
-        <BackButton :title="'voltar'" class=" top-8"/>
-        <TitleGlobal :color="'text-[#181A2A]'" :content="'Estômago'" :position="'justify-center'" class="mt-5"/>
+        <BackButton :title="'voltar'" class=" top-8 sm:top-3"/>
+        <TitleGlobal :color="'text-[#181A2A]'" :content="'Estômago'" :position="'justify-center'" class="mt-5 sm:mt-14"/>
         <CardsContainer class=" mt-16">
             <SlideCard :details="objs" />
         </CardsContainer>
