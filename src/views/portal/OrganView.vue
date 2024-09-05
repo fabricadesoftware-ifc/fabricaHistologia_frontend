@@ -1,5 +1,5 @@
 <script setup>
-import  {ContainerGlobal, CardsContainer, SlideCard, AddInfoGlobal, BtnDefault, BackButton, FooterComp, TitleGlobal } from '@/components/index';
+import  {ContainerGlobal, CardsContainer, SlideCard, AddInfoGlobal, BtnDefault, FooterComp, HeaderPortal} from '@/components/index';
 
 const data = [
 
@@ -33,9 +33,8 @@ const objs = [
 <template>
 <main class="w-dvh">
     <ContainerGlobal class="flex justify-center flex-col">
-        <BackButton :title="'voltar'" class=" top-8 sm:top-3"/>
-        <TitleGlobal :color="'text-[#181A2A]'" :content="'Estômago'" :position="'justify-center'" class="mt-5 sm:mt-14"/>
-        <CardsContainer class=" mt-16">
+        <HeaderPortal :title="'Estômago'" />
+        <CardsContainer class=" mt-3">
             <SlideCard :details="objs" />
         </CardsContainer>
 
