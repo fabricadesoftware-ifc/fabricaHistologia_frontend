@@ -6,7 +6,7 @@ const props = defineProps({
     },
     'weight': {
         type: String,
-        default: 'font-bold'
+        default: 'font-semibold'
     },
     'content': {
         type: String,
