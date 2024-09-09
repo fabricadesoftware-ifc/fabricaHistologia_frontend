@@ -12,7 +12,7 @@ const history = ref('Pulmão de Cachorro')
                 <input type="text" placeholder="pesquisar..." class="bg-transparent my-auto ml-10 sm:ml-5 outline-none w-5/6">
                 <i class="mdi mdi-magnify text-black text-4xl m-auto" />
             </div>
-            <div class="w-full flex justify-end mt-2">
+            <div class="w-full flex justify-end mt-2 sm:mt-3">
                 <span class="text-[#787878] text-end mr-2 text-sm sm:text-xs">Ultima Pesquisa:</span>
                 <RouterLink to="#" class="text-[#787878] underline decoration-1 text-sm sm:text-xs">{{ history }}</RouterLink>
             </div>
