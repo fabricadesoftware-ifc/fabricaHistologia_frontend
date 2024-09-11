@@ -33,6 +33,9 @@ import SmallCardDefault from '@/components/portal/cards/SmallCardDefault.vue';
 import TitleGlobal from '@/components/portal/globals/TitleGlobal.vue';
 import HeaderPortal from '@/components/portal/globals/HeaderPortal.vue';
 import TopicsAdditionalInfo from '@/components/portal/globals/TopicsAdditionalInfo.vue';
+import SystemsHeader from '@/components/portal/SystemsPage/SystemsHeader.vue';
+import SystemsCards from '@/components/portal/SystemsPage/SystemsCards.vue';
+import SystemsSupportMaterial from '@/components/portal/SystemsPage/SystemsSupportMaterials.vue';
 import SelectCardsGlobal from '@/components/portal/globals/SelectCardsGlobal.vue'
 import OrganAdditionalInfo from '@/components/portal/OrganPage/OrgansAdditionalInfo.vue'
 import SearchAddInfo from '@/components/portal/search/SearchAddInfo.vue'
@@ -71,6 +74,9 @@ export {
   AboutHeader,
   HeaderPortal,
   CheckList,
+  SystemsHeader,
+  SystemsCards,
+  SystemsSupportMaterial,
   SelectCardsGlobal,
   OrganAdditionalInfo
 };

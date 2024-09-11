@@ -55,6 +55,11 @@ const router = createRouter({
       component: () => import('@/views/tests/SystemsView.vue')
     },
     {
+      path: '/systems',
+      name: 'systems',
+      component: () => import('@/views/tests/SelectSystemPageView.vue')
+    },
+    {
       path: '/test-components',
       name: 'test-components',
       component: () => import('@/views/tests/ComponentsView.vue')
