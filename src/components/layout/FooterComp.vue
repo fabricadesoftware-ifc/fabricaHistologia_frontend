@@ -4,7 +4,7 @@ import { ContainerGlobal } from '..';
 </script>
 
 <template>
-    <footer class="bg-[#F9F9F9]">
+    <footer class="bg-[#F9F9F9] border">
         <ContainerGlobal>
             <section class="flex justify-between items-center">
                 <div>
