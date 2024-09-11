@@ -28,51 +28,31 @@ const router = createRouter({
           component: () => import('@/views/portal/WelcomeView.vue')
         },
         {
+          path: 'system',
+          name: 'system', 
+          component: () => import('@/views/portal/SystemView.vue')
+        },
+        {
+          path: 'system/:id',
+          name: 'system-id', 
+          component: () => import('@/views/portal/OrgansView.vue')
+        },
+        {
+          path: 'organ/:id',
+          name: 'organ-id', 
+          component: () => import('@/views/portal/OrgansView.vue')
+        },
+        {
           path: 'post/:id',
           name: 'post-id',
           component: () => import('@/views/portal/PostView.vue')
-        }
+        },
+        {
+          path: '/search',
+          name: 'Search',
+          component: () => import('@/views/portal/SearchView.vue')
+        },
       ]
-    },
-    {
-      path: '/test-species',
-      name: 'test-species',
-      component: () => import('@/views/tests/SpeciesView.vue')
-    },
-    {
-      path: '/test-organs',
-      name: 'test-organs',
-      component: () => import('@/views/tests/OrgansView.vue')
-    },
-    {                     
-      path: '/test-slides',
-      name: 'test-slides',
-      component: () => import('@/views/tests/SlidesView.vue')
-    },
-    {
-      path: '/test-systems',
-      name: 'test-systems',
-      component: () => import('@/views/tests/SystemsView.vue')
-    },
-    {
-      path: '/systems',
-      name: 'systems',
-      component: () => import('@/views/tests/SelectSystemPageView.vue')
-    },
-    {
-      path: '/test-components',
-      name: 'test-components',
-      component: () => import('@/views/tests/ComponentsView.vue')
-    },
-    {
-      path: '/organs',
-      name: 'organ',
-      component: () => import('@/views/tests/SelectOrgansView.vue')
-    },
-    {
-      path: '/search',
-      name: 'Search',
-      component: () => import('@/views/tests/SearchPage.vue')
     },
   ]
 })
