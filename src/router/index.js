@@ -64,6 +64,11 @@ const router = createRouter({
       name: 'organ',
       component: () => import('@/views/tests/SelectOrgansView.vue')
     },
+    {
+      path: '/search',
+      name: 'Search',
+      component: () => import('@/views/tests/SearchPage.vue')
+    },
   ]
 })
 

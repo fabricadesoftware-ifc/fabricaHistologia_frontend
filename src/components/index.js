@@ -35,6 +35,7 @@ import HeaderPortal from '@/components/portal/globals/HeaderPortal.vue';
 import TopicsAdditionalInfo from '@/components/portal/globals/TopicsAdditionalInfo.vue';
 import SelectCardsGlobal from '@/components/portal/globals/SelectCardsGlobal.vue'
 import OrganAdditionalInfo from '@/components/portal/OrganPage/OrgansAdditionalInfo.vue'
+import SearchAddInfo from '@/components/portal/search/SearchAddInfo.vue'
 
 // post
 import CheckList from '@/components/portal/post/CheckList.vue';
@@ -54,6 +55,7 @@ export {
   MediumCardDefault,
   NavbarHome,
   SearchBar,
+  SearchAddInfo,
   FooterComp,
   SearchButtonGlobal,
   SearchResults,
