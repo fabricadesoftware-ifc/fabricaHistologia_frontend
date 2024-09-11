@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   HeaderPortal,
@@ -10,25 +11,9 @@ import {
   BtnDefault
 } from '@/components/index'
 
-const route = useRoute()
-const id = route.params.id
-
-const datas_AdditionalInfo = [
-  {
-    title: 'Aulas',
-    refs: [
-      { link: 'link para a aula 1', desc: 'breve descricao' },
-      { link: 'link para a aula 2', desc: 'breve descricao' }
-    ]
-  },
-  {
-    title: 'PDF"s',
-    refs: [
-      { link: 'link para o mapa mental/documento 1', desc: 'breve descricao' },
-      { link: 'link para o mapa mental/documento 2', desc: 'breve descricao' }
-    ]
-  }
-]
+const showInfo = ref(true)
+const router = useRoute()
+const id = router.params.id
 </script>
 
 <template>
@@ -44,18 +29,21 @@ const datas_AdditionalInfo = [
             />
           </div>
         </div>
-        <div class="md:w-full w-1/2 pb-1000 pr-8 relative md:mt-8">
+        <div class="md:w-full w-1/2 pb-16 pr-8 relative md:mt-8">
           <CheckList />
-          <PostInfo />
+          <div class="absolute top-0 right-0">
+            <button v-if="!showInfo"  class="bg-[#267A7A] p-2 rounded-full shadow-lg open-icon" @click="showInfo = true">
+              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" class="h-6 w-6" viewBox="0 0 24 24" fill="#fff">
+                <path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"></path>
+              </svg>
+            </button>
+          </div>
+            <PostInfo @close="showInfo = false" v-if="showInfo" />
         </div>
       </section>
       <section>
         <div class="mt-12">
-          <AddInfoGlobal
-            title="Materiais de Apoio"
-            description="Que tal estudar com um quiz interativo ou talvez com um mapa menta. Clique no botão e aproveite nossos materias adicionais"
-            :data="datas_AdditionalInfo"
-          />
+          <AddInfoGlobal />
         </div>
       </section>
       <section class="mt-8">
@@ -67,12 +55,16 @@ const datas_AdditionalInfo = [
 </template>
 
 <style scoped>
-.pb-1000 {
-  padding-bottom: 400px;
+.open-icon {
+  animation: rotateRight 0.3s;
 }
-@media screen and (max-width: 768px) {
-  .pb-1000 {
-    padding-bottom: 0;
+
+@keyframes rotateRight {
+  0% {
+    transform: rotate(45deg);
+  }
+  100% {
+    transform: rotate(0deg);
   }
 }
 </style>
