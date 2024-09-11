@@ -19,6 +19,6 @@ const props = defineProps({
 <template>
     <ContainerGlobal class="pt-8 pb-12">
         <BackButton />
-        <TitleGlobal :size="props.size" :content="props.title" position="justify-center" class="md:mt-16" />
+        <TitleGlobal :content="props.title" :size="props.size" position="justify-center" class="md:mt-16" />
     </ContainerGlobal>
 </template>
