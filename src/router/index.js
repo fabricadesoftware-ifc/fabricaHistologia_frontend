@@ -43,6 +43,11 @@ const router = createRouter({
           component: () => import('@/views/portal/OrgansView.vue')
         },
         {
+          path: 'posts',
+          name: 'posts',
+          component: () => import('@/views/portal/PostsView.vue')
+        }
+        {
           path: 'post/:id',
           name: 'post-id',
           component: () => import('@/views/portal/PostView.vue')
