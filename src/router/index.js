@@ -28,9 +28,14 @@ const router = createRouter({
           component: () => import('@/views/portal/WelcomeView.vue')
         },
         {
-          path: 'post/:id',
+          path: '/post/:id',
           name: 'post-id',
           component: () => import('@/views/portal/PostView.vue')
+        },
+        {
+          path: '/organ',
+          name: 'organ',
+          component: () => import('@/views/portal/OrganView.vue')
         }
       ]
     },

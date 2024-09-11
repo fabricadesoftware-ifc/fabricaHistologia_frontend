@@ -1,15 +1,22 @@
 <script setup>
+import router from '@/router';
+
 const props = defineProps({
     details: {
         type: Object
     }
 })
+
+function toPage(id) {
+    router.push(`post/${id.toString()}`)
+}
 </script>
 <template>
-    <div class="w-1/5 xl:w-2/6 md:w-3/6 sm:w-5/6 h-80 flex justify-center" v-for="(items, index) in props.details" :key="index">
+
+    <div class="w-1/5 2.5xl:w-2/6 2xl:w-3/12 xl:w-4/12 2md:w-5/12 md:w-3/6 sm:w-5/6 h-80 flex justify-center" v-for="(items, index) in props.details" :key="index" @click="toPage(index)">
     <div class="group/container w-52 h-64 flex flex-col rounded-2xl shadow-lg duration-200 ease-out hover:cursor-pointer hover:shadow-xl cursor-default">
         <div class="w-full h-3/6 rounded-t-xl">
-            <img src="../assets/media/cellImg.jpg" class="rounded-t-2xl" alt="">
+            <img src="@/assets/images/cellImg.jpg" class="rounded-t-2xl" alt="">
         </div>
         <div class="group/boxtext w-full h-3/6 flex flex-col rounded-b-xl bg-white p-3 group-hover/container:bg-zinc-100">
             <div class="w-full h-2/6 flex items-center">
