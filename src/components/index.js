@@ -28,7 +28,7 @@ import DefaultTitle from '@/components/portal/globals/DefaultTitle.vue';
 import MediumCardDefault from '@/components/portal/cards/MediumCardDefault.vue';
 import SearchBar from '@/components/portal/search/SearchBar.vue';
 import SearchResults from '@/components/portal/search/SearchResults.vue';
-import SlideCard from '@/components/portal/cards/SlideCard.vue';
+import SlideCards from '@/components/portal/cards/SlideCards.vue';
 import SmallCardDefault from '@/components/portal/cards/SmallCardDefault.vue';
 import TitleGlobal from '@/components/portal/globals/TitleGlobal.vue';
 import HeaderPortal from '@/components/portal/globals/HeaderPortal.vue';
@@ -59,7 +59,7 @@ export {
   FooterComp,
   SearchButtonGlobal,
   SearchResults,
-  SlideCard,
+  SlideCards,
   SmallCardDefault,
   TitleGlobal,
   TitleHome,

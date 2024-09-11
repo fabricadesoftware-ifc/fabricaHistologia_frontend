@@ -40,20 +40,15 @@ const router = createRouter({
         {
           path: 'organ/:id',
           name: 'organ-id', 
-          component: () => import('@/views/portal/OrgansView.vue')
+          component: () => import('@/views/portal/SlidesView.vue')
         },
-        {
-          path: 'posts',
-          name: 'posts',
-          component: () => import('@/views/portal/PostsView.vue')
-        }
         {
           path: 'post/:id',
           name: 'post-id',
           component: () => import('@/views/portal/PostView.vue')
         },
         {
-          path: '/search',
+          path: 'search',
           name: 'Search',
           component: () => import('@/views/portal/SearchView.vue')
         },
