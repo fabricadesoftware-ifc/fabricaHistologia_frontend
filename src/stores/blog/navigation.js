@@ -8,7 +8,7 @@ export const useNavigationStore = defineStore("navigation", () => {
     currentPage: null,
     navPortal: [
       {name: 'Atlas Digital', icon: 'https://cdn-icons-png.freepik.com/256/3407/3407022.png?semt=ais_hybrid', link: '/portal/system'},
-      {name: 'Conteudos', icon: 'https://cdn-icons-png.freepik.com/256/3407/3407022.png?semt=ais_hybrid', link: '/portal/content'},
+      {name: 'Conteudos', icon: 'https://cdn-icons-png.freepik.com/256/3407/3407022.png?semt=ais_hybrid', link: '/portal/search'},
       {name: 'Quiz', icon: 'https://cdn-icons-png.freepik.com/256/3407/3407022.png?semt=ais_hybrid', link: '/portal/quiz'},
     ]
   });

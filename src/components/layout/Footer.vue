@@ -13,7 +13,7 @@ const getWidthScreenSize = ref(window.innerWidth)
                     <img v-if="getWidthScreenSize > 440" src="@/assets/images/icons/ifcLogoGreen.png" class="logoIf" alt="">
                     <img v-else src="@/assets/images/icons/logoIFCmobile.png" class="ifLogoMobile">
                 </div>
-                <img src="@/assets/images/icons/imgHelp.png" class="w-8 h-8" alt="">    
+                <button><img src="@/assets/images/icons/imgHelp.png" class=" contrast-0 ease-out duration-150 hover:contrast-200" alt=""></button>
             </section>
         </ContainerGlobal>
     </footer>

@@ -17,6 +17,9 @@ export default {
     extend: {
       minWidth: {
         '76': '300px'
+      },
+      invert: {
+        14: '.14'
       }
     },
   },

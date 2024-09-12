@@ -18,7 +18,7 @@ const props = defineProps({
 </script>
 <template>
   <button
-    class="flex items-center gap-5 hover:gap-7 ease-in duration-100 rounded-md text-lg font-medium text-white font-poppins tracking-wide leading-4 btn-access"
+    class="flex items-center gap-5 hover:gap-7 duration-150 rounded-md text-lg font-medium text-white font-poppins tracking-wide leading-4 btn-access"
     @click="router.push(link)"
   >
     {{ props.title }}
