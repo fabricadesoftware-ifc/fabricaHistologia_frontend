@@ -1,5 +1,5 @@
 <script setup>
-import { HeaderPortal, SearchBar, SearchResults, SearchAddInfo, FooterComp } from '@/components';
+import { HeaderPortal, SearchBar, SearchResults, SearchAddInfo, Footer } from '@/components';
 </script>
 
 <template>
@@ -7,5 +7,5 @@ import { HeaderPortal, SearchBar, SearchResults, SearchAddInfo, FooterComp } fro
     <SearchBar />
     <SearchResults />
     <SearchAddInfo />
-    <FooterComp class="mt-12"/>
+    <Footer class="mt-12"/>
 </template>

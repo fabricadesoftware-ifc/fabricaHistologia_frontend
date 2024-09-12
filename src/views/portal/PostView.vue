@@ -7,7 +7,7 @@ import {
   CheckList,
   PostInfo,
   AddInfoGlobal,
-  FooterComp,
+  Footer,
   BtnDefault
 } from '@/components/index'
 
@@ -50,7 +50,7 @@ const id = router.params.id
         <BtnDefault text="Acessar Quiz deste Sistema" block />
       </section>
     </ContainerGlobal>
-    <FooterComp />
+    <Footer />
   </main>
 </template>
 

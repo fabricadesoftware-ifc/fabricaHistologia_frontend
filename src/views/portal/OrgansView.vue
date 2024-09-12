@@ -1,5 +1,5 @@
 <script setup>
-import { HeaderPortal, CardsGlobal, ContainerGlobal, AddInfoGlobal, BtnDefault, FooterComp  } from '@/components';
+import { HeaderPortal, CardsGlobal, ContainerGlobal, AddInfoGlobal, BtnDefault, Footer  } from '@/components';
 
 const OrgansTest = [
     {
@@ -86,5 +86,5 @@ const OrgansTest = [
             <BtnDefault text="Acessar Quiz deste Sistema" background="bg-[#267A7A]" block />
         </div>
     </ContainerGlobal>
-    <FooterComp />
+    <Footer />
 </template>
