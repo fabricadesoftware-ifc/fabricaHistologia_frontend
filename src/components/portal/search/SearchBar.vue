@@ -14,7 +14,7 @@ const history = ref('Pulmão de Cachorro')
             </div>
             <div class="w-full flex justify-end mt-2 sm:mt-3">
                 <span class="text-[#787878] text-end mr-2 text-sm sm:text-xs">Ultima Pesquisa:</span>
-                <RouterLink to="#" class="text-[#787878] underline decoration-1 text-sm sm:text-xs">{{ history }}</RouterLink>
+                <RouterLink to="#" class="text-[#787878] underline decoration-1 text-sm sm:text-xs hover:brightness-75">{{ history }}</RouterLink>
             </div>
         </div>
     </ContainerGlobal>

@@ -30,7 +30,7 @@ const searchResults = [
                         <li>{{ result.description }}</li>
                     </ul>
                 </div>
-                <RouterLink class="my-auto text-[#267A7A] text-base sm:text-base md:mt-3">ver relacionados</RouterLink>
+                <RouterLink class="my-auto text-[#267A7A] text-base sm:text-base md:mt-3 hover:brightness-75">ver relacionados</RouterLink>
             </div>
         </div>
     </ContainerGlobal>

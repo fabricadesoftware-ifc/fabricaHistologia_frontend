@@ -25,7 +25,7 @@ const props = defineProps({
 </script>
 <template>
     <router-link :to="props.link">
-        <button :class="[`rounded-2xl h-14 font-poppins px-6 ${props.background} ${props.color}`, {'w-full': block}]">
+        <button :class="[`rounded-2xl h-14 font-poppins px-6 ${props.background} hover:brightness-90 ${props.color}`, {'w-full': block}]">
             {{ props.text }}
         </button>
     </router-link>
