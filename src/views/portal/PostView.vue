@@ -11,7 +11,7 @@ import {
   BtnDefault
 } from '@/components/index'
 
-const showInfo = ref(true)
+const showInfo = ref(false)
 const router = useRoute()
 const id = router.params.id
 </script>
