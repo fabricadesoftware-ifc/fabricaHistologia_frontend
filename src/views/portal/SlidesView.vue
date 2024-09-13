@@ -5,7 +5,7 @@ import {
   SlideCards,
   AddInfoGlobal,
   BtnDefault,
-  FooterComp,
+  Footer,
   HeaderPortal
 } from '@/components/index'
 </script>
@@ -19,6 +19,6 @@ import {
       <AddInfoGlobal />
       <BtnDefault :text="'Acessar Quiz deste Órgão'" :block="true" class="mt-12" />
     </ContainerGlobal>
-    <FooterComp class="mt-12" />
+    <Footer class="mt-12" />
   </main>
 </template>

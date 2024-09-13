@@ -5,7 +5,7 @@ import {
     ContainerGlobal,
     AddInfoGlobal,
     BtnDefault,
-    FooterComp
+    Footer
 } from '@/components';
 
 
@@ -86,7 +86,7 @@ const SystemsTest = [
 </script>
 
 <template>
-    <HeaderPortal class="mt-10" title="Sistema Digestivo" size="text-3xl md:text-center" />
+    <HeaderPortal class="mt-10" title="Selecione o Sistema" size="text-3xl md:text-center" />
     <CardsGlobal :datas="SystemsTest"/>
     <ContainerGlobal class="mt-16 ">
         <AddInfoGlobal :datas="{}" />
@@ -96,5 +96,5 @@ const SystemsTest = [
             <BtnDefault background="bg-[#D94E4E]" text="Acessar Quiz" />
         </div>
     </ContainerGlobal>
-    <FooterComp />
+    <Footer />
 </template>

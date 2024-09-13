@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-const isCe = ref(true)
 
 const datas = ref([
     {
@@ -22,7 +21,7 @@ const datas = ref([
 </script>
 <template>
     <div v-for="check in datas" :key="check">
-        <label class="flex cursor-pointer select-none items-center gap-4 pb-4">
+        <label class="flex cursor-pointer select-none items-center gap-4 pb-4 hover:brightness-95">
             <div class="relative">
                 <input v-model="check.checked" type="checkbox" class="sr-only" />
                 <div class="block h-8 w-14 rounded-full bg-[#E5E7EB]"></div>

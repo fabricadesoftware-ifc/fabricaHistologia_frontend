@@ -7,11 +7,11 @@ import {
   CheckList,
   PostInfo,
   AddInfoGlobal,
-  FooterComp,
+  Footer,
   BtnDefault
 } from '@/components/index'
 
-const showInfo = ref(true)
+const showInfo = ref(false)
 const router = useRoute()
 const id = router.params.id
 </script>
@@ -32,7 +32,7 @@ const id = router.params.id
         <div class="md:w-full w-1/2 pb-16 pr-8 relative md:mt-8">
           <CheckList />
           <div class="absolute top-0 right-0">
-            <button v-if="!showInfo"  class="bg-[#267A7A] p-2 rounded-full shadow-lg open-icon" @click="showInfo = true">
+            <button v-if="!showInfo"  class="bg-[#267A7A] p-2 rounded-full shadow-lg open-icon hover:brightness-90" @click="showInfo = true">
               <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" class="h-6 w-6" viewBox="0 0 24 24" fill="#fff">
                 <path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"></path>
               </svg>
@@ -50,7 +50,7 @@ const id = router.params.id
         <BtnDefault text="Acessar Quiz deste Sistema" block />
       </section>
     </ContainerGlobal>
-    <FooterComp />
+    <Footer />
   </main>
 </template>
 
