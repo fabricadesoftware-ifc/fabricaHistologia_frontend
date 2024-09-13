@@ -1,9 +1,9 @@
 <script setup>
 const props = defineProps({
   datas: {
-    type: Object,
-    required: false
-  },
+    type: Array,
+    required: true
+  }
 })
 </script>
 

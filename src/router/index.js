@@ -52,6 +52,11 @@ const router = createRouter({
           name: 'content',
           component: () => import('@/views/portal/ContentView.vue')
         },
+        {
+          path: 'test',
+          name: 'test',
+          component: () => import('@/views/portal/PostTest.vue')
+        },
       ]
     },
   ]

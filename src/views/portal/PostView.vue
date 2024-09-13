@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useSlideStore } from '@/stores/blog/slide';
 import {
   HeaderPortal,
   ContainerGlobal,
@@ -9,11 +10,22 @@ import {
   AddInfoGlobal,
   Footer,
   BtnDefault
-} from '@/components/index'
+} from '@/components/index';
 
-const showInfo = ref(false)
-const router = useRoute()
-const id = router.params.id
+const showInfo = ref(true);
+const canvasRef = ref(null);
+const router = useRoute();
+const id = router.params.id;
+const sliceStore = useSlideStore();
+
+onMounted(() => {
+  if (canvasRef.value) {
+    sliceStore.ctx = canvasRef.value.getContext('2d');
+    sliceStore.canvas = canvasRef.value;
+    sliceStore.loadCanvas();
+    sliceStore.redrawCanvas();
+  }
+});
 </script>
 
 <template>
@@ -22,14 +34,9 @@ const id = router.params.id
     <ContainerGlobal class="mb-12">
       <section class="w-full md:block flex gap-8 relative">
         <div class="md:w-full w-1/2">
-          <div class="rounded-xl overflow-hidden">
-            <img
-              src="https://th.bing.com/th/id/R.70f72e90f21fa0b9a884ba9b2a9e72c7?rik=5gT0EQaWi7iYew&riu=http%3a%2f%2fcv.udl.cat%2fcursos%2f100302%2fhistologia%2fbasicos%2f3.1.jpg&ehk=3Z8Bs%2f8b7ok3P2ODm7080hnW8Q5LgxSaPrVvQACAiKE%3d&risl=&pid=ImgRaw&r=0"
-              class="w-full"
-            />
-          </div>
+            <canvas class="w-full" ref="canvasRef"></canvas>
         </div>
-        <div class="md:w-full w-1/2 pb-16 pr-8 relative md:mt-8">
+        <div class="md:w-full w-1/2 pb-16 pr-8 relative md:mt-8 text-center">
           <CheckList />
           <div class="absolute top-0 right-0">
             <button v-if="!showInfo"  class="bg-[#267A7A] p-2 rounded-full shadow-lg open-icon hover:brightness-90" @click="showInfo = true">
@@ -37,6 +44,9 @@ const id = router.params.id
                 <path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"></path>
               </svg>
             </button>
+            <p class="text-center text-gray-500 mt-2">
+              MAIS INFO
+            </p>
           </div>
             <PostInfo @close="showInfo = false" v-if="showInfo" />
         </div>
