@@ -1,4 +1,6 @@
 <script setup>
+import { onMounted, computed } from 'vue';
+import { useSystemStore } from '@/stores';
 import { 
     HeaderPortal,
     CardsGlobal,
@@ -8,86 +10,22 @@ import {
     Footer
 } from '@/components';
 
+const store = useSystemStore()
 
-const SystemsTest = [
-    {
-        id: '1',
-        name: 'Sistema 1',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/1'
-    },
-    {
-        id: '2',
-        name: 'Sistema 2',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/2'
-    },
-    {
-        id: '3',
-        name: 'Sistema 3',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/3'
-    },
-    {
-        id: '4',
-        name: 'Sistema 4',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/4'
-    },
-    {
-        id: '5',
-        name: 'Sistema 5',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/5'
-    },
-    {
-        id: '6',
-        name: 'Sistema 6',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/6'
-    },
-    {
-        id: '7',
-        name: 'Sistema 7',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/7'
-    },
-    {
-        id: '8',
-        name: 'Sistema 8',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/8'
-    },
-    {
-        id: '9',
-        name: 'Sistema 9',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/9'
-    },
-    {
-        id: '10',
-        name: 'Sistema 10',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/10'
-    },
-    {
-        id: '11',
-        name: 'Sistema 11',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/11'
-    },
-    {
-        id: '12',
-        name: 'Sistema 12',
-        icon: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
-        link: '/portal/system/12'
-    },
-]
+onMounted(() => {
+    store.getSystem()
+})
+
+const systems = computed(() => {
+    return store.state.systems
+})
+
 </script>
 
 <template>
     <HeaderPortal class="mt-10" title="Selecione o Sistema" size="text-3xl md:text-center" />
-    <CardsGlobal :datas="SystemsTest"/>
+    <CardsGlobal :datas="systems" />
+    
     <ContainerGlobal class="mt-16 ">
         <AddInfoGlobal :datas="{}" />
         <div class="flex justify-end flex-row flex-wrap lg:justify-center gap-10 mt-10 mb-16">
