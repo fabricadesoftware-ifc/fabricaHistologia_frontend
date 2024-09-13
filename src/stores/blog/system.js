@@ -28,7 +28,6 @@ export const useSystemStore = defineStore('system', () => {
     const state = reactive({
         systems: [],
         loading: false,
-        conected: false,
         error: null,
         selectedSystem: null,
     });
@@ -43,7 +42,8 @@ export const useSystemStore = defineStore('system', () => {
     const getSystem = async () => {
         state.loading = true
         try {
-            state.systems = await SystemService.getSystems();
+            const response = await SystemService.getSystems();
+            state.systems = response
         }
         catch (error) {
             state.error = error;
