@@ -16,15 +16,13 @@ onMounted(() => {
     store.getSystem()
 })
 
-const systems = computed(() => {
-    return store.state.systems
-})
+
 
 </script>
 
 <template>
     <HeaderPortal class="mt-10" title="Selecione o Sistema" size="text-3xl md:text-center" />
-    <CardsGlobal :datas="systems" />
+    <CardsGlobal :datas="store.systems" />
     
     <ContainerGlobal class="mt-16 ">
         <AddInfoGlobal :datas="{}" />

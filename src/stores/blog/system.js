@@ -31,6 +31,7 @@ export const useSystemStore = defineStore('system', () => {
         error: null,
         selectedSystem: null,
     });
+    const systems = computed(() => state.systems)
     const isLoading = computed(() => state.loading);
     const systemsCount = computed(() => state.systems.length);
 
@@ -115,5 +116,5 @@ export const useSystemStore = defineStore('system', () => {
         }
     }
 
-    return { state, isLoading, systemsCount, getSystem, createSystem, updateSystem, deleteSystem, systemsCount };
+    return { state, isLoading, systemsCount, systems, getSystem, createSystem, updateSystem, deleteSystem, systemsCount };
 })
