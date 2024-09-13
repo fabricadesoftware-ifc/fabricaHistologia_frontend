@@ -2,7 +2,6 @@
 import { useSlideStore } from '@/stores';
 
 const sliceStore = useSlideStore();
-
 </script>
 <template>
     <div v-for="(area, index) in sliceStore.labeledAreas" :key="index">

@@ -12,7 +12,7 @@ import {
   BtnDefault
 } from '@/components/index';
 
-const showInfo = ref(true);
+const showInfo = ref(false);
 const canvasRef = ref(null);
 const router = useRoute();
 const id = router.params.id;
@@ -38,15 +38,15 @@ onMounted(() => {
         </div>
         <div class="md:w-full w-1/2 pb-16 pr-8 relative md:mt-8 text-center">
           <CheckList />
-          <div class="absolute top-0 right-0">
+          <div class="absolute top-0 right-0 flex gap-4 items-center">
+            <p class="text-center text-gray-500">
+              +infomações
+            </p>
             <button v-if="!showInfo"  class="bg-[#267A7A] p-2 rounded-full shadow-lg open-icon hover:brightness-90" @click="showInfo = true">
               <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" class="h-6 w-6" viewBox="0 0 24 24" fill="#fff">
                 <path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"></path>
               </svg>
             </button>
-            <p class="text-center text-gray-500 mt-2">
-              MAIS INFO
-            </p>
           </div>
             <PostInfo @close="showInfo = false" v-if="showInfo" />
         </div>
