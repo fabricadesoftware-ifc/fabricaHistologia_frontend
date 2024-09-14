@@ -1,11 +1,11 @@
 import SpecieService from './blog/specie';
 import OrganService from './blog/organ';
-import SlideService from './blog/slide';
+import PostService from './blog/post';
 import SystemService from './blog/system'
 
 export {
     SpecieService,
-    SlideService,
+    PostService,
     SystemService,
     OrganService
 };

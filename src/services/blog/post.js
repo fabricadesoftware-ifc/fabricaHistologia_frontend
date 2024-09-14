@@ -4,20 +4,20 @@ const token = localStorage.getItem('psg_auth_token')
 /**
  * Service class for handling slides related options
  */
-class SlideService {
+class PostService {
 
     /**
      * Retrieves all slides
      * @returns {Promise<Array>} A promise that resolves to an array of slides
      * @throws {Error} If an error occurs while retrieving the slides
      */
-    async getSlides() {
+    async getPosts() {
         try {
-            const { data } = await api.get('/slide', {headers: {'authorization': `Bearer ${token}`}});
-            console.log( "Service: GetSlideMicroscopyPost - return success")
+            const { data } = await api.get('/posts', {headers: {'authorization': `Bearer ${token}`}});
+            console.log( "Service: GetPost - return success")
             return data.results;
         } catch (error) {
-            console.log("Service: GetSlideMicroscopyPost - return error", error);
+            console.log("Service: GetPost - return error", error);
             throw error;
         }
     }
@@ -28,13 +28,13 @@ class SlideService {
      * @returns {Promise<Object>} A promise that resolves to the created slides Object
      * @throws {Error} If an error occurs while creating the slide
      */
-    async postSlides(newSlide) {
+    async createPost(newPost) {
         try {
-            const { data } = await api.post('/slide/', newSlide, {headers: {'authorization': `Bearer ${token}`}});
-            console.log( "Service: AddSlideMicroscopyPost - return success")
+            const { data } = await api.post('/posts/', newPost, {headers: {'authorization': `Bearer ${token}`}});
+            console.log( "Service: AddPost - return success")
             return data.results;
         } catch (error) {
-            console.log("Service: AddSlideMicroscopyPost - return error", error);
+            console.log("Service: AddPost - return error", error);
             throw error;
         }
     }
@@ -46,13 +46,13 @@ class SlideService {
      * @returns {Promise<Object>} A promise that resolves to the updated slides Object
      * @throws {Error} If an error occurs while updating the slide
      */
-    async updateSlides(slide, id) {
+    async updatePosts(post, id) {
         try {
-            const { data } = await api.put(`/slide/${id}/`, slide, {headers: {'authorization': `Bearer ${token}`}});
-            console.log( "Service: UpdateSlideMicroscopyPost - return success")
+            const { data } = await api.put(`/posts/${id}/`, post, {headers: {'authorization': `Bearer ${token}`}});
+            console.log( "Service: UpdatePost - return success")
             return data.results;
         } catch (error) {
-            console.log("Service: UpdateSlideMicroscopyPost - return error", error);
+            console.log("Service: UpdatePost - return error", error);
             throw error;
         }
     }
@@ -63,16 +63,16 @@ class SlideService {
      * @returns {Promise<Object>} A promise that resolves to the deleted slide object.
      * @throws {Error} If an error occurs while deleting the slide
      */
-    async deleteSlides(idSlide) {
+    async deletePosts(idPost) {
         try {
-            const { data } = await api.delete(`/slide/${idSlide}`, {headers: {'authorization': `Bearer ${token}`}});
-            console.log( "Service: DeleteSlideMicroscopyPost - return success")
+            const { data } = await api.delete(`/posts/${idPost}`, {headers: {'authorization': `Bearer ${token}`}});
+            console.log( "Service: DeletePost - return success")
             return data.results;
         } catch (error) {
-            console.log("Service: DeleteSlideMicroscopyPost - return error", error);
+            console.log("Service: DeletePost - return error", error);
             throw error;
         }
     }
 }
 
-export default new SlideService();
+export default new PostService();

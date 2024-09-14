@@ -17,7 +17,7 @@ onMounted(() => {
 
 <template>
     <HeaderPortal class="mt-10" :title="systemStore.selectedSystem.name" size="text-3xl md:text-center" />
-    <CardsGlobal :datas="organStore.organsBySystem" />
+    <CardsGlobal :datas="organStore.organsBySystem" context="organ" />
     <ContainerGlobal class="mt-16 ">
         <AddInfoGlobal />
         <div class="my-10">
