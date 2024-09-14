@@ -29,9 +29,10 @@ export const useSystemStore = defineStore('system', () => {
         systems: [],
         loading: false,
         error: null,
-        selectedSystem: null,
+        selectedSystem: {},
     });
     const systems = computed(() => state.systems)
+    const selectedSystem = computed(() => state.selectedSystem)
     const isLoading = computed(() => state.loading);
     const systemsCount = computed(() => state.systems.length);
 
@@ -40,7 +41,7 @@ export const useSystemStore = defineStore('system', () => {
      * @async
      * @function getSystem
      */
-    const getSystem = async () => {
+    const getSystems = async () => {
         state.loading = true
         try {
             const response = await SystemService.getSystems();
@@ -54,6 +55,21 @@ export const useSystemStore = defineStore('system', () => {
             state.loading = false;
         }
     };
+
+    const getSystemById = async (id) => {
+        state.loading = true
+        try {
+            const response = await SystemService.getSystemById(id);
+            state.selectedSystem = response
+        }
+        catch (error) {
+            state.error = error;
+        }
+        finally {
+            state.conected = true;  // just to see if the connection is established
+            state.loading = false;
+        }
+    }
 
     /**
      * Creates a new system.
@@ -116,5 +132,5 @@ export const useSystemStore = defineStore('system', () => {
         }
     }
 
-    return { state, isLoading, systemsCount, systems, getSystem, createSystem, updateSystem, deleteSystem, systemsCount };
+    return { state, isLoading, systemsCount, systems, selectedSystem, getSystems, getSystemById,  createSystem, updateSystem, deleteSystem };
 })

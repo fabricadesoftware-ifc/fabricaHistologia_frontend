@@ -22,6 +22,22 @@ class SystemService {
         }
     }
 
+    /**
+     * Retrieves all systems.
+    * @returns {Promise<Array>} A promise that resolves to an array of systems.
+    * @throws {Error} If an error occurs while retrieving the systems.
+    */
+    async getSystemById (id) {
+        try {
+            console.log(id)
+            const {data} = await api.get('/systems/' + id + '/');
+            return data;
+        } catch (error) {
+            console.log("error in getSystem", error);
+            throw error;
+        }
+    }
+
      /**
      * Creates a new systems.
      * @param {Object} newSystem - The new systems object to create.

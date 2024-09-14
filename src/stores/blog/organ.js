@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, reactive } from 'vue'
 import { OrganService } from '@/services'
+import organ from '@/services/blog/organ'
 
 /**
  * Store for managing organs data.
@@ -25,12 +26,15 @@ import { OrganService } from '@/services'
  */
 export const useOrganStore = defineStore('organ', () => {
   const state = reactive({
-    species: [],
+    organs: [],
     selectedOrgan: null,
+    organsBySystem: [],
     loading: false,
     error: null,
     connection: false
   })
+  const organs = computed(() => state.organs)
+  const organsBySystem = computed(() => state.organsBySystem)
   const isLoading = computed(() => state.loading)
   const organsCount = computed(() => state.organ.length)
 
@@ -43,6 +47,24 @@ export const useOrganStore = defineStore('organ', () => {
     state.loading = true
     try {
       state.organs = await OrganService.getOrgans()
+    } catch (error) {
+      state.error = error
+    } finally {
+      state.loading = false
+      state.connection = true
+    }
+  }
+
+   /**
+   * Fetches organs data.
+   * @async
+   * @function getOrgansBySystem
+   */
+   const getOrgansBySystem = async (systemId) => {
+    state.loading = true
+    try {
+      const response = await OrganService.getOrgansBySystem(systemId)   
+      state.organsBySystem = response
     } catch (error) {
       state.error = error
     } finally {
@@ -95,7 +117,7 @@ export const useOrganStore = defineStore('organ', () => {
     state.loading = true
     try {
       const index = state.organs.findIndex((s) => s.id === id)
-      state.organ.splice(index, 1)
+      state.organs.splice(index, 1)
     } catch (error) {
       state.error = error
     } finally {
@@ -107,6 +129,9 @@ export const useOrganStore = defineStore('organ', () => {
     state,
     isLoading,
     organsCount,
+    organs,
+    organsBySystem,
+    getOrgansBySystem,
     getOrgans,
     createOrgan,
     updateOrgan,

@@ -13,7 +13,7 @@ import {
 const store = useSystemStore()
 
 onMounted(() => {
-    store.getSystem()
+    store.getSystems()
 })
 
 

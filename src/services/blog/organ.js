@@ -20,6 +20,21 @@ class OrganService {
   }
 
   /**
+   * Retrieves all organs.
+   * @returns {Promise<Array>} A promise that resolves to an array of organs filtered by systems.
+   * @throws {Error} If an error occurs while retrieving the organs.
+   */
+    async getOrgansBySystem(systemId) {
+      try {
+        const { data } = await api.get(`/organs/?page=1&system__id=${systemId}/`)
+        console.log(data)
+        return data.results
+      } catch (error) {
+        console.log('error in getOrgans', error)
+        throw error
+      }
+    }
+  /**
    * Creates a new organs.
    * @param {Object} newSpecie - The new organs object to create.
    * @returns {Promise<Object>} A promise that resolves to the created organs object.
