@@ -22,6 +22,16 @@ class PostService {
         }
     }
 
+    async getPostsByOrgan(organ_id) {
+        try {
+            const {data} = await api.get(`/posts/?organ_id=${organ_id}&species_id=`, {headers: {'authorization': `Bearer ${token}`}});
+        return data.results
+        } catch (error) {
+            console.log('Error in getPostsbyOrgan', error);
+            throw error;
+        }
+    }
+
     /**
      * Creates a new Slide
      * @param {Object} newSlide - The new slide to be created 

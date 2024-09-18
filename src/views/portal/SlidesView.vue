@@ -1,4 +1,7 @@
 <script setup>
+import { onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useOrganStore, usePostStore } from '@/stores';
 import {
   ContainerGlobal,
   CardsContainer,
@@ -8,12 +11,23 @@ import {
   Footer,
   HeaderPortal
 } from '@/components/index'
+
+const organStore = useOrganStore()
+const postStore = usePostStore()
+const router = useRoute()
+const organ_id = router.params.id
+
+onMounted(()=>{
+  organStore.getOrgansById(organ_id)
+  postStore.getPostsByOrgan(organ_id)
+  console.log(organStore.state.selectedOrgan)
+})
 </script>
 <template>
   <main class="w-dvh">
-    <HeaderPortal title="Estômago" />
+    <HeaderPortal :title="organStore.selectedOrgan.name" />
     <CardsContainer class="mb-8" noFlex>
-      <SlideCards />
+      <SlideCards :data="postStore.state.postsByOrgan" />
     </CardsContainer>
     <ContainerGlobal class="flex justify-center flex-col">
       <AddInfoGlobal />
