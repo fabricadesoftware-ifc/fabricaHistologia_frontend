@@ -36,9 +36,8 @@ class OrganService {
 
     async getOrgansById(organ_id) {
       try {
-        const { data } = await api.get(`organs/?system_id=&organ_id=${organ_id}`)
-        console.log(data)
-        return data.results
+        const { data } = await api.get(`/organs/${organ_id}/`)
+        return data
       } catch (error) {
         console.log('error in getOrgansById', error)
         throw error

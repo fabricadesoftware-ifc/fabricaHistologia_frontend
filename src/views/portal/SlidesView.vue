@@ -17,9 +17,9 @@ const postStore = usePostStore()
 const router = useRoute()
 const organ_id = router.params.id
 
-onMounted(()=>{
-  organStore.getOrgansById(organ_id)
-  postStore.getPostsByOrgan(organ_id)
+onMounted(async()=>{
+  await postStore.getPostsByOrgan(organ_id)
+  await organStore.getOrgansById(organ_id)
   console.log(organStore.state.selectedOrgan)
 })
 </script>
