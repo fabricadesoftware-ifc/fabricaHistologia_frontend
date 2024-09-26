@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
 import { computed, reactive } from 'vue'
-import { OrganService } from '@/services'
+import { SupportingMaterialService } from '@/services'
+
 
 /**
  * Store for managing organs data.
- * @typedef {Object} SpecieStore
+ * @typedef {Object} SupportingStore
  * @property {Object} state - The state object containing organs data.
  * @property {Array} state.species - The array of organs.
  * @property {Object|null} state.selectedSpecie - The currently selected organ.
@@ -19,33 +20,32 @@ import { OrganService } from '@/services'
  */
 
 /**
- * Creates a new instance of the OrganStore.
- * @function useSpecieStore
- * @returns {SpecieStore} The OrganStore instance.
+ * Creates a new instance of the upportingStore.
+ * @function useSupportingStore
+ * @returns {SupportingStore} The OrganStore instance.
  */
-export const useOrganStore = defineStore('organ', () => {
+export const useSupportingStore = defineStore('supporting', () => {
   const state = reactive({
-    organs: [],
-    selectedOrgan: null,
-    organsBySystem: [],
+    materials: [],
+    materialsBySystem: [],
     loading: false,
     error: null,
     connection: false
   })
-  const organs = computed(() => state.organs)
-  const organsBySystem = computed(() => state.organsBySystem)
+  const materials = computed(() => state.materials)
+  const materialsBySystem = computed(() => state.materialsBySystem)
   const isLoading = computed(() => state.loading)
-  const organsCount = computed(() => state.organ.length)
+  const materialsCount = computed(() => state.organ.length)
 
   /**
-   * Fetches organs data.
+   * Fetches materials data.
    * @async
    * @function getSpecies
    */
-  const getOrgans = async () => {
+  const getMaterials = async () => {
     state.loading = true
     try {
-      state.organs = await OrganService.getOrgans()
+      state.materials = await SupportingMaterialService.getMaterials()
     } catch (error) {
       state.error = error
     } finally {
@@ -55,15 +55,15 @@ export const useOrganStore = defineStore('organ', () => {
   }
 
    /**
-   * Fetches organs data.
+   * Fetches Material data.
    * @async
-   * @function getOrgansBySystem
+   * @function getMaterialsBySystem
    */
-   const getOrgansBySystem = async (systemId) => {
+   const getMaterialsBySystem = async (systemId) => {
     state.loading = true
     try {
-      const response = await OrganService.getOrgansBySystem(systemId)   
-      state.organsBySystem = response
+      const response = await SupportingMaterialService.getMaterialsBySystem(systemId) 
+      state.materialsBySystem = response
     } catch (error) {
       state.error = error
     } finally {
@@ -73,15 +73,15 @@ export const useOrganStore = defineStore('organ', () => {
   }
 
   /**
-   * Creates a new organ.
+   * Creates a new Material.
    * @async
    * @function createSpecie
-   * @param {Object} newSpecie - The new organ object to create.
+   * @param {Object} newSpecie - The new Material object to create.
    */
-  const createOrgan = async (newOrgan) => {
+  const createMaterial = async (newMaterial) => {
     state.loading = true
     try {
-      state.organs.push(await OrganService.createOrgan(newOrgan))
+      state.materials.push(await SupportingMaterialService.createMaterial(newMaterial))
     } catch (error) {
       state.error = error
     } finally {
@@ -95,11 +95,11 @@ export const useOrganStore = defineStore('organ', () => {
    * @function updateSpecie
    * @param {Object} specie - The organ object to update.
    */
-  const updateOrgan = async (organ) => {
+  const updateMaterial = async (material) => {
     state.loading = true
     try {
-      const index = state.organs.findIndex((s) => s.id === organ.id)
-      state.organs[index] = await OrganService.getOrgans()
+      const index = state.materials.findIndex((s) => s.id === material.id)
+      state.materials[index] = await SupportingMaterialService.updateMaterials(material)
     } catch (error) {
       state.error = error
     } finally {
@@ -112,11 +112,11 @@ export const useOrganStore = defineStore('organ', () => {
    * @function deleteSpecie
    * @param {number} id - The ID of the organ to delete.
    */
-  const deleteOrgan = async (id) => {
+  const deleteMaterial = async (id) => {
     state.loading = true
     try {
-      const index = state.organs.findIndex((s) => s.id === id)
-      state.organs.splice(index, 1)
+      const index = state.materials.findIndex((s) => s.id === id)
+      state.materials.splice(index, 1)
     } catch (error) {
       state.error = error
     } finally {
@@ -127,13 +127,13 @@ export const useOrganStore = defineStore('organ', () => {
   return {
     state,
     isLoading,
-    organsCount,
-    organs,
-    organsBySystem,
-    getOrgansBySystem,
-    getOrgans,
-    createOrgan,
-    updateOrgan,
-    deleteOrgan
+    materialsCount,
+    materials,
+    materialsBySystem,
+    getMaterialsBySystem,
+    getMaterials,
+    createMaterial,
+    updateMaterial,
+    deleteMaterial
   }
 })
