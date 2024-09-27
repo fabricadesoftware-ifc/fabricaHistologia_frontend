@@ -4,7 +4,7 @@ import { TopicsAdditionalInfo, BtnDefault, BtnStroke} from '@/components/index';
 const props = defineProps({
   title: {
     type: String,
-    required: true,
+    required: false,
     default: 'Materiais de Apoio',
   },
   description: {
@@ -12,26 +12,10 @@ const props = defineProps({
     required: false,
     default: 'Que tal estudar com um quiz interativo ou talvez com um mapa menta. Clique no botão e aproveite nossos materias adicionais'
   },
-  data: () => ({
-    type: Object,
+  data: {
+    type: Array,
     required: false,
-    default: () => ({
-      aulas: {
-        title: 'Aulas',
-        refs: [
-          { link: 'link 1 Nome da Aula', desc: 'breve descrição' },
-          { link: 'link 2 Nome da Aula', desc: 'breve descrição' }
-        ]
-      },
-      pdf: {
-        title: 'PDFs',
-        refs: [
-          { link: 'link 1 Nome do mapa mental/documento', desc: 'breve descrição' },
-          { link: 'link 2 Nome do mapa mental/documento', desc: 'breve descrição' }
-        ]
-      }  
-    }),
-  }),
+  },
   buttons: {
     type: Boolean,
     required: false
