@@ -27,7 +27,6 @@ class OrganService {
     async getOrgansBySystem(systemId) {
       try {
         const { data } = await api.get(`/organs/?page=1&system__id=${systemId}/`)
-        console.log(data)
         return data.results
       } catch (error) {
         console.log('error in getOrgans', error)

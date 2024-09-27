@@ -30,7 +30,6 @@ onMounted(async () => {
      systemStore.getSystemById(id)
     await supportingStore.getMaterialsBySystem(id)
     setAdditionalInfo.value
-    setTimeout(()=>{console.log(additionalData.value)},1000)
 })
 
 </script>
