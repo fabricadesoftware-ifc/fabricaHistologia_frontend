@@ -29,6 +29,8 @@ export const useSupportingStore = defineStore('supporting', () => {
     materials: [],
     materialsBySystem: [],
     searchResults: [],
+    history: null,
+    nameHistory: '',
     loading: false,
     error: null,
     connection: false
@@ -37,6 +39,7 @@ export const useSupportingStore = defineStore('supporting', () => {
   const materialsBySystem = computed(() => state.materialsBySystem)
   const isLoading = computed(() => state.loading)
   const materialsCount = computed(() => state.organ.length)
+  const history = computed(()=> state.history)
 
   /**
    * Fetches materials data.
@@ -145,6 +148,7 @@ export const useSupportingStore = defineStore('supporting', () => {
     materialsCount,
     materials,
     materialsBySystem,
+    history,
     getMaterialsBySystem,
     getMaterials,
     createMaterial,
