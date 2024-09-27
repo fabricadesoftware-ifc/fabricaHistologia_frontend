@@ -16,6 +16,8 @@ const additionalData = ref([
     {title: 'PDFs', material: []}
 ])
 
+// Function to filter if the material is a class our pdf based on this: If documents or images are null the material is a class, if they're not null is a pdf
+
 const setAdditionalInfo = computed(()=>{
     additionalData.value[0].material = supportingStore.state.materialsBySystem.filter(s => s.image_supporting_material == null || s.document_supporting_material == null)
 

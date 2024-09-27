@@ -12,7 +12,7 @@ const props = defineProps({
     <h4 class="text-xl font-medium">{{section.title}}</h4> 
     <ul>
       <li v-for="(item, index) in section.material" :key="index" class="mt-3">
-        <a :href="item.field_name" class="text-stone-700 font-normal font-poppins hover:underline">{{ item.field_name }} {{ item.name }}</a>
+        <a :href="item.field_name" target="_blank" class="text-stone-700 font-normal font-poppins hover:underline">{{ item.field_name }} {{ item.name }}</a>
         <ul class="list-disc ml-5">
           <li class="text-stone-700 font-normal font-poppins">{{ item.description }}</li>
         </ul>   
