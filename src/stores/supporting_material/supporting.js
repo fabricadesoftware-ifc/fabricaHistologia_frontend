@@ -28,6 +28,7 @@ export const useSupportingStore = defineStore('supporting', () => {
   const state = reactive({
     materials: [],
     materialsBySystem: [],
+    searchResults: [],
     loading: false,
     error: null,
     connection: false
@@ -45,7 +46,8 @@ export const useSupportingStore = defineStore('supporting', () => {
   const getMaterials = async () => {
     state.loading = true
     try {
-      state.materials = await SupportingMaterialService.getMaterials()
+      const response = await SupportingMaterialService.getMaterials()
+      state.materials = response
     } catch (error) {
       state.error = error
     } finally {
@@ -64,6 +66,19 @@ export const useSupportingStore = defineStore('supporting', () => {
     try {
       const response = await SupportingMaterialService.getMaterialsBySystem(systemId) 
       state.materialsBySystem = response
+    } catch (error) {
+      state.error = error
+    } finally {
+      state.loading = false
+      state.connection = true
+    }
+  }
+
+  const searchMaterialsByName = async (name) => {
+    state.loading = true
+    try {
+      const response = await SupportingMaterialService.SearchMaterialsByName(name)
+      state.searchResults = response
     } catch (error) {
       state.error = error
     } finally {
@@ -134,6 +149,7 @@ export const useSupportingStore = defineStore('supporting', () => {
     getMaterials,
     createMaterial,
     updateMaterial,
-    deleteMaterial
+    deleteMaterial,
+    searchMaterialsByName
   }
 })

@@ -1,31 +1,20 @@
 <script setup>
 import { ContainerGlobal } from '@/components/index';
 
-const searchResults = [
-    {
-        title: 'link 1 Nome da aular',
-        description: 'breve descrição',
-        link: '#'
-    },
-    {
-        title: 'link 2 Nome do PDF',
-        description: 'breve descrição',
-        link: '#'
-    },
-    {
-        title: 'link 3 Nome da Referencia',
-        description: 'breve descrição',
-        link: '#'
-    },
-]
+const props = defineProps({
+    data: {
+        type: Array,
+        required: true
+    }
+})
 </script>
 
 <template>
     <ContainerGlobal>
         <div class="w-3/4 mx-auto flex flex-col my-4 font-poppins">
-            <div v-for="(result, index) in searchResults" :key="index" class="w-full flex h-auto my-4 justify-between md:flex-col">
+            <div v-for="(result, index) in props.data" :key="index" class="w-full flex h-auto my-4 justify-between md:flex-col">
                 <div class="flex flex-col my">
-                    <RouterLink class="text-xl sm:text-lg hover:text-zinc-600" :to="result.link">{{ result.title }}</RouterLink>
+                    <a :href="result.field_name" target="_blank" class="text-xl sm:text-lg hover:text-zinc-600">{{ result.name }}</a>
                     <ul class="text-[#787878] list-disc ml-4 text-lg sm:text-base">
                         <li>{{ result.description }}</li>
                     </ul>
