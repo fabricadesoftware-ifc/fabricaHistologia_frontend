@@ -77,10 +77,10 @@ export const useSupportingStore = defineStore('supporting', () => {
     }
   }
 
-  const searchMaterialsByName = async (name) => {
+  const searchMaterialsByName = async (name, system__id) => {
     state.loading = true
     try {
-      const response = await SupportingMaterialService.SearchMaterialsByName(name)
+      const response = await SupportingMaterialService.SearchMaterialsByName(name, system__id)
       state.searchResults = response
     } catch (error) {
       state.error = error

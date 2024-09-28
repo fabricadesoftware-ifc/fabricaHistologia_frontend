@@ -2,27 +2,15 @@
 import { HeaderPortal, SearchBar, SearchResults, SearchAddInfo, Footer } from '@/components';
 import { computed, onMounted, ref } from 'vue';
 import { useSupportingStore } from '@/stores';
-
+import {setSystemFilter, cleanFilter, searchByName, saveHistory, nameNotFound, systemid} from '@/utils/search'
 const supportingStore = useSupportingStore()
-const nameNotFound = ref('')
-
-const searchByName = (name) => {
-    supportingStore.searchMaterialsByName(name)
-    nameNotFound.value = name
-}
-
-function saveHistory(name) {
-   supportingStore.searchMaterialsByName(name)
-    supportingStore.state.nameHistory = name
-    nameNotFound.value = name
-}
-
-onMounted(()=>{
-    supportingStore.getMaterials()
-})
 
 const returnSearchResults = computed(() => {
     return supportingStore.state.searchResults.length > 0 ? supportingStore.state.searchResults : supportingStore.state.searchResults.length <= 0 && nameNotFound.value != '' ? [] : supportingStore.state.materials
+})
+
+onMounted(()=>{
+    supportingStore.getMaterials()
 })
 
 </script>
@@ -30,7 +18,7 @@ const returnSearchResults = computed(() => {
 <template>
     <HeaderPortal size="text-3xl" title="Conteúdos" />
     <SearchBar @search="searchByName" @save="saveHistory" @searchByLast="searchByName" />
-    <SearchResults :data="returnSearchResults" />
+    <SearchResults @cleanFilter="cleanFilter" @filter="setSystemFilter" :data="returnSearchResults" />
     <SearchAddInfo />
     <Footer class="mt-12"/>
 </template>

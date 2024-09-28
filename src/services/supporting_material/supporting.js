@@ -35,10 +35,10 @@ class SupportingMaterialService {
       }
     }
 
-    async SearchMaterialsByName(name) {
+    async SearchMaterialsByName(name, system_id) {
 
       try {
-      const {data} = await api.get(`/supporting-material/?search=${name}`)
+        const {data} = await api.get(`/supporting-material/?search=${name}&system_id=${system_id}`)
       return data.results
       } catch (error) {
         throw error;
