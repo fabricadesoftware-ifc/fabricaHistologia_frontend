@@ -34,6 +34,16 @@ class SupportingMaterialService {
         throw error
       }
     }
+
+    async SearchMaterialsByName(name, system_id) {
+
+      try {
+        const {data} = await api.get(`/supporting-material/?search=${name}&system_id=${system_id}`)
+      return data.results
+      } catch (error) {
+        throw error;
+      }
+    }
   /**
    * Creates a new Material.
    * @param {Object} newSpecie - The new Material object to create.

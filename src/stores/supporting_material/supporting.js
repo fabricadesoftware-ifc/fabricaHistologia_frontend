@@ -28,6 +28,9 @@ export const useSupportingStore = defineStore('supporting', () => {
   const state = reactive({
     materials: [],
     materialsBySystem: [],
+    searchResults: [],
+    history: null,
+    nameHistory: '',
     loading: false,
     error: null,
     connection: false
@@ -36,6 +39,7 @@ export const useSupportingStore = defineStore('supporting', () => {
   const materialsBySystem = computed(() => state.materialsBySystem)
   const isLoading = computed(() => state.loading)
   const materialsCount = computed(() => state.organ.length)
+  const history = computed(()=> state.history)
 
   /**
    * Fetches materials data.
@@ -45,7 +49,8 @@ export const useSupportingStore = defineStore('supporting', () => {
   const getMaterials = async () => {
     state.loading = true
     try {
-      state.materials = await SupportingMaterialService.getMaterials()
+      const response = await SupportingMaterialService.getMaterials()
+      state.materials = response
     } catch (error) {
       state.error = error
     } finally {
@@ -64,6 +69,19 @@ export const useSupportingStore = defineStore('supporting', () => {
     try {
       const response = await SupportingMaterialService.getMaterialsBySystem(systemId) 
       state.materialsBySystem = response
+    } catch (error) {
+      state.error = error
+    } finally {
+      state.loading = false
+      state.connection = true
+    }
+  }
+
+  const searchMaterialsByName = async (name, system__id) => {
+    state.loading = true
+    try {
+      const response = await SupportingMaterialService.SearchMaterialsByName(name, system__id)
+      state.searchResults = response
     } catch (error) {
       state.error = error
     } finally {
@@ -130,10 +148,12 @@ export const useSupportingStore = defineStore('supporting', () => {
     materialsCount,
     materials,
     materialsBySystem,
+    history,
     getMaterialsBySystem,
     getMaterials,
     createMaterial,
     updateMaterial,
-    deleteMaterial
+    deleteMaterial,
+    searchMaterialsByName
   }
 })
