@@ -20,7 +20,7 @@ const organ_id = router.params.id
 onMounted(async()=>{
   await postStore.getPostsByOrgan(organ_id)
   await organStore.getOrgansById(organ_id)
-  console.log(organStore.state.selectedOrgan)
+  console.log(postStore.state.postsByOrgan)
 })
 </script>
 <template>
