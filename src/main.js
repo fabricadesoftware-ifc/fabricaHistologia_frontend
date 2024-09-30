@@ -14,9 +14,17 @@ app.use(pinia);
 
 const navigationStore = useNavigationStore();
 
-router.beforeEach((to, from, next) => {
-  navigationStore.addToHistory(from);
-  next();
+router.beforeEach((to, from) => {
+  
+  if (router.path != '/') {
+  navigationStore.addToHistory(to.path);
+  }
+
+  if (to.path == '/') {
+    navigationStore.state.history = []
+  }
+  console.log('from:' + from.fullPath)
+
 });
 
 app.mount('#app');
