@@ -26,7 +26,7 @@ import { OrganService } from '@/services'
 export const useOrganStore = defineStore('organ', () => {
   const state = reactive({
     organs: [],
-    selectedOrgan: null,
+    selectedOrgan: {},
     organsBySystem: [],
     loading: false,
     error: null,
@@ -34,8 +34,9 @@ export const useOrganStore = defineStore('organ', () => {
   })
   const organs = computed(() => state.organs)
   const organsBySystem = computed(() => state.organsBySystem)
+  const selectedOrgan = computed(()=> state.selectedOrgan)
   const isLoading = computed(() => state.loading)
-  const organsCount = computed(() => state.organ.length)
+  const organsCount = computed(() => state.organs.length)
 
   /**
    * Fetches organs data.
@@ -64,6 +65,19 @@ export const useOrganStore = defineStore('organ', () => {
     try {
       const response = await OrganService.getOrgansBySystem(systemId)   
       state.organsBySystem = response
+    } catch (error) {
+      state.error = error
+    } finally {
+      state.loading = false
+      state.connection = true
+    }
+  }
+
+  const getOrgansById = async (organId) => {
+    state.loading = true
+    try {
+      const response = await OrganService.getOrgansById(organId)   
+      state.selectedOrgan = response
     } catch (error) {
       state.error = error
     } finally {
@@ -130,8 +144,10 @@ export const useOrganStore = defineStore('organ', () => {
     organsCount,
     organs,
     organsBySystem,
+    selectedOrgan,
     getOrgansBySystem,
     getOrgans,
+    getOrgansById,
     createOrgan,
     updateOrgan,
     deleteOrgan

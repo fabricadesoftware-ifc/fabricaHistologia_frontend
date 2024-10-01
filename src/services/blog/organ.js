@@ -33,6 +33,17 @@ class OrganService {
         throw error
       }
     }
+
+    async getOrgansById(organ_id) {
+      try {
+        const { data } = await api.get(`/organs/${organ_id}/`)
+        return data
+      } catch (error) {
+        console.log('error in getOrgansById', error)
+        throw error
+      }
+    }
+
   /**
    * Creates a new organs.
    * @param {Object} newSpecie - The new organs object to create.
