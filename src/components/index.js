@@ -37,6 +37,7 @@ import CardsGlobal from '@/components/portal/cards/CardsGlobal.vue';
 import SelectCardsGlobal from '@/components/portal/globals/SelectCardsGlobal.vue'
 import SearchAddInfo from '@/components/portal/search/SearchAddInfo.vue'
 import PersonaDataForm from '@/components/portal/Forms/PersonaDataForm.vue'
+import FormModal from '@/components/portal/Forms/ModalForm.vue'
 
 // post
 import CheckList from '@/components/portal/post/CheckList.vue';
@@ -75,4 +76,5 @@ export {
   CardsGlobal,
   SelectCardsGlobal,
   PersonaDataForm,
+  FormModal
 };

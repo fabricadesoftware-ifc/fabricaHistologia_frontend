@@ -4,7 +4,6 @@ import { TitleGlobal, BtnDefault } from '@/components';
 const fields = [
     'Nome',
     'Registro',
-    'Nascimento',
     'Telefone',
     'Universidade',
     ]
@@ -16,6 +15,10 @@ const fields = [
         <div v-for="(field, id) in fields" :key="id" class="relative p-0 pt-3 mt-5 w-full">
             <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">{{ field }}</p>
             <input type="text" class="border-2 rounded-md w-full h-10" >
+        </div>
+        <div class="relative p-0 pt-3 mt-5 w-full">
+            <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">Nascimento</p>
+            <input type="date" class="border-2 rounded-md w-full h-10" >
         </div>
         <div class="relative p-0 pt-3 mt-5 w-full">
             <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">Escolaridade</p>

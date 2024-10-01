@@ -1,5 +1,5 @@
 <script setup>
-import { BackButton, ContainerGlobal, Footer, PersonaDataForm  } from '@/components';
+import { BackButton, ContainerGlobal, Footer, PersonaDataForm, FormModal  } from '@/components';
 </script>
 
 <template>
@@ -7,5 +7,6 @@ import { BackButton, ContainerGlobal, Footer, PersonaDataForm  } from '@/compone
         <BackButton  />
         <PersonaDataForm />
     </ContainerGlobal>
+    <FormModal />
     <Footer />
 </template>
