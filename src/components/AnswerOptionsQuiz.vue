@@ -1,7 +1,5 @@
 <script setup>
-import { ref } from 'vue'
 
-const answerNumber = ref(0)
 const props = defineProps({
   datas: {
     type: Object

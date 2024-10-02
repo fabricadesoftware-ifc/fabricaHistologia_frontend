@@ -1,6 +1,6 @@
 <script setup>
 import ContainerDefault from '@/components/ContainerDefault.vue'
-import AnswerQuiz from './AnswerQuiz.vue'
+import AnswerQuiz from './AnswerOptionsQuiz.vue'
 
 
 const datas = [
@@ -15,7 +15,7 @@ const datas = [
     AnswerNumber: 2
   },
   {
-    QuestionLetter: 'C',
+    QuestionLetter: 'Cu',
     QuestionText: 'apenas I,II,III',
     AnswerNumber: 3
   }
