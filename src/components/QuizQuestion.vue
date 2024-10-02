@@ -1,6 +1,7 @@
 <script setup>
-import ContainerDefault from '@/components/ContainerDefault.vue'
-import AnswerQuiz from './AnswerOptionsQuiz.vue'
+import ContainerGlobal from './layout/ContainerGlobal.vue';
+import AnswerQuiz from './AnswerOptionsQuiz.vue';
+import Question from './Question.vue'
 
 
 const datas = [
@@ -24,32 +25,14 @@ const datas = [
 </script>
 
 <template>
-  <ContainerDefault>
+  <ContainerGlobal>
     <div class="flex flex-col gap-5 border border-gray-100 p-6 rounded-lg">
-      <div>
-        <h4 class="text-base font-medium">1. Pergunta:</h4>
-
-        <ol class="list-inside mt-2 mb-2">
-          <li>
-            <p class="mx-5 mt-1 text-base font-medium font-poppins">(I) Teste</p>
-          </li>
-
-          <li>
-            <p class="mx-5 mt-1 text-base font-medium font-poppins">(II) Teste</p>
-          </li>
-
-          <li>
-            <p class="mx-5 mt-1 text-base font-medium font-poppins">(III) Teste</p>
-          </li>
-        </ol>
-
-        <h4 class="mx-5 text-base font-medium">Bla bla bla, nos homens:</h4>
-      </div>
+      <Question/>
 
       <div class="flex flex-col gap-4">
         <AnswerQuiz :datas="datas"></AnswerQuiz>
       </div>
       
     </div>
-  </ContainerDefault>
+  </ContainerGlobal>
 </template>
