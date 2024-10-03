@@ -28,7 +28,7 @@ export const usePostStore = defineStore("post",
     () => {
         const state = reactive({
             posts: [],
-            postsByOrgan: [],
+            postsByOrganAndType: [],
             selectedPost: null,
             loading: false,
             error: null,
@@ -37,6 +37,7 @@ export const usePostStore = defineStore("post",
         const posts = computed(() => state.posts)
         const isLoading = computed(() => state.loading);
         const postCount = computed(() => state.posts.length);
+        const postByOrganAndType = computed(()=> state.postsByOrganAndType)
 
         /**
          * Fetches post data.
@@ -56,11 +57,11 @@ export const usePostStore = defineStore("post",
             }
         };
 
-        const getPostsByOrgan = async (organ_id) => {
+        const getPostsByOrganAndType = async (organ_id, type_post) => {
             state.loading = true;
             try {
-                const response = await PostService.getPostsByOrgan(organ_id)
-                state.postsByOrgan = response
+                const response = await PostService.getPostsByOrganAndType(organ_id, type_post)
+                state.postsByOrganAndType = response
                 
             } catch (error) {
                 state.error = error
@@ -129,8 +130,9 @@ export const usePostStore = defineStore("post",
             isLoading,
             postCount,
             posts,
+            postByOrganAndType,
             getPosts,
-            getPostsByOrgan,
+            getPostsByOrganAndType,
             createPost,
             updatePosts,
             deletePosts

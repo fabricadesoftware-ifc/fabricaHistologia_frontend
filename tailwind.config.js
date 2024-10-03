@@ -13,6 +13,7 @@ export default {
       '2md': {'max': '900px'},
       'md': { 'max': '768px' },
       'sm': { 'max': '640px' },
+      'xsm': {'max': '450px'}
     },
     extend: {
       minWidth: {
