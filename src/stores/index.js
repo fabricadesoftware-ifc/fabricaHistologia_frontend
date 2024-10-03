@@ -5,6 +5,7 @@ import { useSystemStore } from "./blog/system.js";
 import { usePostStore } from "./blog/post.js";
 import { useSupportingStore } from "./supporting_material/supporting.js";
 import { useCollaboratorsStore } from "./auth/collaborators.js";
+import { useAuthStore } from "./auth/auth.js";
 
 export {
     useSpecieStore,
@@ -14,4 +15,5 @@ export {
     useOrganStore,
     usePostStore,
     useCollaboratorsStore,
+    useAuthStore
 }

@@ -1,5 +1,6 @@
-import { OrganService } from '..'
 import api from '../../plugins/api'
+
+const token = localStorage.getItem('psg_auth_token')
 
 
 class CollaboratorsService{
@@ -31,7 +32,7 @@ class CollaboratorsService{
 
     async PostCollaborators(newData) {
         try {
-            const { data } = await api.post('/personal', newData)
+            const { data } = await api.post('/personal/', newData, {headers: {'authorization': `Bearer ${token}`}})
             return data.results
         } catch (error) {
             console.log('error in getCollaborators', error)

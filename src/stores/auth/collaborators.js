@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, reactive, ref } from 'vue'
 import { CollaboratorsService } from '@/services'
+import { useAuthStore } from './auth'
 
 /**
  * Store for managing collaborators data.
@@ -35,12 +36,14 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         connection: false
       })
 
+      const authStore = useAuthStore()
+
       const collaborators = computed(() => state.collaborators)
       const collaboratorByUser = computed(() => state.collaboratorByUser)
       const selectedCollaborator = computed(()=> state.selectedCollaborator)
       const isLoading = computed(() => state.loading)
       const collaboratorsCount = computed(() => state.collaborators.length)
-      const succesMsg = ref(false)
+      const successMsg = ref(false)
 
           /**
      * Fetches collaborators data from the server.
@@ -85,12 +88,14 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
      * @function postCollaborators
      * @param {Object} newCollaborator - The new collaborator data to add.
      */
-      const postCollaborators = async (newCollaborator) => {
+      const postCollaborators = async (datas) => {
         state.loading = true
         try {
+          //console.log(newCollaborator)
+          const newCollaborator = ({...datas, user: authStore.email})
           const response = await CollaboratorsService.PostCollaborators(newCollaborator)
           state.collaborators.push(response)
-          succesMsg.value = true
+          successMsg.value = true
         } catch (error) {
           state.error = error
         } finally {
@@ -144,7 +149,7 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         selectedCollaborator,
         isLoading,
         collaboratorsCount,
-        succesMsg,
+        successMsg,
         getCollaborators,
         getCollaboratorsByUser,
         postCollaborators,
