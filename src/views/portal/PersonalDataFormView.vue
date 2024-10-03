@@ -1,5 +1,10 @@
 <script setup>
+import { useCollaboratorsStore } from '@/stores/auth/collaborators';
 import { BackButton, ContainerGlobal, Footer, PersonaDataForm, FormModal  } from '@/components';
+
+const store = useCollaboratorsStore()
+
+
 </script>
 
 <template>
@@ -7,6 +12,6 @@ import { BackButton, ContainerGlobal, Footer, PersonaDataForm, FormModal  } from
         <BackButton  />
         <PersonaDataForm />
     </ContainerGlobal>
-    <FormModal />
+    <FormModal v-show="store.successMsg" />
     <Footer />
 </template>
