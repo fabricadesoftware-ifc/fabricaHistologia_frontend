@@ -1,5 +1,11 @@
 <script setup>
+import { ref } from 'vue'
+import { useCollaboratorsStore } from '@/stores/auth/collaborators';
 import { BackButton, ContainerGlobal, Footer, PersonaDataForm, FormModal  } from '@/components';
+
+const store = useCollaboratorsStore()
+
+const succesMsg = ref(false)
 </script>
 
 <template>
@@ -7,6 +13,6 @@ import { BackButton, ContainerGlobal, Footer, PersonaDataForm, FormModal  } from
         <BackButton  />
         <PersonaDataForm />
     </ContainerGlobal>
-    <FormModal />
+    <FormModal v-show="succesMsg" />
     <Footer />
 </template>

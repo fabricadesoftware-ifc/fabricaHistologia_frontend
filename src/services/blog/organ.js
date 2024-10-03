@@ -68,7 +68,7 @@ class OrganService {
    */
   async updateOrgans(organ) {
     try {
-      const { data } = await api.put(`/organs/${organ.id}/`)
+      const { data } = await api.put(`/organs/${organ.id}/`, organ)
       return data.results
     } catch (error) {
       console.log('error in updateOrgans')
