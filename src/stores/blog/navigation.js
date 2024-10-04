@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
+import { useStorage } from '@vueuse/core'
 import { computed, reactive } from "vue";
 import router from "@/router"
 
 export const useNavigationStore = defineStore("navigation", () => {
-  const state = reactive({
+  const state = useStorage('navigate', {
     history: [],
     currentPage: null,
     navPortal: [
@@ -13,32 +14,33 @@ export const useNavigationStore = defineStore("navigation", () => {
     ]
   });
 
-  const currentPage = computed(() => state.currentPage);
+
+  const returnCurrentPage = computed(() => state.value.currentPage);
 
   const addToHistory = (route) => {
-    state.history.push(route);
-    state.currentPage = route;
+    state.value.history.push(route);
+    state.value.currentPage = route;
   };
 
   const navigateBack = async () => {
  
-    if (state.history.length != 1) {
-      const previousRoute = state.history[state.history.length - 2]
-      state.history.splice((state.history.length - 2), 2)
+    if (state.value.history.length != 1) {
+      const previousRoute = state.value.history[state.value.history.length - 2]
+      state.value.history.splice((state.value.history.length - 2), 2)
       if (previousRoute) {
         await router.push(previousRoute);
-        state.currentPage = previousRoute;
+        state.value.currentPage = previousRoute;
       }
     } else {
       await router.push('/');
-      state.history.splice(0, 2)
-      state.currentPage = null;
+      state.value.history.splice(0, 2)
+      state.value.currentPage = null;
     }
   };
 
   return {
     state,
-    currentPage,
+    returnCurrentPage,
     addToHistory,
     navigateBack,
   };

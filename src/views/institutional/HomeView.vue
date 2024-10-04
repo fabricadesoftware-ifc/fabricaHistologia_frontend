@@ -12,7 +12,7 @@ import {
       <div class="flex w-60 h-16 md:w-48 md:h-14 absolute m-10 left-0 bottom-0 sm:m-6">
         <img src="@/assets/images/icons/ifcLogo.png" class="w-12/12 h-12/12">
       </div>
-      <TitleHome  class="z-10 absolute top-64" />
+      <TitleHome  class="z-10 absolute top-52" />
     </main>
 </template>
 

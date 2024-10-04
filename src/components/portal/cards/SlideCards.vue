@@ -19,29 +19,29 @@ const props = defineProps({
           <div class="w-full h-2/6 flex items-center">
             <ul class="flex list-none w-full justify-around text-white font-poppins text-xs">
               <li
-                class="bg-purple-800 text-white px-3 py-1 rounded-lg"
+                class="bg-purple-800 overflow-hidden max-w-9 text-white px-3 py-1 rounded-lg"
               >
                 <p>{{ item.increase }}</p>
               </li>
 
               <li
-                class="bg-green-600 text-white px-3 py-1 rounded-lg"
+                class="bg-green-600 overflow-hidden max-w-16 text-white px-2 py-1 rounded-lg"
               >
                 <p class="">{{ item.species.name }}</p>
               </li>
 
               <li
-                class="bg-gray-400 text-black px-3 py-1 rounded-lg"
+                class="bg-gray-400 overflow-hidden max-w-16 text-black px-2 py-1 rounded-lg"
               >
                 <p>{{ item.type_cut }}</p>
               </li> 
             </ul>
           </div>
           <div
-            class="w-full h-4/6 flex flex-col items-center justify-evenly font-poppins text-center"
+            class="w-full h-5/6 flex flex-col items-center justify-evenly font-poppins text-center"
           >
             <div class="w-full overflow-x-hidden overflow-y-hidden">
-              <p class="font-normal text-xl mb-2">{{ item.name }}</p>
+              <p class="font-normal text-xl ">{{ item.name }}</p>
             </div>
             <p class="text-sm italic text-slate-600">
               {{ item.post_date }}
