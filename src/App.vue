@@ -1,5 +1,9 @@
 <script setup>
 import { RouterView } from 'vue-router'
+import { useNavigationStore } from './stores/blog/navigation';
+import { onMounted } from 'vue';
+
+const navigate = useNavigationStore()
 // import { onMounted } from 'vue';
 // import { useAuthStore } from '@/stores/auth/auth';
 // import { PassageUser } from '@passageidentity/passage-elements/passage-user';
@@ -24,6 +28,9 @@ import { RouterView } from 'vue-router'
 // onMounted(() => {
 //   getUserInfo();
 // });
+onMounted(()=> {
+  console.log(navigate.state.history)
+})
 </script>
 
 <template>

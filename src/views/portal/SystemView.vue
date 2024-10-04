@@ -22,7 +22,7 @@ onMounted(() => {
 
 <template>
     <HeaderPortal class="mt-10" title="Selecione o Sistema" size="text-3xl md:text-center" />
-    <CardsGlobal :datas="store.systems" />
+    <CardsGlobal :gap="'gap-10'" :justify="'justify-start'" :datas="store.systems" />
     
     <ContainerGlobal class="mt-16 ">
         <AddInfoGlobal :datas="{}" />

@@ -38,9 +38,8 @@ onMounted(async()=>{
   <main class="w-dvh">
     <HeaderPortal class=" " :title="organStore.selectedOrgan.name" />
     <div class=" flex justify-center gap-10">
-      <button @click="selectPostType(item)" v-for="(item,index) in buttons" class="rounded-2xl h-14 font-poppins px-16 ease-in duration-100" :class="item.selected ? 'bg-transparent border-2  text-[#267A7A] border-[#267A7A] hover:bg-[#b9dada]' : 'text-white  bg-[#267A7A] hover:bg-[#b9dada] hover:border-2 hover:border-[#267A7A] hover:text-[#267A7A] ' " >{{ item.text }}</button>
     </div>
-    <CardsContainer class="mb-8 mt-8" noFlex>
+    <CardsContainer :gap="'gap-10'" :justify="'justify-start'" class="mb-8 mt-8">
       <SlideCards :data="postStore.postByOrganAndType" />
     </CardsContainer>
     <ContainerGlobal class="flex justify-center flex-col">
