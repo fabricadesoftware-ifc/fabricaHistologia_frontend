@@ -4,6 +4,8 @@ import { useSlideStore } from "./blog/slide.js";
 import { useSystemStore } from "./blog/system.js";
 import { usePostStore } from "./blog/post.js";
 import { useSupportingStore } from "./supporting_material/supporting.js";
+import { useCollaboratorsStore } from "./auth/collaborators.js";
+import { useAuthStore } from "./auth/auth.js";
 
 export {
     useSpecieStore,
@@ -12,4 +14,6 @@ export {
     useSystemStore,
     useOrganStore,
     usePostStore,
+    useCollaboratorsStore,
+    useAuthStore
 }
