@@ -5,7 +5,7 @@ const getWidthScreenSize = ref(window.innerWidth)
 </script>
 
 <template>
-    <footer class="bg-[#F9F9F9] border">
+    <footer class="bg-[#F9F9F9] border relative bottom-0">
         <ContainerGlobal>
             <section class="flex justify-between w-full items-center">
                 <div class="sm:flex sm:items-center sm:justify-around w-2/3 sm:gap-1">

@@ -12,7 +12,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <section :class="`h-auto w-4/5 mx-auto bg-orange-400 flex flex-wrap ${props.justify} ${props.gap} sm:justify-center`">
+    <section :class="`h-auto w-4/5 mx-auto flex flex-wrap ${props.justify} ${props.gap} sm:justify-center`">
         <slot></slot>
     </section>
 </template>
