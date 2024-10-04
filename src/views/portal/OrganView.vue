@@ -42,6 +42,6 @@ const objs = [
 
         <BtnDefault :text="'Acessar Quiz deste Órgão'" :block="true" class=" mt-12"/>
     </ContainerGlobal>
-    <Footer class=" mt-12" />
+    <Footer class="absolute bottom-0 mt-12" />
 </main>
 </template>

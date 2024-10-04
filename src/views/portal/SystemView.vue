@@ -31,5 +31,5 @@ onMounted(() => {
             <BtnDefault background="bg-[#D94E4E]" text="Acessar Quiz" />
         </div>
     </ContainerGlobal>
-    <Footer />
+    <Footer class="absolute bottom-0" />
 </template>
