@@ -47,5 +47,5 @@ onMounted(async()=>{
       <BtnDefault :text="'Acessar Quiz deste Órgão'" :block="true" class="mt-12" />
     </ContainerGlobal>
   </main>
-  <Footer class="mt-12 absolute bottom-0" />
+  <Footer class="mt-12" />
 </template>
