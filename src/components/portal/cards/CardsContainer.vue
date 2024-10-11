@@ -1,14 +1,18 @@
+<script setup>
+const props = defineProps({
+    justify: {
+        type: String,
+        default: 'justify'
+    },
+    gap: {
+        type: String,
+        default: '10'
+    },
+})
+</script>
+
 <template>
-    <section class="h-auto w-4/5 mx-auto" :class="[{'justify-center flex flex-wrap' :!props.noFlex}, {'grid gap-5 grid-cols-5': props.noFlex}]">
+    <section :class="`h-auto w-4/5 mx-auto flex flex-wrap ${props.justify} ${props.gap} sm:justify-center`">
         <slot></slot>
     </section>
 </template>
-
-<script setup>
-const props = defineProps({
-    'noFlex': {
-        type: Boolean,
-        default: false
-    }
-})
-</script>

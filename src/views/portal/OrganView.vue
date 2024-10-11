@@ -34,7 +34,7 @@ const objs = [
 <main class="w-dvh">
     <ContainerGlobal class="flex justify-center flex-col">
         <HeaderPortal :title="'Estômago'" />
-        <CardsContainer class=" mt-3">
+        <CardsContainer :gap="'gap-10'" :justify="'justify-start'" class=" mt-3">
             <SlideCard :details="objs" />
         </CardsContainer>
 
@@ -42,6 +42,6 @@ const objs = [
 
         <BtnDefault :text="'Acessar Quiz deste Órgão'" :block="true" class=" mt-12"/>
     </ContainerGlobal>
-    <Footer class=" mt-12" />
+    <Footer class="absolute bottom-0 mt-12" />
 </main>
 </template>

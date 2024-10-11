@@ -4,6 +4,8 @@ import PostService from './blog/post';
 import SystemService from './blog/system'
 import SupportingMaterialService from './supporting_material/supporting'
 import UploaderService from './uploader/uploader'
+import CollaboratorsService from './auth/collaborators'
+import AuthService from './auth/auth';
 
 export {
     SpecieService,
@@ -11,5 +13,7 @@ export {
     SupportingMaterialService,
     SystemService,
     OrganService,
-    UploaderService
+    UploaderService,
+    CollaboratorsService,
+    AuthService
 };
