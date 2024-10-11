@@ -1,5 +1,5 @@
 <script setup>
-import ContainerGlobal from './layout/ContainerGlobal.vue';
+import ContainerGlobal from '../../layout/ContainerGlobal.vue';
 import AnswerQuiz from './AnswerOptionsQuiz.vue';
 import Question from './Question.vue'
 
