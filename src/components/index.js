@@ -38,6 +38,9 @@ import SelectCardsGlobal from '@/components/portal/globals/SelectCardsGlobal.vue
 import SearchAddInfo from '@/components/portal/search/SearchAddInfo.vue'
 import PersonaDataForm from '@/components/portal/Forms/PersonaDataForm.vue'
 import FormModal from '@/components/portal/Forms/ModalForm.vue'
+import AnswerOptionsQuiz from './portal/quiz/AnswerOptionsQuiz.vue';
+import Question from './portal/quiz/Question.vue';
+import QuizQuestion from './portal/quiz/QuizQuestion.vue';
 
 // post
 import CheckList from '@/components/portal/post/CheckList.vue';
@@ -76,5 +79,8 @@ export {
   CardsGlobal,
   SelectCardsGlobal,
   PersonaDataForm,
-  FormModal
+  FormModal,
+  QuizQuestion,
+  AnswerOptionsQuiz,
+  Question,
 };
