@@ -1,7 +1,9 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import {ContainerGlobal, QuizQuestion} from '@/components/';
+import { useQuizStore } from '@/stores/blog/quiz';
 
+const quizStore = useQuizStore()
 
 const question = ref([
     {position: 1, question: 'A mitocôndria é o que?', title: 'Sobre as mitocondrias afirme'},
@@ -44,6 +46,12 @@ const answer = ref([
     {position: 24, corrected: false, option: 'O complexo de Golgi realiza a fotossíntese', comment_answer: 'não, isso é feito pelos cloroplastos', question: 6}
 ]);
 
+
+onMounted(async()=>{
+ await quizStore.getQuizBySystem(1)
+ await quizStore.getAnswersByQuestion(1)
+})
+
 const currentQuestion = ref(1)
 
 const nextSection = () => {
@@ -59,17 +67,9 @@ const previousSection = () => {
 
 const watchCorrect = ref(false)
 
-const selectAnswer = (answer) => {
-    if (answer.corrected) {
-        return true
-    } else {
-        return false
-    }
-}
-
 </script>
 <template>
     <ContainerGlobal>
-        <QuizQuestion :data_answer="answer.filter(s => s.question == 1)" :data_question="question" :index="question.position" />
+        <QuizQuestion :data_answer="quizStore.answersByQuestion" :data_question="quizStore.quizBySystem" />
     </ContainerGlobal>
 </template>

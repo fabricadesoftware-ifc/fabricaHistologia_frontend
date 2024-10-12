@@ -32,13 +32,14 @@ export const useQuizStore = defineStore("post",
             quizBySystem: [],
             answersByQuestion: [],
             selectedQuiz: null,
-            selectedAnswer: null,
+            selectedAnswers: [],
             loading: false,
             error: null,
             connection: false,
         });
         const answers = computed(() => state.answers)
         const quiz = computed(() => state.quiz)
+        const selectedAnswers = computed(()=> state.selectedAnswers)
         const isLoading = computed(() => state.loading);
         const answersCount = computed(() => state.answers.length);
         const quizCount = computed(() => state.quiz.length);
@@ -202,6 +203,7 @@ export const useQuizStore = defineStore("post",
             answersCount,
             quiz,
             answers,
+            selectedAnswers,
             quizBySystem,
             answersByQuestion,
             getQuiz,
