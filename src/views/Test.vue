@@ -1,18 +1,19 @@
 <script setup>
-import ContainerGlobal from '@/components/layout/ContainerGlobal.vue';
 import { computed, ref } from 'vue';
+import {ContainerGlobal, QuizQuestion} from '@/components/';
+
 
 const question = ref([
-    {position: 1, question: 'A mitocôndria é o que?'},
-    {position: 2, question: 'Qual é a função dos ribossomos?'},
-    {position: 3, question: 'Qual é a principal função do núcleo celular?'},
-    {position: 4, question: 'O que é a membrana plasmática?'},
-    {position: 5, question: 'O que é o retículo endoplasmático rugoso?'},
-    {position: 6, question: 'Qual é a função do complexo de Golgi?'}
+    {position: 1, question: 'A mitocôndria é o que?', title: 'Sobre as mitocondrias afirme'},
+    {position: 2, question: 'Qual é a função dos ribossomos?', title: 'Sobre as mitocondrias afirme'},
+    {position: 3, question: 'Qual é a principal função do núcleo celular?', title: 'Sobre as mitocondrias afirme'},
+    {position: 4, question: 'O que é a membrana plasmática?', title: 'Sobre as mitocondrias afirme'},
+    {position: 5, question: 'O que é o retículo endoplasmático rugoso?', title: 'Sobre as mitocondrias afirme'},
+    {position: 6, question: 'Qual é a função do complexo de Golgi?', title: 'Sobre as mitocondrias afirme'}
 ]);
 
 const answer = ref([
-    {position: 1, corrected: true, option: 'A mitocôndria é a organela que cupositiona da respiração da célula', comment_answer: 'pois ela respira porra', question: 1},
+    {position: 1, corrected: true, option: 'A mitocôndria é a organela que cupositiona da respiração da célulaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', comment_answer: 'pois ela respira porra', question: 1},
     {position: 2, corrected: false, option: 'A mitocôndria é responsável pela fotossíntese', comment_answer: 'não, isso é função dos cloroplastos', question: 1},
     {position: 3, corrected: false, option: 'A mitocôndria armazena informações genéticas', comment_answer: 'isso é papel do núcleo', question: 1},
     {position: 4, corrected: false, option: 'A mitocôndria produz proteínas', comment_answer: 'isso é função dos ribossomos', question: 1},
@@ -69,25 +70,6 @@ const selectAnswer = (answer) => {
 </script>
 <template>
     <ContainerGlobal>
-        <div class="w-full h-96 bg-[#212a21] flex justify-center">
-            <div>
-                <button class="text-white" @click="previousSection()"><<</button>
-            </div>
-            <div class="flex flex-col items-center">
-            <div class="w-3/5 h-2/5 bg-[#dcf5a2]">
-                <span v-for="(q, index) in question" :key="index" v-show="currentQuestion == q.position"><h2>{{ q.question }}</h2></span>
-            </div>
-            <div class="w-3/5 relative mt-5 bg-[#dcf5a2]">
-                <span v-for="(a, index) in answer" :key="index" v-show="currentQuestion == a.question" >
-                    <p v-show="watchCorrect">{{ a.corrected ? 'Correta' : 'Errada' }}</p><h2 class="mt-2" @click="selectAnswer(a), watchCorrect = !watchCorrect" :class="!watchCorrect ? 'bg-none' : selectAnswer(a) ? 'bg-green-500 border-2 border-[#309737] rounded-md' : 'bg-red-500 border-2 border-[#912d2d] rounded-md'">{{ a.option }}</h2>
-                <p v-show="watchCorrect">{{ a.comment_answer }}</p>
-                </span>
-            </div>
-            </div>
-
-            <div>
-                <button class="text-white" @click="nextSection()">>></button>
-            </div>
-        </div>
+        <QuizQuestion :data_answer="answer.filter(s => s.question == 1)" :data_question="question" :index="question.position" />
     </ContainerGlobal>
 </template>

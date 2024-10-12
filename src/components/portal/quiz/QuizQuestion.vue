@@ -1,36 +1,31 @@
 <script setup>
+import {ref} from 'vue'
 import ContainerGlobal from '../../layout/ContainerGlobal.vue';
 import AnswerQuiz from './AnswerOptionsQuiz.vue';
 import Question from './Question.vue'
 
-
-const datas = [
-  {
-    QuestionLetter: 'A',
-    QuestionText: 'apenas I,II,III',
-    AnswerNumber: 1
+const props = defineProps({
+  data_question: {
+    type: Array
   },
-  {
-    QuestionLetter: 'B',
-    QuestionText: 'apenas I,II,III',
-    AnswerNumber: 2
+  data_answer: {
+    type: Array
   },
-  {
-    QuestionLetter: 'Cu',
-    QuestionText: 'apenas I,II,III',
-    AnswerNumber: 3
+  index: {
+    type: Number
   }
-]
+})
 
+const currentQuestion = ref(1)
 </script>
 
 <template>
   <ContainerGlobal>
     <div class="flex flex-col gap-5 border border-gray-100 p-6 rounded-lg">
-      <Question/>
+      <Question :data_question="item" :index="item.position" v-for="item, index in props.data_question" :key="index"  v-show="currentQuestion == item.position"/>
 
       <div class="flex flex-col gap-4">
-        <AnswerQuiz :datas="datas"></AnswerQuiz>
+        <AnswerQuiz :data_answer="props.data_answer" />
       </div>
       
     </div>
