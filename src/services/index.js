@@ -6,6 +6,7 @@ import SupportingMaterialService from './supporting_material/supporting'
 import UploaderService from './uploader/uploader'
 import CollaboratorsService from './auth/collaborators'
 import AuthService from './auth/auth';
+import QuizService from './blog/quiz';
 
 export {
     SpecieService,
@@ -15,5 +16,6 @@ export {
     OrganService,
     UploaderService,
     CollaboratorsService,
-    AuthService
+    AuthService,
+    QuizService
 };
