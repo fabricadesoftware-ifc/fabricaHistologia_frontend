@@ -19,6 +19,11 @@ const router = createRouter({
       component: () => import('@/views/auth/LoginView.vue')
     },
     {
+      path: '/testcomponents',
+      name: 'testcomponents',
+      component: () => import('@/views/TestComponents.vue')
+    },
+    {
       path: '/portal',
       name: 'portal',
       children: [
@@ -51,11 +56,6 @@ const router = createRouter({
           path: 'content',
           name: 'content',
           component: () => import('@/views/portal/ContentView.vue')
-        },
-        {
-          path: 'test',
-          name: 'test',
-          component: () => import('@/views/portal/PostTest.vue')
         },
         {
           path: 'personal-data',
