@@ -15,7 +15,7 @@ const showCorrect = ref(null)
 
 <template>
         
-        <div v-for="(item, index) in props.data_answer" :key="index" class="flex flex-nowrap w-[100%] h-auto items-center gap-4 rounded-md p-1" :class="filterAnswer(item) == undefined ? '' : item.correct ? 'bg-green-400' : 'bg-red-400'" @click="!answered ? selectAnswer(item) : ''" :style="setBackground(item)">
+        <div v-for="(item, index) in props.data_answer" :key="index" class="select-none cursor-pointer flex flex-nowrap w-[100%] h-auto items-center gap-4 rounded-[40px] px-4 py-1" :class="filterAnswer(item) == undefined ? '' : item.correct ? 'bg-green-400' : 'bg-red-400'" @click="!answered ? selectAnswer(item) : ''" :style="setBackground(item)">
           <div class="size-8 rounded-full bg-black/30 flex items-center justify-center text-white">
             {{ index }}
           </div>
