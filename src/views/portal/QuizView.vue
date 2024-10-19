@@ -2,9 +2,11 @@
 import { computed, onMounted, ref } from 'vue';
 import {ContainerGlobal, QuizQuestion, HeaderPortal, Footer} from '@/components/';
 import { useQuizStore } from '@/stores/blog/quiz';
+import { useRoute } from 'vue-router';
 
 const quizStore = useQuizStore()
-
+const router = useRoute()
+const id = router.params.id
 const currentQuestion = ref(1)
 
 const updateQuestions = computed(()=> {
@@ -23,7 +25,7 @@ const previousSection = () => {
 }
 
 onMounted(async()=>{
- await quizStore.getQuizBySystem(1)
+ await quizStore.getQuizBySystem(id, '')
  await quizStore.getAnswersByQuestion()
   quizStore.getMarkedAnswers()
   console.log(quizStore.markedAnswers)

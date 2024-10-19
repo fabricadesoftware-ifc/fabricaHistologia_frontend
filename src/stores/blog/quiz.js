@@ -35,6 +35,7 @@ export const useQuizStore = defineStore("post",
             selectedAnswers: [],
             savedAnswers: [],
             markedAnswers: [],
+            selectedLevel: null,
             loading: false,
             error: null,
             connection: false,
@@ -49,6 +50,7 @@ export const useQuizStore = defineStore("post",
         const answersByQuestion = computed(()=> state.answersByQuestion)
         const quizBySystem = computed(()=> state.quizBySystem)
         const markedAnswers = computed(()=> state.markedAnswers)
+        const selectedLevel = computed(()=> state.selectedLevel)
 
         /**
          * Fetches post data.
@@ -81,10 +83,10 @@ export const useQuizStore = defineStore("post",
             }
         };
 
-        const getQuizBySystem = async (system_id) => {
+        const getQuizBySystem = async (system_id, level) => {
             state.loading = true;
             try {
-                const response = await QuizService.getQuizBySystem(system_id)
+                const response = await QuizService.getQuizBySystem(system_id, level)
                 state.quizBySystem = response
                 
             } catch (error) {
@@ -225,6 +227,7 @@ export const useQuizStore = defineStore("post",
             answersByQuestion,
             savedAnswers,
             markedAnswers,
+            selectedLevel,
             getMarkedAnswers,
             getQuiz,
             getAnswers,

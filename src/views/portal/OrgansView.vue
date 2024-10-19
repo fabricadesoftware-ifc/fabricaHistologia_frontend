@@ -1,12 +1,13 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import router from '@/router';
 import { useOrganStore, useSystemStore, useSupportingStore } from '@/stores';
 import { HeaderPortal, CardsGlobal, ContainerGlobal, AddInfoGlobal, BtnDefault, Footer  } from '@/components';
 import { data } from 'autoprefixer';
 
-const router = useRoute();
-const id = router.params.id;
+const route = useRoute();
+const id = route.params.id;
 const organStore = useOrganStore()
 const systemStore = useSystemStore()
 const supportingStore = useSupportingStore()
@@ -32,6 +33,9 @@ onMounted(async () => {
     setAdditionalInfo.value
 })
 
+const push = (id) => {
+    router.push('/portal/quiz/' + id)
+}
 </script>
 
 <template>
@@ -40,7 +44,7 @@ onMounted(async () => {
     <ContainerGlobal class="mt-16 ">
         <AddInfoGlobal :data='additionalData' />
         <div class="my-10">
-            <BtnDefault text="Acessar Quiz deste Sistema" background="bg-[#267A7A]" block />
+            <BtnDefault @click="push(id)" text="Acessar Quiz deste Sistema" background="bg-[#267A7A]" block />
         </div>
     </ContainerGlobal>
     <Footer />
