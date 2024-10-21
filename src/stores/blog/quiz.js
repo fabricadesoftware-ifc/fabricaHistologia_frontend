@@ -24,7 +24,7 @@ import { QuizService } from "@/services";
  * @returns {postStore} The postStore instance.
  */
 
-export const useQuizStore = defineStore("post",
+export const useQuizStore = defineStore("quiz",
     () => {
         const state = reactive({
             quiz: [],
@@ -42,6 +42,7 @@ export const useQuizStore = defineStore("post",
         });
         const answers = computed(() => state.answers)
         const quiz = computed(() => state.quiz)
+        const selectedQuiz = computed(()=> state.selectedQuiz)
         const selectedAnswers = computed(()=> state.selectedAnswers)
         const savedAnswers = computed(()=> state.savedAnswers)
         const isLoading = computed(() => state.loading);
@@ -84,6 +85,7 @@ export const useQuizStore = defineStore("post",
         };
 
         const getQuizBySystem = async (system_id, level) => {
+            state.quizBySystem = []
             state.loading = true;
             try {
                 const response = await QuizService.getQuizBySystem(system_id, level)
@@ -228,6 +230,7 @@ export const useQuizStore = defineStore("post",
             savedAnswers,
             markedAnswers,
             selectedLevel,
+            selectedQuiz,
             getMarkedAnswers,
             getQuiz,
             getAnswers,

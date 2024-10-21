@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import {ContainerGlobal, QuizQuestion, HeaderPortal, Footer} from '@/components/';
+import {ContainerGlobal, QuizQuestion, HeaderPortal, Footer, BackButton} from '@/components/';
 import { useQuizStore } from '@/stores/blog/quiz';
 import { useRoute } from 'vue-router';
 
@@ -25,15 +25,18 @@ const previousSection = () => {
 }
 
 onMounted(async()=>{
- await quizStore.getQuizBySystem(id, '')
- await quizStore.getAnswersByQuestion()
+  await quizStore.getAnswersByQuestion()
   quizStore.getMarkedAnswers()
-  console.log(quizStore.markedAnswers)
+  console.log(quizStore.quizBySystem)
 })
 
 </script>
 <template>
-    <main  class="min-h-dvh relative">
+    <section v-if="quizStore.quizBySystem.length == 0" class="h-dvh w-dvw flex justify-center items-center">
+        <BackButton class="top-14 left-40" />
+        <h1 class=" text-4xl">Quiz não encontrado</h1>
+    </section>
+    <main v-else class="min-h-dvh relative flex flex-col justify-between">
     <ContainerGlobal>
             <HeaderPortal title="Quiz de Conhecimentos Gerais" size="text-2xl" />
             <section class="flex flex-col gap">
@@ -51,7 +54,7 @@ onMounted(async()=>{
         <QuizQuestion :currentQuestion="currentQuestion" class="w-full" :data_answer="updateQuestions" :data_question="quizStore.quizBySystem" />
         </section>
     </ContainerGlobal>
-    <Footer class=" absolute bottom-0"  />
+    <Footer class="mt-10"  />
     </main>
 
 </template>

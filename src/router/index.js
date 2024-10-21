@@ -66,6 +66,11 @@ const router = createRouter({
           path: 'quiz/:id',
           name: 'quiz-id',
           component: () => import('@/views/portal/QuizView.vue')
+        },
+        {
+          path: 'quiz/random',
+          name: 'quiz-random',
+          component: () => import('@/views/portal/QuizView.vue')
         }
       ]
     },

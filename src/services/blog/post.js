@@ -24,7 +24,7 @@ class PostService {
 
     async getPostsByOrganAndType(organ_id, type_post) {
         try {
-            const {data} = await api.get(`/posts/?organ_id=${organ_id}&page=&species_id=&type_post=${type_post}`, {headers: {'authorization': `Bearer ${token}`}});
+            const {data} = await api.get(`/posts/?organ_id=${organ_id}&species_id=&type_post=${type_post}`, {headers: {'authorization': `Bearer ${token}`}});
         return data.results
         } catch (error) {
             console.log('Error in getPostsbyOrgan', error);

@@ -22,16 +22,17 @@ const buttons = ref([
   {text: 'Histologia', selected: false, post: 1}
 ])
 
-const selectPostType = (item) => {
-  for (let state of buttons.value) {
-    state.selected = !state.selected
-  }
-  postStore.getPostsByOrganAndType(organ_id, item.post)
-}
+// const selectPostType = (item) => {
+//   for (let state of buttons.value) {
+//     state.selected = !state.selected
+//   }
+//   postStore.getPostsByOrganAndType(organ_id, item.post)
+// }
 
 onMounted(async()=>{
-  await postStore.getPostsByOrganAndType(organ_id, 1)
+  console.log(postStore)
   await organStore.getOrgansById(organ_id)
+  await postStore.getPostsByOrganAndType(organ_id, 1)
 })
 </script>
 <template>

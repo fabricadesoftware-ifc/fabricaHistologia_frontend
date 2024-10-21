@@ -31,8 +31,8 @@ const verifyAnswered = (answer) => {
             {{ transform(index) }}
           </div>
           <div class=" max-w-[90%] lg:max-w-[80%] sm:max-w-[70%] break-all">
-          <h4 class="text-base font-medium">{{item.option}}</h4>
-          <p v-show="verifyAnswered(item) && watchAnswered(item) || setBackground(item, verifyAnswered(item)) != undefined" >{{item.comment_answer}}</p>
+          <h4 class="text-base md:text-sm sm:text-xs   font-medium">{{item.option}}</h4>
+          <p class="text-sm md:text-sm sm:text-xs" v-show="verifyAnswered(item) && watchAnswered(item) || setBackground(item, verifyAnswered(item)) != undefined" >{{item.comment_answer}}</p>
           </div>
         </div>
 </template>

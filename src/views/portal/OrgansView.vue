@@ -4,7 +4,9 @@ import { useRoute } from 'vue-router';
 import router from '@/router';
 import { useOrganStore, useSystemStore, useSupportingStore } from '@/stores';
 import { HeaderPortal, CardsGlobal, ContainerGlobal, AddInfoGlobal, BtnDefault, Footer  } from '@/components';
-import { data } from 'autoprefixer';
+import { useQuizStore } from '@/stores/blog/quiz';
+import { resetAll } from '@/utils/quiz';
+const quizStore = useQuizStore()
 
 const route = useRoute();
 const id = route.params.id;
@@ -33,7 +35,9 @@ onMounted(async () => {
     setAdditionalInfo.value
 })
 
-const push = (id) => {
+const push = async(id) => {
+    resetAll()
+    quizStore.getQuizBySystem(id, '')
     router.push('/portal/quiz/' + id)
 }
 </script>

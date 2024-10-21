@@ -2,10 +2,31 @@ import {ref} from 'vue'
 import { useQuizStore } from "@/stores/blog/quiz"
 const quizStore = useQuizStore()
 
+export const systemGeral = ref([])
+
+export const choseNumbs = (between) => {
+   return (Math.round(Math.random() * between))
+}
+
+export const verifyManyQuiz = () => {
+    quizStore.quizBySystem.length < 10 ? quizStore.quiz.length : 10 
+}
+
+export const throwQuizes = () => {
+  while (systemGeral.value < verifyManyQuiz()) {
+      // const numb = choseNumbs(quizStore.quizBySystem.length)
+      const numb = choseNumbs(quizStore.quizBySystem.length)
+      if (systemGeral.value.filter(s => s == numb).length == 0) {
+          systemGeral.value.push(numb)
+      }
+  }
+  console.log(systemGeral.value)
+}
+
 export const quizHomeButtonsData = [
-    {color: 'bg-[#267A7A]', text: 'Fácil', value: 'FACIL', link: '/portal/quiz/'},
-    {color: 'bg-[#1F94C7]', text: 'Médio', value: 'MEDIO', link: '/portal/quiz/'},
-    {color: 'bg-[#D94E4E]', text: 'Difícil', value: 'DIFICIL', link: '/portal/quiz/'},
+    {color: 'bg-[#267A7A]', text: 'Fácil', value: 1, link: '/portal/quiz/'},
+    {color: 'bg-[#1F94C7]', text: 'Médio', value: 2, link: '/portal/quiz/'},
+    {color: 'bg-[#D94E4E]', text: 'Difícil', value: 3, link: '/portal/quiz/'},
 ]
 
 export const selectAnswer = async (answer) => {
@@ -27,6 +48,18 @@ export const selectAnswer = async (answer) => {
      return quizStore.selectedAnswers[index].correct
     }
      
+  }
+
+  export const resetAll = () => {
+    quizStore.state.quiz = []
+    quizStore.state.answers = []
+    quizStore.state.quizBySystem = []
+    quizStore.state.answersByQuestion = []
+    quizStore.state.selectedQuiz = null
+    quizStore.state.selectedAnswers = []
+    quizStore.state.savedAnswers = []
+    quizStore.state.markedAnswers = []
+    quizStore.state.selectedLevel = null
   }
   
 export const filterAnswer = (answer) => {
