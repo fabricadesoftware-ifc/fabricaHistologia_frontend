@@ -62,14 +62,14 @@ export const usePostStore = defineStore("post",
             try {
                 const response = await PostService.getPostsByOrganAndType(organ_id, type_post)
                 state.postsByOrganAndType = response
-                
+                console.log(response)
             } catch (error) {
                 state.error = error
             } finally {
                 state.loading = false
                 state.connection = true
             }
-        }
+        };
 
         /**
          * Creates a new post.

@@ -24,7 +24,7 @@ import { QuizService } from "@/services";
  * @returns {postStore} The postStore instance.
  */
 
-export const useQuizStore = defineStore("post",
+export const useQuizStore = defineStore("quiz",
     () => {
         const state = reactive({
             quiz: [],
@@ -33,18 +33,25 @@ export const useQuizStore = defineStore("post",
             answersByQuestion: [],
             selectedQuiz: null,
             selectedAnswers: [],
+            savedAnswers: [],
+            markedAnswers: [],
+            selectedLevel: null,
             loading: false,
             error: null,
             connection: false,
         });
         const answers = computed(() => state.answers)
         const quiz = computed(() => state.quiz)
+        const selectedQuiz = computed(()=> state.selectedQuiz)
         const selectedAnswers = computed(()=> state.selectedAnswers)
+        const savedAnswers = computed(()=> state.savedAnswers)
         const isLoading = computed(() => state.loading);
         const answersCount = computed(() => state.answers.length);
         const quizCount = computed(() => state.quiz.length);
         const answersByQuestion = computed(()=> state.answersByQuestion)
         const quizBySystem = computed(()=> state.quizBySystem)
+        const markedAnswers = computed(()=> state.markedAnswers)
+        const selectedLevel = computed(()=> state.selectedLevel)
 
         /**
          * Fetches post data.
@@ -77,10 +84,11 @@ export const useQuizStore = defineStore("post",
             }
         };
 
-        const getQuizBySystem = async (system_id) => {
+        const getQuizBySystem = async (system_id, level) => {
+            state.quizBySystem = []
             state.loading = true;
             try {
-                const response = await QuizService.getQuizBySystem(system_id)
+                const response = await QuizService.getQuizBySystem(system_id, level)
                 state.quizBySystem = response
                 
             } catch (error) {
@@ -91,11 +99,10 @@ export const useQuizStore = defineStore("post",
             }
         }
 
-        const getAnswersByQuestion = async (question_id) => {
+        const getAnswersByQuestion = async () => {
             state.loading = true;
             try {
-                const response = await QuizService.getAnswersByQuestion(question_id)
-                state.answersByQuestion = response
+                    state.answersByQuestion = await QuizService.getAnswers()
                 
             } catch (error) {
                 state.error = error
@@ -104,6 +111,20 @@ export const useQuizStore = defineStore("post",
                 state.connection = true
             }
         }
+
+        const getMarkedAnswers = () => {
+            for (let i = 0; i < quizBySystem.value.length; i++) {
+                const response = {
+                        id: quizBySystem.value[i].id,
+                        correct: false,
+                        answered: false,
+                }
+                state.markedAnswers.push(response)
+                }
+                
+                
+            }
+        
 
         
         /**
@@ -206,6 +227,11 @@ export const useQuizStore = defineStore("post",
             selectedAnswers,
             quizBySystem,
             answersByQuestion,
+            savedAnswers,
+            markedAnswers,
+            selectedLevel,
+            selectedQuiz,
+            getMarkedAnswers,
             getQuiz,
             getAnswers,
             getQuizBySystem,

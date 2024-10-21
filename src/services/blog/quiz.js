@@ -41,9 +41,9 @@ class QuizService {
         }
     }
 
-    async getQuizBySystem(system_id) {
+    async getQuizBySystem(system_id, level) {
         try {
-            const {data} = await api.get(`/quiz/?system_id=${system_id}`, {headers: {'authorization': `Bearer ${token}`}});
+            const {data} = await api.get(`/quiz/?level=${level}&system_id=${system_id}`, {headers: {'authorization': `Bearer ${token}`}});
         return data.results
         } catch (error) {
             console.log('Error in getQuizBySystem', error);

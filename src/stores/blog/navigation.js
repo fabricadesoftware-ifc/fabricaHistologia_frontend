@@ -14,6 +14,7 @@ export const useNavigationStore = defineStore("navigation", () => {
     ]
   });
 
+  const returnNavPortal = computed(()=>state.value.navPortal)
 
   const returnCurrentPage = computed(() => state.value.currentPage);
 
@@ -41,6 +42,7 @@ export const useNavigationStore = defineStore("navigation", () => {
   return {
     state,
     returnCurrentPage,
+    returnNavPortal,
     addToHistory,
     navigateBack,
   };

@@ -9,13 +9,13 @@ import {
     BtnDefault,
     Footer
 } from '@/components';
+import router from '@/router';
 
 const store = useSystemStore()
 
 onMounted(() => {
     store.getSystems()
 })
-
 
 
 </script>
