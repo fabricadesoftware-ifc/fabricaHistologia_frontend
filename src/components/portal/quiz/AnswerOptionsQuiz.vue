@@ -25,8 +25,8 @@ const verifyAnswered = (answer) => {
 </script>
 
 <template>
-        
         <div v-for="(item, index) in props.data_answer" :key="index" class="flex flex-nowrap w-[100%] h-auto items-center gap-4 rounded-full py-1 px-3 cursor-pointer" :class="filterAnswer(item) == undefined ? '' : item.correct ? 'bg-green-400' : 'bg-red-400'" @click="!verifyAnswered(item) ? selectAnswer(item) : '', answered = true" :style="setBackground(item, verifyAnswered(item))">
+
           <div class="size-8 rounded-full bg-black/30 flex items-center justify-center text-white">
             {{ transform(index) }}
           </div>
