@@ -76,7 +76,7 @@ const redrawCanvas = () => {
     ctx.value.drawImage(image.value, 0, 0);
     labeledAreas.value.forEach((area) => {
         if (area.visible) {
-            ctx.value.strokeStyle = 'yellow';
+            ctx.value.strokeStyle = 'red';
             ctx.value.lineWidth = 10;
             ctx.value.beginPath();
             area.path.forEach((point, index) => {
@@ -144,7 +144,7 @@ onMounted(() => {
         <div>
             <div v-for="(area, index) in labeledAreas" :key="index">
                 <input type="checkbox" v-model="area.visible" @change="redrawCanvas()" />
-                <span>{{ area.label }} {{ area.visible }}</span>
+                <span>{{ area.title }} {{ area.visible }}</span>
             </div>
         </div>
           </div>
@@ -153,7 +153,7 @@ onMounted(() => {
           {{ labeledAreas }}
             <label v-for="(area, index) in labeledAreas" :key="index">
               <input type="checkbox" v-model="area.visible" @change="redrawCanvas" /> 
-              {{ area.label }}
+              {{ area.title }}
             </label>
         </div>
       </section>
