@@ -29,8 +29,8 @@ const setAdditionalInfo = computed(()=>{
 
 
 onMounted(async () => {
-     organStore.getOrgansBySystem(id)
-     systemStore.getSystemById(id)
+    await organStore.getOrgansBySystem(id)
+    await systemStore.getSystemById(id)
     await supportingStore.getMaterialsBySystem(id)
     setAdditionalInfo.value
 })
