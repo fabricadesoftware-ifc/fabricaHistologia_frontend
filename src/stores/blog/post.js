@@ -38,6 +38,7 @@ export const usePostStore = defineStore("post",
         const isLoading = computed(() => state.loading);
         const postCount = computed(() => state.posts.length);
         const postByOrganAndType = computed(()=> state.postsByOrganAndType)
+        const selectedPost = computed(() => state.selectedPost)
 
         /**
          * Fetches post data.
@@ -56,6 +57,20 @@ export const usePostStore = defineStore("post",
                 state.connection = true; // just to see if the connection is established
             }
         };
+
+        const getPostsById = async (id) => {
+            state.loading = true;
+            try {
+                const response = await PostService.getPostsById(id)
+                console.log(response)
+                state.selectedPost = response
+            } catch (error) {
+                state.error = error
+            } finally {
+                state.loading = false
+                state.connection = true
+            }
+        }
 
         const getPostsByOrganAndType = async (organ_id, type_post) => {
             state.loading = true;
@@ -131,8 +146,10 @@ export const usePostStore = defineStore("post",
             postCount,
             posts,
             postByOrganAndType,
+            selectedPost,
             getPosts,
             getPostsByOrganAndType,
+            getPostsById,
             createPost,
             updatePosts,
             deletePosts

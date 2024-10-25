@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useSlideStore } from '@/stores/blog/slide';
+import { usePostStore, usePointStore } from '@/stores';
 import {
   HeaderPortal,
   ContainerGlobal,
@@ -16,21 +16,26 @@ const showInfo = ref(false);
 const canvasRef = ref(null);
 const router = useRoute();
 const id = router.params.id;
-const sliceStore = useSlideStore();
+const postsStore = usePostStore();
+const pointStore = usePointStore();
+const image = ref(null)
 
-onMounted(() => {
+onMounted(async () => {
+  await postsStore.getPostsById(id)
+  image.value = postsStore.selectedPost.image.url
+  console.log(canvasRef.value)
   if (canvasRef.value) {
-    sliceStore.ctx = canvasRef.value.getContext('2d');
-    sliceStore.canvas = canvasRef.value;
-    sliceStore.loadCanvas();
-    sliceStore.redrawCanvas();
+    pointStore.ctx = canvasRef.value.getContext('2d');
+    pointStore.canvas = canvasRef.value;
+    pointStore.loadCanvas(canvasRef, image.value);
+    pointStore.redrawCanvas(canvasRef);
   }
 });
 </script>
 
 <template>
   <main>
-    <HeaderPortal :title="`Dados da Lâmina ${id}`" />
+    <HeaderPortal :title="'aju'" />
     <ContainerGlobal class="mb-12">
       <section class="w-full md:block flex gap-8 relative">
         <div class="md:w-full w-1/2">

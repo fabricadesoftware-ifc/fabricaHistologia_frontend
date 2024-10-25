@@ -1,14 +1,23 @@
 <script setup>
-import { useSlideStore } from '@/stores';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { usePointStore } from '@/stores';
 
-const sliceStore = useSlideStore();
+const router = useRoute();
+const pointStore = usePointStore();
+const id = router.params.id;
+
+onMounted(async () => {
+    await pointStore.getPointsByPosts(id)
+})
+
 </script>
 <template>
-    <div v-for="(area, index) in sliceStore.labeledAreas" :key="index">
+    <div v-for="(area, index) in pointStore.points" :key="index">
         <label class="flex cursor-pointer select-none items-center gap-4 pb-4 hover:brightness-95">
             <div class="relative">
-                <input v-model="area.visible" type="checkbox" class="sr-only" @change="
-    sliceStore.visibleLabel(area);"  />
+                <input v-model="model" type="checkbox" class="sr-only" @change="
+    pointStore.visibleLabel(area);"  />
                 <div class="block h-8 w-14 rounded-full bg-[#E5E7EB]"></div>
                 <div
                     :class="{ 'translate-x-full !bg-[#8181FF]': area.visible }"
@@ -16,7 +25,7 @@ const sliceStore = useSlideStore();
                 ></div>
             </div>
             <p class="font-normal text-lg">
-                {{ area.title }}
+                {{ area.label_title }}
             </p>
         </label>
         <p class="text-left text-gray-400 pb-6 transition" v-show="area.visible">
