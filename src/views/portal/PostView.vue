@@ -11,6 +11,7 @@ import {
   Footer,
   BtnDefault
 } from '@/components/index';
+import point from '@/services/blog/point';
 
 const showInfo = ref(false);
 const canvasRef = ref(null);
@@ -23,19 +24,21 @@ const image = ref(null)
 onMounted(async () => {
   await postsStore.getPostsById(id)
   image.value = postsStore.selectedPost.image.url
-  console.log(canvasRef.value)
+  console.log(postsStore.selectedPost)
   if (canvasRef.value) {
     pointStore.ctx = canvasRef.value.getContext('2d');
     pointStore.canvas = canvasRef.value;
-    pointStore.loadCanvas(canvasRef, image.value);
-    pointStore.redrawCanvas(canvasRef);
+    if (pointStore.canvas && pointStore.ctx) {
+    pointStore.loadCanvas(image.value);
+    pointStore.redrawCanvas();
+  }
   }
 });
 </script>
 
 <template>
   <main>
-    <HeaderPortal :title="'aju'" />
+    <HeaderPortal :title="postsStore.selectedPost ? postsStore.selectedPost.type_cut : 'Carregando'" />
     <ContainerGlobal class="mb-12">
       <section class="w-full md:block flex gap-8 relative">
         <div class="md:w-full w-1/2">

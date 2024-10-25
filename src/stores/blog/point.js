@@ -27,6 +27,7 @@ import { PointService } from "@/services";
 export const usePointStore = defineStore("point",
     () => {
         const ctx = ref(null)
+        const canvas = ref(null)
         const image = ref(null)
         const state = reactive({
             points: [],
@@ -50,7 +51,8 @@ export const usePointStore = defineStore("point",
             state.loading = true;
             try {
                 const response = await PointService.getPoints();
-                state.points = Object.assign(response, {visible: false})
+                const data = Object.assign(response, {visible: false})
+                state.points = data
             } catch (error) {
                 state.error = error;
             } finally {
@@ -63,7 +65,8 @@ export const usePointStore = defineStore("point",
             state.loading = true;
             try {
                 const response = await PointService.getPointsByPost(post_id)
-                state.pointsByPosts = Object.assign(response, {visible: false})
+                const data = Object.assign(response, {visible: false})
+                state.pointsByPosts = data
             } catch (error) {
                 state.error = error
             } finally {
@@ -126,17 +129,18 @@ export const usePointStore = defineStore("point",
             }
         };
 
-        const redrawCanvas = (canvas) => {
+        const redrawCanvas = () => {
             console.log('redrawCanvas')
+            console.log(ctx.value)
             if (!ctx.value || !canvas.value) return
             console.log('redrawCanvas 2')
             ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
             ctx.value.drawImage(image.value, 0, 0)
         
             // Desenhar áreas baseadas no estado atual
-            points.value.forEach((area) => {
+            pointsByPosts.value.forEach((area) => {
               if (area.visible) {
-                ctx.value.strokeStyle = 'white'
+                ctx.value.strokeStyle = 'red'
                 ctx.value.lineWidth = 16
                 ctx.value.beginPath()
                 area.position.forEach((point, index) => {
@@ -160,7 +164,7 @@ export const usePointStore = defineStore("point",
             })
           }
         
-          const loadCanvas = (canvas, imageSrc) => {
+          const loadCanvas = (imageSrc) => {
             // Carregue a imagem e configure o canvas aqui
             image.value = new Image()
             console.log(imageSrc, image.value)
@@ -170,15 +174,15 @@ export const usePointStore = defineStore("point",
               if (canvas.value) {
                 canvas.value.width = image.value.width
                 canvas.value.height = image.value.height
-                redrawCanvas(canvas)
+                redrawCanvas()
               }
             }
-            redrawCanvas(canvas)
+            redrawCanvas()
           }
         
         
           const visibleLabel = (index) => {
-            points.value.forEach((area, i) => {
+            pointsByPosts.value.forEach((area, i) => {
               if (i == index) {
                 area.visible = !area.visible
               }
@@ -193,6 +197,9 @@ export const usePointStore = defineStore("point",
             pointCount,
             points,
             pointsByPosts,
+            canvas,
+            ctx,
+            image,
             getPoints,
             getPointsByPosts,
             createPoint,

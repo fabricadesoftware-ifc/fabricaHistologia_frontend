@@ -9,14 +9,15 @@ const id = router.params.id;
 
 onMounted(async () => {
     await pointStore.getPointsByPosts(id)
+    console.log(pointStore.pointsByPosts)
 })
 
 </script>
 <template>
-    <div v-for="(area, index) in pointStore.points" :key="index">
+    <div v-for="(area, index) in pointStore.pointsByPosts" :key="index">
         <label class="flex cursor-pointer select-none items-center gap-4 pb-4 hover:brightness-95">
             <div class="relative">
-                <input v-model="model" type="checkbox" class="sr-only" @change="
+                <input v-model="area.visible" type="checkbox" class="sr-only" @change="
     pointStore.visibleLabel(area);"  />
                 <div class="block h-8 w-14 rounded-full bg-[#E5E7EB]"></div>
                 <div
