@@ -84,6 +84,7 @@ export const usePointStore = defineStore("point",
         const createPoint = async (newPoint) => {
             state.loading = true;
             try {
+                console.log(newPoint)
                 state.points.push(await PointService.createPoint(newPoint));
             } catch (error) {
                 state.error = error;

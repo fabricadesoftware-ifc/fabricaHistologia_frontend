@@ -6,6 +6,7 @@ import {
   ContainerGlobal,
   TitleGlobal,
   Footer,
+  BtnDefault,
 } from '@/components/index'
 
 const postsStore = usePostStore();
@@ -23,6 +24,9 @@ const colors = [
     {select: 'Azul', value: 'blue'},
 ]
 const color = ref('')
+const analyzed_structures = ref(null)
+const analyzed_functions = ref(null)
+const BlockDrawn = ref(false)
 const labeledAreas = ref([]);
 
 
@@ -35,9 +39,9 @@ const getMousePos = (canvas, evt) => {
 };
 
 const startDrawing = (e) => {
-    if (label_title.value === '' || color.value === '' || description.value === '') return;
+    if (label_title.value === '' || color.value === '' || description.value === '' || BlockDrawn.value) return;
     isDrawing.value = true;
-    labeledAreas.value.push({ position: [],});
+    labeledAreas.value.push({ position: [], });
     ctx.value.strokeStyle = color.value;
     ctx.value.lineWidth = 2;
     ctx.value.beginPath();
@@ -46,7 +50,7 @@ const startDrawing = (e) => {
 };
 
 const draw = (e) => {
-    if (label_title.value === '' || color.value === '' || description.value === '') {
+    if (label_title.value === '' || color.value === '' || description.value === '' || BlockDrawn.value) {
         console.log(label_title.value, color.value, description.value)
         return;
     }
@@ -65,11 +69,14 @@ const endDrawing = () => {
     if (!isDrawing.value) return;
     isDrawing.value = false;
     ctx.value.closePath();
-    console.log(label_title.value, color.value, description.value)
     labeledAreas.value[labeledAreas.value.length - 1].label_title = label_title.value;
     labeledAreas.value[labeledAreas.value.length - 1].description = description.value;
-    labeledAreas.value[labeledAreas.value.length - 1].post_id = post.value.id;
+    labeledAreas.value[labeledAreas.value.length - 1].posts = post.value.id;
     labeledAreas.value[labeledAreas.value.length - 1].color = color.value;
+    labeledAreas.value[labeledAreas.value.length - 1].analyzed_functions = analyzed_functions.value;
+    labeledAreas.value[labeledAreas.value.length - 1].analyzed_structures = analyzed_structures.value;
+    BlockDrawn.value = true
+    console.log(labeledAreas.value)
     redrawCanvas();
 };
 
@@ -120,6 +127,16 @@ const setDefaultImage = async () => {
     };
 };
 
+const deletePoint = () => {
+    labeledAreas.value.pop()
+    BlockDrawn.value = false
+    redrawCanvas()
+}
+
+const addPoint = () => {
+    (BlockDrawn.value) ? pointStore.createPoint(labeledAreas.value[0]) : alert('Preencha corretamente todos os Campos!!')
+};
+
 onMounted(async () => {
     await postsStore.getPosts();
     console.log(postsStore.posts)
@@ -161,14 +178,18 @@ onMounted(async () => {
                 <svg class="fill-current h-7 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
             </div>
         </div>
-        <canvas class="w-full border-2 mt-2" ref="canvas" @mousedown="startDrawing" @mousemove="draw" @mouseup="endDrawing"></canvas>
-        <div class="mt-14 w-3/5" @click="saveCollaborator(newCollaborator)" >
-            <BtnDefault text="Enviar"  link="#" color="text-white" :block="true"/>
+        <p class="mt-2 text-xs text-gray-500">Aviso: preencha os campos acima antes de desenhar os focos e faça apenas 1 foco por vez</p>
+        <canvas class="w-full border-2" ref="canvas" @mousedown="startDrawing" @mousemove="draw" @mouseup="endDrawing"></canvas>
+        <p class="mt-2 text-xs text-gray-500">Errou? não tem problema.</p><p class="text-xs text-[#267A7A] underline cursor-pointer" @click="deletePoint()">Clique aqui para refazer</p>
+        <div class="w-full flex justify-between">
+            <div class="mt-14 w-3/6" @click="downloadImage()" >
+                <BtnDefault text="Download"  link="#" color="text-white" :block="true"/>
+            </div>
+            <div class="mt-14 w-2/6" @click="addPoint" >
+                <BtnDefault text="Enviar"  link="#" color="text-white" :block="true"/>
+            </div>
         </div>
     </form>
-            <div v-for="(area, index) in labeledAreas" :key="index">
-                <span>{{ area.label }} {{ area.visible }}</span>
-            </div>
     </ContainerGlobal>
     <Footer />
   </main>

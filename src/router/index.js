@@ -53,6 +53,11 @@ const router = createRouter({
           component: () => import('@/views/portal/ContentView.vue')
         },
         {
+          path: 'points',
+          name: 'points',
+          component: () => import('@/views/portal/PointFormView.vue')
+        },
+        {
           path: 'personal-data',
           name: 'personal-data', 
           component: () => import('@/views/portal/PersonalDataFormView.vue')
