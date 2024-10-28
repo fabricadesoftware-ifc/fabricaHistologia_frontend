@@ -11,7 +11,6 @@ import {
   Footer,
   BtnDefault
 } from '@/components/index';
-import point from '@/services/blog/point';
 
 const showInfo = ref(false);
 const canvasRef = ref(null);

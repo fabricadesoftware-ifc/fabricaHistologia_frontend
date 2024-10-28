@@ -140,8 +140,8 @@ export const usePointStore = defineStore("point",
             // Desenhar áreas baseadas no estado atual
             pointsByPosts.value.forEach((area) => {
               if (area.visible) {
-                ctx.value.strokeStyle = 'red'
-                ctx.value.lineWidth = 16
+                ctx.value.strokeStyle = area.color
+                ctx.value.lineWidth = 6
                 ctx.value.beginPath()
                 area.position.forEach((point, index) => {
                   if (index === 0) {
@@ -155,8 +155,8 @@ export const usePointStore = defineStore("point",
         
                 // Exibir rótulo
                 if (area.label_title) {
-                  ctx.value.fillStyle = 'white'
-                  ctx.value.font = 'bold 100px Arial'
+                  ctx.value.fillStyle = area.color
+                  ctx.value.font = 'bold 15px Arial'
                   const midpoint = area.position[Math.floor(area.position.length / 2)]
                   ctx.value.fillText(area.label_title, midpoint.x, midpoint.y - 10)
                 }
@@ -167,9 +167,7 @@ export const usePointStore = defineStore("point",
           const loadCanvas = (imageSrc) => {
             // Carregue a imagem e configure o canvas aqui
             image.value = new Image()
-            console.log(imageSrc, image.value)
             image.value.src = imageSrc
-            console.log(canvas)
             image.value.onload = () => {
               if (canvas.value) {
                 canvas.value.width = image.value.width

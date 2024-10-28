@@ -1,18 +1,30 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { usePointStore, usePostStore } from '@/stores';
 import {
   HeaderPortal,
   ContainerGlobal,
+  TitleGlobal,
   Footer,
 } from '@/components/index'
 
+const postsStore = usePostStore();
+const pointStore = usePointStore();
 const canvas = ref(null); // Referência ao canvas
 const ctx = ref(null);
 const isDrawing = ref(false);
 const image = ref(null);
-const title = ref('');
+const label_title = ref('');
 const description = ref('');
+const post = ref(0)
+const colors = [ 
+    {select: 'Amarelo', value: 'yellow'},
+    {select: 'Vermelho', value: 'red'},
+    {select: 'Azul', value: 'blue'},
+]
+const color = ref('')
 const labeledAreas = ref([]);
+
 
 const getMousePos = (canvas, evt) => {
     const rect = canvas.getBoundingClientRect();
@@ -22,38 +34,27 @@ const getMousePos = (canvas, evt) => {
     };
 };
 
-const handleImage = (event) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        image.value = new Image();
-        image.value.onload = () => {
-            canvas.value.width = image.value.width;
-            canvas.value.height = image.value.height;
-            ctx.value.drawImage(image.value, 0, 0);
-        };
-        image.value.src = e.target.result;
-    };
-    reader.readAsDataURL(event.target.files[0]);
-};
-
 const startDrawing = (e) => {
-    if (title.value === '') return;
+    if (label_title.value === '' || color.value === '' || description.value === '') return;
     isDrawing.value = true;
-    labeledAreas.value.push({ path: [], label: '', visible: false });
-    ctx.value.strokeStyle = 'red';
-    ctx.value.lineWidth = 10;
+    labeledAreas.value.push({ position: [],});
+    ctx.value.strokeStyle = color.value;
+    ctx.value.lineWidth = 2;
     ctx.value.beginPath();
     const pos = getMousePos(canvas.value, e);
     ctx.value.moveTo(pos.x, pos.y);
 };
 
 const draw = (e) => {
-    if (title.value === '') return;
+    if (label_title.value === '' || color.value === '' || description.value === '') {
+        console.log(label_title.value, color.value, description.value)
+        return;
+    }
     if (!isDrawing.value) return;
     const pos = getMousePos(canvas.value, e);
     ctx.value.lineTo(pos.x, pos.y);
     ctx.value.stroke();
-    labeledAreas.value[labeledAreas.value.length - 1].path.push({
+    labeledAreas.value[labeledAreas.value.length - 1].position.push({
         id: labeledAreas.value.length - 1,
         x: pos.x,
         y: pos.y,
@@ -64,39 +65,40 @@ const endDrawing = () => {
     if (!isDrawing.value) return;
     isDrawing.value = false;
     ctx.value.closePath();
-    labeledAreas.value[labeledAreas.value.length - 1].title = title.value;
+    console.log(label_title.value, color.value, description.value)
+    labeledAreas.value[labeledAreas.value.length - 1].label_title = label_title.value;
     labeledAreas.value[labeledAreas.value.length - 1].description = description.value;
+    labeledAreas.value[labeledAreas.value.length - 1].post_id = post.value.id;
+    labeledAreas.value[labeledAreas.value.length - 1].color = color.value;
     redrawCanvas();
 };
 
 const redrawCanvas = () => {
-    if (title.value === '') return;
+    if (label_title.value === '') return;
     console.log('redrawCanvas');
     ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height);
     ctx.value.drawImage(image.value, 0, 0);
     labeledAreas.value.forEach((area) => {
-        if (area.visible) {
-            ctx.value.strokeStyle = 'yellow';
-            ctx.value.lineWidth = 10;
-            ctx.value.beginPath();
-            area.path.forEach((point, index) => {
-                if (index === 0) {
-                    ctx.value.moveTo(point.x, point.y);
-                } else {
-                    ctx.value.lineTo(point.x, point.y);
-                }
-            });
-            ctx.value.stroke();
-            ctx.value.closePath();
-            // Exibir rótulo
-            if (area.title) {
-                ctx.value.fillStyle = 'yellow';
-                ctx.value.font = '64px Arial';
-                ctx.value.fontWeight = '900'; // Ensure fontWeight is a string
-                const midpoint = area.path[Math.floor(area.path.length / 2)];
-                ctx.value.fillText(area.title, midpoint.x, midpoint.y - 10);
-            }
-        }
+    ctx.value.strokeStyle = color.value;
+    ctx.value.lineWidth = 2;
+    ctx.value.beginPath();
+    area.position.forEach((point, index) => {
+    if (index === 0) {
+        ctx.value.moveTo(point.x, point.y);
+    } else {
+        ctx.value.lineTo(point.x, point.y);
+    }
+    });
+    ctx.value.stroke();
+    ctx.value.closePath();
+    // Exibir rótulo
+    if (area.label_title) {
+    ctx.value.fillStyle = color.value;
+    ctx.value.font = 2;
+    ctx.value.fontWeight = '900'; // Ensure fontWeight is a string
+    const midpoint = area.position[Math.floor(area.position.length / 2)];
+    ctx.value.fillText(area.label_title, midpoint.x, midpoint.y - 10);
+    }
     });
 };
 
@@ -108,9 +110,9 @@ const downloadImage = () => {
     link.click();
 };
 
-const setDefaultImage = () => {
+const setDefaultImage = async () => {
     image.value = new Image();
-    image.value.src = 'https://th.bing.com/th/id/R.70f72e90f21fa0b9a884ba9b2a9e72c7?rik=5gT0EQaWi7iYew&riu=http%3a%2f%2fcv.udl.cat%2fcursos%2f100302%2fhistologia%2fbasicos%2f3.1.jpg&ehk=3Z8Bs%2f8b7ok3P2ODm7080hnW8Q5LgxSaPrVvQACAiKE%3d&risl=&pid=ImgRaw&r=0'; // Substitua pelo caminho da sua imagem padrão
+    image.value.src = post.value.image.url
     image.value.onload = () => {
         canvas.value.width = image.value.width;
         canvas.value.height = image.value.height;
@@ -118,9 +120,10 @@ const setDefaultImage = () => {
     };
 };
 
-onMounted(() => {
+onMounted(async () => {
+    await postsStore.getPosts();
+    console.log(postsStore.posts)
     ctx.value = canvas.value.getContext('2d'); // Inicializa o contexto do canvas corretamente
-    setDefaultImage();
     redrawCanvas();
 });
 
@@ -128,66 +131,45 @@ onMounted(() => {
 
 <template>
   <main>
-    <HeaderPortal title="TESTE PARA ADICIONAR LAMINA" />
+    <HeaderPortal title="Adicão de pontos de interesse!" />
     <ContainerGlobal class="mb-12">
-      <section class="w-full md:block flex gap-8 relative">
-        <div class="md:w-full w-1/2">
-          <div class="rounded-xl overflow-hidden">
-            <input type="file" @change="handleImage" accept="image/*" />
-            <canvas class="w-full" ref="canvas" @mousedown="startDrawing" @mousemove="draw" @mouseup="endDrawing"></canvas>
-            <div>
-                <p class="text-center">Digite o texto do ponto</p>
-                <input type="text" v-model="title" placeholder="TEXTO" />
-                <textarea v-model="description" placeholder="DESCRIÇÃO"></textarea>
-                <button @click="downloadImage">Download Image</button>
+        <form  class="shadow-xl w-3/5 mx-auto bg-white px-20 py-8 flex flex-col items-center border rounded-lg lg:w-5/6 sm:w-full md:px-10">
+        <TitleGlobal class="mb-10 text-center" content="Informações" size="text-3xl xl:text-2xl sm:text-xl"/>
+        <div class="relative p-0 pt-3 mt-5 w-full">
+            <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">Título</p>
+            <input type="text" class="border-2 rounded-md w-full h-10 pl-3" v-model="label_title">
+        </div>
+        <div class="relative p-0 pt-3 mt-5 w-full">
+            <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">Descrição</p>
+            <textarea type="text" class="border-2 rounded-md w-full h-50 pl-3" v-model="description"></textarea>
+        </div>
+        <div class="relative p-0 pt-3 mt-5 w-full">
+            <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">Cor</p>
+            <select v-model="color" class="border-2 rounded-md w-full h-10 bg-white cursor-pointer appearance-none pl-3">
+                <option v-for="(cor, index) in colors" :key="index" :value="cor.value">{{ cor.select }}</option>
+            </select >
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center mt-3 px-2 text-gray-700">
+                <svg class="fill-current h-7 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
             </div>
-        <div>
+        </div>
+        <div class="relative p-0 pt-3 mt-5 w-full">
+            <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">Post</p>
+            <select class="border-2 rounded-md w-full h-10 bg-white cursor-pointer appearance-none pl-3" v-model="post" @change="setDefaultImage()">
+                <option v-for="post in postsStore.posts" :key="post.id" :value="post">{{ post.name }}</option>
+            </select >
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center mt-3 px-2 text-gray-700">
+                <svg class="fill-current h-7 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+            </div>
+        </div>
+        <canvas class="w-full border-2 mt-2" ref="canvas" @mousedown="startDrawing" @mousemove="draw" @mouseup="endDrawing"></canvas>
+        <div class="mt-14 w-3/5" @click="saveCollaborator(newCollaborator)" >
+            <BtnDefault text="Enviar"  link="#" color="text-white" :block="true"/>
+        </div>
+    </form>
             <div v-for="(area, index) in labeledAreas" :key="index">
-                <input type="checkbox" v-model="area.visible" @change="redrawCanvas()" />
                 <span>{{ area.label }} {{ area.visible }}</span>
             </div>
-        </div>
-          </div>
-        </div>
-        <div class="md:w-full w-1/2 pb-16 pr-8 relative md:mt-8">
-          {{ labeledAreas }}
-            <label v-for="(area, index) in labeledAreas" :key="index">
-              <input type="checkbox" v-model="area.visible" @change="redrawCanvas" /> 
-              {{ area.label }}
-            </label>
-        </div>
-      </section>
     </ContainerGlobal>
     <Footer />
   </main>
 </template>
-
-<style scoped>
-.open-icon {
-  animation: rotateRight 0.3s;
-}
-
-@keyframes rotateRight {
-  0% {
-    transform: rotate(45deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-canvas {
-    border: 1px solid black;
-    margin-top: 20px;
-}
-
-input, textarea {
-    display: block;
-    margin: 10px auto;
-    border: 1px solid black;
-}
-
-button {
-    margin-top: 10px;
-}
-</style>
