@@ -22,7 +22,7 @@ const image = ref(null)
 
 onMounted(async () => {
   await postsStore.getPostsById(id)
-  image.value = postsStore.selectedPost.image.url
+  image.value = postsStore.selectedPost.image.file
   console.log(postsStore.selectedPost)
   if (canvasRef.value) {
     pointStore.ctx = canvasRef.value.getContext('2d');

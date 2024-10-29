@@ -1,9 +1,12 @@
 <script setup>
+import { onMounted } from 'vue';
+
 const props = defineProps({
   data: {
     type: Array
   }
 })
+
 </script>
 <template>
     <router-link v-for="(item, index) in props.data" :key="index" :to="'/portal/post/' + item.id ">
@@ -11,7 +14,7 @@ const props = defineProps({
         class="group/container mb-4 w-52 h-64 flex flex-col rounded-2xl shadow-lg duration-200 ease-out hover:cursor-pointer hover:shadow-xl cursor-default"
       >
         <div class="w-full h-3/6 rounded-t-xl">
-          <img :src="item.image.file" class="rounded-t-2xl h-full w-full" alt="" />
+          <img :src="item.image.url" class="rounded-t-2xl h-full w-full" alt="" />
         </div>
         <div
           class="group/boxtext w-full h-3/6 flex flex-col rounded-b-xl bg-white p-3 group-hover/container:bg-zinc-100"
@@ -25,7 +28,7 @@ const props = defineProps({
               </li>
 
               <li
-                class="bg-green-600 overflow-hidden max-w-16 text-white px-2 py-1 rounded-lg"
+                class="bg-green-600 overflow-hidden max-w-16 text-white px-1 py-1 rounded-lg"
               >
                 <p class="">{{ item.species.name }}</p>
               </li>
