@@ -4,16 +4,16 @@ const token = localStorage.getItem('psg_auth_token')
 /**
  * Service class for handling slides related options
  */
-class PostService {
+class PointService {
 
     /**
      * Retrieves all slides
      * @returns {Promise<Array>} A promise that resolves to an array of slides
      * @throws {Error} If an error occurs while retrieving the slides
      */
-    async getPosts() {
+    async getPoints() {
         try {
-            const { data } = await api.get('/posts', {headers: {'authorization': `Bearer ${token}`}});
+            const { data } = await api.get('/points', {headers: {'authorization': `Bearer ${token}`}});
             console.log( "Service: GetPost - return success")
             return data.results;
         } catch (error) {
@@ -22,22 +22,12 @@ class PostService {
         }
     }
 
-    async getPostsById(Id) {
+    async getPointsByPost(post_id) {
         try {
-            const { data } = await api.get(`/posts/${Id}/`, {headers: {'authorization': `Bearer ${token}`}});
-            return data;
+            const {data} = await api.get(`/points/?posts_id=${post_id}`, {headers: {'authorization': `Bearer ${token}`}});
+            return data.results
         } catch (error) {
-            console.log("Service: GetPostById - return error", error);
-            throw error;
-        }
-    }
-
-    async getPostsByOrganAndType(organ_id, type_post) {
-        try {
-            const {data} = await api.get(`/posts/?organ_id=${organ_id}&species_id=&type_post=${type_post}`, {headers: {'authorization': `Bearer ${token}`}});
-        return data.results
-        } catch (error) {
-            console.log('Error in getPostsbyOrgan', error);
+            console.log('Error in getPointsByPost', error);
             throw error;
         }
     }
@@ -48,13 +38,15 @@ class PostService {
      * @returns {Promise<Object>} A promise that resolves to the created slides Object
      * @throws {Error} If an error occurs while creating the slide
      */
-    async createPost(newPost) {
+    async createPoint(newPoint) {
         try {
-            const { data } = await api.post('/posts/', newPost, {headers: {'authorization': `Bearer ${token}`}});
-            console.log( "Service: AddPost - return success")
+            const { data } = await api.post('/points/', newPoint, {headers: {'authorization': `Bearer ${token}`}});
+            console.log( "Service: AddPoint - return success")
+            alert('point created')
+            window.location.reload()
             return data.results;
         } catch (error) {
-            console.log("Service: AddPost - return error", error);
+            console.log("Service: AddPoint - return error", error);
             throw error;
         }
     }
@@ -66,13 +58,13 @@ class PostService {
      * @returns {Promise<Object>} A promise that resolves to the updated slides Object
      * @throws {Error} If an error occurs while updating the slide
      */
-    async updatePosts(post, id) {
+    async updatePoints(point, id) {
         try {
-            const { data } = await api.put(`/posts/${id}/`, post, {headers: {'authorization': `Bearer ${token}`}});
-            console.log( "Service: UpdatePost - return success")
+            const { data } = await api.put(`/points/${id}/`, point, {headers: {'authorization': `Bearer ${token}`}});
+            console.log( "Service: UpdatePoint - return success")
             return data.results;
         } catch (error) {
-            console.log("Service: UpdatePost - return error", error);
+            console.log("Service: UpdatePoint - return error", error);
             throw error;
         }
     }
@@ -83,16 +75,16 @@ class PostService {
      * @returns {Promise<Object>} A promise that resolves to the deleted slide object.
      * @throws {Error} If an error occurs while deleting the slide
      */
-    async deletePosts(idPost) {
+    async deletePoints(idPoint) {
         try {
-            const { data } = await api.delete(`/posts/${idPost}`, {headers: {'authorization': `Bearer ${token}`}});
-            console.log( "Service: DeletePost - return success")
+            const { data } = await api.delete(`/points/${idPoint}`, {headers: {'authorization': `Bearer ${token}`}});
+            console.log( "Service: DeletePoint - return success")
             return data.results;
         } catch (error) {
-            console.log("Service: DeletePost - return error", error);
+            console.log("Service: DeletePoint - return error", error);
             throw error;
         }
     }
 }
 
-export default new PostService();
+export default new PointService();

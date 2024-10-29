@@ -20,5 +20,5 @@ onMounted(()=>{
     <SearchBar @search="searchByName" @save="saveHistory" @searchByLast="searchByName" />
     <SearchResults @cleanFilter="cleanFilter" @filter="setSystemFilter" :data="returnSearchResults" />
     <SearchAddInfo />
-    <Footer class="mt-12"/>
+    <Footer class="mt-12 bottom-0"/>
 </template>
