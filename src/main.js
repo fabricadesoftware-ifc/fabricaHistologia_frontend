@@ -1,14 +1,28 @@
-import './assets/main.css'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import { useNavigationStore } from './stores/blog/navigation';
+import './assets/styles/main.css';
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import App from './App.vue';
+import router from './router';
 
-import App from './App.vue'
-import router from './router'
+const app = createApp(App);
+const pinia = createPinia();
 
-const app = createApp(App)
+app.use(router);
+app.use(pinia);
 
-app.use(createPinia())
-app.use(router)
+const navigationStore = useNavigationStore();
 
-app.mount('#app')
+router.beforeEach((to, from) => {
+  
+  if (router.path != '/') {
+  navigationStore.addToHistory(to.path);
+  }
+
+  if (to.path == '/') {
+    navigationStore.state.history = []
+  }
+});
+
+app.mount('#app');
