@@ -21,6 +21,7 @@ const router = createRouter({
     {
       path: '/portal',
       name: 'portal',
+      meta: {activeUser: true},
       children: [
         {
           path: '',

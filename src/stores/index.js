@@ -9,7 +9,8 @@ import { useSupportingStore } from "./supporting_material/supporting.js"
 ;
 import { useCollaboratorsStore } from "./auth/collaborators.js";
 import { useAuthStore } from "./auth/auth.js";
-
+import { useNavigationStore } from "./blog/navigation.js";
+import { useQuizStore } from "./blog/quiz.js";
 export {
     useSpecieStore,
     useSlideStore,
@@ -19,5 +20,7 @@ export {
     usePostStore,
     usePointStore,
     useCollaboratorsStore,
-    useAuthStore
+    useAuthStore,
+    useNavigationStore,
+    useQuizStore
 }

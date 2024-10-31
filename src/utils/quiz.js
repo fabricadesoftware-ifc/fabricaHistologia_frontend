@@ -1,6 +1,7 @@
 import {ref} from 'vue'
-import { useQuizStore } from "@/stores/blog/quiz"
-const quizStore = useQuizStore()
+import { useQuizStore } from "@/stores"
+
+const quizStore = async () => useQuizStore
 
 export const systemGeral = ref([])
 

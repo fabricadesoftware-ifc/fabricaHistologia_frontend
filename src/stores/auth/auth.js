@@ -1,40 +1,34 @@
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { defineStore } from 'pinia';
 import AuthService from '../../services/auth/auth';
+import router from '@/router';
+import { useStorage } from '@vueuse/core';
 
 const authService = new AuthService();
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = reactive({
-    id: null,
-    password: null,
-    last_login: null,
-    is_superuser: null,
-    first_name: null,
-    last_name: null,
-    is_staff: null,
-    is_active: null,
-    date_joined: null,
-    email: null,
-    passage_id: null,
-    verification_token: null,
-    is_verified: null,
-    groups: null, 
-    user_permissions: null 
-  });
+  const active = useStorage('active', {
+    active: false
+  })
+  const user = reactive({});
   
-  const email = computed(() => user.value.email)
-
   const getUser = async () => {
     const authToken = localStorage.getItem('psg_auth_token');
     const userData = await authService.getUser(authToken);
-    console.log(userData)
     user.value = userData
+    user.value ? active.value.active = true : ''
   }
+
+  const email = computed(() => user.value ? user.value.email : '')
+
+  const activeUser = computed(() => active.value.active )
 
   const logout = () => {
     user.value = {};
+    localStorage.removeItem('psg_auth_token')
+    router.push('/')
+    active.value.active = false
   }
 
-  return { user, email, getUser, logout };
+  return { user, email, getUser, logout, activeUser };
 });

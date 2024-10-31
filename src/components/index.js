@@ -45,7 +45,7 @@ import QuizQuestion from './portal/quiz/QuizQuestion.vue';
 // post
 import CheckList from '@/components/portal/post/CheckList.vue';
 import PostInfo from '@/components/portal/post/PostInfo.vue';
-
+import UserInformation from './layout/UserInformation.vue';
 export {
   AddInfoGlobal,
   PostInfo,
@@ -83,4 +83,5 @@ export {
   QuizQuestion,
   AnswerOptionsQuiz,
   Question,
+  UserInformation
 };
