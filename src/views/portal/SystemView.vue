@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, computed } from 'vue';
+import { onMounted } from 'vue';
 import { useSystemStore } from '@/stores';
 import { 
     HeaderPortal,
@@ -9,15 +9,12 @@ import {
     BtnDefault,
     Footer
 } from '@/components';
-import router from '@/router';
 
 const store = useSystemStore()
 
 onMounted(() => {
     store.getSystems()
 })
-
-
 </script>
 
 <template>

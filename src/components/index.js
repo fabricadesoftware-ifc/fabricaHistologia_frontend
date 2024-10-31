@@ -15,8 +15,6 @@ import AboutHeader from '@/components/institutional/about/AboutHeader.vue';
 // layout
 import BackButton from '@/components/layout/BackButton.vue';
 import ContainerGlobal from '@/components/layout/ContainerGlobal.vue';
-import InitialSearchButton from '@/components/layout/InitialSearchButton.vue';
-import SearchButtonGlobal from '@/components/layout/SearchButtonGlobal.vue';
 import Footer from '@/components/layout/Footer.vue'
 
 // portal
@@ -56,13 +54,11 @@ export {
   CardsContainer,
   ContainerGlobal,
   DefaultTitle,
-  InitialSearchButton,
   MediumCardDefault,
   NavbarHome,
   SearchBar,
   SearchAddInfo,
   Footer,
-  SearchButtonGlobal,
   SearchResults,
   SlideCards,
   SmallCardDefault,

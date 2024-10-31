@@ -2,7 +2,6 @@ import api from '../../plugins/api'
 
 const token = localStorage.getItem('psg_auth_token')
 
-
 class CollaboratorsService{
     /**
      * Retrieves all Collaborators personal data.

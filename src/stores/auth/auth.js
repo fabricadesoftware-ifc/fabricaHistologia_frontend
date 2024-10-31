@@ -12,6 +12,15 @@ export const useAuthStore = defineStore('auth', () => {
   })
   const user = reactive({});
   
+  const verifyUser = () => {
+    const authToken = localStorage.getItem('psg_auth_token');
+    if (authToken) {
+      active.value.active = true
+    } else {
+      active.value.active = false
+    }
+  }
+
   const getUser = async () => {
     const authToken = localStorage.getItem('psg_auth_token');
     const userData = await authService.getUser(authToken);
@@ -30,5 +39,5 @@ export const useAuthStore = defineStore('auth', () => {
     active.value.active = false
   }
 
-  return { user, email, getUser, logout, activeUser };
+  return { user, email, getUser, verifyUser, logout, activeUser };
 });

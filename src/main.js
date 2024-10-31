@@ -23,8 +23,6 @@ router.beforeEach((to, from) => {
   if (to.path == '/') {
     navigationStore.state.history = []
   }
-  console.log('from:' + from.fullPath)
-
 });
 
 app.mount('#app');

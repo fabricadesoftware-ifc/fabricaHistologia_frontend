@@ -45,6 +45,7 @@ export const useSystemStore = defineStore('system', () => {
         state.loading = true
         try {
             const response = await SystemService.getSystems();
+            console.log(response)
             state.systems = response
         }
         catch (error) {

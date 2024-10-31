@@ -1,8 +1,6 @@
 import api from "@/plugins/api";
-import { useAuthStore } from "@/stores/auth/auth";
-import { PassageUser } from '@passageidentity/passage-elements/passage-user';
-
 const authToken = localStorage.getItem('psg_auth_token'); 
+
 /**
  * Service class for handling systems related operations.
  */
