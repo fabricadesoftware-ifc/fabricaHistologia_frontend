@@ -25,12 +25,25 @@ export const useAuthStore = defineStore('auth', () => {
     const authToken = localStorage.getItem('psg_auth_token');
     const userData = await authService.getUser(authToken);
     user.value = userData
-    user.value ? active.value.active = true : ''
+    user.value ? active.value.active = true : active.value.active = false
   }
 
   const email = computed(() => user.value ? user.value.email : '')
 
   const activeUser = computed(() => active.value.active )
+
+  // const token = localStorage.getItem('psg_auth_token')
+
+  // const verifyTokenExpires = computed(()=> {
+  //   if (!token) {
+  //     active.value.active = false
+  //     console.log('was false', token)
+  //   } else {
+  //     active.value = true
+  //     console.log('was true', token)
+  //   }
+    
+  // })
 
   const logout = () => {
     user.value = {};

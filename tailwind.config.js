@@ -7,13 +7,13 @@ export default {
     },
     screens: {
       '2.5xl': { 'max': '1700px'},  
-      '2xl': { 'max': '1536px' },
-      'xl': { 'max': '1280px' },
-      'lg': { 'max': '1024px' },
+      '2xl': { 'max': '1536px'},
+      'xl': { 'max': '1280px'},
+      'lg': { 'max': '1024px'},
       '2md': {'max': '900px'},
-      'md': { 'max': '768px' },
-      'sm': { 'max': '640px' },
-      'xsm': {'max': '450px'}
+      'md': { 'max': '768px'},
+      'sm': { 'max': '640px'},
+      'xsm': {'max': '450px'},
     },
     extend: {
       minWidth: {

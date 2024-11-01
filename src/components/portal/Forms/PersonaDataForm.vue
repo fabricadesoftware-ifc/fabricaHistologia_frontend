@@ -1,18 +1,26 @@
 <script setup>
-import { useCollaboratorsStore, useAuthStore } from '@/stores';
-import { TitleGlobal, BtnDefault } from '@/components';
+import { useCollaboratorsStore, useAuthStore, useNavigationStore } from '@/stores';
+import { TitleGlobal, BtnDefault, MessageGlobal } from '@/components';
 import { useRouter } from 'vue-router';
-import { reactive, computed, onMounted } from 'vue';
+import { reactive, computed, onMounted, ref } from 'vue';
 
 const router = useRouter()
 
 const collaboratorStore = useCollaboratorsStore()
 const authStore = useAuthStore()
+const navigationStore = useNavigationStore()
+
+const personalData = ref([
+    {data: '', name: 'Nome', length: '255'},
+    {data: '', name: 'Registro', length: '20'},
+    {data: '', name: 'Telefone', length: '20'},
+    {data: '', name: 'Universidade', length: '255'},
+])
 
 const PersonaDataGeneric = reactive({
     'name': '',
     'registration': '',
-    'phone': null,
+    'phone': '',
     'university': '',
 });
 
@@ -38,27 +46,43 @@ onMounted(() => {
     authStore.getUser()
 })
 
+const validate_data = () => {
+    if (PersonaDataGeneric.Nome == '' || PersonaDataGeneric.Regristro == '' || PersonaDataGeneric.Telefone == '' || PersonaDataGeneric.Universidade == '') {
+        navigationStore.messageBody.title = 'Erro ao enviar o formulário'
+        navigationStore.messageBody.description = 'Por favor, preencha todos os campos corretamente, assegurando-se de que nenhum campo esteja vazio e de que todas as informações foram inseridas sem erros.'
+        navigationStore.formState = false
+    } else {
+        navigationStore.messageBody.title = 'Formulário enviado com sucesso!'
+        navigationStore.messageBody.description = 'Aguarde até suas informações serem verificadas'
+        navigationStore.formState = true
+    }
+}
+
 function saveCollaborator(data) {
     collaboratorStore.postCollaborators(data)
-    setTimeout(() => {
-        router.push({ name: 'home' }); 
-    }, 5000)
+    navigationStore.activeError = !navigationStore.activeError
+    PersonaDataGeneric.name = personalData.value[0].data
+    PersonaDataGeneric.registration = personalData.value[1].data
+    PersonaDataGeneric.phone = personalData.value[2].data
+    PersonaDataGeneric.university = personalData.value[3].data
+    validate_data()
+    console.log(PersonaDataGeneric)
 }
 </script>
 
 <template>
     <form  class="shadow-xl w-3/5 mx-auto bg-white px-20 py-8 flex flex-col items-center border mt-14 rounded-lg lg:w-5/6 sm:w-full md:px-10">
         <TitleGlobal class="mb-10 text-center" content="Torne-se um Colaborador!" size="text-3xl xl:text-2xl sm:text-xl"/>
-        <div v-for="(field, id) in PersonaDataGeneric" :key="id" class="relative p-0 pt-3 mt-5 w-full">
-            <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">{{ id }}</p>
-            <input type="text" class="border-2 rounded-md w-full h-10 pl-3" v-model="PersonaDataGeneric[id]" >
+        <div v-for="(field, id) in personalData" :key="id" class="relative p-0 pt-3 mt-5 w-full">
+            <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">{{ field.name }}</p>
+            <input :maxlength="field.length" type="text" class="border-2 rounded-md w-full h-10 pl-3" v-model="personalData[id].data" >
         </div>
         <div class="relative p-0 pt-3 mt-5 w-full">
-            <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">birthday</p>
+            <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">Data de Nascimento</p>
             <input type="date" class="border-2 rounded-md w-full h-10 pl-3" v-model="PersonaDataSpecific.birth_date" >
         </div>
         <div class="relative p-0 pt-3 mt-5 w-full">
-            <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">graduation</p>
+            <p class="absolute top-0 bg-white text-sm font-poppins font-semibold ml-8 px-2 lg:text-xs md:ml-4">Graduação</p>
             <select class="border-2 rounded-md w-full h-10 bg-white cursor-pointer appearance-none pl-3" v-model="PersonaDataSpecific.education">
                 <option v-for="(field, key) in education" :key="key" :value="field">{{ key }}</option>
             </select >
