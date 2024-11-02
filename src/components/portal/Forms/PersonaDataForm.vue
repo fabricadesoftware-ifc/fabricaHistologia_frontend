@@ -42,31 +42,31 @@ const newCollaborator = computed(() => {
     return {...PersonaDataSpecific, ...PersonaDataGeneric}
 })
 
-onMounted(() => {
-    authStore.getUser()
-})
-
 const validate_data = () => {
-    if (PersonaDataGeneric.Nome == '' || PersonaDataGeneric.Regristro == '' || PersonaDataGeneric.Telefone == '' || PersonaDataGeneric.Universidade == '') {
+    if (PersonaDataGeneric.name == '' || PersonaDataGeneric.registration == '' || PersonaDataGeneric.phone == '' || PersonaDataGeneric.university == '' || !authStore.email || 6 < personalData.phone.length <= 15) {
         navigationStore.messageBody.title = 'Erro ao enviar o formulário'
-        navigationStore.messageBody.description = 'Por favor, preencha todos os campos corretamente, assegurando-se de que nenhum campo esteja vazio e de que todas as informações foram inseridas sem erros.'
+        navigationStore.messageBody.description = 'Por favor, preencha todos os campos corretamente, assegurando-se de que nenhum campo esteja vazio e de que todas as informações foram inseridas sem erros. Cetifique-se também que você tenha iniciado a sessão com sua conta no portal.'
         navigationStore.formState = false
+        return false
     } else {
         navigationStore.messageBody.title = 'Formulário enviado com sucesso!'
         navigationStore.messageBody.description = 'Aguarde até suas informações serem verificadas'
         navigationStore.formState = true
+        return true
     }
 }
 
 function saveCollaborator(data) {
-    collaboratorStore.postCollaborators(data)
     navigationStore.activeError = !navigationStore.activeError
     PersonaDataGeneric.name = personalData.value[0].data
     PersonaDataGeneric.registration = personalData.value[1].data
     PersonaDataGeneric.phone = personalData.value[2].data
     PersonaDataGeneric.university = personalData.value[3].data
     validate_data()
-    console.log(PersonaDataGeneric)
+
+    if (validate_data()) {
+        collaboratorStore.postCollaborators(data)
+    }
 }
 </script>
 

@@ -6,7 +6,7 @@ let quizStore = null
 
 setTimeout(()=>{
   quizStore = useQuizStore()
-},2000)
+},1000)
 
 
 export const systemGeral = ref([])

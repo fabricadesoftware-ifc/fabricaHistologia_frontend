@@ -21,7 +21,10 @@ export default {
       },
       invert: {
         14: '.14'
-      }
+      },
+      minHeight: {
+        'screen-minus-80': 'calc(100dvh - 80px)',
+      },
     },
   },
   plugins: [],

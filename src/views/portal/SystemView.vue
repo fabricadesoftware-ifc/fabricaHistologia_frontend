@@ -18,15 +18,17 @@ onMounted(() => {
 </script>
 
 <template>
+    <main class=" min-h-screen-minus-80 relative">
     <HeaderPortal class="mt-10" title="Selecione o Sistema" size="text-3xl md:text-center" />
     <CardsGlobal :gap="'gap-10'" :justify="'justify-start'" :datas="store.systems" />
     
     <ContainerGlobal class="mt-16">
-        <AddInfoGlobal :datas="{}" />
+        <AddInfoGlobal :link="'/portal/quiz/'" :datas="{}" />
         <div class="flex justify-end flex-row flex-wrap lg:justify-center gap-10 mt-10">
             <BtnDefault to="/portal/content" background="bg-[#4B4BEB]" text="Acessar Conteúdos" />
-            <BtnDefault background="bg-[#D94E4E]" text="Acessar Quiz" />
+            <BtnDefault :link="'/portal/quiz'" background="bg-[#D94E4E]" text="Acessar Quiz" />
         </div>
     </ContainerGlobal>
-    <Footer class="mt-5" />
+    </main>
+    <Footer />
 </template>

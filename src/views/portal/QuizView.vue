@@ -1,11 +1,13 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import {ContainerGlobal, QuizQuestion, HeaderPortal, Footer, BackButton} from '@/components/';
-import { useQuizStore } from '@/stores/blog/quiz';
-import { useRoute } from 'vue-router';
+import { useQuizStore, useAuthStore} from '@/stores';
+import { useRoute, useRouter } from 'vue-router';
 
 const quizStore = useQuizStore()
+const authStore = useAuthStore()
 const router = useRoute()
+const routeruse = useRouter()
 const id = router.params.id
 const currentQuestion = ref(1)
 
@@ -27,14 +29,15 @@ const previousSection = () => {
 onMounted(async()=>{
   await quizStore.getAnswersByQuestion()
   quizStore.getMarkedAnswers()
-  console.log(quizStore.quizBySystem)
+
 })
 
 </script>
 <template>
-    <section v-if="quizStore.quizBySystem.length == 0" class="h-dvh w-dvw flex justify-center items-center">
+    <section v-if="quizStore.quizBySystem.length == 0" class="h-dvh w-dvw flex justify-center flex-col items-center gap-4">
         <BackButton class="top-14 left-40" />
         <h1 class=" text-4xl">Quiz não encontrado</h1>
+        <p>Aparentemente não há nenhum quiz cadastrado</p>
     </section>
     <main v-else class="min-h-dvh relative flex flex-col justify-between">
     <ContainerGlobal>

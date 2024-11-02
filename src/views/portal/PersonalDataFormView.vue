@@ -14,11 +14,13 @@ const go = () => {
 </script>
 
 <template>
+    <main class=" min-h-screen-minus-80 relative">
     <MessageGlobal @action="go" />
     <ContainerGlobal class="py-8">
         <BackButton  />
         <PersonaDataForm />
     </ContainerGlobal>
     <FormModal v-show="store.successMsg" />
+    </main>
     <Footer />
 </template>

@@ -12,7 +12,7 @@ class SystemService {
      */
     async getSystems () {
         try {
-            const {data} = await api.get('/systems');
+            const {data} = await api.get('/systems/');
             return data.results;
         } catch (error) {
             console.log("error in getSystem", error);

@@ -9,7 +9,6 @@ const id = router.params.id;
 
 onMounted(async () => {
     await pointStore.getPointsByPosts(id)
-    console.log(pointStore.pointsByPosts)
 })
 
 </script>

@@ -13,7 +13,7 @@ class QuizService {
      */
     async getQuiz() {
         try {
-            const { data } = await api.get('/quiz', {headers: {'authorization': `Bearer ${token}`}});
+            const { data } = await api.get('/quiz',);
             return data.results;
         } catch (error) {
             console.log("Service: GetQuiz - return error", error);
@@ -23,7 +23,7 @@ class QuizService {
     
     async getAnswers() {
         try {
-            const { data } = await api.get('/answer', {headers: {'authorization': `Bearer ${token}`}});
+            const { data } = await api.get('/answer');
             return data.results;
         } catch (error) {
             console.log("Service: GetAnswer - return error", error);
@@ -33,7 +33,7 @@ class QuizService {
     
     async getAnswersByQuestion(question_id) {
         try {
-            const {data} = await api.get(`/answer/?question_id=${question_id}`, {headers: {'authorization': `Bearer ${token}`}});
+            const {data} = await api.get(`/answer/?question_id=${question_id}`);
         return data.results
         } catch (error) {
             console.log('Error in getAnswerByQuestion', error);
@@ -43,7 +43,7 @@ class QuizService {
 
     async getQuizBySystem(system_id, level) {
         try {
-            const {data} = await api.get(`/quiz/?level=${level}&system_id=${system_id}`, {headers: {'authorization': `Bearer ${token}`}});
+            const {data} = await api.get(`/quiz/?level=${level}&system_id=${system_id}`);
         return data.results
         } catch (error) {
             console.log('Error in getQuizBySystem', error);

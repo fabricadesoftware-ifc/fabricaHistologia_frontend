@@ -1,14 +1,18 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { usePointStore, usePostStore } from '@/stores';
+import { usePointStore, usePostStore, useNavigationStore } from '@/stores';
 import {
   HeaderPortal,
   ContainerGlobal,
   TitleGlobal,
   Footer,
   BtnDefault,
+  MessageGlobal
 } from '@/components/index'
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
+const navigationStore = useNavigationStore()
 const postsStore = usePostStore();
 const pointStore = usePointStore();
 const canvas = ref(null); // Referência ao canvas
@@ -51,7 +55,6 @@ const startDrawing = (e) => {
 
 const draw = (e) => {
     if (label_title.value === '' || color.value === '' || description.value === '' || BlockDrawn.value) {
-        console.log(label_title.value, color.value, description.value)
         return;
     }
     if (!isDrawing.value) return;
@@ -76,13 +79,11 @@ const endDrawing = () => {
     labeledAreas.value[labeledAreas.value.length - 1].analyzed_functions = analyzed_functions.value;
     labeledAreas.value[labeledAreas.value.length - 1].analyzed_structures = analyzed_structures.value;
     BlockDrawn.value = true
-    console.log(labeledAreas.value)
     redrawCanvas();
 };
 
 const redrawCanvas = () => {
     if (label_title.value === '') return;
-    console.log('redrawCanvas');
     ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height);
     ctx.value.drawImage(image.value, 0, 0);
     labeledAreas.value.forEach((area) => {
@@ -134,20 +135,42 @@ const deletePoint = () => {
 }
 
 const addPoint = () => {
-    (BlockDrawn.value) ? pointStore.createPoint(labeledAreas.value[0]) : alert('Preencha corretamente todos os Campos!!')
+    if (BlockDrawn.value) {
+        pointStore.createPoint(labeledAreas.value[0])
+        navigationStore.activeError = true
+        navigationStore.messageBody.title = 'Sucesso ao Enviar o Ponto'
+
+    } else {
+        navigationStore.activeError = true
+        navigationStore.messageBody.title = 'Erro ao Enviar o Ponto!'
+        navigationStore.messageBody.description = 'Preencha corretamente todos os Campos!!' 
+    }
 };
+
 
 onMounted(async () => {
     await postsStore.getPosts();
-    console.log(postsStore.posts)
     ctx.value = canvas.value.getContext('2d'); // Inicializa o contexto do canvas corretamente
     redrawCanvas();
+
+    if (postsStore.posts.length <= 0) {
+    navigationStore.messageBody.title = 'Lâmina não encontrada'
+    navigationStore.messageBody.description = 'Isso ocorre porquê você não iniciou sessão, volte para a página inicial e inicie sessão com sua conta'
+    navigationStore.activeError = !navigationStore.activeError
+  } else {
+    navigationStore.activeError = false
+  }
 });
+
+const setAction = () => {
+    navigationStore.message.title == 'Lâmina não encontrada' ? router.push('/') : ''
+}
 
 </script>
 
 <template>
-  <main>
+  <main class=" min-h-screen-minus-80 relative">
+    <MessageGlobal @action="setAction" />
     <HeaderPortal title="Adicão de pontos de interesse!" />
     <ContainerGlobal class="mb-12">
         <form  class="shadow-xl w-3/5 mx-auto bg-white px-20 py-8 flex flex-col items-center border rounded-lg lg:w-5/6 sm:w-full md:px-10">
@@ -191,6 +214,6 @@ onMounted(async () => {
         </div>
     </form>
     </ContainerGlobal>
-    <Footer />
   </main>
+  <Footer />
 </template>

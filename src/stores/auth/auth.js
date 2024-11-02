@@ -4,10 +4,10 @@ import AuthService from '../../services/auth/auth';
 import router from '@/router';
 import { useStorage } from '@vueuse/core';
 
-const authService = new AuthService();
+
 
 export const useAuthStore = defineStore('auth', () => {
-  const active = useStorage('active', {
+  const active = useStorage('activated', {
     active: false
   })
   const user = reactive({});
@@ -16,14 +16,18 @@ export const useAuthStore = defineStore('auth', () => {
     const authToken = localStorage.getItem('psg_auth_token');
     if (authToken) {
       active.value.active = true
+      return true
     } else {
       active.value.active = false
+      return false
     }
   }
 
   const getUser = async () => {
     const authToken = localStorage.getItem('psg_auth_token');
-    const userData = await authService.getUser(authToken);
+    console.log(authToken)
+    const userData = await AuthService.getUser(authToken);
+    console.log(userData)
     user.value = userData
     user.value ? active.value.active = true : active.value.active = false
   }
