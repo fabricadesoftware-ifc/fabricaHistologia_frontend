@@ -14,8 +14,9 @@ const go = () => {
 }
 onMounted(()=> {
     if (authStore.userInfo.is_verified) {
-        navigationStore.title = "Você já é um colaborador"
+        navigationStore.messageBody.title = "Você já é um colaborador"
         navigationStore.activeError = true
+        navigationStore.formState = true
     }
 })
 

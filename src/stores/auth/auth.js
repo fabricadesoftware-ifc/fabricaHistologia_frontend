@@ -27,16 +27,17 @@ export const useAuthStore = defineStore('auth', () => {
     const authToken = localStorage.getItem('psg_auth_token');
     console.log(authToken)
     const userData = await AuthService.getUser(authToken);
-    console.log(userData)
+  
     user.value = userData
     user.value ? active.value.active = true : active.value.active = false
+    console.log(user.value.is_verified)
   }
 
   const email = computed(() => user.value ? user.value.email : '')
 
   const activeUser = computed(() => active.value.active )
 
-  const userInfo = computed(()=> user)
+  const userInfo = computed(()=> user.value)
 
   // const token = localStorage.getItem('psg_auth_token')
 

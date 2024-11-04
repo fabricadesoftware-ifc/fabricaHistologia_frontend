@@ -35,11 +35,13 @@ onMounted(async () => {
     setAdditionalInfo.value
 })
 
-const push = async(id) => {
-    resetAll()
-    quizStore.getQuizBySystem(id, '')
-    
+const push = async(id) => { 
+    quizStore.getQuizBySystem(id, '') 
 }
+
+onMounted(()=>{
+    console.log()
+})
 </script>
 
 <template>
