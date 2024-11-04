@@ -85,7 +85,6 @@ export const useQuizStore = defineStore("quiz",
         };
 
         const getQuizBySystem = async (system_id, level) => {
-            state.quizBySystem = []
             state.loading = true;
             try {
                 const response = await QuizService.getQuizBySystem(system_id, level)
@@ -99,10 +98,10 @@ export const useQuizStore = defineStore("quiz",
             }
         }
 
-        const getAnswersByQuestion = async () => {
+        const getAnswersByQuestion = async (id) => {
             state.loading = true;
             try {
-                    state.answersByQuestion = await QuizService.getAnswers()
+                    state.answersByQuestion = await QuizService.getAnswersByQuestion(id)
                 
             } catch (error) {
                 state.error = error

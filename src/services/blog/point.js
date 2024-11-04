@@ -13,7 +13,7 @@ class PointService {
      */
     async getPoints() {
         try {
-            const { data } = await api.get('/points', {headers: {'authorization': `Bearer ${token}`}});
+            const { data } = await api.get('/points');
             console.log( "Service: GetPost - return success")
             return data.results;
         } catch (error) {
@@ -24,7 +24,7 @@ class PointService {
 
     async getPointsByPost(post_id) {
         try {
-            const {data} = await api.get(`/points/?posts_id=${post_id}`, {headers: {'authorization': `Bearer ${token}`}});
+            const {data} = await api.get(`/points/?posts_id=${post_id}`);
             return data.results
         } catch (error) {
             console.log('Error in getPointsByPost', error);
@@ -40,7 +40,7 @@ class PointService {
      */
     async createPoint(newPoint) {
         try {
-            const { data } = await api.post('/points/', newPoint, {headers: {'authorization': `Bearer ${token}`}});
+            const { data } = await api.post('/points/', newPoint);
             console.log( "Service: AddPoint - return success")
             alert('point created')
             window.location.reload()

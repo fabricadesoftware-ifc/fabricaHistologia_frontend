@@ -19,7 +19,7 @@ const props = defineProps({
   buttons: {
     type: Boolean,
     required: false
-  }
+  },
 })
 </script>
 

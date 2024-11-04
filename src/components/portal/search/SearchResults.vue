@@ -20,7 +20,7 @@ const props = defineProps({
     <ContainerGlobal>
         <div class="w-3/4 mx-auto flex flex-col my-4 font-poppins">
             <div v-if="returnFilterBySystem != null" class="flex justify-center mb-3">
-                <button @click="filterBySystem = null, emits('cleanFilter')" class="bg-gray-300 p-2 rounded-md flex gap-3 items-center">Limpar Filtros <img class="w-4 h-4" src="@/assets/images/icons/close.svg" alt="close button"></button>
+                <button @click="filterBySystem = null, emits('cleanFilter')" class="bg-gray-300 p-2 rounded-md flex gap-3 items-center hover:brightness-[80%] duration-300">Limpar Filtros <img class="w-4 h-4" src="@/assets/images/icons/close.svg" alt="close button"></button>
             </div>
             <div v-if="props.data.length > 0" v-for="(result, index) in props.data" :key="index" class="w-full flex h-auto my-4 justify-between md:flex-col">
                 <div class="flex flex-col my">

@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { BackButton } from '@/components/index';
 
 const screen = computed(() => {

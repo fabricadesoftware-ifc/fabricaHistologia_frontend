@@ -16,9 +16,11 @@ onMounted(()=>{
 </script>
 
 <template>
+    <main class="min-h-screen-minus-80">
     <HeaderPortal size="text-3xl" title="Conteúdos" />
     <SearchBar @search="searchByName" @save="saveHistory" @searchByLast="searchByName" />
     <SearchResults @cleanFilter="cleanFilter" @filter="setSystemFilter" :data="returnSearchResults" />
     <SearchAddInfo />
-    <Footer class="mt-12 bottom-0"/>
+    </main>
+    <Footer />
 </template>
