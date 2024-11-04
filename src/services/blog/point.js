@@ -40,7 +40,7 @@ class PointService {
      */
     async createPoint(newPoint) {
         try {
-            const { data } = await api.post('/points/', newPoint);
+            const { data } = await api.post('/points/', newPoint, {headers: {authorization: `Bearer ${token}`}});
             console.log( "Service: AddPoint - return success")
             alert('point created')
             window.location.reload()
