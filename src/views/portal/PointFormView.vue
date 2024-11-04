@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { usePointStore, usePostStore, useNavigationStore } from '@/stores';
+import { usePointStore, usePostStore, useNavigationStore, useAuthStore } from '@/stores';
 import {
   HeaderPortal,
   ContainerGlobal,
@@ -11,6 +11,7 @@ import {
 } from '@/components/index'
 import { useRouter } from 'vue-router';
 
+const authStore = useAuthStore()
 const router = useRouter()
 const navigationStore = useNavigationStore()
 const postsStore = usePostStore();
@@ -139,7 +140,6 @@ const addPoint = () => {
         pointStore.createPoint(labeledAreas.value[0])
         navigationStore.activeError = true
         navigationStore.messageBody.title = 'Sucesso ao Enviar o Ponto'
-
     } else {
         navigationStore.activeError = true
         navigationStore.messageBody.title = 'Erro ao Enviar o Ponto!'
@@ -157,13 +157,17 @@ onMounted(async () => {
     navigationStore.messageBody.title = 'Lâmina não encontrada'
     navigationStore.messageBody.description = 'Isso ocorre porquê você não iniciou sessão, volte para a página inicial e inicie sessão com sua conta'
     navigationStore.activeError = !navigationStore.activeError
+  } else if (authStore.userInfo.is_verified) {
+    navigationStore.messageBody.title = 'Usuário não autorizado'
+    navigationStore.messageBody.description = 'Isso ocorre porquê você ainda não é um colaborador! Somente colaboradores podem gerenciar o conteúdo do portal.'
+    navigationStore.activeError = !navigationStore.activeError
   } else {
     navigationStore.activeError = false
   }
 });
 
 const setAction = () => {
-    navigationStore.message.title == 'Lâmina não encontrada' ? router.push('/') : ''
+    navigationStore.message.title == 'Lâmina não encontrada' ? router.push('/') : window.location.reload()
 }
 
 </script>

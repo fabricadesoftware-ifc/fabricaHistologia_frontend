@@ -52,8 +52,8 @@ const push = async(id) => {
     <div class=" flex justify-center gap-10">
     </div>
     <div class="w-full h-96 flex justify-center items-center flex-col" v-if="postStore.postByOrganAndType.length  == 0">
-    <h1 class="text-3xl md:text-5xl">Lâminas não encontradas</h1>
-    <p class="text-xl">Não há nenhuma lâmina registrada no portal</p>
+    <h1 class="text-3xl md:text-5xl text-center break-all">Lâminas não encontradas</h1>
+    <p class="text-xl break-all">Não há nenhuma lâmina registrada no portal</p>
     </div>
     <section v-else>
     <CardsContainer :gap="'gap-10'" :justify="'justify-start'" class="mb-8 mt-8">

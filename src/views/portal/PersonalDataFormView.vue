@@ -12,6 +12,12 @@ const authStore = useAuthStore()
 const go = () => {
     navigationStore.showFormState ? router.push('/') : ''
 }
+onMounted(()=> {
+    if (authStore.userInfo.is_verified) {
+        navigationStore.title = "Você já é um colaborador"
+        navigationStore.activeError = true
+    }
+})
 
 </script>
 

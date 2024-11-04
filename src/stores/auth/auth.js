@@ -36,6 +36,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   const activeUser = computed(() => active.value.active )
 
+  const userInfo = computed(()=> user)
+
   // const token = localStorage.getItem('psg_auth_token')
 
   // const verifyTokenExpires = computed(()=> {
@@ -56,5 +58,5 @@ export const useAuthStore = defineStore('auth', () => {
     active.value.active = false
   }
 
-  return { user, email, getUser, verifyUser, logout, activeUser };
+  return { user, email, getUser, verifyUser, logout, activeUser, userInfo };
 });
