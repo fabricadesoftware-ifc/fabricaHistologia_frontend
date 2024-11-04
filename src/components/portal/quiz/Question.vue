@@ -1,7 +1,7 @@
 <script setup>
 
 const props = defineProps({
-  data_question: {
+  dataQuestion: {
     type: Object
   },
   index: {
@@ -13,10 +13,10 @@ const props = defineProps({
 
 <template>
       <div>
-        <h4 class="text-base font-medium">{{ props.index + '. ' + props.data_question.title }}</h4>
+        <h4 class="text-base font-medium">{{ props.index + '. ' }}</h4>
 
         <div class="list-inside mt-2 mb-2">
-            <p class="mx-5 mt-1 text-base font-medium font-poppins">{{ props.data_question.question }}</p>
+            <p class="mx-5 mt-1 text-base font-medium font-poppins">{{ props.dataQuestion.question }}</p>
         </div>
       </div>
 

@@ -23,7 +23,6 @@ const image = ref(null)
 onMounted(async () => {
   await postsStore.getPostsById(id)
   image.value = postsStore.selectedPost.image.file
-  console.log(postsStore.selectedPost)
   if (canvasRef.value) {
     pointStore.ctx = canvasRef.value.getContext('2d');
     pointStore.canvas = canvasRef.value;
@@ -36,9 +35,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main>
-    <HeaderPortal :title="postsStore.selectedPost ? postsStore.selectedPost.type_cut : 'Carregando'" />
-    <ContainerGlobal class="mb-12">
+  <main class="min-h-screen-minus-80 relative">
+    <HeaderPortal :title="postsStore.selectedPost ? postsStore.selectedPost.type_cut : 'Carregando...'" />
+    <div class="w-full h-96 flex justify-center items-center flex-col" v-if="postsStore.selectedPost == null">
+    <h1 class="text-3xl md:text-5xl">Lâminas não encontradas</h1>
+    <p class="text-xl">Não há nenhuma lâmina registrada no portal</p>
+    </div>
+    <ContainerGlobal v-else class=" mb-10">
       <section class="w-full md:block flex gap-8 relative">
         <div class="md:w-full w-1/2">
             <canvas class="w-full" ref="canvasRef"></canvas>
@@ -67,8 +70,8 @@ onMounted(async () => {
         <BtnDefault text="Acessar Quiz deste Sistema" block />
       </section>
     </ContainerGlobal>
-    <Footer />
   </main>
+  <Footer :class="!postsStore.selectedPost == null ? 'mt-12' : ''" />
 </template>
 
 <style scoped>

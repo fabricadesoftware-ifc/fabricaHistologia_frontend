@@ -1,7 +1,13 @@
 import {ref} from 'vue'
 import { useQuizStore } from "@/stores"
 
-const quizStore = async () => useQuizStore
+
+let quizStore = null
+
+setTimeout(()=>{
+  quizStore = useQuizStore()
+},1000)
+
 
 export const systemGeral = ref([])
 

@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router'
 import { useNavigationStore, useAuthStore } from './stores';
 import { onMounted } from 'vue';
-import { UserInformation } from './components';
+import { UserInformation, MessageGlobal } from './components';
 import { useRoute } from 'vue-router';
 const router = useRoute()
 const authStore = useAuthStore()
