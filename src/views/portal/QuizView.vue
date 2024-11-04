@@ -15,7 +15,7 @@ const actual = ref(null)
 
 
 const nextSection = async () => {
-    if (currentQuestion.value < quizStore.quizBySystem.length)
+    if (currentQuestion.value <= quizStore.quizBySystem.length - 1 && quizStore.markedAnswers[currentQuestion.value].answered)
     currentQuestion.value += 1
     setId(currentQuestion.value)
 }
@@ -59,7 +59,7 @@ onMounted(async()=>{
                 <div class="flex w-10/12 justify-evenly">
                 <div v-for="item, index in quizStore.markedAnswers" :class="!item.answered ? 'bg-slate-400' : item.correct ? 'bg-green-400' : 'bg-red-500', index == (currentQuestion) ? ' border-2 border-slate-600' : ''" class="size-5 rounded-full"></div>
                 </div>
-                <div @click="nextSection()" class="flex justify-end w-1/12 hover:scale-[.92] duration-150 active:scale-[.80]">
+                <div @click="nextSection()" :class="quizStore.markedAnswers[currentQuestion] ? quizStore.markedAnswers[currentQuestion].answered ? ' opacity-1' : '  opacity-[50%]' : ''" class="flex justify-end w-1/12 hover:scale-[.92] duration-150 active:scale-[.80]">
                     <img class="size-9" src="@/assets/images/icons/arrow-right.svg" >
                 </div>
             </div>

@@ -33,6 +33,7 @@ onMounted(async () => {
     await systemStore.getSystemById(id)
     await supportingStore.getMaterialsBySystem(id)
     setAdditionalInfo.value
+    
 })
 
 const push = async(id) => { 

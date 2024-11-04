@@ -76,7 +76,7 @@ const router = createRouter({
         {
           path: 'quiz/random',
           name: 'quiz-random',
-          component: () => import('@/views/portal/QuizView.vue')
+          component: () => import('@/views/portal/QuizRandomView.vue')
         }
       ]
     },

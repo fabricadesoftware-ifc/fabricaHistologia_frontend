@@ -1,7 +1,8 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useOrganStore, usePostStore, useNavigationStore, useSystemStore } from '@/stores';
+import { useOrganStore, usePostStore, useNavigationStore, useSystemStore, useQuizStore } from '@/stores';
+import { resetAll } from '@/utils/quiz';
 const navigationStore = useNavigationStore()
 import {
   ContainerGlobal,
@@ -16,6 +17,7 @@ import {
 const systemStore = useSystemStore()
 const organStore = useOrganStore()
 const postStore = usePostStore()
+const quizStore = useQuizStore()
 const router = useRoute()
 const routerUse = useRouter()
 const organ_id = router.params.id
@@ -37,12 +39,13 @@ const buttons = ref([
 onMounted(async()=>{
   await organStore.getOrgansById(organ_id)
   await postStore.getPostsByOrganAndType(organ_id, 1)
+  console.log(system_id)
 })
 
 const push = async(id) => {
     resetAll()
-    quizStore.getQuizBySystem(system_id, '')
-    // routerUse.push('/portal/quiz/' + id)
+    quizStore.getQuizBySystem(id, '')
+    routerUse.push('/portal/quiz/' + id)
 }
 
 </script>
