@@ -10,7 +10,7 @@ export default {
       '2xl': { 'max': '1536px'},
       'xl': { 'max': '1280px'},
       'lg': { 'max': '1024px'},
-      '2md': {'max': '900px'},
+      'md2': {'max': '900px'},
       'md': { 'max': '768px'},
       'sm': { 'max': '640px'},
       'xsm': {'max': '450px'},

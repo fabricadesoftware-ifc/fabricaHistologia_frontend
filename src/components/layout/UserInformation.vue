@@ -1,6 +1,7 @@
 <script setup>
-import { useAuthStore } from '@/stores';
+import { useAuthStore, useCollaboratorsStore } from '@/stores';
 const authStore = useAuthStore()
+const collabStore = useCollaboratorsStore()
 
 const props = defineProps({
     position: {

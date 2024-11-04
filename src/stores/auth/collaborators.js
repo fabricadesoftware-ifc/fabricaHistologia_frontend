@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, reactive, ref } from 'vue'
 import { CollaboratorsService } from '@/services'
 import { useAuthStore } from './auth'
+import { useStorage } from '@vueuse/core'
 
 /**
  * Store for managing collaborators data.
@@ -27,17 +28,17 @@ import { useAuthStore } from './auth'
  * @returns {CollaboratorsStore} The CollaboratorsStore instance.
  */
 export const useCollaboratorsStore = defineStore('collaborators', () => {
+
     const state = reactive({
         collaborators: [],
         selectedCollaborator: {},
         collaboratorByUser: [],
         loading: false,
         error: null,
-        connection: false
+        connection: false,
       })
 
       const authStore = useAuthStore()
-
       const collaborators = computed(() => state.collaborators)
       const collaboratorByUser = computed(() => state.collaboratorByUser)
       const selectedCollaborator = computed(()=> state.selectedCollaborator)
