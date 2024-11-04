@@ -12,9 +12,9 @@ export const useNavigationStore = defineStore("navigation", () => {
     history: [],
     currentPage: null,
     navPortal: [
-      {name: 'Atlas Digital', icon: portal},
-      {name: 'Conteudos', icon: content},
-      {name: 'Quiz', icon: quiz},
+      {name: 'Atlas Digital', icon: portal, link: '/portal/system'},
+      {name: 'Conteudos', icon: content, link: '/portal/content'},
+      {name: 'Quiz', icon: quiz, link: '/portal/quiz'},
     ]
   });
 
