@@ -50,8 +50,9 @@ export const selectAnswer = async (answer) => {
       }
      }
      quizStore.state.savedAnswers.push(saveddata(quizStore.selectedAnswers[index].correct, answer.question))
-     quizStore.state.markedAnswers[answer.question - 1].correct = quizStore.savedAnswers[index].correct
-     quizStore.state.markedAnswers[answer.question - 1].answered = true
+    //  console.log(quizStore.savedAnswers[])
+     quizStore.state.markedAnswers[index].correct = quizStore.savedAnswers[index].correct
+     quizStore.state.markedAnswers[index].answered = true
      return quizStore.selectedAnswers[index].correct
     }
      

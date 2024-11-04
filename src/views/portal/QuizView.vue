@@ -12,10 +12,7 @@ const id = router.params.id
 const currentQuestion = ref(0)
 const actual = ref(null)
 
-const updateQuestions = computed(()=> {
-    
-    return quizStore.answersByQuestion.filter(s => s.question == currentQuestion.value)
-} )
+
 
 const nextSection = async () => {
     if (currentQuestion.value < quizStore.quizBySystem.length)
@@ -25,6 +22,7 @@ const nextSection = async () => {
 
 const setId = (id) => {
     actual.value = quizStore.quizBySystem[id].id
+    quizStore.getAnswersByQuestion(actual.value)
 }
 
 const previousSection = () => {
@@ -38,7 +36,8 @@ onMounted(async()=>{
   await quizStore.getAnswersByQuestion(currentQuestion.value)
   quizStore.getMarkedAnswers()
   setId(0)
- 
+  console.log('chega')
+  console.log(quizStore.markedAnswers)
     
 })
 
@@ -67,7 +66,7 @@ onMounted(async()=>{
                 </div>
             </div>
 
-        <QuizQuestion :currentQuestion="currentQuestion" class="w-full" :data_answer="updateQuestions" :data_question="quizStore.quizBySystem" />
+        <QuizQuestion :currentQuestion="actual" class="w-full" :data_answer="quizStore.answersByQuestion" :data_question="quizStore.quizBySystem" />
         </section>
     </ContainerGlobal>
     <Footer class="mt-10"  />

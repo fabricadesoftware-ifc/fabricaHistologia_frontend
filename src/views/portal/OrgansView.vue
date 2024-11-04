@@ -36,6 +36,7 @@ onMounted(async () => {
 })
 
 const push = async(id) => { 
+    resetAll()
     quizStore.getQuizBySystem(id, '') 
 }
 
