@@ -62,7 +62,7 @@ export const usePostStore = defineStore("post",
             state.loading = true;
             try {
                 const response = await PostService.getPostsById(id)
-                console.log(response)
+                
                 state.selectedPost = response
             } catch (error) {
                 state.error = error

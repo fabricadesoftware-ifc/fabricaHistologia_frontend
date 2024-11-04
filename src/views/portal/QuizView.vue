@@ -36,8 +36,6 @@ onMounted(async()=>{
   await quizStore.getAnswersByQuestion(currentQuestion.value)
   quizStore.getMarkedAnswers()
   setId(0)
-  console.log('chega')
-  console.log(quizStore.markedAnswers)
     
 })
 

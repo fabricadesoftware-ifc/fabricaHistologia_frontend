@@ -40,9 +40,6 @@ const push = async(id) => {
     quizStore.getQuizBySystem(id, '') 
 }
 
-onMounted(()=>{
-    console.log()
-})
 </script>
 
 <template>
