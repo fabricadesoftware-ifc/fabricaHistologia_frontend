@@ -33,15 +33,14 @@ onMounted(async () => {
     await systemStore.getSystemById(id)
     await supportingStore.getMaterialsBySystem(id)
     setAdditionalInfo.value
+    
 })
 
 const push = async(id) => { 
+    resetAll()
     quizStore.getQuizBySystem(id, '') 
 }
 
-onMounted(()=>{
-    console.log()
-})
 </script>
 
 <template>

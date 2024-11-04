@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const getUser = async () => {
     const authToken = localStorage.getItem('psg_auth_token');
-    console.log(authToken)
+  
     const userData = await AuthService.getUser(authToken);
   
     user.value = userData
