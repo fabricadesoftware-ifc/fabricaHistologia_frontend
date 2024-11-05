@@ -1,4 +1,7 @@
 <script setup>
+import { usePostStore, useOrganStore } from '@/stores';
+const postStore = usePostStore()
+const organStore = useOrganStore()
 const props = defineProps({
   id: {
     type: Number,
@@ -25,32 +28,23 @@ const close = () => {
       <h2 class="pt-4 font-semibold text-lg animation-appear">Dados da Lâmina {{ props.id }}</h2>
       <ul class="text-gray-300 pt-4 pb-4 animation-appear">
         <li>
-          <p>Órgão: Órgão</p>
+          <p>Órgão: {{ organStore.selectedOrgan.name }}</p>
         </li>
         <li>
-          <p>Espécie: Espécie</p>
+          <p>Espécie: {{ postStore.selectedPost.species.name }}</p>
         </li>
         <li>
-          <p>Coloração: Coloração</p>
+          <p>Coloração: {{ postStore.selectedPost.coloring }}</p>
         </li>
         <li>
-          <p>Aumento: Aumento</p>
+          <p>Aumento: {{ postStore.selectedPost.increase }}</p>
         </li>
         <li>
-          <p>Tipo de corte: Tipo de corte</p>
-        </li>
-        <li>
-          <p>Função do órgão: 2</p>
-        </li>
-        <li>
-          <p>Estruturas analisadas: 4</p>
-        </li>
-        <li>
-          <p>Função das estruturas: 3</p>
+          <p>Tipo de corte: {{ postStore.selectedPost.type_cut }}</p>
         </li>
       </ul>
-      <p class="font-light italic animation-appear">Lâmina postada por Mateus Lopes Albano</p>
-      <p class="font-medium animation-appear">Postado em 12/12/2021</p>
+      <p class="font-light italic animation-appear">Lâmina postada por {{ postStore.selectedPost.autor_user.email }}</p>
+      <p class="font-medium animation-appear">Postado em {{ postStore.selectedPost.post_date }}</p>
     </div>
   </div>
 </template>

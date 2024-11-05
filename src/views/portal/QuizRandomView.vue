@@ -3,6 +3,8 @@ import { computed, onMounted, ref } from 'vue';
 import {ContainerGlobal, QuizQuestion, HeaderPortal, Footer, BackButton} from '@/components/';
 import { useQuizStore, useAuthStore} from '@/stores';
 import { useRoute, useRouter } from 'vue-router';
+import { systemGeral } from '@/utils/quiz';
+
 
 const quizStore = useQuizStore()
 const authStore = useAuthStore()
@@ -36,6 +38,7 @@ onMounted(async()=>{
   await quizStore.getAnswersByQuestion(currentQuestion.value)
   quizStore.getMarkedAnswers()
   setId(0)
+  console.log(systemGeral.value)
     
 })
 

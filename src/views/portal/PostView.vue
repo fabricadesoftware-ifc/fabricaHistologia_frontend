@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { usePostStore, usePointStore } from '@/stores';
+import { usePostStore, usePointStore, useQuizStore, useSystemStore } from '@/stores';
 import {
   HeaderPortal,
   ContainerGlobal,
@@ -11,13 +11,18 @@ import {
   Footer,
   BtnDefault
 } from '@/components/index';
+import { resetAll } from '@/utils/quiz';
 
 const showInfo = ref(false);
 const canvasRef = ref(null);
 const router = useRoute();
 const id = router.params.id;
+
 const postsStore = usePostStore();
 const pointStore = usePointStore();
+const quizStore = useQuizStore();
+const systemStore = useSystemStore()
+const system_id = systemStore.selectedSystem.id
 const image = ref(null)
 
 onMounted(async () => {
@@ -32,6 +37,11 @@ onMounted(async () => {
   }
   }
 });
+
+const push = async(id) => { 
+    resetAll()
+    quizStore.getQuizBySystem(id, '') 
+}
 </script>
 
 <template>
@@ -67,7 +77,7 @@ onMounted(async () => {
         </div>
       </section>
       <section class="mt-8">
-        <BtnDefault text="Acessar Quiz deste Sistema" block />
+        <BtnDefault @click="push(system_id)" :link="'/portal/quiz/' + system_id" text="Acessar Quiz deste Sistema" block />
       </section>
     </ContainerGlobal>
   </main>

@@ -10,13 +10,13 @@ setTimeout(()=>{
 
 
 export const systemGeral = ref([])
-
+export const realSystemGeral = ref([])
 export const choseNumbs = (between) => {
    return (Math.round(Math.random() * between))
 }
 
 export const verifyManyQuiz = () => {
-    quizStore.quizBySystem.length < 10 ? quizStore.quiz.length : 10 
+    return quizStore.quizBySystem.length < 10 ? quizStore.quiz.length : 10 
 }
 
 export const throwQuizes = () => {
@@ -24,10 +24,27 @@ export const throwQuizes = () => {
       // const numb = choseNumbs(quizStore.quizBySystem.length)
       const numb = choseNumbs(quizStore.quizBySystem.length)
       if (systemGeral.value.filter(s => s == numb).length == 0) {
-          systemGeral.value.push(numb)
+
+          // const realQuestions = quizStore.quizBySystem.filter(s => s.id == numb)
+             systemGeral.value.push(numb)
+          // for (real = realQuestions[0]; real < realQuestions.length; real++){
+         
+          // }
+          
       }
   }
-  console.log(systemGeral.value)
+
+
+ 
+  for (real = realQuestions[0]; real < realQuestions.length; real++){
+
+  }
+
+  setTimeout(()=>{
+    console.log('system:', systemGeral.value)
+    
+  },1000)
+ 
 }
 
 export const quizHomeButtonsData = [
@@ -97,3 +114,10 @@ export const setBackground = (item, answered) => {
       return {backgroundColor: '#4ade80'}
     }
   }
+
+  export const adjusteSize = (item, lenght, index) => {
+    if (item.length > lenght) {
+        item = item.replace(item.substring(index), '') + '...'
+    }
+    return item
+}
