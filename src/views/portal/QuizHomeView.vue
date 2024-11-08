@@ -11,7 +11,7 @@ const quizStore = useQuizStore()
 
 
 const defineLevel = async(item) => {
-    resetAll()
+    resetAll(quizStore)
     await quizStore.getQuizBySystem('', item)
     quizStore.state.selectedLevel = item
     throwQuizes()

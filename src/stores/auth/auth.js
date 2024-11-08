@@ -8,9 +8,10 @@ import { useStorage } from '@vueuse/core';
 
 export const useAuthStore = defineStore('auth', () => {
   const active = useStorage('activated', {
-    active: false
+    active: false,
+    user: {}
   })
-  const user = reactive({});
+  
   
   const verifyUser = () => {
     const authToken = localStorage.getItem('psg_auth_token');
@@ -28,16 +29,15 @@ export const useAuthStore = defineStore('auth', () => {
   
     const userData = await AuthService.getUser(authToken);
   
-    user.value = userData
-    user.value ? active.value.active = true : active.value.active = false
-    console.log(user.value.is_verified)
+    active.value.user = userData
+    active.value.user ? active.value.active = true : active.value.active = false
   }
 
-  const email = computed(() => user.value ? user.value.email : '')
+  const email = computed(() => active.value.user ? active.value.user.email : '')
 
   const activeUser = computed(() => active.value.active )
 
-  const userInfo = computed(()=> user.value)
+  const userInfo = computed(()=> active.value.user)
 
   // const token = localStorage.getItem('psg_auth_token')
 
@@ -53,11 +53,11 @@ export const useAuthStore = defineStore('auth', () => {
   // })
 
   const logout = () => {
-    user.value = {};
+    active.value.user = {};
     localStorage.removeItem('psg_auth_token')
     router.push('/')
     active.value.active = false
   }
 
-  return { user, email, getUser, verifyUser, logout, activeUser, userInfo };
+  return { email, getUser, verifyUser, logout, activeUser, userInfo };
 });

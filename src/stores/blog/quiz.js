@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import { computed, reactive } from "vue";
+import { computed, reactive, ref } from "vue";
 import { QuizService } from "@/services";
+import { useStorage } from "@vueuse/core";
 
 /**
  * Store for managing post data.
@@ -26,7 +27,7 @@ import { QuizService } from "@/services";
 
 export const useQuizStore = defineStore("quiz",
     () => {
-        const state = reactive({
+        const state = useStorage('quizStorage', {
             quiz: [],
             answers: [],
             quizBySystem: [],
@@ -39,75 +40,83 @@ export const useQuizStore = defineStore("quiz",
             loading: false,
             error: null,
             connection: false,
-        });
-        const answers = computed(() => state.answers)
-        const quiz = computed(() => state.quiz)
-        const selectedQuiz = computed(()=> state.selectedQuiz)
-        const selectedAnswers = computed(()=> state.selectedAnswers)
-        const savedAnswers = computed(()=> state.savedAnswers)
-        const isLoading = computed(() => state.loading);
-        const answersCount = computed(() => state.answers.length);
-        const quizCount = computed(() => state.quiz.length);
-        const answersByQuestion = computed(()=> state.answersByQuestion)
-        const quizBySystem = computed(()=> state.quizBySystem)
-        const markedAnswers = computed(()=> state.markedAnswers)
-        const selectedLevel = computed(()=> state.selectedLevel)
+            
+        })
 
+        const answers = computed(() => state.value.answers)
+        const quiz = computed(() => state.value.quiz)
+        const selectedQuiz = computed(()=> state.value.selectedQuiz)
+        const selectedAnswers = computed(()=> state.value.selectedAnswers)
+        const savedAnswers = computed(()=> state.value.savedAnswers)
+        const isLoading = computed(() => state.value.loading);
+        const answersCount = computed(() => state.value.answers.length);
+        const quizCount = computed(() => state.value.quiz.length);
+        const answersByQuestion = computed(()=> state.value.answersByQuestion)
+        const quizBySystem = computed(()=> state.value.quizBySystem)
+        const markedAnswers = computed(()=> state.value.markedAnswers)
+        const selectedLevel = computed(()=> state.value.selectedLevel)
+       
+        const countSavedAnswers = computed(()=> {
+            const correctAnswers = state.value.savedAnswers.filter(s => s.correct == true)
+            return correctAnswers.length
+        })
+        
+        
         /**
          * Fetches post data.
          * @async
          * @function getPosts
          */
         const getQuiz = async () => {
-            state.loading = true;
+            state.value.loading = true;
             try {
                 const response = await QuizService.getQuiz();
-                state.quiz = response
+                state.value.quiz = response
             } catch (error) {
-                state.error = error;
+                state.value.error = error;
             } finally {
-                state.loading = false;
-                state.connection = true; // just to see if the connection is established
+                state.value.loading = false;
+                state.value.connection = true; // just to see if the connection is established
             }
         };
 
         const getAnswers = async () => {
-            state.loading = true;
+            state.value.loading = true;
             try {
                 const response = await QuizService.getAnswers();
-                state.answers = response
+                state.value.answers = response
             } catch (error) {
-                state.error = error;
+                state.value.error = error;
             } finally {
-                state.loading = false;
-                state.connection = true; // just to see if the connection is established
+                state.value.loading = false;
+                state.value.connection = true; // just to see if the connection is established
             }
         };
 
         const getQuizBySystem = async (system_id, level) => {
-            state.loading = true;
+            state.value.loading = true;
             try {
                 const response = await QuizService.getQuizBySystem(system_id, level)
-                state.quizBySystem = response
+                state.value.quizBySystem = response
                 
             } catch (error) {
-                state.error = error
+                state.value.error = error
             } finally {
-                state.loading = false
-                state.connection = true
+                state.value.loading = false
+                state.value.connection = true
             }
         }
 
         const getAnswersByQuestion = async (id) => {
-            state.loading = true;
+            state.value.loading = true;
             try {
-                    state.answersByQuestion = await QuizService.getAnswersByQuestion(id)
+                    state.value.answersByQuestion = await QuizService.getAnswersByQuestion(id)
                 
             } catch (error) {
-                state.error = error
+                state.value.error = error
             } finally {
-                state.loading = false
-                state.connection = true
+                state.value.loading = false
+                state.value.connection = true
             }
         }
 
@@ -118,11 +127,12 @@ export const useQuizStore = defineStore("quiz",
                         correct: false,
                         answered: false,
                 }
-                state.markedAnswers.push(response)
+                state.value.markedAnswers.push(response)
                 }
                 
                 
             }
+        
         
 
         
@@ -133,24 +143,24 @@ export const useQuizStore = defineStore("quiz",
          * @param {Object} newPosts - The new Posts object to create.
          */
         const createQuiz = async (newQuiz) => {
-            state.loading = true;
+            state.value.loading = true;
             try {
-                state.quiz.push(await QuizService.createQuiz(newQuiz));
+                state.value.quiz.push(await QuizService.createQuiz(newQuiz));
             } catch (error) {
-                state.error = error;
+                state.value.error = error;
             } finally {
-                state.loading = false;
+                state.value.loading = false;
             }
         };
 
         const createAnswers = async (newAnswer) => {
-            state.loading = true;
+            state.value.loading = true;
             try {
-                state.answers.push(await QuizService.createQuiz(newAnswer));
+                state.value.answers.push(await QuizService.createQuiz(newAnswer));
             } catch (error) {
-                state.error = error;
+                state.value.error = error;
             } finally {
-                state.loading = false;
+                state.value.loading = false;
             }
         };
         
@@ -161,26 +171,26 @@ export const useQuizStore = defineStore("quiz",
          * @param {Object} PosupdatePosts - The PosupdatePosts object to update.
          */
         const updateQuiz = async (quiz) => {
-            state.loading = true;
+            state.value.loading = true;
             try {
-                const index = state.quiz.findIndex((s) => s.id === quiz.id);
-                state.quiz[index] = await QuizService.updateQuiz(quiz);
+                const index = state.value.quiz.findIndex((s) => s.id === quiz.id);
+                state.value.quiz[index] = await QuizService.updateQuiz(quiz);
             } catch (error) {
-                state.error = error;
+                state.value.error = error;
             } finally {
-                state.loading = false;
+                state.value.loading = false;
             }
         };
 
         const updateAnswers = async (answer) => {
-            state.loading = true;
+            state.value.loading = true;
             try {
-                const index = state.answers.findIndex((s) => s.id === answer.id);
-                state.answers[index] = await QuizService.updateAnswers(answer);
+                const index = state.value.answers.findIndex((s) => s.id === answer.id);
+                state.value.answers[index] = await QuizService.updateAnswers(answer);
             } catch (error) {
-                state.error = error;
+                state.value.error = error;
             } finally {
-                state.loading = false;
+                state.value.loading = false;
             }
         };
 
@@ -191,28 +201,28 @@ export const useQuizStore = defineStore("quiz",
          * @param {number} id - The ID of the Posts to delete.
         */
        const deleteQuiz = async (id) => {
-           state.loading = true;
+           state.value.loading = true;
            try {
-               const index = state.quiz.findIndex((s) => s.id === id);
-               state.quiz.splice(index, 1);
+               const index = state.value.quiz.findIndex((s) => s.id === id);
+               state.value.quiz.splice(index, 1);
                await QuizService.deleteQuiz(id);
             } catch (error) {
-                state.error = error;
+                state.value.error = error;
             } finally {
-                state.loading = false;
+                state.value.loading = false;
             }
         };
 
         const deleteAnswers = async (id) => {
-            state.loading = true;
+            state.value.loading = true;
             try {
-                const index = state.answers.findIndex((s) => s.id === id);
-                state.answers.splice(index, 1);
+                const index = state.value.answers.findIndex((s) => s.id === id);
+                state.value.answers.splice(index, 1);
                 await QuizService.deleteAnswers(id);
              } catch (error) {
-                 state.error = error;
+                 state.value.error = error;
              } finally {
-                 state.loading = false;
+                 state.value.loading = false;
              }
          };
         
@@ -231,6 +241,7 @@ export const useQuizStore = defineStore("quiz",
             selectedLevel,
             selectedQuiz,
             getMarkedAnswers,
+            countSavedAnswers,
             getQuiz,
             getAnswers,
             getQuizBySystem,

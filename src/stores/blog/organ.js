@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, reactive } from 'vue'
 import { OrganService } from '@/services'
+import { useStorage } from '@vueuse/core'
 
 /**
  * Store for managing organs data.
@@ -24,7 +25,7 @@ import { OrganService } from '@/services'
  * @returns {SpecieStore} The OrganStore instance.
  */
 export const useOrganStore = defineStore('organ', () => {
-  const state = reactive({
+  const state = useStorage('organStorage', {
     organs: [],
     selectedOrgan: {},
     organsBySystem: [],
@@ -32,11 +33,12 @@ export const useOrganStore = defineStore('organ', () => {
     error: null,
     connection: false
   })
-  const organs = computed(() => state.organs)
-  const organsBySystem = computed(() => state.organsBySystem)
-  const selectedOrgan = computed(()=> state.selectedOrgan)
-  const isLoading = computed(() => state.loading)
-  const organsCount = computed(() => state.organs.length)
+
+  const organs = computed(() => state.value.organs)
+  const organsBySystem = computed(() => state.value.organsBySystem)
+  const selectedOrgan = computed(()=> state.value.selectedOrgan)
+  const isLoading = computed(() => state.value.loading)
+  const organsCount = computed(() => state.value.organs.length)
 
   /**
    * Fetches organs data.
@@ -44,14 +46,14 @@ export const useOrganStore = defineStore('organ', () => {
    * @function getSpecies
    */
   const getOrgans = async () => {
-    state.loading = true
+    state.value.loading = true
     try {
-      state.organs = await OrganService.getOrgans()
+      state.value.organs = await OrganService.getOrgans()
     } catch (error) {
-      state.error = error
+      state.value.error = error
     } finally {
-      state.loading = false
-      state.connection = true
+      state.value.loading = false
+      state.value.connection = true
     }
   }
 
@@ -61,28 +63,28 @@ export const useOrganStore = defineStore('organ', () => {
    * @function getOrgansBySystem
    */
    const getOrgansBySystem = async (systemId) => {
-    state.loading = true
+    state.value.loading = true
     try {
       const response = await OrganService.getOrgansBySystem(systemId)   
-      state.organsBySystem = response
+      state.value.organsBySystem = response
     } catch (error) {
-      state.error = error
+      state.value.error = error
     } finally {
-      state.loading = false
-      state.connection = true
+      state.value.loading = false
+      state.value.connection = true
     }
   }
 
   const getOrgansById = async (organId) => {
-    state.loading = true
+    state.value.loading = true
     try {
       const response = await OrganService.getOrgansById(organId)   
-      state.selectedOrgan = response
+      state.value.selectedOrgan = response
     } catch (error) {
-      state.error = error
+      state.value.error = error
     } finally {
-      state.loading = false
-      state.connection = true
+      state.value.loading = false
+      state.value.connection = true
     }
   }
 
@@ -93,13 +95,13 @@ export const useOrganStore = defineStore('organ', () => {
    * @param {Object} newSpecie - The new organ object to create.
    */
   const createOrgan = async (newOrgan) => {
-    state.loading = true
+    state.value.loading = true
     try {
-      state.organs.push(await OrganService.createOrgan(newOrgan))
+      state.value.organs.push(await OrganService.createOrgan(newOrgan))
     } catch (error) {
-      state.error = error
+      state.value.error = error
     } finally {
-      state.loading = false
+      state.value.loading = false
     }
   }
 
@@ -110,14 +112,14 @@ export const useOrganStore = defineStore('organ', () => {
    * @param {Object} specie - The organ object to update.
    */
   const updateOrgan = async (organ) => {
-    state.loading = true
+    state.value.loading = true
     try {
-      const index = state.organs.findIndex((s) => s.id === organ.id)
-      state.organs[index] = await OrganService.getOrgans()
+      const index = state.value.organs.findIndex((s) => s.id === organ.id)
+      state.value.organs[index] = await OrganService.getOrgans()
     } catch (error) {
-      state.error = error
+      state.value.error = error
     } finally {
-      state.loading = false
+      state.value.loading = false
     }
   }
   /**
@@ -127,14 +129,14 @@ export const useOrganStore = defineStore('organ', () => {
    * @param {number} id - The ID of the organ to delete.
    */
   const deleteOrgan = async (id) => {
-    state.loading = true
+    state.value.loading = true
     try {
-      const index = state.organs.findIndex((s) => s.id === id)
-      state.organs.splice(index, 1)
+      const index = state.value.organs.findIndex((s) => s.id === id)
+      state.value.organs.splice(index, 1)
     } catch (error) {
-      state.error = error
+      state.value.error = error
     } finally {
-      state.loading = false
+      state.value.loading = false
     }
   }
 

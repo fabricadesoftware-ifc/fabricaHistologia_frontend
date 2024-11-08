@@ -24,12 +24,8 @@ export const throwQuizes = () => {
       // const numb = choseNumbs(quizStore.quizBySystem.length)
       const numb = choseNumbs(quizStore.quizBySystem.length)
       if (systemGeral.value.filter(s => s == numb).length == 0) {
-
-          // const realQuestions = quizStore.quizBySystem.filter(s => s.id == numb)
              systemGeral.value.push(numb)
-          // for (real = realQuestions[0]; real < realQuestions.length; real++){
-         
-          // }
+          
           
       }
   }
@@ -53,10 +49,10 @@ export const quizHomeButtonsData = [
     {color: 'bg-[#D94E4E]', text: 'Difícil', value: 3, link: '/portal/quiz/'},
 ]
 
-export const selectAnswer = async (answer) => {
-    if (quizStore.selectedAnswers.filter(s => s.id == answer.id).length == 0) {
-     quizStore.state.selectedAnswers.push(answer)
-     const index = quizStore.selectedAnswers.findIndex(s => s.id == answer.id)
+export const selectAnswer = async (answer, store) => {
+    if (store.selectedAnswers.filter(s => s.id == answer.id).length == 0) {
+     store.state.selectedAnswers.push(answer)
+     const index = store.selectedAnswers.findIndex(s => s.id == answer.id)
      
      const saveddata = (correct, question_id) => {
       return {
@@ -66,51 +62,54 @@ export const selectAnswer = async (answer) => {
         answered: true
       }
      }
-     quizStore.state.savedAnswers.push(saveddata(quizStore.selectedAnswers[index].correct, answer.question))
-    //  console.log(quizStore.savedAnswers[])
-     quizStore.state.markedAnswers[index].correct = quizStore.savedAnswers[index].correct
-     quizStore.state.markedAnswers[index].answered = true
-     return quizStore.selectedAnswers[index].correct
+     store.state.savedAnswers.push(saveddata(store.selectedAnswers[index].correct, answer.question))
+    //  console.log(store.savedAnswers[])
+     store.state.markedAnswers[index].correct = store.savedAnswers[index].correct
+     store.state.markedAnswers[index].answered = true
+     return store.selectedAnswers[index].correct
     }
      
   }
 
-  export const resetAll = () => {
-    quizStore.state.quiz = []
-    quizStore.state.answers = []
-    quizStore.state.quizBySystem = []
-    quizStore.state.answersByQuestion = []
-    quizStore.state.selectedQuiz = null
-    quizStore.state.selectedAnswers = []
-    quizStore.state.savedAnswers = []
-    quizStore.state.markedAnswers = []
-    quizStore.state.selectedLevel = null
+
+
+  export const resetAll = (store) => {
+    localStorage.removeItem('quizStorage')
+    store.state.quiz = []
+    store.state.answers = []
+    store.state.quizBySystem = []
+    store.state.answersByQuestion = []
+    store.state.selectedQuiz = null
+    store.state.selectedAnswers = []
+    store.state.savedAnswers = []
+    store.state.markedAnswers = []
+    store.state.selectedLevel = null
   }
   
-export const filterAnswer = (answer) => {
-    if (quizStore.savedAnswers.filter(s => s.id == answer.id).length > 0) {
-    const index = quizStore.savedAnswers.findIndex(s => s.id == answer.id)
-    console.log(quizStore.savedAnswers[index].correct)
-    return quizStore.savedAnswers[index].correct
+export const filterAnswer = (answer, store) => {
+    if (store.savedAnswers.filter(s => s.id == answer.id).length > 0) {
+    const index = store.savedAnswers.findIndex(s => s.id == answer.id)
+    console.log(store.savedAnswers[index].correct)
+    return store.savedAnswers[index].correct
     }
   }
   
-export const watchAnswered = (answer) => {
-    if (quizStore.savedAnswers.filter(s => s.id == answer.id).length > 0) {
-    const index = quizStore.savedAnswers.findIndex(s => s.id == answer.id)
-    return quizStore.savedAnswers[index]
+export const watchAnswered = (answer, store) => {
+    if (store.savedAnswers.filter(s => s.id == answer.id).length > 0) {
+    const index = store.savedAnswers.findIndex(s => s.id == answer.id)
+    return store.savedAnswers[index]
     }
   }
   
-export const showRight = (item) => {
+export const showRight = (item, store) => {
     if (item.correct) {
-    const index = quizStore.answersByQuestion.findIndex(s => s.correct == item.correct)
-    return quizStore.answersByQuestion[index]
+    const index = store.answersByQuestion.findIndex(s => s.correct == item.correct)
+    return store.answersByQuestion[index]
     }
   }
   
-export const setBackground = (item, answered) => {
-    if (answered && showRight(item)) {
+export const setBackground = (item, answered, store) => {
+    if (answered && showRight(item, store)) {
       return {backgroundColor: '#4ade80'}
     }
   }

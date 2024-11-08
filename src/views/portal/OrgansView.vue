@@ -37,8 +37,11 @@ onMounted(async () => {
 })
 
 const push = async(id) => { 
-    resetAll()
-    quizStore.getQuizBySystem(id, '') 
+    resetAll(quizStore)
+    quizStore.getQuizBySystem(id, '')
+    // setTimeout(()=>{
+    //     window.location.reload()
+    // },500)
 }
 
 </script>
