@@ -8,38 +8,19 @@ setTimeout(()=>{
   quizStore = useQuizStore()
 },1000)
 
-
-export const systemGeral = ref([])
-export const realSystemGeral = ref([])
 export const choseNumbs = (between) => {
    return (Math.round(Math.random() * between))
 }
 
 export const verifyManyQuiz = () => {
-    return quizStore.quizBySystem.length < 10 ? quizStore.quiz.length : 10 
+    return Math.min(quizStore.quizBySystem.length, 10)
 }
 
 export const throwQuizes = () => {
-  while (systemGeral.value < verifyManyQuiz()) {
-      // const numb = choseNumbs(quizStore.quizBySystem.length)
-      const numb = choseNumbs(quizStore.quizBySystem.length)
-      if (systemGeral.value.filter(s => s == numb).length == 0) {
-             systemGeral.value.push(numb)
-          
-          
-      }
-  }
-
-
- 
-  for (real = realQuestions[0]; real < realQuestions.length; real++){
-
-  }
-
-  setTimeout(()=>{
-    console.log('system:', systemGeral.value)
-    
-  },1000)
+    const quizCount = verifyManyQuiz()
+    quizStore.state.quizBySystem = quizStore.state.quizBySystem.slice(0, quizCount).sort(()=> Math.random() - 0.5)
+    console.log(quizStore.quizBySystem)
+  
  
 }
 

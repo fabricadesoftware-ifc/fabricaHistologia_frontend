@@ -18,7 +18,7 @@ const actual = ref(null)
 
 
 const nextSection = async () => {
-    if (currentQuestion.value <= quizStore.quizBySystem.length - 1 && quizStore.markedAnswers[currentQuestion.value].answered)
+    if (currentQuestion.value < quizStore.quizBySystem.length - 1 && quizStore.markedAnswers[currentQuestion.value].answered)
     currentQuestion.value += 1
     setId(currentQuestion.value)
 }
@@ -65,7 +65,10 @@ onUpdated(()=>{
 
 const answeredAll = computed(()=> {
     if (quizStore.markedAnswers.length == quizStore.savedAnswers.length && quizStore.markedAnswers.length != 0) {
+       
         return true
+       
+        
     } else {
         return false
     }
@@ -84,7 +87,7 @@ const answeredAll = computed(()=> {
     </section>
     <main v-else class="min-h-dvh relative flex flex-col justify-between">
         <section class="fixed w-dvw h-dvh flex justify-center items-center z-40" v-if="answeredAll && keepCompAlive">
-        <div class="absolute bg-white z-40 rounded-md p-5 w-4/12 h-2/6 flex flex-col justify-center gap-10">
+        <div class="absolute bg-white z-40 rounded-md p-5 w-4/12 lg:w-8/12 h-2/6 flex flex-col justify-center gap-10">
 
             <div class="flex w-full justify-center flex-col gap-3">
             <h1  class="text-3xl text-center">Pontuação:</h1>
@@ -108,7 +111,7 @@ const answeredAll = computed(()=> {
                 <div class="flex w-10/12 justify-evenly">
                 <div v-for="item, index in quizStore.markedAnswers" :class="!item.answered ? 'bg-slate-400' : item.correct ? 'bg-green-400' : 'bg-red-500', index == (currentQuestion) ? ' border-2 border-slate-600' : ''" class="size-5 rounded-full"></div>
                 </div>
-                <div @click="nextSection()" :class="quizStore.markedAnswers[currentQuestion] ? quizStore.markedAnswers[currentQuestion].answered ? ' opacity-1' : '  opacity-[50%]' : ''" class="flex justify-end w-1/12 hover:scale-[.92] duration-150 active:scale-[.80]">
+                <div @click="nextSection()" :class="quizStore.markedAnswers[currentQuestion] ? quizStore.markedAnswers[currentQuestion].answered && quizStore.savedAnswers.length < quizStore.quizBySystem.length || keepCompAlive == false && currentQuestion < (quizStore.quizBySystem.length - 1)  ? ' opacity-1' : '  opacity-[50%]' : ''" class="flex justify-end w-1/12 hover:scale-[.92] duration-150 active:scale-[.80]">
                     <img class="size-9" src="@/assets/images/icons/arrow-right.svg" >
                 </div>
             </div>

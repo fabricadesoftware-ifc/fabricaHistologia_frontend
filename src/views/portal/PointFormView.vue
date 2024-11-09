@@ -217,7 +217,7 @@ const setAction = () => {
           </p>
           <textarea
             type="text"
-            class="border-2 rounded-md w-full h-50 pl-3"
+            class="border-2 rounded-md w-full h-50 pl-3 pt-3"
             v-model="description"
           ></textarea>
         </div>
