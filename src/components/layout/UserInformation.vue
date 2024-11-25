@@ -1,4 +1,5 @@
 <script setup>
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore, useCollaboratorsStore } from '@/stores';
 const authStore = useAuthStore()
@@ -10,10 +11,14 @@ const props = defineProps({
         default: 'relative'
     }
 })
+const userName = ref(null)
+onMounted(()=>{
+    userName.value = localStorage.getItem('psg_last_login')
+})
 </script>
 <template>
     <div :class='`min-w-[240px] max-w-[420px] over z-40 ${props.position} right-0 my-3 mr-8 cursor-pointer flex flex-col items-center rounded-md justify-between container-information gap-1`'>
-        <p class="text-black px-3">{{ authStore.email }}</p>
+        <p class="text-black px-3">{{ userName }}</p>
         <div v-if="authStore.userInfo.is_verified" class="logout-pop min-h-10 flex justify-center items-center hover:bg-[#e6e6e6] w-full duration-300 ">
             <button @click="router.push('/portal/points')" class=" py-1 px-4 text-black font-medium w-full rounded-b-md flex justify-center gap-3 items-center">
                 <img class="size-[25px]"src="@/assets/images/icons/point.svg" />

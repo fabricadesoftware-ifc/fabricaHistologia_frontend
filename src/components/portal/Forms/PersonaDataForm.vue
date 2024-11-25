@@ -43,7 +43,7 @@ const newCollaborator = computed(() => {
 })
 
 const validate_data = () => {
-    if (PersonaDataGeneric.name == '' || PersonaDataGeneric.registration == '' || PersonaDataGeneric.phone == '' || PersonaDataGeneric.university == '' || !authStore.email ) {
+    if (PersonaDataGeneric.name == '' || PersonaDataGeneric.registration == '' || PersonaDataGeneric.phone == '' || PersonaDataGeneric.university == '' || !authStore.email || PersonaDataGeneric.registration.length > 20 ) {
         navigationStore.messageBody.title = 'Erro ao enviar o formulário'
         navigationStore.messageBody.description = 'Por favor, preencha todos os campos corretamente, assegurando-se de que nenhum campo esteja vazio e de que todas as informações foram inseridas sem erros. Cetifique-se também que você tenha iniciado a sessão com sua conta no portal.'
         navigationStore.formState = false
