@@ -162,23 +162,25 @@ onMounted(async () => {
   ctx.value = canvas.value.getContext('2d') // Inicializa o contexto do canvas corretamente
   redrawCanvas()
 
-  if (!authStore.userInfo.is_verified) {
+  if (!authStore.activeUser) {
+    navigationStore.messageBody.title = 'Não Autorizado'
+    navigationStore.messageBody.description =
+      'Isso ocorre porquê você não iniciou sessão, volte para a página inicial e inicie sessão com sua conta'
+    navigationStore.activeError = !navigationStore.activeError
+  }
+  else if (!authStore.userInfo.is_verified) {
     navigationStore.messageBody.title = 'Usuário não autorizado'
     navigationStore.messageBody.description =
       'Isso ocorre porquê você ainda não é um colaborador! Somente colaboradores podem gerenciar o conteúdo do portal.'
     navigationStore.activeError = !navigationStore.activeError
-  } else if (postsStore.posts.length <= 0) {
-    navigationStore.messageBody.title = 'Lâmina não encontrada'
-    navigationStore.messageBody.description =
-      'Isso ocorre porquê você não iniciou sessão, volte para a página inicial e inicie sessão com sua conta'
-    navigationStore.activeError = !navigationStore.activeError
+   
   } else {
     navigationStore.activeError = false
   }
 })
 
 const setAction = () => {
-    if (navigationStore.message.title == 'Lâmina não encontrada' || navigationStore.message.title == 'Usuário não autorizado') {
+    if (navigationStore.message.title == 'Não Autorizado' || navigationStore.message.title == 'Usuário não autorizado') {
         router.push('/')
     } else {
         window.location.reload()
@@ -215,7 +217,7 @@ const setAction = () => {
           </p>
           <textarea
             type="text"
-            class="border-2 rounded-md w-full h-50 pl-3"
+            class="border-2 rounded-md w-full h-50 pl-3 pt-3"
             v-model="description"
           ></textarea>
         </div>

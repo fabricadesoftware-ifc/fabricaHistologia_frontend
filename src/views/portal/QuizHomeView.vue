@@ -11,10 +11,12 @@ const quizStore = useQuizStore()
 
 
 const defineLevel = async(item) => {
-    resetAll()
+    resetAll(quizStore)
     await quizStore.getQuizBySystem('', item)
     quizStore.state.selectedLevel = item
     throwQuizes()
+    console.log('atualizou')
+    router.push('/portal/quiz/random'); 
 }
 
 </script>
@@ -26,7 +28,7 @@ const defineLevel = async(item) => {
         <p class=" text-center">Este é um quiz para testar seu conhecimento em Histologia. Ele reúne perguntas aleatórias cadastradas pelos colaboradores e varia a cada vez. Um ótimo método para estudar!</p>
         <section class=" mt-2 w-10/12 flex sm:flex-col justify-between sm:items-center gap-4">
         <div class="w-4/12 sm:w-9/12" v-for="item, index in quizHomeButtonsData" :key="index">
-            <BtnDefault block="true" :text="item.text" :background="item.color" @click="defineLevel(item.value)"  :link="'/portal/quiz/random'" />
+            <BtnDefault block="true" :text="item.text" :background="item.color" @click="defineLevel(item.value)" link="/portal/quiz/random" />
         </div>
         </section>
     </section>

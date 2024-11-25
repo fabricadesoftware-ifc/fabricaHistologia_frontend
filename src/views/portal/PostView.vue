@@ -11,7 +11,8 @@ import {
   Footer,
   BtnDefault
 } from '@/components/index';
-import { resetAll } from '@/utils/quiz';
+import { resetAll, adjusteSize } from '@/utils/quiz';
+
 
 const showInfo = ref(false);
 const canvasRef = ref(null);
@@ -36,17 +37,19 @@ onMounted(async () => {
     pointStore.redrawCanvas();
   }
   }
+
+  console.log(postsStore.selectedPost)
 });
 
 const push = async(id) => { 
-    resetAll()
+    resetAll(quizStore)
     quizStore.getQuizBySystem(id, '') 
 }
 </script>
 
 <template>
   <main class="min-h-screen-minus-80 relative">
-    <HeaderPortal :title="postsStore.selectedPost ? postsStore.selectedPost.type_cut : 'Carregando...'" />
+    <HeaderPortal :title="postsStore.selectedPost ?  postsStore.selectedPost.name : 'Carregando...'" />
     <div class="w-full h-96 flex justify-center items-center flex-col" v-if="postsStore.selectedPost == null">
     <h1 class="text-3xl md:text-5xl">Lâminas não encontradas</h1>
     <p class="text-xl">Não há nenhuma lâmina registrada no portal</p>

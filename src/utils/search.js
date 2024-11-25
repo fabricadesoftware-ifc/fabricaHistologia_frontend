@@ -3,9 +3,10 @@ import { useSupportingStore } from "@/stores"
 const supportingStore = useSupportingStore()
 export const nameNotFound = ref('')
 export const systemid = ref('')
-    export const setSystemFilter = (id) => {
-        supportingStore.searchMaterialsByName('', id != undefined ? systemid.value = id 
+    export const setSystemFilter = (item) => {
+        supportingStore.searchMaterialsByName('', item != undefined ? systemid.value = item.id
         : systemid.value = '')
+        
     }
 
     export const cleanFilter = () => {
