@@ -57,7 +57,7 @@ const validate_data = () => {
 }
 
 function saveCollaborator(data) {
-    navigationStore.activeError = !navigationStore.
+    navigationStore.activeError = !navigationStore.activeError
     validate_data()
 
         if (validate_data()) {

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { usePostStore, usePointStore } from '@/stores';
+import { usePostStore, usePointStore, useQuizStore, useSystemStore } from '@/stores';
 import {
   HeaderPortal,
   ContainerGlobal,
@@ -11,13 +11,19 @@ import {
   Footer,
   BtnDefault
 } from '@/components/index';
+import { resetAll, adjusteSize } from '@/utils/quiz';
+
 
 const showInfo = ref(false);
 const canvasRef = ref(null);
 const router = useRoute();
 const id = router.params.id;
+
 const postsStore = usePostStore();
 const pointStore = usePointStore();
+const quizStore = useQuizStore();
+const systemStore = useSystemStore()
+const system_id = systemStore.selectedSystem.id
 const image = ref(null)
 
 onMounted(async () => {
@@ -31,12 +37,19 @@ onMounted(async () => {
     pointStore.redrawCanvas();
   }
   }
+
+  console.log(postsStore.selectedPost)
 });
+
+const push = async(id) => { 
+    resetAll(quizStore)
+    quizStore.getQuizBySystem(id, '') 
+}
 </script>
 
 <template>
   <main class="min-h-screen-minus-80 relative">
-    <HeaderPortal :title="postsStore.selectedPost ? postsStore.selectedPost.type_cut : 'Carregando...'" />
+    <HeaderPortal :title="postsStore.selectedPost ?  postsStore.selectedPost.name : 'Carregando...'" />
     <div class="w-full h-96 flex justify-center items-center flex-col" v-if="postsStore.selectedPost == null">
     <h1 class="text-3xl md:text-5xl">Lâminas não encontradas</h1>
     <p class="text-xl">Não há nenhuma lâmina registrada no portal</p>
@@ -67,7 +80,7 @@ onMounted(async () => {
         </div>
       </section>
       <section class="mt-8">
-        <BtnDefault text="Acessar Quiz deste Sistema" block />
+        <BtnDefault @click="push(system_id)" :link="'/portal/quiz/' + system_id" text="Acessar Quiz deste Sistema" block />
       </section>
     </ContainerGlobal>
   </main>

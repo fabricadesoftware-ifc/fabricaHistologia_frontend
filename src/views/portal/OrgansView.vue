@@ -33,15 +33,17 @@ onMounted(async () => {
     await systemStore.getSystemById(id)
     await supportingStore.getMaterialsBySystem(id)
     setAdditionalInfo.value
+    
 })
 
 const push = async(id) => { 
-    quizStore.getQuizBySystem(id, '') 
+    resetAll(quizStore)
+    quizStore.getQuizBySystem(id, '')
+    // setTimeout(()=>{
+    //     window.location.reload()
+    // },500)
 }
 
-onMounted(()=>{
-    console.log()
-})
 </script>
 
 <template>

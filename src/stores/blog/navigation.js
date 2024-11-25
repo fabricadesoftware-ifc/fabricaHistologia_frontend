@@ -2,15 +2,19 @@ import { defineStore } from "pinia";
 import { useStorage } from '@vueuse/core'
 import { computed, reactive, ref } from "vue";
 import router from "@/router"
+import content from '@/assets/images/content.jpg'
+import portal from '@/assets/images/portal.jpg'
+import quiz from '@/assets/images/quiz.jpg'
+
 
 export const useNavigationStore = defineStore("navigation", () => {
   const state = useStorage('navigate', {
     history: [],
     currentPage: null,
     navPortal: [
-      {name: 'Atlas Digital', icon: "https://res.cloudinary.com/dzdrwmug3/image/upload/v1/vet/images/64404d0c-23b7-4377-8502-b7ba59cbd537_s87psj", link: '/portal/system'},
-      {name: 'Conteudos', icon: "https://res.cloudinary.com/dzdrwmug3/image/upload/v1/vet/images/80df3269-76f2-4133-b80c-9198a8ea42c6_cmyxma", link: '/portal/content'},
-      {name: 'Quiz', icon: "https://res.cloudinary.com/dzdrwmug3/image/upload/v1/vet/images/206bef91-5262-4a43-955e-ed1281e6ad5e_nmembu", link: '/portal/quiz'},
+      {name: 'Atlas Digital', icon: portal, link: '/portal/system'},
+      {name: 'Conteudos', icon: content, link: '/portal/content'},
+      {name: 'Quiz', icon: quiz, link: '/portal/quiz'},
     ]
   });
 

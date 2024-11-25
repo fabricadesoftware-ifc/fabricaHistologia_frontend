@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, reactive } from "vue";
 import { SystemService } from '@/services/'
+import { useStorage } from "@vueuse/core";
 
 /**
  * Store for managing system data.
@@ -25,16 +26,17 @@ import { SystemService } from '@/services/'
  */
 export const useSystemStore = defineStore('system', () => {
 
-    const state = reactive({
+    const state = useStorage('systemStorage', {
         systems: [],
         loading: false,
         error: null,
         selectedSystem: {},
-    });
-    const systems = computed(() => state.systems)
-    const selectedSystem = computed(() => state.selectedSystem)
-    const isLoading = computed(() => state.loading);
-    const systemsCount = computed(() => state.systems.length);
+    })
+
+    const systems = computed(() => state.value.systems)
+    const selectedSystem = computed(() => state.value.selectedSystem)
+    const isLoading = computed(() => state.value.loading);
+    const systemsCount = computed(() => state.value.systems.length);
 
     /**
      * Fetches system data.
@@ -42,33 +44,33 @@ export const useSystemStore = defineStore('system', () => {
      * @function getSystem
      */
     const getSystems = async () => {
-        state.loading = true
+        state.value.loading = true
         try {
             const response = await SystemService.getSystems();
-            console.log(response)
-            state.systems = response
+            
+            state.value.systems = response
         }
         catch (error) {
-            state.error = error;
+            state.value.error = error;
         }
         finally {
-            state.conected = true;  // just to see if the connection is established
-            state.loading = false;
+            state.value.conected = true;  // just to see if the connection is established
+            state.value.loading = false;
         }
     };
 
     const getSystemById = async (id) => {
-        state.loading = true
+        state.value.loading = true
         try {
             const response = await SystemService.getSystemById(id);
-            state.selectedSystem = response
+            state.value.selectedSystem = response
         }
         catch (error) {
-            state.error = error;
+            state.value.error = error;
         }
         finally {
-            state.conected = true;  // just to see if the connection is established
-            state.loading = false;
+            state.value.conected = true;  // just to see if the connection is established
+            state.value.loading = false;
         }
     }
 
@@ -79,16 +81,16 @@ export const useSystemStore = defineStore('system', () => {
      * @param {Object} newsystem - The new system object to create.
      */
     const createSystem = async (newSystem) => {
-        state.loading = true;
+        state.value.loading = true;
         try {
-            state.systems.push(await SystemService.createSystems(newSystem));
+            state.value.systems.push(await SystemService.createSystems(newSystem));
         }
         catch (error) {
-            state.error = error;
+            state.value.error = error;
         }
         finally {
-            state.conected = true;
-            state.loading = false;
+            state.value.conected = true;
+            state.value.loading = false;
         }
     };
 
@@ -99,16 +101,16 @@ export const useSystemStore = defineStore('system', () => {
      * @param {Object} system - The system object to update.
      */
     const updateSystem = async (system) => {
-        state.loading = true;
+        state.value.loading = true;
         try {
-            const index = state.systems.findIndex((s) => s.id === system.id);
-            state.systems[index] = await SystemService.updateSystems(system);
+            const index = state.value.systems.findIndex((s) => s.id === system.id);
+            state.value.systems[index] = await SystemService.updateSystems(system);
         }
         catch (error) {
-            state.error = error;
+            state.value.error = error;
         }
         finally {
-            state.loading = false;
+            state.value.loading = false;
         }
     };
 
@@ -119,17 +121,17 @@ export const useSystemStore = defineStore('system', () => {
      * @param {number} id - The ID of the system to delete.
      */
     const deleteSystem = async (id) => {
-        state.loading = true;
+        state.value.loading = true;
         try {
-            const index = state.systems.findIndex((s) => s.id === id);
-            state.systems.splice(index, 1);
+            const index = state.value.systems.findIndex((s) => s.id === id);
+            state.value.systems.splice(index, 1);
             await SystemService.deleteSystems(id);
         }
         catch (error) {
-            state.error = error;
+            state.value.error = error;
         }
         finally {
-            state.loading = false;
+            state.value.loading = false;
         }
     }
 
