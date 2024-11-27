@@ -1,13 +1,14 @@
 <script setup>
 import { ref } from 'vue'
 import { useNavigationStore } from '@/stores/blog/navigation';
-import { CardsContainer, DefaultTitle, MediumCardDefault, ContainerGlobal, Footer } from '@/components/index';
+import { BackButton, CardsContainer, DefaultTitle, MediumCardDefault, ContainerGlobal, Footer } from '@/components/index';
 
 const navigationStore = useNavigationStore()
 const getWidthScreenSize = ref(window.innerWidth)
 </script>
 <template>
     <main class="w-full min-h-screen-minus-80 flex flex-col justify-between sm:gap-16">
+        <BackButton class="top-16 left-24" />
        <ContainerGlobal class=" lg:h-auto flex justify-center items-center h-full mt-10">
             <div class="w-full flex flex-col gap-16 mb-16 lg:mb-10 sm:mb-0">
                 <DefaultTitle class="mt-16 text-center" :color="'text-black'" :weight="'font-medium'" :content="getWidthScreenSize < 1100 ? 'Bem-vindo ao portal!' : 'Bem-vindo ao Portal! Explore nossos recursos'" :size="'text-3xl'" :position="'justify-center'" />
