@@ -31,7 +31,7 @@ const props = defineProps({
                 </div>
                 <span @click="filterBySystem = result.system, emits('filter', filterBySystem)" class="my-auto text-[#267A7A] text-base sm:text-base md:mt-3 hover:brightness-75 cursor-pointer">ver relacionados</span>
             </div>
-            <div class="w-3/4 mx-auto flex flex-col my-4 font-poppins items-center" v-else>
+            <div class="w-3/4 sm:text-center sm:w-4/4 mx-auto flex flex-col my-4 font-poppins items-center" v-else>
                 <p class="text-xl text-[#787878]">Este material não existe</p>
             </div>
         </div>

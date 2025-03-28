@@ -7,6 +7,15 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    host: '0.0.0.0',  // Aceitar conexões externas
+    port: 5173,        // A porta do seu servidor
+    allowedHosts: [
+      'localhost',
+      '127.0.0.1',
+      '9222-187-99-118-213.ngrok-free.app',  // Substitua isso pelo link gerado pelo ngrok, por exemplo: '123456789.ngrok.io'
+    ],
+  },
   plugins: [
     vue(),
     vueDevTools(),
