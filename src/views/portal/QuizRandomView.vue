@@ -80,14 +80,14 @@ const answeredAll = computed(()=> {
 </script>
 <template>
     <MessageGlobal @action="router.push('/portal')" />
-    <section v-if="quizStore.quizBySystem.length == 0" class="h-dvh w-dvw flex justify-center flex-col items-center gap-4">
+    <section v-if="quizStore.quizBySystem.length == 0" class="h-dvh w-dvw flex justify-center flex-col items-center gap-4 sm:text-center">
         <BackButton class="top-14 left-40" />
-        <h1 class=" text-4xl">Quiz não encontrado</h1>
+        <h1 class=" text-4xl sm:text-3xl">Quiz não encontrado</h1>
         <p>Aparentemente não há nenhum quiz cadastrado</p>
     </section>
     <main v-else class="min-h-dvh relative flex flex-col justify-between">
         <section class="fixed w-dvw h-dvh flex justify-center items-center z-40" v-if="answeredAll && keepCompAlive">
-        <div class="absolute bg-white z-40 rounded-md p-5 w-4/12 lg:w-8/12 h-2/6 flex flex-col justify-center gap-10">
+        <div class="absolute bg-white z-40 rounded-md p-5 w-4/12 sm:w-11/12 lg:w-8/12 h-2/6 flex flex-col justify-center gap-10">
 
             <div class="flex w-full justify-center flex-col gap-3">
             <h1  class="text-3xl text-center">Pontuação:</h1>

@@ -62,7 +62,7 @@ const push = async(id) => {
         <div class="md:w-full w-1/2 pb-16 pr-8 relative md:mt-8 text-center">
           <CheckList />
           <div class="absolute top-0 right-0 flex gap-4 items-center">
-            <p class="text-center text-gray-500">
+            <p class="text-center sm:hidden text-gray-500">
               +infomações
             </p>
             <button v-if="!showInfo"  class="bg-[#267A7A] p-2 rounded-full shadow-lg open-icon hover:brightness-90" @click="showInfo = true">

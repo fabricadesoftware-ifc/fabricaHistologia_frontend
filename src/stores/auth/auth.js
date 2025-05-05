@@ -55,6 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
   const logout = () => {
     active.value.user = {};
     localStorage.removeItem('psg_auth_token')
+    localStorage.removeItem('psg_last_login')
     router.push('/')
     active.value.active = false
     setTimeout(()=>{
