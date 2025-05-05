@@ -1,35 +1,25 @@
-# fabricahistologia
+### Default commits
 
-This template should help get you started developing with Vue 3 in Vite.
+Commits should be added by Issues, with the default:
 
-## Recommended IDE Setup
+`<type>(scope): <description> <ref-id>`
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### Default branches
 
-## Customize configuration
+Branches should be added by Issues, always created by __"dev"__, with the default:
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+`<feat>-<issue-id>`
 
-## Project Setup
-
+### Run
+```sh
+git clone https://github.com/fabricadesoftware-ifc/fabricaHistologia_frontend.git
+```
+```sh
+cd fabricaHistologia_frontend
+```
 ```sh
 npm install
 ```
-
-### Compile and Hot-Reload for Development
-
 ```sh
 npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
