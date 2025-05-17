@@ -72,10 +72,10 @@ export const usePostStore = defineStore("post",
             }
         }
 
-        const getPostsByOrganAndType = async (organ_id, type_post) => {
+        const getPostsByOrganAndType = async (organ_id, type_post, specie_id) => {
             state.loading = true;
             try {
-                const response = await PostService.getPostsByOrganAndType(organ_id, type_post)
+                const response = await PostService.getPostsByOrganByTypeAndSpecie(organ_id, type_post, specie_id)
                 state.postsByOrganAndType = response
                 console.log(response)
             } catch (error) {

@@ -1,0 +1,38 @@
+.species-nav {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.species-nav::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.open-comp {
+    animation: open-comp 1 0.3s ease-in-out;
+}
+
+.close-comp {
+    animation: close-comp 1 0.3s ease-in-out;
+}
+
+@keyframes open-comp {
+    from {
+       
+        opacity: 0;
+    }
+    to {
+       
+        opacity: 1;
+    }
+}
+
+@keyframes close-comp {
+    from {
+       
+        opacity: 1;
+    }
+    to {
+       
+        opacity: 0;
+    }
+}

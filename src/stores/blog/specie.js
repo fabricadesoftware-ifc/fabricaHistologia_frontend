@@ -35,6 +35,7 @@ export const useSpecieStore = defineStore("specie",
         });
         const isLoading = computed(() => state.loading);
         const speciesCount = computed(() => state.species.length);
+        const species = computed(() => state.species)
 
         /**
          * Fetches species data.
@@ -111,6 +112,7 @@ export const useSpecieStore = defineStore("specie",
             state,
             isLoading,
             speciesCount,
+            species,
             getSpecies,
             createSpecie,
             updateSpecie,

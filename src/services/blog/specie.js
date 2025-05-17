@@ -12,7 +12,7 @@ class SpecieService {
      */
     async getSpecies() {
         try {
-            const { data } = await api.get(`/species`, {headers: {authorization: `Bearer ${token}`}});
+            const { data } = await api.get(`/species`);
             return data.results;
         } catch (error) {
             console.log("error in getSpecies", error);

@@ -22,6 +22,7 @@ class PostService {
         }
     }
 
+
     async getPostsById(Id) {
         try {
             const { data } = await api.get(`/posts/${Id}/`);
@@ -32,9 +33,9 @@ class PostService {
         }
     }
 
-    async getPostsByOrganAndType(organ_id, type_post) {
+    async getPostsByOrganByTypeAndSpecie(organ_id, type_post, specie_id) {
         try {
-            const {data} = await api.get(`/posts/?organ_id=${organ_id}&species_id=&type_post=${type_post}`);
+            const {data} = await api.get(`/posts/?organ_id=${organ_id}&species_id=${specie_id}&type_post=${type_post}`);
         return data.results
         } catch (error) {
             console.log('Error in getPostsbyOrgan', error);
