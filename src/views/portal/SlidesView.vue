@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { SpecieFilterComponent } from '@/components/index';
 import { useOrganStore, usePostStore, useNavigationStore, useSystemStore, useQuizStore } from '@/stores';
 import { resetAll } from '@/utils/quiz';
 const navigationStore = useNavigationStore()
@@ -38,7 +39,7 @@ const buttons = ref([
 
 onMounted(async()=>{
   await organStore.getOrgansById(organ_id)
-  await postStore.getPostsByOrganAndType(organ_id, 1)
+  await postStore.getPostsByOrganAndType(organ_id, 1, '')
   console.log(system_id)
 })
 
@@ -52,6 +53,7 @@ const push = async(id) => {
 <template>
   <main class=" min-h-screen-minus-80 relative">
     <HeaderPortal class=" " :title="organStore.selectedOrgan.name" />
+    <SpecieFilterComponent class="absolute top right-0 top-0" />
     <div class=" flex justify-center gap-10">
     </div>
     <div class="w-full h-96 flex justify-center items-center flex-col" v-if="postStore.postByOrganAndType.length  == 0">

@@ -45,6 +45,8 @@ import CheckList from '@/components/portal/post/CheckList.vue';
 import PostInfo from '@/components/portal/post/PostInfo.vue';
 import UserInformation from './layout/UserInformation.vue';
 import MessageGlobal from './portal/globals/MessageGlobal.vue';
+import SpecieFilterComponent from './portal/post/SpecieFilterComponent.vue';
+
 export {
   AddInfoGlobal,
   PostInfo,
@@ -81,5 +83,6 @@ export {
   AnswerOptionsQuiz,
   Question,
   UserInformation,
-  MessageGlobal
+  MessageGlobal,
+  SpecieFilterComponent
 };

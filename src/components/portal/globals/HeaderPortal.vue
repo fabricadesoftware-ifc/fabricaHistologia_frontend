@@ -17,7 +17,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <ContainerGlobal class="pt-8 pb-12">
+    <ContainerGlobal class="pt-8 pb-12 relative">
         
         <BackButton />
         <TitleGlobal :content="props.title" :size="props.size" position="justify-center" class="xl:mt-16" />
