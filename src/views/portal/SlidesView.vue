@@ -53,7 +53,9 @@ const push = async(id) => {
 <template>
   <main class=" min-h-screen-minus-80 relative">
     <HeaderPortal class=" " :title="organStore.selectedOrgan.name" />
-    <SpecieFilterComponent class="absolute top right-0 top-0" />
+   
+    <SpecieFilterComponent />
+
     <div class=" flex justify-center gap-10">
     </div>
     <div class="w-full h-96 flex justify-center items-center flex-col" v-if="postStore.postByOrganAndType.length  == 0">

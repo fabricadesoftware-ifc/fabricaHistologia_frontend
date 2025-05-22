@@ -1,5 +1,13 @@
 <script setup>
+import {useAuthStore} from '@/stores'
 import { ContainerGlobal, BackButton, TitleGlobal } from '@/components/index';
+import { UserInformation } from '@/components';
+
+import { useRoute } from 'vue-router';
+
+const router = useRoute()
+const authStore = useAuthStore()
+
 
 const props = defineProps({
     title: {
@@ -17,10 +25,13 @@ const props = defineProps({
 </script>
 
 <template>
-    <ContainerGlobal class="pt-8 pb-12 relative">
+    <ContainerGlobal class="pt-8 pb-12 relative flex justify-between ">
         
-        <BackButton />
+        <BackButton class="w-20" position="relative" />
         <TitleGlobal :content="props.title" :size="props.size" position="justify-center" class="xl:mt-16" />
-        
+    
+        <div class="relative  w-20">
+        <UserInformation  position="absolute" position_directions=" right-0" v-if="authStore.activeUser && router.meta.activeUser" />
+        </div>
     </ContainerGlobal>
 </template>

@@ -11,6 +11,10 @@ const props = defineProps({
     setBackOff: {
         type: Boolean,
         default: false 
+    },
+    position: {
+        type: String,
+        default: 'absolute'
     }
 })
 
@@ -20,7 +24,7 @@ const emits = defineEmits([
 </script>
 
 <template>
-    <span class="flex justify-between items-start w-auto text-base font-poppins absolute cursor-pointer box-back-btn" @click="setBackOff ? emits('navigate') :  navigationStore.navigateBack() ">
+    <span :class="`flex justify-between items-start w-auto ${position} text-base font-poppins cursor-pointer box-back-btn`" @click="setBackOff ? emits('navigate') :  navigationStore.navigateBack() ">
         <button class="bg-transparent border-transparent cursor-pointer" name="back-btn"> 
             <IconBack class="w-6 h-6" />
         </button>
