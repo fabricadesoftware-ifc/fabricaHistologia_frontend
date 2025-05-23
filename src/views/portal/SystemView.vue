@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 import { useSystemStore, useOrganStore } from '@/stores';
 import { 
     HeaderPortal,
@@ -17,7 +17,7 @@ const organStore = useOrganStore()
 const {
      listAnalysis,
      countItems
-} = useGlobalComposable(store.systems, organStore.getOrgansBySystem)
+} = useGlobalComposable(computed(() => store.systems), organStore.getOrgansBySystem)
 
 onMounted(async () => {
     await store.getSystems()

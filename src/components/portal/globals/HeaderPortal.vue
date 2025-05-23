@@ -27,7 +27,9 @@ const props = defineProps({
 <template>
     <ContainerGlobal class="pt-8 pb-12 relative flex justify-between md:hidden">
         
-        <BackButton class="w-20" position="relative" />
+        <div class="relative w-20">
+        <BackButton position="absolute" />
+        </div>
         <TitleGlobal :content="props.title" :size="props.size" position="justify-center" class="xl:mt-16" />
     
         <div class="relative  w-20">
