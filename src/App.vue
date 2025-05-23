@@ -12,5 +12,5 @@ onMounted(async()=> {
 </script>
 
 <template>
-  <RouterView />
+  <RouterView  />
 </template>

@@ -63,7 +63,7 @@ const push = async(id) => {
     <p class="text-xl break-all">Não há nenhuma lâmina registrada no portal</p>
     </div>
     <section v-else>
-    <CardsContainer :gap="'gap-10'" :justify="'justify-start'" class="mb-8 mt-8">
+    <CardsContainer :gap="'gap-10'" :justify="'justify-start'" class="mb-8 mt-8 sm:mt-16">
       <SlideCards :data="postStore.postByOrganAndType" />
     
     </CardsContainer>

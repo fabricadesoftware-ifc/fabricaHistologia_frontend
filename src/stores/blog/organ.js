@@ -49,6 +49,7 @@ export const useOrganStore = defineStore('organ', () => {
     state.value.loading = true
     try {
       state.value.organs = await OrganService.getOrgans()
+      return response
     } catch (error) {
       state.value.error = error
     } finally {

@@ -31,6 +31,7 @@ const counts = reactive({})
 const filterAnalises = async () => {
     for (const item of props.analisys_datas) {
         counts[item.id] = item.data.length
+        console.log(counts)
     }
 }
 
