@@ -22,7 +22,7 @@ const props = defineProps({
             <img :src="props.item.image.url" class="w-[75px] h-[75px] mx-auto mb-4" />
             <span class="text-base font-normal my-4">{{ props.item.name }}</span>
 
-            <p class="text-sm text-gray-500 font-medium">{{ props.count }} Análises</p>
+            <p class="text-sm text-gray-500 font-medium">{{ props.count }} {{ props.count == 1 ? 'Análise' : 'Análises' }}</p>
         </div>
     </router-link>
 </template>
