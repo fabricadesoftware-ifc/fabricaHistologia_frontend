@@ -1,6 +1,6 @@
 <script setup>
-import { onMounted } from 'vue';
-import { useSystemStore } from '@/stores';
+import { onMounted, computed } from 'vue';
+import { useSystemStore, useOrganStore } from '@/stores';
 import { 
     HeaderPortal,
     CardsGlobal,
@@ -9,18 +9,27 @@ import {
     BtnDefault,
     Footer
 } from '@/components';
+import { useGlobalComposable } from '@/composables/global/global';
 
 const store = useSystemStore()
+const organStore = useOrganStore()
 
-onMounted(() => {
-    store.getSystems()
+const {
+     listAnalysis,
+     countItems
+} = useGlobalComposable(computed(() => store.systems), organStore.getOrgansBySystem)
+
+onMounted(async () => {
+    await store.getSystems()
+    await listAnalysis()
 })
+
 </script>
 
 <template>
     <main class=" min-h-screen-minus-80 relative">
     <HeaderPortal class="mt-10" title="Selecione o Sistema" size="text-3xl md:text-center" />
-    <CardsGlobal :gap="'gap-10'" :justify="'justify-start'" :datas="store.systems" />
+    <CardsGlobal :analisys_datas="countItems" :gap="'gap-10'" :justify="'justify-start'" :datas="store.systems" />
     
     <ContainerGlobal class="mt-16 mb-4">
         <AddInfoGlobal :link="'/portal/quiz/'" :datas="{}" />

@@ -8,6 +8,15 @@ import { VitePWA } from 'vite-plugin-pwa';
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/',
+   server: {
+    host: true,      // permite acesso pela rede (0.0.0.0)
+    port: 3000,      // porta que o Vite vai rodar (exemplo 3000)
+    strictPort: true, // erro se a porta estiver ocupada
+    allowedHosts: [
+      'a0cd-187-99-114-170.ngrok-free.app',  // coloque o host do seu ngrok aqui
+      // você pode adicionar mais hosts se quiser
+    ]
+  },
   plugins: [
     vue(),
     vueDevTools(),

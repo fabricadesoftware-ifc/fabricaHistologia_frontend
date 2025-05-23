@@ -1,8 +1,9 @@
 <script setup>
 import {onMounted, watch, ref, computed} from 'vue'
-import { useSpecieStore } from '@/stores'
+import { useSpecieStore, useAuthStore } from '@/stores'
 import { useSpeciesFilter } from '@/composables/filter/species'
 const speciesStore = useSpecieStore()
+const authStore = useAuthStore()
 
 onMounted(async()=> {
     if (speciesStore.speciesCount == 0) {
@@ -43,12 +44,12 @@ watch(
 </script>
 <template>
 
-        <div @click="activated ? setTime(false) : setTime(true)" :class="`flex select-none gap-2 absolute z-[999999999] top-10 right-14 ${delayActive ? 'text-[#267A7A]' : 'text-[#000]'}`"><span class="mdi mdi-filter-cog"></span><p class="font-semibold">Filtro</p></div>
+        <div @click="activated ? setTime(false) : setTime(true)" :class="`flex select-none gap-2 right-40 absolute z-[999999999] cursor-pointer  ${delayActive ? 'text-[#267A7A]' : 'text-[#000]'}`"><span class="mdi mdi-filter-cog"></span><p class="font-semibold">Filtro</p></div>
 
-    <section v-if="activated" class="w-[324px] bg-white z-[9999] select-none h-auto max-h-[464px] border-[1.8px] flex flex-col gap-2 rounded-2xl absolute  border-zinc-300 top-8 right-10" :class="delayActive ? 'open-comp' : 'close-comp'">
-        <div class="w-full items-start flex justift-start p-3">
+    <section v-if="activated" class="w-[324px] bg-white z-[9999] select-none h-auto max-h-[464px] border-[1.8px] flex flex-col gap-2 rounded-2xl absolute border-zinc-300 sm:right-8 mt-[-10px] right-36" :class="delayActive ? 'open-comp' : 'close-comp'">
+        <div class="w-full items-start sm:justify-center flex justift-start p-3">
             
-        <p class=" font-semibold text-sm ">Filtre por Espécies</p>
+        <p class=" font-semibold text-sm sm:mt-10 ">Filtre por Espécies</p>
         </div>
 
         <div class="flex justify-center items-center mt-1 h-14 w-full">
