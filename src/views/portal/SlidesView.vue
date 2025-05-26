@@ -53,7 +53,9 @@ const push = async(id) => {
 <template>
   <main class=" min-h-screen-minus-80 relative">
     <HeaderPortal class=" " :title="organStore.selectedOrgan.name" />
-    <SpecieFilterComponent class="absolute top right-0 top-0" />
+   
+    <SpecieFilterComponent />
+
     <div class=" flex justify-center gap-10">
     </div>
     <div class="w-full h-96 flex justify-center items-center flex-col" v-if="postStore.postByOrganAndType.length  == 0">
@@ -61,7 +63,7 @@ const push = async(id) => {
     <p class="text-xl break-all">Não há nenhuma lâmina registrada no portal</p>
     </div>
     <section v-else>
-    <CardsContainer :gap="'gap-10'" :justify="'justify-start'" class="mb-8 mt-8">
+    <CardsContainer :gap="'gap-10'" :justify="'justify-start'" class="mb-8 mt-8 sm:mt-16">
       <SlideCards :data="postStore.postByOrganAndType" />
     
     </CardsContainer>

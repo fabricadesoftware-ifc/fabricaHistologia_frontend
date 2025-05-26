@@ -1,11 +1,11 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import router from '@/router';
-import { useOrganStore, useSystemStore, useSupportingStore } from '@/stores';
+import { useOrganStore, useSystemStore, useSupportingStore, usePostStore } from '@/stores';
 import { HeaderPortal, CardsGlobal, ContainerGlobal, AddInfoGlobal, BtnDefault, Footer  } from '@/components';
 import { useQuizStore } from '@/stores/blog/quiz';
 import { resetAll } from '@/utils/quiz';
+import { useGlobalComposable } from '@/composables/global/global';
 const quizStore = useQuizStore()
 
 const route = useRoute();
@@ -13,6 +13,12 @@ const id = route.params.id;
 const organStore = useOrganStore()
 const systemStore = useSystemStore()
 const supportingStore = useSupportingStore()
+const postStore = usePostStore()
+
+const { listAnalysis, countItems } = useGlobalComposable(
+  computed(() => organStore.organsBySystem),
+  postStore.getPostsByOrgan
+)
 
 const additionalData = ref([
     {title: 'Aulas', material: []},
@@ -33,6 +39,7 @@ onMounted(async () => {
     await systemStore.getSystemById(id)
     await supportingStore.getMaterialsBySystem(id)
     setAdditionalInfo.value
+    await listAnalysis()
     
 })
 
@@ -49,7 +56,7 @@ const push = async(id) => {
 <template>
     <main class=" min-h-screen-minus-80 relative">
     <HeaderPortal class="mt-10" :title="systemStore.selectedSystem.name" size="text-3xl md:text-center" />
-    <CardsGlobal :justify="'start'" :datas="organStore.organsBySystem" context="organ" />
+    <CardsGlobal :analisys_datas="countItems" :justify="'start'" :datas="organStore.organsBySystem" context="organ" />
     <ContainerGlobal class="mt-16 ">
         <AddInfoGlobal :data='additionalData' />
         <div class="my-10">
