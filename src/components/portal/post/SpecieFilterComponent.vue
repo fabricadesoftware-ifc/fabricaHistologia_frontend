@@ -22,7 +22,7 @@ const {
     setInitialSpecies,
     setTime,
     searchSpecies,
-} = useSpeciesFilter(speciesStore.species, search.value)
+} = useSpeciesFilter(speciesStore.species)
 
 const filteredSpecies = computed(() => searchSpecies(search.value))
 

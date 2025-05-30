@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { SpecieFilterComponent } from '@/components/index';
 import { useOrganStore, usePostStore, useNavigationStore, useSystemStore, useQuizStore } from '@/stores';
@@ -30,13 +30,19 @@ const buttons = ref([
 const selectPostType = (item) => {
   for (let state of buttons.value) {
     state.selected = !state.selected
+    postStore.typeSelection = state.post
   }
   postStore.getPostsByOrganAndType(organ_id, item.post, '')
 }
 
+watch(()=> buttons.value.find((s) => s.selected == true).post, (newVal) => {
+  postStore.typeSelection = newVal
+})
+
 onMounted(async()=>{
   await organStore.getOrgansById(organ_id)
   await postStore.getPostsByOrganAndType(organ_id, 1, '')
+  postStore.typeSelection = 1
 })
 
 const push = async(id) => {

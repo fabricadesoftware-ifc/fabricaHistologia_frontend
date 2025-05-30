@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, reactive } from "vue";
+import { computed, reactive, ref } from "vue";
 import { PostService } from "@/services";
 
 /**
@@ -41,6 +41,8 @@ export const usePostStore = defineStore("post",
         const postByOrganAndType = computed(()=> state.postsByOrganAndType)
         const selectedPost = computed(() => state.selectedPost)
         const postsByOrgan = computed(() => state.postsByOrgan)
+
+        const typeSelection = ref(1)
 
         /**
          * Fetches post data.
@@ -164,6 +166,7 @@ export const usePostStore = defineStore("post",
             postByOrganAndType,
             selectedPost,
             postsByOrgan,
+            typeSelection,
             getPosts,
             getPostsByOrganAndType,
             getPostsByOrgan,

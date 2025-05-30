@@ -20,6 +20,7 @@ export function useSpeciesFilter(initialSpecies) {
 
   
   const setSelectedSpecie = (specie) => {
+
     if (selectedSpecie.value) {
       species.value.push(selectedSpecie.value)
     }
@@ -29,7 +30,7 @@ export function useSpeciesFilter(initialSpecies) {
       species.value.splice(index, 1)
     }
 
-    postStore.getPostsByOrganAndType(organId, 1, selectedSpecie.value.id)
+    postStore.getPostsByOrganAndType(organId, postStore.typeSelection, selectedSpecie.value.id)
         console.log(postStore.postByOrganAndType)
 
   }
@@ -38,7 +39,7 @@ export function useSpeciesFilter(initialSpecies) {
     if (selectedSpecie.value) {
       species.value.push(selectedSpecie.value)
       selectedSpecie.value = null
-      postStore.getPostsByOrganAndType(organId, 1, '')
+      postStore.getPostsByOrganAndType(organId, postStore.typeSelection, '')
     }
 }
 
