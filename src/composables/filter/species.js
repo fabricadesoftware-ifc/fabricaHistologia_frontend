@@ -6,11 +6,13 @@ export function useSpeciesFilter(initialSpecies) {
   const postStore = usePostStore()
   const route = useRoute()
   const organId = route.params.id
-  const species = ref([...initialSpecies])
+  const species = ref([])
   const selectedSpecie = ref(null)
   const delayActive = ref(false)
   const activated = ref(false)
   const filteredSpecies = ref(null)
+
+  if (initialSpecies) species.value = [...initialSpecies]
 
   function setInitialSpecies(initialSpecies) {
     species.value = [...initialSpecies]

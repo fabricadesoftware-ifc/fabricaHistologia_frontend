@@ -38,6 +38,7 @@ watch(() => props.analisys_datas, filterAnalises, {immediate: true, deep: true})
 
 onMounted(async ()=> {
       await filterAnalises()
+      console.log(counts)
 })
 </script>
 

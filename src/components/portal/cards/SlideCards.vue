@@ -23,7 +23,7 @@ const props = defineProps({
           <div class="w-full h-2/6 flex items-center">
             <ul class="flex list-none w-full justify-around text-white font- gap-3 text-xs"> 
               <li
-                class="bg-green-600 overflow-hidden max-w-24 max-h-[25px] text-white px-1 py-1 rounded-lg flex items center justify-start"
+                class="bg-green-600 overflow-hidden max-h-[25px] text-white px-1 py-1 rounded-lg flex items center justify-start"
               >
                 <p class="">{{ item.species.name }}</p>
               </li>

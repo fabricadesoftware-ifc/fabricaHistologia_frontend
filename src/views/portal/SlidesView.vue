@@ -19,8 +19,10 @@ const postStore = usePostStore()
 const quizStore = useQuizStore()
 const router = useRoute()
 const routerUse = useRouter()
+
 const organ_id = router.params.id
 const system_id = systemStore.selectedSystem.id
+const specieFilterRef = ref(null)
 
 const buttons = ref([
   {text: 'Histologia', selected: true, post: 1},
@@ -33,6 +35,7 @@ const selectPostType = (item) => {
     postStore.typeSelection = state.post
   }
   postStore.getPostsByOrganAndType(organ_id, item.post, '')
+  specieFilterRef.value?.clearFilters()
 }
 
 watch(()=> buttons.value.find((s) => s.selected == true).post, (newVal) => {
@@ -56,7 +59,7 @@ const push = async(id) => {
   <main class=" min-h-screen-minus-80 relative">
     <HeaderPortal :title="organStore.selectedOrgan.name" />
    
-    <SpecieFilterComponent />
+    <SpecieFilterComponent ref="specieFilterRef" />
 
      <div class=" flex justify-center gap-10">
       <p @click="selectPostType(button)" :class="button.selected ? 'text-[#267A7A] text-[18px] font-semibold selectedType' : ' hover:opacity-75' + ' duration-200 ease-in-out cursor-pointer'" v-for="(button, index) in buttons" :key="index" >{{ button.text }}</p>
