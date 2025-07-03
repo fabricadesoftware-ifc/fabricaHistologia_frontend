@@ -47,6 +47,10 @@ import UserInformation from './layout/UserInformation.vue';
 import MessageGlobal from './portal/globals/MessageGlobal.vue';
 import SpecieFilterComponent from './portal/post/SpecieFilterComponent.vue';
 
+//admin
+import NavLateralAdmin from '@/components/admin/navbar/NavLateralAdmin.vue';
+import NavLateralReponsive from './admin/navbar/NavLateralReponsive.vue';
+
 export {
   AddInfoGlobal,
   PostInfo,
@@ -84,5 +88,7 @@ export {
   Question,
   UserInformation,
   MessageGlobal,
-  SpecieFilterComponent
+  SpecieFilterComponent,
+  NavLateralAdmin,
+  NavLateralReponsive,
 };
