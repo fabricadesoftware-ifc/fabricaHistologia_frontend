@@ -50,6 +50,8 @@ import SpecieFilterComponent from './portal/post/SpecieFilterComponent.vue';
 //admin
 import NavLateralAdmin from '@/components/admin/navbar/NavLateralAdmin.vue';
 import NavLateralReponsive from './admin/navbar/NavLateralReponsive.vue';
+import NavbarAdminUser from './admin/navbar/NavbarAdminUser.vue';
+import NavbarAdminMenu from './admin/navbar/NavbarAdminMenu.vue';
 
 export {
   AddInfoGlobal,
@@ -91,4 +93,6 @@ export {
   SpecieFilterComponent,
   NavLateralAdmin,
   NavLateralReponsive,
+  NavbarAdminUser,
+  NavbarAdminMenu,
 };
