@@ -52,6 +52,7 @@ import NavLateralAdmin from '@/components/admin/navbar/NavLateralAdmin.vue';
 import NavLateralReponsive from './admin/navbar/NavLateralReponsive.vue';
 import NavbarAdminUser from './admin/navbar/NavbarAdminUser.vue';
 import NavbarAdminMenu from './admin/navbar/NavbarAdminMenu.vue';
+import NavbarDropdown from './admin/navbar/NavbarDropdown.vue';
 
 export {
   AddInfoGlobal,
@@ -95,4 +96,5 @@ export {
   NavLateralReponsive,
   NavbarAdminUser,
   NavbarAdminMenu,
+  NavbarDropdown,
 };
