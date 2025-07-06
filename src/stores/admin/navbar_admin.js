@@ -8,6 +8,8 @@ import ImageUser from '@/assets/images/admin/users-svgrepo-com.svg'
 import ImageTest from '@/assets/images/admin/test-svgrepo-com.svg'
 import ImagePet from '@/assets/images/admin/pet-svgrepo-com.svg'
 import ImageSystem from '@/assets/images/admin/dog-svgrepo-com.svg'
+import ImageLogout from '@/assets/images/admin/logout-svgrepo-com.svg'
+import ImageReturn from '@/assets/images/admin/arrow-back-svgrepo-com.svg'
 
 export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
   const isMobile = ref(false)
@@ -16,6 +18,8 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
 
   const router = useRouter()
   const route = useRoute()
+
+  //NavbarAdminMenu.vue
 
   const menuSections = ref([
     {
@@ -47,20 +51,41 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
     }
   ])
 
-  function checkIsMobile() {
-    isMobile.value = window.innerWidth <= 1150
+    function navigateTo(to) {
+    open.value = false
+    router.push(to)
   }
 
-  function initResizeListener() {
-    onMounted(() => {
-      checkIsMobile()
-      window.addEventListener('resize', checkIsMobile)
-    })
-
-    onUnmounted(() => {
-      window.removeEventListener('resize', checkIsMobile)
-    })
+  function isCurrent(path) {
+    return route.path === path
   }
+
+  //NavbarAdminUser.vue
+
+  //NavbarDropdown.vue
+
+    const dropdownSections = ref([
+  {
+    title: 'Usuário',
+    items: [
+      {
+        label: 'Logout',
+        icon: ImageLogout,
+        event: 'logout'
+      }
+    ]
+  },
+  {
+    title: 'Site',
+    items: [
+      {
+        label: 'Voltar ao site',
+        icon: ImageReturn,
+        to: '/' // modifique para o caminho correto do site
+      }
+    ]
+  }
+  ])
 
   function toggleDropdown() {
     isDropdownOpen.value = !isDropdownOpen.value
@@ -74,7 +99,11 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
     isDropdownOpen.value = false
   }
 
-  function toggleMenu() {
+  //NavLateralAdmin.vue
+
+  //NavLateralResponsive.vue
+
+    function toggleMenu() {
     open.value = !open.value
   }
 
@@ -86,13 +115,20 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
     open.value = false
   }
 
-  function navigateTo(to) {
-    open.value = false
-    router.push(to)
+
+  function checkIsMobile() {
+    isMobile.value = window.innerWidth <= 1150
   }
 
-  function isCurrent(path) {
-    return route.path === path
+  function initResizeListener() {
+    onMounted(() => {
+      checkIsMobile()
+      window.addEventListener('resize', checkIsMobile)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', checkIsMobile)
+    })
   }
 
   return {
@@ -110,5 +146,6 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
     closeMenu,
     navigateTo,
     isCurrent,
+    dropdownSections,
   }
 })

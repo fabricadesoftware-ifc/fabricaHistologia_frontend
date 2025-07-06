@@ -12,7 +12,7 @@ const store = useNavBarAdminStore()
 
   <transition name="slide">
     <aside v-if="store.open" class="responsive-aside min-h-screen bg-gray-100 shadow-md p-5 flex flex-col gap-8">
-      <button @click="store.closeMenu" aria-label="Close Menu" class="absolute z-50 top-4 left-4 text-xl">✕</button>
+      <button @click="store.closeMenu" aria-label="Close Menu" class="absolute z-50 top-4 left-4 text-xl"><img src="@/assets/images/icons/close.svg" alt="Fechar" class="w-5 h-5 object-contain" /></button>
 
       <div class="flex justify-start py-8">
         <div class="max-w-xs w-full">
@@ -49,7 +49,7 @@ const store = useNavBarAdminStore()
   width: 100%;
   max-width: 100%;
   min-height: 100dvh;
-  overflow-y: auto; /* permite scroll vertical se conteúdo for maior que a tela */
+  overflow-y: auto;
   z-index: 40;
 }
 
