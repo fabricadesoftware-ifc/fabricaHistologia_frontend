@@ -19,7 +19,11 @@ const store = useNavBarAdminStore()
           class="text-gray-400 hover:text-gray-600 focus:outline-none"
           type="button"
         >
-          ✕
+          <img
+            src="@/assets/images/icons/close.svg"
+            alt="Fechar"
+            class="w-5 h-5 object-contain"
+          />
         </button>
       </div>
 
@@ -30,7 +34,12 @@ const store = useNavBarAdminStore()
           class="flex items-center gap-2 text-gray-700 hover:text-black hover:bg-gray-100 w-full text-left px-2 py-1 rounded-md"
           type="button"
         >
-          🚪 <span>Logout</span>
+          <img
+            src="@/assets/images/admin/logout-svgrepo-com.svg"
+            alt="Logout"
+            class="w-4 h-4 object-contain"
+          />
+          <span>Logout</span>
         </button>
       </div>
     </div>

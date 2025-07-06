@@ -1,7 +1,13 @@
-// stores/userMenuStore.js
 import { defineStore } from 'pinia'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import imageBone from '@/assets/images/admin/bone-svgrepo-com.svg'
+import ImageLamina from '@/assets/images/admin/microscope-svgrepo-com.svg'
+import ImageDocument from '@/assets/images/admin/document-svgrepo-com.svg'
+import ImageUser from '@/assets/images/admin/users-svgrepo-com.svg'
+import ImageTest from '@/assets/images/admin/test-svgrepo-com.svg'
+import ImagePet from '@/assets/images/admin/pet-svgrepo-com.svg'
+import ImageSystem from '@/assets/images/admin/dog-svgrepo-com.svg'
 
 export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
   const isMobile = ref(false)
@@ -15,28 +21,28 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
     {
       title: 'Portal',
       items: [
-        { label: 'Órgãos', icon: '🦴', to: '/orgaos' },
-        { label: 'Lâminas', icon: '🧬', to: '/laminas' },
-        { label: 'Espécies', icon: '🐾', to: '/especies' },
-        { label: 'Sistemas', icon: '🦻', to: '/sistemas' }
+        { label: 'Órgãos', icon: imageBone, to: '/orgaos' },
+        { label: 'Lâminas', icon: ImageLamina, to: '/laminas' },
+        { label: 'Espécies', icon: ImagePet, to: '/especies' },
+        { label: 'Sistemas', icon: ImageSystem, to: '/sistemas' }
       ]
     },
     {
       title: 'Usuários',
       items: [
-        { label: 'Usuários', icon: '👥', to: '/usuarios' }
+        { label: 'Usuários', icon: ImageUser, to: '/usuarios' }
       ]
     },
     {
       title: 'Quiz',
       items: [
-        { label: 'Perguntas', icon: '📋', to: '/perguntas' }
+        { label: 'Perguntas', icon: ImageTest, to: '/perguntas' }
       ]
     },
     {
       title: 'Material de Suporte',
       items: [
-        { label: 'Conteúdos', icon: '📄', to: '/conteudos' }
+        { label: 'Conteúdos', icon: ImageDocument, to: '/conteudos' }
       ]
     }
   ])

@@ -19,9 +19,15 @@ function handleClick(to) {
           <a
             href="#"
             @click.prevent="handleClick(item.to)"
-            :class="[ store.isCurrent(item.to) ? 'text-blue-600 font-semibold' : 'text-gray-700 hover:text-black', 'flex items-center gap-2']"
+            :class="[
+              store.isCurrent(item.to)
+                ? 'text-blue-600 font-semibold'
+                : 'text-gray-700 hover:text-black',
+              'flex items-center gap-2'
+            ]"
           >
-            {{ item.icon }} <span>{{ item.label }}</span>
+            <img :src="item.icon" alt="Icone de {{ item.label }}" class="w-4 h-4 object-contain" />
+            <span>{{ item.label }}</span>
           </a>
         </li>
       </ul>
