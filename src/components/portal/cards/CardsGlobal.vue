@@ -31,14 +31,14 @@ const counts = reactive({})
 const filterAnalises = async () => {
     for (const item of props.analisys_datas) {
         counts[item.id] = item.data.length
-        console.log(counts)
-    }
+    }   
 }
 
 watch(() => props.analisys_datas, filterAnalises, {immediate: true, deep: true})
 
 onMounted(async ()=> {
       await filterAnalises()
+      console.log(counts)
 })
 </script>
 
