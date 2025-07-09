@@ -25,9 +25,9 @@ const nextSection = async () => {
 
 const setId = (index) => {
 
-    actual.value = quizStore.quizBySystem[index].id
+    actual.value = quizStore.quizBySystem[index]?.id
     quizStore.getAnswersByQuestion(actual.value)
-   
+  
 }
 
 const previousSection = () => {
@@ -47,12 +47,12 @@ onMounted(async()=>{
   resetAll(quizStore)
   await quizStore.getQuizBySystem(id, '')
   await quizStore.getAnswersByQuestion(currentQuestion.value)
-  setId(0)
+  setId(currentQuestion.value ?? 0)
   
 
   } else {
   await quizStore.getAnswersByQuestion(currentQuestion.value)
-  setId(0)
+  setId(currentQuestion.value ?? 0)
   
 }
 })
