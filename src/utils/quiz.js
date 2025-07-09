@@ -18,7 +18,7 @@ export const verifyManyQuiz = () => {
 
 export const throwQuizes = () => {
     const quizCount = verifyManyQuiz()
-    quizStore.state.quizBySystem = quizStore.state.quizBySystem.slice(0, quizCount).sort(()=> Math.random() - 0.5)
+    quizStore.state.quizBySystem = quizStore?.state?.quizBySystem.slice(0, quizCount).sort(()=> Math.random() - 0.5)
     console.log(quizStore.quizBySystem)
   
  
