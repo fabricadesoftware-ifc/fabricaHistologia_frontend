@@ -19,6 +19,18 @@ const router = createRouter({
       component: () => import('@/views/auth/LoginView.vue')
     },
     {
+      path: '/admin',
+      name: 'admin',
+      meta: {activeUser: true},
+      children: [
+         {
+          path: '',
+          name: 'admin-home', 
+          component: () => import('@/views/admin/HomeView.vue')
+        },
+      ]
+    },
+    {
       path: '/portal',
       name: 'portal',
       meta: {activeUser: true},
