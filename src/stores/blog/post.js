@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, reactive } from "vue";
+import { computed, reactive, ref } from "vue";
 import { PostService } from "@/services";
 
 /**
@@ -29,6 +29,7 @@ export const usePostStore = defineStore("post",
         const state = reactive({
             posts: [],
             postsByOrganAndType: [],
+            postsByOrgan: [],
             selectedPost: null,
             loading: false,
             error: null,
@@ -39,6 +40,9 @@ export const usePostStore = defineStore("post",
         const postCount = computed(() => state.posts.length);
         const postByOrganAndType = computed(()=> state.postsByOrganAndType)
         const selectedPost = computed(() => state.selectedPost)
+        const postsByOrgan = computed(() => state.postsByOrgan)
+
+        const typeSelection = ref(1)
 
         /**
          * Fetches post data.
@@ -72,12 +76,26 @@ export const usePostStore = defineStore("post",
             }
         }
 
-        const getPostsByOrganAndType = async (organ_id, type_post) => {
+        const getPostsByOrgan = async (organId) => {
             state.loading = true;
             try {
-                const response = await PostService.getPostsByOrganAndType(organ_id, type_post)
+                const response = await PostService.getPostsByOrganId(organId)
+                state.postsByOrgan = response
+                return response
+            } catch (error) {
+                state.error = error
+            } finally {
+                state.loading = false
+                state.connection = true
+            }
+        }
+
+        const getPostsByOrganAndType = async (organ_id, type_post, specie_id) => {
+            state.loading = true;
+            try {
+                const response = await PostService.getPostsByOrganByTypeAndSpecie(organ_id, type_post, specie_id)
                 state.postsByOrganAndType = response
-                console.log(response)
+                return response
             } catch (error) {
                 state.error = error
             } finally {
@@ -147,8 +165,11 @@ export const usePostStore = defineStore("post",
             posts,
             postByOrganAndType,
             selectedPost,
+            postsByOrgan,
+            typeSelection,
             getPosts,
             getPostsByOrganAndType,
+            getPostsByOrgan,
             getPostsById,
             createPost,
             updatePosts,
