@@ -52,12 +52,14 @@ import NavLateralAdmin from '@/components/admin/navbar/NavLateralAdmin.vue';
 import NavLateralReponsive from './admin/navbar/NavLateralReponsive.vue';
 import NavbarAdminUser from './admin/navbar/NavbarAdminUser.vue';
 import NavbarAdminMenu from './admin/navbar/NavbarAdminMenu.vue';
-import NavbarDropdown from './admin/navbar/NavbarDropdown.vue';
+
 import TableFilterCard from './admin/filter/TableFilterCard.vue';
 import TableFilterContainer from './admin/filter/TableFilterContainer.vue';
 import NavigationAdminFilterButton from './admin/filter/controler/NavigationAdminFilterButton.vue';
 import SearchAdminFilter from './admin/filter/controler/SearchAdminFilter.vue';
+import NavbarDropdown from './admin/dropdown/NavbarDropdown.vue';
 import ButtonActionAdmin from './admin/buttons/ButtonActionAdmin.vue';
+import ButtonDropdown from './admin/dropdown/ButtonDropdown.vue';
 
 export {
   AddInfoGlobal,
@@ -106,5 +108,6 @@ export {
   TableFilterContainer,
   NavigationAdminFilterButton,
   SearchAdminFilter,
-  ButtonActionAdmin
+  ButtonActionAdmin,
+  ButtonDropdown
 };
