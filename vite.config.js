@@ -53,6 +53,36 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
+      workbox: {
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
+        runtimeCaching: [
+          {
+            urlPattern: ({request}) => request.destination = 'image',
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'images-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 7,
+              }
+            }
+          },
+          {
+            urlPattern: ({url}) => url.pathname.startsWith('/'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pages-cache',
+              networkTimeoutSeconds: 10,
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24,
+              }
+            }
+          }
+        ]
+      }
     }),
   ],
   resolve: {
