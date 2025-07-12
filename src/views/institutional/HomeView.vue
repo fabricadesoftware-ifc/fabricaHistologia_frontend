@@ -6,6 +6,8 @@ import {
 </script>
 
 <template>
+  <div class="flex">
+  </div>
     <main class="w-dvw h-dvh relative bg-cover bg-top flex justify-center items-center sm:flex-col sm:justify-normal bg-main-image">
       <div class="absolute w-dvw h-dvh z-0 overlay"></div> 
       <NavbarHome />
