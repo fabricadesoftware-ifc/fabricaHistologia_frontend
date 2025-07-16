@@ -1,9 +1,14 @@
 <script setup>
 import {TableFilterContainer, TableFilterCard} from '@/components/index';
-import { generalFilterData, changeActive } from '@/stores/admin/filter_admin';
+import { useAdmin } from '@/stores/admin/filter_admin';
+
+const {
+    generalFilterData, 
+    changeActive
+} = useAdmin()
 </script>
 <template>
-    <TableFilterContainer class="mx-auto" :amount="generalFilterData.length">
+    <TableFilterContainer :amount="generalFilterData.length">
         <TableFilterCard @change="changeActive(index, generalFilterData)" :active="i.active" :filter="i" v-for="(i, index) in generalFilterData" />
     </TableFilterContainer>
 
