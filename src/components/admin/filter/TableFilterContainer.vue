@@ -1,6 +1,8 @@
 <script setup>
-import { computed, ref } from 'vue'
-import { generalFilterData } from '@/stores/admin/filter_admin';
+import { computed, ref } from 'vue';
+
+import { useAdmin } from '@/stores/admin/filter_admin';
+
 
 const props = defineProps({
   amount: {
@@ -8,9 +10,22 @@ const props = defineProps({
   }
 })
 
+const {
+    generalFilterData, 
+    handleFilterAction,
+} = useAdmin()
+
 const margin = ref(0)
 const step = 85
-const maxRightMargin = computed(() => (props.amount)  * step)
+const width = window.innerWidth
+const maxRightMargin = computed(() => {
+  if (width > 1630) {
+   return ((props.amount)  * step) - 400
+  } else {
+    console.log(margin.value, (props.amount)  * 120)
+   return ((props.amount)  * 120)
+  }
+  })
 
 const activeSearch = ref(false)
 
@@ -30,9 +45,9 @@ const returnMargin = computed(() => `-${margin.value}px`)
 </script>
 
 <template>
-  <div class="relative flex h-14 overflow-hidden w-[80%] items-center">
-  <div class="flex items-center gap-5 relative max-w-[95%] overflow-hidden z-50 sm:hidden">
-     <div v-show="margin >= 200" class="h-full w-60 absolute left-0 top-0 bg-gradient-to-r duration-150 from-white to-transparent z-40"></div>
+  <div class="relative flex h-14 overflow-hidden w-[80%] mx-auto items-center">
+  <div class="flex items-center gap-5 relative max-w-[95%] overflow-hidden z-50 lg:hidden">
+     <div v-show="margin >= 200" class="h-full w-60 absolute left-0 top-0 md:bg-white md:opacity-60 md:w-20 bg-gradient-to-r duration-150 from-white to-transparent z-40"></div>
 
     <!-- Botão de navegação -->
     <span v-show="margin >= 200"
@@ -50,10 +65,10 @@ const returnMargin = computed(() => `-${margin.value}px`)
     </div>
 
     <!-- Gradiente (efeito visual) -->
-    <div v-show="maxRightMargin - 400 >= margin" class="h-full w-60 absolute right-0 top-0 bg-gradient-to-l duration-150 from-white to-transparent z-40"></div>
+    <div v-show="maxRightMargin >= margin" class="h-full md:bg-white md:opacity-60 md:w-20 w-60 absolute right-0 top-0 bg-gradient-to-l duration-150 from-white to-transparent z-40"></div>
 
     <!-- Botão de navegação -->
-    <span v-show="maxRightMargin - 400 >= margin"
+    <span v-show="maxRightMargin >= margin"
       @click="goDirection('right')"
       class="w-[30px] h-[30px] bg-green-50 active:scale-110 absolute right-5 z-50 hover:scale-105 duration-150 cursor-pointer flex items-center justify-center"
     >
@@ -62,9 +77,9 @@ const returnMargin = computed(() => `-${margin.value}px`)
 
   </div>
 
-  <div class="z-50 invisible sm:visible">
-    <select class="rounded-md bg-white border text-gray-700" >  
-      <option v-for="i in generalFilterData" value="">{{ i.nome }}</option>
+  <div class="z-50 invisible lg:visible">
+    <select @change="handleFilterAction($event.target.value)" class="rounded-md bg-white border text-gray-700" >  
+      <option v-for="i in generalFilterData"  >{{ i.nome }}</option>
     </select>
   </div>
 
@@ -81,6 +96,14 @@ const returnMargin = computed(() => `-${margin.value}px`)
     </div>
     
 
-    </div>
+  </div>
+
+  <div @click="activeSearch = !activeSearch" v-if="activeSearch" class="w-dvw inset-0 z-30 h-dvh absolute top-0 left-0"></div>
     
 </template>
+
+<style scoped>
+input::placeholder {
+  color: white;
+}
+</style>
