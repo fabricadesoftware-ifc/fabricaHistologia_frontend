@@ -57,6 +57,8 @@ import TableFilterCard from './admin/filter/TableFilterCard.vue';
 import TableFilterContainer from './admin/filter/TableFilterContainer.vue';
 import NavigationAdminFilterButton from './admin/filter/controler/NavigationAdminFilterButton.vue';
 import SearchAdminFilter from './admin/filter/controler/SearchAdminFilter.vue';
+import ButtonActionAdmin from './admin/buttons/ButtonActionAdmin.vue';
+import ButtonDropdown from './admin/dropdown/ButtonDropdown.vue';
 
 export {
   AddInfoGlobal,
@@ -105,4 +107,6 @@ export {
   TableFilterContainer,
   NavigationAdminFilterButton,
   SearchAdminFilter
+  ButtonActionAdmin,
+  ButtonDropdown
 };

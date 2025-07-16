@@ -31,6 +31,18 @@ const router = createRouter({
       ]
     },
     {
+      path: '/orgaos',
+      name: 'orgaos',
+      meta: {activeUser: true},
+      component: () => import('@/views/teste/Orgao.vue')
+    },
+    {
+    path: '/laminas',
+    name: 'laminas',
+    meta: {activeUser: true},
+    component: () => import('@/views/teste/Lamina.vue')
+    },
+    {
       path: '/portal',
       name: 'portal',
       meta: {activeUser: true},
