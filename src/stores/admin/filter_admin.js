@@ -29,7 +29,7 @@ export function useAdmin() {
 
 const handleFilterAction = (item) => {
   
-  switch (item.nome) {
+  switch (item) {
     case 'Geral':
       // ação para Geral
       break;
@@ -69,7 +69,7 @@ const handleFilterAction = (item) => {
       // ação para Documentos
       break;
     default:
-      console.log(`Filtro desconhecido: ${item.nome}`)
+      console.log(`Filtro desconhecido: ${item}`)
       break;
   }
 }
@@ -81,12 +81,14 @@ const changeActive = (index, itens) => {
     })
 
     itens[index].active = true 
-    handleFilterAction(itens[index])
+    handleFilterAction(itens[index].nome)
 }
+
+const activeSearch = ref(false)
 
 
 return {
-  generalFilterData, changeActive, handleFilterAction
+  generalFilterData, changeActive, handleFilterAction, activeSearch
 }
 }
 
