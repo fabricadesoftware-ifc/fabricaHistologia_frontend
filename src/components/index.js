@@ -55,6 +55,11 @@ import NavbarAdminMenu from './admin/navbar/NavbarAdminMenu.vue';
 import NavbarDropdown from './admin/dropdown/NavbarDropdown.vue';
 import ButtonActionAdmin from './admin/buttons/ButtonActionAdmin.vue';
 import ButtonDropdown from './admin/dropdown/ButtonDropdown.vue';
+import InputDateAdmin from './admin/input/InputDateAdmin.vue';
+import InputImageAdmin from './admin/input/InputImageAdmin.vue';
+import InputSelectAdmin from './admin/input/InputSelectAdmin.vue';
+import InputStringAdmin from './admin/input/InputStringAdmin.vue';
+
 
 export {
   AddInfoGlobal,
@@ -100,5 +105,9 @@ export {
   NavbarAdminMenu,
   NavbarDropdown,
   ButtonActionAdmin,
-  ButtonDropdown
+  ButtonDropdown,
+  InputDateAdmin,
+  InputImageAdmin,
+  InputSelectAdmin,
+  InputStringAdmin,
 };
