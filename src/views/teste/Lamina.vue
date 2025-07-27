@@ -1,16 +1,44 @@
 <script setup>
+import { ref } from 'vue'
 import {
-  TitleHome,
-  NavbarHome,
   NavLateralAdmin,
-  ButtonActionAdmin
+  ButtonActionAdmin,
+  InputDateAdmin,
+  InputImageAdmin,
+  InputSelectAdmin,
+  InputStringAdmin,
 } from '@/components/index'
+
+const nome = ref('')
+const nivelEducacao = ref('medio')
+const dataAnalise = ref('')
+const imagem = ref(null)
+
+const opcoesEducacao = [
+  { label: 'Fundamental', value: 'fundamental' },
+  { label: 'Médio', value: 'medio' },
+  { label: 'Superior', value: 'superior' },
+]
 </script>
 
 <template>
   <div class="flex">
-  <NavLateralAdmin />
-  <ButtonActionAdmin />
+    <NavLateralAdmin />
+    
+    <div class="flex-1 p-6 space-y-6">
+      <ButtonActionAdmin />
+
+      <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <InputStringAdmin label="Nome" :modelValue="nome" @action="nome = $event"/>
+
+        <InputSelectAdmin label="Nível da educação" :modelValue="nivelEducacao" :options="opcoesEducacao" @action="nivelEducacao = $event"/>
+
+        <InputDateAdmin label="Data de Análise" modelValue="dataAnalise" @action="dataAnalise = $event"/>
+
+        <div class="md:col-span-2">
+          <InputImageAdmin label="Imagem" :modelValue="imagem" @action="imagem = $event"/>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
-
