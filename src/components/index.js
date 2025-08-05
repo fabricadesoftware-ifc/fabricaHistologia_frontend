@@ -52,7 +52,6 @@ import NavLateralAdmin from '@/components/admin/navbar/NavLateralAdmin.vue';
 import NavLateralReponsive from './admin/navbar/NavLateralReponsive.vue';
 import NavbarAdminUser from './admin/navbar/NavbarAdminUser.vue';
 import NavbarAdminMenu from './admin/navbar/NavbarAdminMenu.vue';
-
 import TableFilterCard from './admin/filter/TableFilterCard.vue';
 import TableFilterContainer from './admin/filter/TableFilterContainer.vue';
 import NavigationAdminFilterButton from './admin/filter/controler/NavigationAdminFilterButton.vue';
@@ -64,7 +63,7 @@ import InputDateAdmin from './admin/input/InputDateAdmin.vue';
 import InputImageAdmin from './admin/input/InputImageAdmin.vue';
 import InputSelectAdmin from './admin/input/InputSelectAdmin.vue';
 import InputStringAdmin from './admin/input/InputStringAdmin.vue';
-
+import AdminGlobalContainer from './admin/layout/AdminGlobalContainer.vue';
 
 export {
   AddInfoGlobal,
@@ -119,4 +118,5 @@ export {
   InputImageAdmin,
   InputSelectAdmin,
   InputStringAdmin,
+  AdminGlobalContainer,
 };

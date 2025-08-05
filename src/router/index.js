@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,50 +21,88 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      meta: {activeUser: true},
-      children: [
-         {
-          path: '',
-          name: 'admin-home', 
-          component: () => import('@/views/admin/HomeView.vue')
-        },
-      ]
-    },
-    {
-      path: '/orgaos',
-      name: 'orgaos',
-      meta: {activeUser: true},
-      component: () => import('@/views/teste/Orgao.vue')
-    },
-    {
-    path: '/laminas',
-    name: 'laminas',
-    meta: {activeUser: true},
-    component: () => import('@/views/teste/Lamina.vue')
-    },
-    {
-      path: '/portal',
-      name: 'portal',
-      meta: {activeUser: true},
+      meta: { activeUser: true },
       children: [
         {
           path: '',
-          name: 'welcome-portal', 
+          name: 'Painel Administrativo',
+          component: () => import('@/views/admin/HomeView.vue')
+        },
+        {
+          path: 'organs',
+          name: 'Órgãos',
+          meta: { activeUser: true },
+          children: [
+            {
+              path: '',
+              name: '',
+              component: () => import('@/views/admin/portal/organs/OrgansView.vue')
+            },
+             {
+              path: 'add',
+              name: '> Cadastrar Órgão',
+              component: () => import('@/views/admin/portal/organs/OrgansView.vue')
+            },
+             {
+              path: ':id',
+              name: 'custom-name-organ',
+              component: () => import('@/views/admin/portal/posts/AddPointView.vue')
+            },
+          ]
+        },
+        {
+          path: 'posts',
+          name: 'Lâmina',
+          meta: { activeUser: true },
+          children: [
+            {
+              path: '',
+              name: '',
+              component: () => import('@/views/admin/portal/posts/PostsView.vue'),
+            },
+            {
+              path: 'add-post',
+              name: '> Cadastrar Lâmina',
+              component: () => import('@/views/admin/portal/posts/AddPostView.vue')
+            },
+            {
+              path: 'add-point',
+              name: '> Cadastrar Ponto',
+              component: () => import('@/views/admin/portal/posts/AddPointView.vue')
+            },
+            {
+              path: ':id',
+              name: 'custom-name-post',
+              component: () => import('@/views/admin/portal/posts/AddPointView.vue')
+            },
+          ]
+        },
+      ]
+    },
+
+    {
+      path: '/portal',
+      name: 'portal',
+      meta: { activeUser: true },
+      children: [
+        {
+          path: '',
+          name: 'welcome-portal',
           component: () => import('@/views/portal/WelcomeView.vue')
         },
         {
           path: 'system',
-          name: 'system', 
+          name: 'system',
           component: () => import('@/views/portal/SystemView.vue')
         },
         {
           path: 'system/:id',
-          name: 'system-id', 
+          name: 'system-id',
           component: () => import('@/views/portal/OrgansView.vue')
         },
         {
           path: 'organ/:id',
-          name: 'organ-id', 
+          name: 'organ-id',
           component: () => import('@/views/portal/SlidesView.vue')
         },
         {
@@ -84,12 +122,12 @@ const router = createRouter({
         },
         {
           path: 'personal-data',
-          name: 'personal-data', 
+          name: 'personal-data',
           component: () => import('@/views/portal/PersonalDataFormView.vue')
         },
         {
           path: 'quiz',
-          name: 'quiz', 
+          name: 'quiz',
           component: () => import('@/views/portal/QuizHomeView.vue')
         },
         {
