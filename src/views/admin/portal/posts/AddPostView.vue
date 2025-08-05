@@ -7,6 +7,7 @@ import {
   InputImageAdmin,
   InputSelectAdmin,
   InputStringAdmin,
+  AdminGlobalContainer,
 } from '@/components/index'
 
 const nome = ref('')
@@ -22,11 +23,10 @@ const opcoesEducacao = [
 </script>
 
 <template>
-  <div class="flex">
-    <NavLateralAdmin />
+  
     
+    <AdminGlobalContainer>
     <div class="flex-1 p-6 space-y-6">
-      <ButtonActionAdmin />
 
       <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <InputStringAdmin label="Nome" :modelValue="nome" @action="nome = $event"/>
@@ -40,5 +40,5 @@ const opcoesEducacao = [
         </div>
       </form>
     </div>
-  </div>
+  </AdminGlobalContainer>
 </template>
