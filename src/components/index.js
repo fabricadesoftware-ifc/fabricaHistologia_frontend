@@ -60,6 +60,7 @@ import InputImageAdmin from './admin/input/InputImageAdmin.vue';
 import InputSelectAdmin from './admin/input/InputSelectAdmin.vue';
 import InputStringAdmin from './admin/input/InputStringAdmin.vue';
 import TableConfig from './admin/table/TableConfig.vue';
+import TablePagination from './admin/table/TablePagination.vue';
 
 export {
   AddInfoGlobal,
@@ -110,5 +111,6 @@ export {
   InputImageAdmin,
   InputSelectAdmin,
   InputStringAdmin,
-  TableConfig
+  TableConfig,
+  TablePagination,
 };
