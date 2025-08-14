@@ -64,6 +64,7 @@ import InputImageAdmin from './admin/input/InputImageAdmin.vue';
 import InputSelectAdmin from './admin/input/InputSelectAdmin.vue';
 import InputStringAdmin from './admin/input/InputStringAdmin.vue';
 import AdminGlobalContainer from './admin/layout/AdminGlobalContainer.vue';
+import TableConfig from './admin/table/TableConfig.vue';
 
 export {
   AddInfoGlobal,
@@ -119,4 +120,5 @@ export {
   InputSelectAdmin,
   InputStringAdmin,
   AdminGlobalContainer,
+  TableConfig
 };
