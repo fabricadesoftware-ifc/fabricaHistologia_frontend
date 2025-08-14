@@ -24,26 +24,24 @@ const pages = computed(() => {
   const pagesArray = [];
   const { currentPage, totalPages } = props;
 
-  // Páginas do meio (anterior, atual, próxima)
   let start = currentPage - 1;
   let end = currentPage + 1;
 
-  // Ajusta os limites para não passar de 1 e totalPages
-  if (start < 1) start = 1;
-  if (end > totalPages) end = totalPages;
+  if (start < 1) {
+    start = 1;
+    end = Math.min(3, totalPages);
+  }
+  if (end > totalPages) {
+    end = totalPages;
+    start = Math.max(totalPages - 2, 1);
+  }
 
-  // Adiciona páginas do meio
   for (let i = start; i <= end; i++) {
     pagesArray.push(i);
   }
 
-  // Adiciona "..." se houver intervalo entre meio e última página
-  if (end < totalPages - 1) {
-    pagesArray.push("...");
-  }
-
-  // Adiciona última página se não estiver incluída
   if (end < totalPages) {
+    pagesArray.push("...");
     pagesArray.push(totalPages);
   }
 
@@ -52,62 +50,32 @@ const pages = computed(() => {
 </script>
 
 <template>
-  <div class="pagination">
-    <!-- Botão anterior -->
-    <button 
-      @click="changePage(currentPage - 1)" 
-      :disabled="currentPage === 1">
+  <div class="flex items-center gap-2 text-lg">
+    <button
+      @click="changePage(currentPage - 1)"
+      :disabled="currentPage === 1"
+      class="px-3 py-1 rounded-md text-teal-500 font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-teal-100">
       &lt;
     </button>
 
-    <!-- Páginas -->
     <button
       v-for="(page, index) in pages"
       :key="index"
       @click="typeof page === 'number' && changePage(page)"
-      :class="[{ active: page === currentPage, dots: page === '...' }] "
+      :class="[
+        'px-3 py-1 rounded-md font-medium',
+        page === currentPage ? 'bg-teal-500 text-white' : 'text-teal-500 hover:bg-teal-100',
+        page === '...' ? 'cursor-default text-gray-400 hover:bg-transparent' : ''
+      ]"
       :disabled="page === '...'">
       {{ page }}
     </button>
 
-    <!-- Botão próximo -->
-    <button 
-      @click="changePage(currentPage + 1)" 
-      :disabled="currentPage === totalPages">
+    <button
+      @click="changePage(currentPage + 1)"
+      :disabled="currentPage === totalPages"
+      class="px-3 py-1 rounded-md text-teal-500 font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-teal-100">
       &gt;
     </button>
   </div>
 </template>
-
-<style scoped>
-.pagination {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 16px;
-}
-
-button {
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 4px 8px;
-  color: #21b19b;
-  font-weight: 500;
-}
-
-button.active {
-  background: #21b19b;
-  color: white;
-  border-radius: 8px;
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-button.dots {
-  cursor: default;
-}
-</style>
