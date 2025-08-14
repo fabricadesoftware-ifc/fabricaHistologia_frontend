@@ -59,7 +59,7 @@ import InputDateAdmin from './admin/input/InputDateAdmin.vue';
 import InputImageAdmin from './admin/input/InputImageAdmin.vue';
 import InputSelectAdmin from './admin/input/InputSelectAdmin.vue';
 import InputStringAdmin from './admin/input/InputStringAdmin.vue';
-
+import TableConfig from './admin/table/TableConfig.vue';
 
 export {
   AddInfoGlobal,
@@ -110,4 +110,5 @@ export {
   InputImageAdmin,
   InputSelectAdmin,
   InputStringAdmin,
+  TableConfig
 };

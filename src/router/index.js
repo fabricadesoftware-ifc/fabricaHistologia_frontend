@@ -21,7 +21,6 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      meta: {activeUser: true},
       children: [
          {
           path: '',
