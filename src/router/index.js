@@ -23,18 +23,6 @@ const router = createRouter({
       name: 'admin',
       meta: { activeUser: true },
       children: [
-         {
-          path: '',
-          name: 'admin-home', 
-          component: () => import('@/views/admin/HomeView.vue')
-        },
-      ]
-    },
-    {
-      path: '/portal',
-      name: 'portal',
-      meta: {activeUser: true},
-      children: [
         {
           path: '',
           name: 'Painel Administrativo',
@@ -48,12 +36,17 @@ const router = createRouter({
             {
               path: '',
               name: '',
-              component: () => import('@/views/admin/portal/systems/SystemView.vue')
+              component: () => import('@/views/admin/portal/systems/SystemsView.vue')
             },
-             {
+            {
               path: 'add',
               name: '> Cadastrar Sistema',
               component: () => import('@/views/admin/portal/systems/AddSystemView.vue')
+            },
+            {
+              path: ':id',
+              name: '> Atualizar Sistema',
+              component: () => import('@/views/admin/portal/systems/SystemView.vue')
             },
           ]
         },
@@ -65,12 +58,78 @@ const router = createRouter({
             {
               path: '',
               name: '',
-              component: () => import('@/views/admin/portal/species/SpecieView.vue')
+              component: () => import('@/views/admin/portal/species/SpeciesView.vue')
+
             },
              {
+              path: ':id',
+              name: '> Atualizar Espécie',
+              component: () => import('@/views/admin/portal/species/SpecieView.vue')
+
+            },
+            {
               path: 'add',
               name: '> Cadastrar Espécie',
               component: () => import('@/views/admin/portal/species/AddSpecieView.vue')
+            },
+            {
+              path: ':id',
+              name: '> Atualizar Espécie',
+              component: () => import('@/views/admin/portal/species/SpecieView.vue')
+            }
+          ]
+        },
+        {
+          path: 'quiz',
+          name: 'Quiz',
+          meta: { activeUser: true },
+          children: [
+            {
+              path: '',
+              name: '',
+              component: () => import('@/views/admin/quiz/QuizesView.vue')
+            },
+            {
+              path: ':id',
+              name: '> Atualizar Pergunta',
+              component: () => import('@/views/admin/quiz/QuizView.vue')
+            },
+            {
+              path: 'answer/:id',
+              name: '> Atualizar Resposta',
+              component: () => import('@/views/admin/quiz/AnswerView.vue')
+            },
+            {
+              path: 'add-quiz',
+              name: '> Cadastrar Pergunta',
+              component: () => import('@/views/admin/quiz/AddQuizView.vue')
+            },
+            {
+              path: 'add-answer',
+              name: '> Cadastrar Resposta',
+              component: () => import('@/views/admin/quiz/AddAnswerView.vue')
+            },
+          ]
+        },
+        {
+          path: 'supporting',
+          name: 'Materiais de Apoio',
+          meta: { activeUser: true },
+          children: [
+            {
+              path: '',
+              name: '',
+              component: () => import('@/views/admin/supporting_material/SupportingMaterialsView.vue')
+            },
+            {
+              path: 'add-supporting-material',
+              name: '> Cadastrar Material de Apoio',
+              component: () => import('@/views/admin/supporting_material/AddSupportingMaterialView.vue')
+            },
+            {
+              path: ':id',
+              name: '> Atualizar Material de Apoio',
+              component: () => import('@/views/admin/supporting_material/SupportingMaterialView.vue')
             },
           ]
         },
@@ -84,12 +143,16 @@ const router = createRouter({
               name: '',
               component: () => import('@/views/admin/portal/organs/OrgansView.vue')
             },
-             {
+            {
               path: 'add',
               name: '> Cadastrar Órgão',
-              component: () => import('@/views/admin/portal/organs/OrgansView.vue')
+              component: () => import('@/views/admin/portal/organs/AddOrganView.vue')
             },
-            
+            {
+              path: ':id',
+              name: '> Atualizar Órgão',
+              component: () => import('@/views/admin/portal/organs/OrganView.vue')
+            },
           ]
         },
         {
@@ -117,7 +180,7 @@ const router = createRouter({
               name: '> Atualizar Lâmina',
               component: () => import('@/views/admin/portal/posts/PostView.vue')
             },
-             {
+            {
               path: 'points/:id',
               name: '> Atualizar Ponto',
               component: () => import('@/views/admin/portal/posts/PointView.vue')
@@ -193,4 +256,3 @@ const router = createRouter({
 })
 
 export default router
-
