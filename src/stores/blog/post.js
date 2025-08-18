@@ -116,6 +116,7 @@ export const usePostStore = defineStore("post",
                 state.posts.push(await PostService.createPost(newPost));
             } catch (error) {
                 state.error = error;
+                throw error
             } finally {
                 state.loading = false;
             }
@@ -127,11 +128,11 @@ export const usePostStore = defineStore("post",
          * @function updatePosts
          * @param {Object} PosupdatePosts - The PosupdatePosts object to update.
          */
-        const updatePosts = async (post) => {
+        const updatePosts = async (post, id) => {
             state.loading = true;
             try {
                 const index = state.posts.findIndex((s) => s.id === post.id);
-                state.posts[index] = await PostService.updatePosts(post);
+                state.posts[index] = await PostService.updatePosts(post, id);
             } catch (error) {
                 state.error = error;
             } finally {

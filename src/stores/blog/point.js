@@ -88,6 +88,7 @@ export const usePointStore = defineStore("point",
                 state.points.push(await PointService.createPoint(newPoint));
             } catch (error) {
                 state.error = error;
+                throw error;
             } finally {
                 state.loading = false;
             }

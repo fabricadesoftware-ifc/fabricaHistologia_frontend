@@ -18,7 +18,18 @@ class UploaderService {
    */
   async getUploads(url) {
     try {
-      const { data } = await api.get(`/${url}`)
+      const { data } = await api.get(`/${url}`, {headers: {'authorization': `Bearer ${token}`,  "Content-Type": 'multipart/form-data'}})
+      console.log('upload response:', data);
+      return data.results
+    } catch (error) {
+      console.log('error in getUploads', error)
+      throw error
+    }
+  }
+
+    async getAllUploads(url) {
+    try {
+      const { data } = await api.get(`/${url}/?page_size=0`, {headers: {'authorization': `Bearer ${token}`,  "Content-Type": 'multipart/form-data'}})
       console.log('upload response:', data);
       return data
     } catch (error) {
