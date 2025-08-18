@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { eraseWords } from '@/utils/admin'
 
 export const useActionSelectorStore = defineStore('actionSelector', () => {
   const router = useRouter()
@@ -8,10 +9,10 @@ export const useActionSelectorStore = defineStore('actionSelector', () => {
 
   // Sessões disponíveis e suas opções
   const sessionMap = {
-    laminas: {
+    posts: {
       label: 'Lâmina',
       options: {
-        'Lâmina': '/laminas/create', // < modificar futuramente
+        'Lâmina': '/admin/posts/add-post', // < modificar futuramente
         'Ponto da Lâmina': '/laminas/ponto/create' // < modificar futuramente      
       }
     },
@@ -22,10 +23,10 @@ export const useActionSelectorStore = defineStore('actionSelector', () => {
         'Resposta': '/perguntas/resposta/create' // < modificar futuramente         
         }
     },
-    orgaos: {
+    organs: {
       label: 'Órgão',
       options: {
-        'Órgão': '/orgaos/create' // < modificar futuramente      
+        'Órgão': '/admin/organs/add' // < modificar futuramente      
         }
     },
     conteudos: {
@@ -56,7 +57,7 @@ export const useActionSelectorStore = defineStore('actionSelector', () => {
 
   // Detecta a sessão atual com base na URL
   const sessionKey = computed(() => {
-    const match = route.path.match(/\/([^/]+)/)
+      const match = route.path.match(/^\/admin\/([^/]+)/)
     return match ? match[1] : null
   })
 

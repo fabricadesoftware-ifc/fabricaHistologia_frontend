@@ -10,6 +10,8 @@ import ImagePet from '@/assets/images/admin/pet-svgrepo-com.svg'
 import ImageSystem from '@/assets/images/admin/dog-svgrepo-com.svg'
 import ImageLogout from '@/assets/images/admin/logout-svgrepo-com.svg'
 import ImageReturn from '@/assets/images/admin/arrow-back-svgrepo-com.svg'
+import ImageMenu from '@/assets/images/admin/menuadmin.svg'
+import { eraseWords } from '@/utils/admin'
 
 export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
   const isMobile = ref(false)
@@ -21,13 +23,16 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
 
   //NavbarAdminMenu.vue
 
+
+
   const menuSections = ref([
     {
       title: 'Portal',
       items: [
-        { label: 'Órgãos', icon: imageBone, to: '/orgaos' },
-        { label: 'Lâminas', icon: ImageLamina, to: '/laminas' },
-        { label: 'Espécies', icon: ImagePet, to: '/especies' },
+        { label: 'Geral', icon: ImageMenu, to: eraseWords('admin', '')},
+        { label: 'Órgãos', icon: imageBone, to: eraseWords('admin', 'organs') },
+        { label: 'Lâminas', icon: ImageLamina, to: eraseWords('admin', 'posts') },
+        { label: 'Espécies', icon: ImagePet, to: eraseWords('admin', 'especies') },
         { label: 'Sistemas', icon: ImageSystem, to: '/sistemas' }
       ]
     },
@@ -119,6 +124,8 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
   function checkIsMobile() {
     isMobile.value = window.innerWidth <= 1150
   }
+
+
 
   function initResizeListener() {
     onMounted(() => {

@@ -45,7 +45,7 @@ const returnMargin = computed(() => `-${margin.value}px`)
 </script>
 
 <template>
-  <div class="relative flex h-14 overflow-hidden w-[80%] mx-auto items-center">
+  <div class="relative flex h-14 overflow-hidden w-full mx-auto items-center">
   <div class="flex items-center gap-5 relative max-w-[95%] overflow-hidden z-50 lg:hidden">
      <div v-show="margin >= 200" class="h-full w-60 absolute left-0 top-0 md:bg-white md:opacity-60 md:w-20 bg-gradient-to-r duration-150 from-white to-transparent z-40"></div>
 
