@@ -10,6 +10,7 @@ export const useUploadStore = defineStore('upload', () => {
 
   const state = useStorage('uploadStorage', {
     uploads: [],
+    allUploads: [],
     selectedUpload: null,
     loading: false,
     error: null,
@@ -17,6 +18,7 @@ export const useUploadStore = defineStore('upload', () => {
 
   const uploads = computed(() => state.value.uploads);
   const selectedUpload = computed(() => state.value.selectedUpload);
+  const allUploads = computed(() => state.value.allUploads);
   const isLoading = computed(() => state.value.loading);
   const uploadsCount = computed(() => state.value.uploads.length);
 
@@ -28,7 +30,20 @@ export const useUploadStore = defineStore('upload', () => {
     state.value.loading = true;
     try {
       const response = await UploaderService.getUploads(url);
+      console.log('🟡 response recebido na store:', response)
       state.value.uploads = response;
+    } catch (error) {
+      state.value.error = error;
+    } finally {
+      state.value.loading = false;
+    }
+  };
+
+  const getAllUploads = async (url) => {
+    state.value.loading = true;
+    try {
+      const response = await UploaderService.getAllUploads(url);
+      state.value.allUploads = response;
     } catch (error) {
       state.value.error = error;
     } finally {
@@ -98,7 +113,9 @@ export const useUploadStore = defineStore('upload', () => {
     selectedUpload,
     isLoading,
     uploadsCount,
+    allUploads,
     getUploads,
+    getAllUploads,
     createUpload,
     updateUpload,
     deleteUpload,

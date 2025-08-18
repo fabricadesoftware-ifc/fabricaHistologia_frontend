@@ -42,10 +42,10 @@ onMounted(async () => {
         </TableFilterContainer>
       </div>
 
-      <div class="p-16" v-for="posts in postStore.posts">
+      <RouterLink :to="`/admin/posts/${posts.id}`" class="p-16" v-for="posts in postStore.posts">
         <p> {{posts.id}} - {{ posts.name }}</p>
         <img class=" w-24 h-24 object-cover" :src="posts?.image?.url">
-      </div>
+      </RouterLink>
     </section>
   </AdminGlobalContainer>
 </template>
