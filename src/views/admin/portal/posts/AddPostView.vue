@@ -29,7 +29,7 @@ const newPost = reactive({
   type_cut: '',
   increase: '',
   coloring: '',
-  autor_user: null,
+  autor_user: Number(authStore.userInfo.id),
   is_verified: false,
   image: null
 })
@@ -58,10 +58,13 @@ onMounted(async ()=> {
   console.log(authStore.userInfo)
   newPost.date_analysis = formatedData()
   newPost.post_date = formatedData()
+
+  console.log('Dados iniciais do post:', newPost)
 })
 
 const send = async () => {
   try {
+    if (newImage.file) {
     const imageUiqueDescriptionId = crypto.randomUUID()
     newImage.description = `${newPost.name} - ${imageUiqueDescriptionId}`
     newPost.autor_user = authStore.userInfo.id
@@ -71,6 +74,7 @@ const send = async () => {
 
     newPost.image = result.attachment_key
     console.log(newPost)
+    }
     await postStore.createPost(newPost)
 
     router.push('/admin/posts')
