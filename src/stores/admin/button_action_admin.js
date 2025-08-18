@@ -41,16 +41,16 @@ export const useActionSelectorStore = defineStore('actionSelector', () => {
         'Espécie': '/especies/create', // < modificar futuramente
       }
     },
-    sistemas: {
+    systems: {
       label: 'Sistema',
       options: {
-        'Sistema': '/sistemas/create', // < modificar futuramente
+        'Sistema': '/admin/systems/add', // < modificar futuramente
       }
     },
-    usuarios: {
+    users: {
       label: 'Usuário',
       options: {
-        'Usuário': '/usuarios/create', // < modificar futuramente
+        'Usuário': '/users/create', // < modificar futuramente
       }
     }
   }

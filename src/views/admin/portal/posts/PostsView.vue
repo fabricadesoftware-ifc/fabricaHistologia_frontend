@@ -38,11 +38,12 @@ onMounted(async () => {
             :active="i.active"
             :filter="i"
             v-for="(i, index) in generalFilterData"
+            :key="index"
           />
         </TableFilterContainer>
       </div>
 
-      <div class="p-16" v-for="posts in postStore.posts">
+      <div class="p-16" v-for="(posts, index) in postStore.posts" :key="index">
         <p> {{posts.id}} - {{ posts.name }}</p>
         <img class=" w-24 h-24 object-cover" :src="posts?.image?.url">
       </div>
