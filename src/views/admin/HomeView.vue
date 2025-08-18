@@ -1,20 +1,18 @@
-<script>
+
+<script setup>
+import {TableFilterContainer, TableFilterCard} from '@/components/index';
+import { useAdmin } from '@/stores/admin/filter_admin';
 import TableConfig from '@/components/admin/table/TableConfig.vue';
 
-export default {
-  components: {
-    TableConfig,
-  },
-  methods: {
-    handleConfigUpdate(config) {
-      console.log('Configuração Atualizada:', config);
-    },
-  },
-};
+const {
+    generalFilterData, 
+    changeActive
+} = useAdmin()
 </script>
-
 <template>
-  <div>
-    <TableConfig :additional-filters="filters" @update-config="handleConfigUpdate" />
-  </div>
+    <TableFilterContainer :amount="generalFilterData.length">
+        <TableFilterCard @change="changeActive(index, generalFilterData)" :active="i.active" :filter="i" v-for="(i, index) in generalFilterData" />
+    </TableFilterContainer>
+ <TableConfig :additional-filters="filters" @update-config="handleConfigUpdate" />
+
 </template>
