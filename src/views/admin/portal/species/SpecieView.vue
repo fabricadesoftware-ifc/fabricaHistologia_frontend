@@ -12,7 +12,7 @@ import { useAdmin } from '@/stores/admin/filter_admin'
 const speciesStore = useSpecieStore()
 const { generalFilterData, changeActive } = useAdmin()
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await speciesStore.getSpecies()
   console.log(speciesStore.species)
 })  
