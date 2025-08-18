@@ -52,7 +52,7 @@ import NavLateralAdmin from '@/components/admin/navbar/NavLateralAdmin.vue';
 import NavLateralReponsive from './admin/navbar/NavLateralReponsive.vue';
 import NavbarAdminUser from './admin/navbar/NavbarAdminUser.vue';
 import NavbarAdminMenu from './admin/navbar/NavbarAdminMenu.vue';
-import NavbarDropdown from './admin/navbar/NavbarDropdown.vue';
+import NavbarDropdown from './admin/dropdown/NavbarDropdown.vue';
 import TableFilterCard from './admin/filter/TableFilterCard.vue';
 import TableFilterContainer from './admin/filter/TableFilterContainer.vue';
 import NavigationAdminFilterButton from './admin/filter/controler/NavigationAdminFilterButton.vue';
@@ -112,7 +112,7 @@ export {
   TableFilterCard,
   TableFilterContainer,
   NavigationAdminFilterButton,
-  SearchAdminFilter
+  SearchAdminFilter,
   ButtonActionAdmin,
   ButtonDropdown,
   InputDateAdmin,
