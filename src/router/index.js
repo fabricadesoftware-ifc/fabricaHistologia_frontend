@@ -47,6 +47,23 @@ const router = createRouter({
           ]
         },
         {
+          path: 'quiz',
+          name: 'Quiz',
+          meta: { activeUser: true },
+          children: [
+            {
+              path: '',
+              name: '',
+              component: () => import('@/views/admin/quiz/QuizView.vue')
+            },
+             {
+              path: 'add-quiz',
+              name: '> Cadastrar Pergunta',
+              component: () => import('@/views/admin/quiz/AddQuizView.vue')
+            },
+          ]
+        },
+        {
           path: 'organs',
           name: 'Órgãos',
           meta: { activeUser: true },

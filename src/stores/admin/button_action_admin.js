@@ -16,12 +16,12 @@ export const useActionSelectorStore = defineStore('actionSelector', () => {
         'Ponto da Lâmina': '/laminas/ponto/create' // < modificar futuramente      
       }
     },
-    perguntas: {
+    quiz: {
       label: 'Pergunta',
       options: {
-        'Pergunta': '/perguntas/create', // < modificar futuramente
-        'Resposta': '/perguntas/resposta/create' // < modificar futuramente         
-        }
+        'Pergunta': '/admin/quiz/add-quiz', // < modificar futuramente
+        'Resposta': '/admin/quiz/answer/add' // < modificar futuramente
+      }
     },
     organs: {
       label: 'Órgão',

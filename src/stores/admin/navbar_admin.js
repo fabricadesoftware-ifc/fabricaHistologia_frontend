@@ -45,7 +45,7 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
     {
       title: 'Quiz',
       items: [
-        { label: 'Perguntas', icon: ImageTest, to: '/perguntas' }
+        { label: 'Perguntas', icon: ImageTest, to: '/admin/quiz' }
       ]
     },
     {
