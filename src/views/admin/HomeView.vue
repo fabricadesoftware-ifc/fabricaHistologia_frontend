@@ -3,9 +3,12 @@ import {
   NavLateralAdmin,
   TableFilterContainer,
   TableFilterCard,
-  AdminGlobalContainer
+  AdminGlobalContainer,
+  TableConfig,
+  TablePagination,
 } from '@/components/index'
 import { useAdmin } from '@/stores/admin/filter_admin'
+import { ref } from 'vue';
 
 const { generalFilterData, changeActive } = useAdmin()
 </script>
