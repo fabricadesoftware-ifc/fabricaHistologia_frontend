@@ -58,6 +58,23 @@ const router = createRouter({
           ]
         },
         {
+          path: 'species',
+          name: 'Espécies',
+          meta: { activeUser: true },
+          children: [
+            {
+              path: '',
+              name: '',
+              component: () => import('@/views/admin/portal/species/SpecieView.vue')
+            },
+             {
+              path: 'add',
+              name: '> Cadastrar Espécie',
+              component: () => import('@/views/admin/portal/species/AddSpecieView.vue')
+            },
+          ]
+        },
+        {
           path: 'organs',
           name: 'Órgãos',
           meta: { activeUser: true },
