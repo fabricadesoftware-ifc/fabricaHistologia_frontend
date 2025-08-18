@@ -1,5 +1,7 @@
 import api from "@/plugins/api";
 
+const token = localStorage.getItem('psg_auth_token')
+
 /**
  * Service class for handling Uploads related operations.
  */
@@ -17,7 +19,8 @@ class UploaderService {
   async getUploads(url) {
     try {
       const { data } = await api.get(`/${url}`)
-      return data.results
+      console.log('upload response:', data);
+      return data
     } catch (error) {
       console.log('error in getUploads', error)
       throw error
@@ -33,8 +36,8 @@ class UploaderService {
    */
   async createUpload(url, newUpload) {
     try {
-      const { data } = await api.post(`/${url}/`, newUpload)
-      return data.results
+      const { data } = await api.post(`/${url}/`, newUpload, {headers: {'authorization': `Bearer ${token}`,  "Content-Type": 'multipart/form-data'}})
+      return data
     } catch (error) {
       console.log('error in createUpload', error)
       throw error

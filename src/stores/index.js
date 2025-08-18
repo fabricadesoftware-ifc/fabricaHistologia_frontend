@@ -11,6 +11,7 @@ import { useCollaboratorsStore } from "./auth/collaborators.js";
 import { useAuthStore } from "./auth/auth.js";
 import { useNavigationStore } from "./blog/navigation.js";
 import { useQuizStore } from "./blog/quiz.js";
+import { useUploadStore } from "./uploader/uploader.js";
 export {
     useSpecieStore,
     useSlideStore,
@@ -22,5 +23,6 @@ export {
     useCollaboratorsStore,
     useAuthStore,
     useNavigationStore,
-    useQuizStore
+    useQuizStore,
+    useUploadStore
 }
