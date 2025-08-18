@@ -32,7 +32,7 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
         { label: 'Geral', icon: ImageMenu, to: eraseWords('admin', '')},
         { label: 'Órgãos', icon: imageBone, to: eraseWords('admin', 'organs') },
         { label: 'Lâminas', icon: ImageLamina, to: eraseWords('admin', 'posts') },
-        { label: 'Espécies', icon: ImagePet, to: eraseWords('admin', 'especies') },
+        { label: 'Espécies', icon: ImagePet, to: eraseWords('admin', 'species') },
         { label: 'Sistemas', icon: ImageSystem, to: eraseWords('admin', 'systems') }
       ]
     },
