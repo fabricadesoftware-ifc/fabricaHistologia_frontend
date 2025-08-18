@@ -5,7 +5,7 @@ const store = useActionSelectorStore()
 </script>
 
 <template>
-  <div v-if="store.session" class="flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-2 relative mt-12 ml-[5%]">
+  <div v-if="store.session" class="flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-2 relative ml-[5%]">
     <label class="text-lg text-gray-500 font-semibold">Ação:</label>
 
     <div class="flex items-center gap-2 relative">
