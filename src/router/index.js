@@ -21,6 +21,7 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
+
       meta: { activeUser: true },
       children: [
         {
@@ -130,6 +131,11 @@ const router = createRouter({
           name: 'quiz',
           component: () => import('@/views/portal/QuizHomeView.vue')
         },
+        // {
+        //   path: 'quiz',
+        //   name: 'quiz', 
+        //   component: () => import('@/views/portal/Quiziew.vue')
+        // },
         {
           path: 'quiz/:id',
           name: 'quiz-id',

@@ -1,3 +1,4 @@
+
 <script setup>
 import {
   NavLateralAdmin,
@@ -6,6 +7,17 @@ import {
   AdminGlobalContainer
 } from '@/components/index'
 import { useAdmin } from '@/stores/admin/filter_admin'
+
+import TableConfig from '@/components/admin/table/TableConfig.vue';
+import TablePagination from "@/components/admin/table/TablePagination.vue";
+import { ref } from 'vue';
+
+const currentPage = ref(2);
+const totalPages = ref(23);
+
+function onPageChange(newPage) {
+  currentPage.value = newPage;
+}
 
 const { generalFilterData, changeActive } = useAdmin()
 </script>
@@ -30,4 +42,6 @@ const { generalFilterData, changeActive } = useAdmin()
       </div>
     </section>
   </AdminGlobalContainer>
+
+ 
 </template>
