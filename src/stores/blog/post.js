@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, reactive, ref } from "vue";
 import { PostService } from "@/services";
+import { useStorage } from "@vueuse/core";
 
 /**
  * Store for managing post data.
@@ -26,7 +27,7 @@ import { PostService } from "@/services";
 
 export const usePostStore = defineStore("post",
     () => {
-        const state = reactive({
+        const state = useStorage('postStorage', {
             posts: [],
             postsByOrganAndType: [],
             postsByOrgan: [],
@@ -35,12 +36,12 @@ export const usePostStore = defineStore("post",
             error: null,
             connection: false,
         });
-        const posts = computed(() => state.posts)
-        const isLoading = computed(() => state.loading);
-        const postCount = computed(() => state.posts.length);
-        const postByOrganAndType = computed(()=> state.postsByOrganAndType)
-        const selectedPost = computed(() => state.selectedPost)
-        const postsByOrgan = computed(() => state.postsByOrgan)
+        const posts = computed(() => state.value.posts)
+        const isLoading = computed(() => state.value.loading);
+        const postCount = computed(() => state.value.posts.length);
+        const postByOrganAndType = computed(()=> state.value.postsByOrganAndType)
+        const selectedPost = computed(() => state.value.selectedPost)
+        const postsByOrgan = computed(() => state.value.postsByOrgan)
 
         const typeSelection = ref(1)
 
@@ -50,57 +51,57 @@ export const usePostStore = defineStore("post",
          * @function getPosts
          */
         const getPosts = async () => {
-            state.loading = true;
+            state.value.loading = true;
             try {
                 const response = await PostService.getPosts();
-                state.posts = response
+                state.value.posts = response
             } catch (error) {
-                state.error = error;
+                state.value.error = error;
             } finally {
-                state.loading = false;
-                state.connection = true; // just to see if the connection is established
+                state.value.loading = false;
+                state.value.connection = true; // just to see if the connection is established
             }
         };
 
         const getPostsById = async (id) => {
-            state.loading = true;
+            state.value.loading = true;
             try {
                 const response = await PostService.getPostsById(id)
                 
-                state.selectedPost = response
+                state.value.selectedPost = response
             } catch (error) {
-                state.error = error
+                state.value.error = error
             } finally {
-                state.loading = false
-                state.connection = true
+                state.value.loading = false
+                state.value.connection = true
             }
         }
 
         const getPostsByOrgan = async (organId) => {
-            state.loading = true;
+            state.value.loading = true;
             try {
                 const response = await PostService.getPostsByOrganId(organId)
-                state.postsByOrgan = response
+                state.value.postsByOrgan = response
                 return response
             } catch (error) {
-                state.error = error
+                state.value.error = error
             } finally {
-                state.loading = false
-                state.connection = true
+                state.value.loading = false
+                state.value.connection = true
             }
         }
 
         const getPostsByOrganAndType = async (organ_id, type_post, specie_id) => {
-            state.loading = true;
+            state.value.loading = true;
             try {
                 const response = await PostService.getPostsByOrganByTypeAndSpecie(organ_id, type_post, specie_id)
-                state.postsByOrganAndType = response
+                state.value.postsByOrganAndType = response
                 return response
             } catch (error) {
-                state.error = error
+                state.value.error = error
             } finally {
-                state.loading = false
-                state.connection = true
+                state.value.loading = false
+                state.value.connection = true
             }
         };
 
@@ -111,13 +112,14 @@ export const usePostStore = defineStore("post",
          * @param {Object} newPosts - The new Posts object to create.
          */
         const createPost = async (newPost) => {
-            state.loading = true;
+            state.value.loading = true;
             try {
-                state.posts.push(await PostService.createPost(newPost));
+                state.value.posts.push(await PostService.createPost(newPost));
             } catch (error) {
-                state.error = error;
+                state.value.error = error;
+                throw error
             } finally {
-                state.loading = false;
+                state.value.loading = false;
             }
         };
         
@@ -127,15 +129,15 @@ export const usePostStore = defineStore("post",
          * @function updatePosts
          * @param {Object} PosupdatePosts - The PosupdatePosts object to update.
          */
-        const updatePosts = async (post) => {
-            state.loading = true;
+        const updatePosts = async (post, id) => {
+            state.value.loading = true;
             try {
-                const index = state.posts.findIndex((s) => s.id === post.id);
-                state.posts[index] = await PostService.updatePosts(post);
+                const index = state.value.posts.findIndex((s) => s.id === post.id);
+                state.value.posts[index] = await PostService.updatePosts(post, id);
             } catch (error) {
-                state.error = error;
+                state.value.error = error;
             } finally {
-                state.loading = false;
+                state.value.loading = false;
             }
         };
 
@@ -146,15 +148,15 @@ export const usePostStore = defineStore("post",
          * @param {number} id - The ID of the Posts to delete.
         */
        const deletePosts = async (id) => {
-           state.loading = true;
+           state.value.loading = true;
            try {
-               const index = state.posts.findIndex((s) => s.id === id);
-               state.posts.splice(index, 1);
+               const index = state.value.posts.findIndex((s) => s.id === id);
+               state.value.posts.splice(index, 1);
                await PostService.deletePosts(id);
             } catch (error) {
-                state.error = error;
+                state.value.error = error;
             } finally {
-                state.loading = false;
+                state.value.loading = false;
             }
         };
         

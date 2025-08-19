@@ -13,7 +13,7 @@ export const useActionSelectorStore = defineStore('actionSelector', () => {
       label: 'Lâmina',
       options: {
         'Lâmina': '/admin/posts/add-post', // < modificar futuramente
-        'Ponto da Lâmina': '/laminas/ponto/create' // < modificar futuramente      
+        'Ponto da Lâmina': '/admin/posts/add-point' // < modificar futuramente      
       }
     },
     quiz: {

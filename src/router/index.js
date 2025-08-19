@@ -78,11 +78,7 @@ const router = createRouter({
               name: '> Cadastrar Órgão',
               component: () => import('@/views/admin/portal/organs/OrgansView.vue')
             },
-             {
-              path: ':id',
-              name: 'custom-name-organ',
-              component: () => import('@/views/admin/portal/posts/AddPointView.vue')
-            },
+            
           ]
         },
         {
@@ -107,8 +103,13 @@ const router = createRouter({
             },
             {
               path: ':id',
-              name: 'custom-name-post',
-              component: () => import('@/views/admin/portal/posts/AddPointView.vue')
+              name: '> Atualizar Lâmina',
+              component: () => import('@/views/admin/portal/posts/PostView.vue')
+            },
+             {
+              path: 'points/:id',
+              name: '> Atualizar Ponto',
+              component: () => import('@/views/admin/portal/posts/PointView.vue')
             },
           ]
         },
