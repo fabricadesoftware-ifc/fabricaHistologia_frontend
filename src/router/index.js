@@ -30,6 +30,40 @@ const router = createRouter({
           component: () => import('@/views/admin/HomeView.vue')
         },
         {
+          path: 'systems',
+          name: 'Sistemas',
+          meta: { activeUser: true },
+          children: [
+            {
+              path: '',
+              name: '',
+              component: () => import('@/views/admin/portal/systems/SystemView.vue')
+            },
+             {
+              path: 'add',
+              name: '> Cadastrar Sistema',
+              component: () => import('@/views/admin/portal/systems/AddSystemView.vue')
+            },
+          ]
+        },
+        {
+          path: 'quiz',
+          name: 'Quiz',
+          meta: { activeUser: true },
+          children: [
+            {
+              path: '',
+              name: '',
+              component: () => import('@/views/admin/quiz/QuizView.vue')
+            },
+             {
+              path: 'add-quiz',
+              name: '> Cadastrar Pergunta',
+              component: () => import('@/views/admin/quiz/AddQuizView.vue')
+            },
+          ]
+        },
+        {
           path: 'organs',
           name: 'Órgãos',
           meta: { activeUser: true },

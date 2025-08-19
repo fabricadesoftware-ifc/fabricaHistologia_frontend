@@ -38,9 +38,11 @@ onMounted(async () => {
             :active="i.active"
             :filter="i"
             v-for="(i, index) in generalFilterData"
+            :key="index"
           />
         </TableFilterContainer>
       </div>
+
 
       <section>
  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 w-[95%] mx-auto mt-8">
@@ -63,6 +65,7 @@ onMounted(async () => {
   </RouterLink>
 </div>
 </section>
+
     </section>
   </AdminGlobalContainer>
 </template>

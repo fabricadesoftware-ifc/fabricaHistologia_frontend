@@ -33,7 +33,7 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
         { label: 'Órgãos', icon: imageBone, to: eraseWords('admin', 'organs') },
         { label: 'Lâminas', icon: ImageLamina, to: eraseWords('admin', 'posts') },
         { label: 'Espécies', icon: ImagePet, to: eraseWords('admin', 'especies') },
-        { label: 'Sistemas', icon: ImageSystem, to: '/sistemas' }
+        { label: 'Sistemas', icon: ImageSystem, to: eraseWords('admin', 'systems') }
       ]
     },
     {
@@ -45,7 +45,7 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
     {
       title: 'Quiz',
       items: [
-        { label: 'Perguntas', icon: ImageTest, to: '/perguntas' }
+        { label: 'Perguntas', icon: ImageTest, to: '/admin/quiz' }
       ]
     },
     {
