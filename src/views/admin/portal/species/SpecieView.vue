@@ -1,11 +1,13 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onBeforeMount } from 'vue'
 import { useSpecieStore } from '@/stores'
 import {
   TableFilterContainer,
   TableFilterCard,
   ButtonActionAdmin,
-  AdminGlobalContainer
+  AdminGlobalContainer,
+  ListTableAdmin,
+  DataGraph
 } from '@/components/index'
 
 import { useAdmin } from '@/stores/admin/filter_admin'
@@ -16,18 +18,21 @@ onBeforeMount(async () => {
   await speciesStore.getSpecies()
   console.log(speciesStore.species)
 })  
-
 </script>
 
 <template>
- 
-  <AdminGlobalContainer >
-
-    <div class="flex gap-5 h-56 items-center justify-between ">
-     <ButtonActionAdmin />
-     <div class=" bg-blue-400 h-[80%] w-[40%] mr-[5%] mt-10 mb-10"></div>
+  <AdminGlobalContainer>
+    <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
+      <ButtonActionAdmin />
+      <DataGraph
+        title="Espécies"
+        :total="speciesStore.species.length"
+        seeMoreUrl="/admin/species"
+        :items="speciesStore.species"
+        groupBy="category"
+      />
+      
     </div>
-    
     
     <section>
       <div class="flex flex-col w-[90%] mx-auto">
@@ -43,9 +48,17 @@ onBeforeMount(async () => {
         </TableFilterContainer>
       </div>
 
-      <div class="p-16" v-for="(specie, index) in speciesStore.species" :key="index">
-        <p> {{specie.id}} - {{ specie.name }}</p>
-      </div>
+      <section>
+        <ListTableAdmin
+          :rows="speciesStore.species"
+          :columns="[
+            { key: 'id', label: 'ID' },
+            { key: 'name', label: 'Nome', editable: true },
+            { key: 'category', label: 'Categoria', editable: true }
+          ]"
+          @update:cell="(e) => console.log('editou', e)"
+        />
+      </section>
     </section>
   </AdminGlobalContainer>
 </template>

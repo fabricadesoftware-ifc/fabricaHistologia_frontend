@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { onBeforeMount, onMounted, reactive, ref, onBeforeMount } from 'vue'
 import { useSpecieStore, useOrganStore, useAuthStore, useUploadStore, usePostStore } from '@/stores'
 import {
   NavLateralAdmin,
@@ -59,7 +59,7 @@ const showSuccessModal = ref(false)
 const showErrorModal = ref(false)
 const errorMessage = ref("")
 
-onMounted(async ()=> {
+onBeforeMount(async ()=> {
   await specieStore.getSpecies()
   await organStore.getOrgans()
   newPost.date_analysis = formatedData()
@@ -89,7 +89,7 @@ const send = async () => {
 
 // ações do modal de sucesso
 function handleConfirm() {
-  router.push('/admin/points') // vai para tela de pontos
+  router.push('/admin/posts/add-point') // vai para tela de pontos
 }
 function handleCancel() {
   router.push('/admin/posts') // vai para lista de posts

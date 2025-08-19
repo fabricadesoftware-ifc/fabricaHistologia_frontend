@@ -1,11 +1,13 @@
 <script setup>
-import { onBeforeMount, onMounted } from 'vue'
+import { onBeforeMount } from 'vue'
 import { useSupportingStore } from '@/stores'
 import {
   TableFilterContainer,
   TableFilterCard,
   ButtonActionAdmin,
-  AdminGlobalContainer
+  AdminGlobalContainer,
+  ListTableAdmin,
+  DataGraph
 } from '@/components/index'
 
 import { useAdmin } from '@/stores/admin/filter_admin'
@@ -14,21 +16,23 @@ const { generalFilterData, changeActive } = useAdmin()
 
 onBeforeMount(async () => {
   await supportingStore.getMaterials()
-  console.log(supportingStore.materials, 'foi')
-})  
-
+  console.log(supportingStore.materials)
+})
 </script>
 
 <template>
- 
-  <AdminGlobalContainer >
-
-    <div class="flex gap-5 h-56 items-center justify-between ">
-     <ButtonActionAdmin />
-     <div class=" bg-blue-400 h-[80%] w-[40%] mr-[5%] mt-10 mb-10"></div>
+  <AdminGlobalContainer>
+    <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
+      <ButtonActionAdmin />
+      <DataGraph
+        title="Materiais de Apoio"
+        :total="supportingStore.materials.length"
+        seeMoreUrl="/admin/supporting-materials"
+        :items="supportingStore.materials"
+        groupBy="system.name" 
+      />
     </div>
-    
-    
+
     <section>
       <div class="flex flex-col w-[90%] mx-auto">
         <p class="text-xl font-medium mb-10">Cadastros Gerais</p>
@@ -43,10 +47,17 @@ onBeforeMount(async () => {
         </TableFilterContainer>
       </div>
 
-      <div class="p-16" v-for="(material, index) in supportingStore.materials" :key="index">
-        <p> {{material.id}} - {{ material.name }}</p>
-        <img class=" w-24 h-24 object-cover" :src="material?.image_supporting_material?.url">
-      </div>
+      <section>
+        <ListTableAdmin
+          :rows="supportingStore.materials"
+          :columns="[
+            { key: 'name', label: 'Nome', editable: true },
+            { key: 'document_supporting_material.description', label: 'Descrição', editable: true },
+            { key: 'system.name', label: 'Sistema', editable: true },
+          ]"
+          @update:cell="(e) => console.log('editou', e)"
+        />
+      </section>
     </section>
   </AdminGlobalContainer>
 </template>

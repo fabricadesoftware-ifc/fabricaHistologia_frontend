@@ -1,11 +1,13 @@
 <script setup>
-import { onBeforeMount, onMounted } from 'vue'
+import { onBeforeMount } from 'vue'
 import { useOrganStore } from '@/stores'
 import {
   TableFilterContainer,
   TableFilterCard,
   ButtonActionAdmin,
-  AdminGlobalContainer
+  AdminGlobalContainer,
+  ListTableAdmin,
+  DataGraph
 } from '@/components/index'
 
 import { useAdmin } from '@/stores/admin/filter_admin'
@@ -14,21 +16,23 @@ const { generalFilterData, changeActive } = useAdmin()
 
 onBeforeMount(async () => {
   await organStore.getOrgans()
-  console.log(organStore.organs, ' a')
-})  
-
+  console.log(organStore.organs, 'a')
+})
 </script>
 
 <template>
- 
-  <AdminGlobalContainer >
-
-    <div class="flex gap-5 h-56 items-center justify-between ">
-     <ButtonActionAdmin />
-     <div class=" bg-blue-400 h-[80%] w-[40%] mr-[5%] mt-10 mb-10"></div>
+  <AdminGlobalContainer>
+    <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
+      <ButtonActionAdmin />
+      <DataGraph
+        title="Órgãos"
+        :total="organStore.organs.length"
+        seeMoreUrl="/admin/organs"
+        :items="organStore.organs"
+        groupBy="system"
+      />
     </div>
-    
-    
+
     <section>
       <div class="flex flex-col w-[90%] mx-auto">
         <p class="text-xl font-medium mb-10">Cadastros Gerais</p>
@@ -43,10 +47,18 @@ onBeforeMount(async () => {
         </TableFilterContainer>
       </div>
 
-      <div class="p-16" v-for="(organ, index) in organStore.organs" :key="index">
-        <p> {{organ.id}} - {{ organ.name }}</p>
-        <img class=" w-24 h-24 object-cover" :src="organ?.image?.url">
-      </div>
+      <section>
+        <ListTableAdmin
+          :rows="organStore.organs"
+          :columns="[
+            { key: 'id', label: 'ID' },
+            { key: 'name', label: 'Nome', editable: true },
+            { key: 'system', label: 'Sistema', editable: true },
+            { key: 'image.url', label: 'Imagem', type: 'image' }
+          ]"
+          @update:cell="(e) => console.log('editou', e)"
+        />
+      </section>
     </section>
   </AdminGlobalContainer>
 </template>
