@@ -154,7 +154,7 @@ function handleConfirm() {
 }
 
 function handleCancel() {
-  router.push('/admin/points') // volta para lista de pontos
+  router.push('/admin/posts') 
 }
 
 function closeErrorModal() {
