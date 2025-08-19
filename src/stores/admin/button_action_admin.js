@@ -35,10 +35,10 @@ export const useActionSelectorStore = defineStore('actionSelector', () => {
             'Conteúdo': '/conteudos/create', // < modificar futuramente
         }
     },
-    especies: {
-      label: 'Espécie',
+    species: {
+      label: 'Espécies',
       options: {
-        'Espécie': '/especies/create', // < modificar futuramente
+        'Espécies': '/admin/species/add', // < modificar futuramente
       }
     },
     systems: {
