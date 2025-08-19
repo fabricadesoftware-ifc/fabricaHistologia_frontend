@@ -117,6 +117,11 @@ const router = createRouter({
               name: '> Atualizar Lâmina',
               component: () => import('@/views/admin/portal/posts/PostView.vue')
             },
+             {
+              path: 'points/:id',
+              name: '> Atualizar Ponto',
+              component: () => import('@/views/admin/portal/posts/PointView.vue')
+            },
           ]
         },
       ]
