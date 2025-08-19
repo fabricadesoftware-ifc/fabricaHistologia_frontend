@@ -12,7 +12,7 @@ import { useAdmin } from '@/stores/admin/filter_admin'
 const postStore = usePostStore()
 const { generalFilterData, changeActive } = useAdmin()
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await postStore.getPosts()
   console.log(postStore.posts)
 })  

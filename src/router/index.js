@@ -76,7 +76,7 @@ const router = createRouter({
              {
               path: 'add',
               name: '> Cadastrar Órgão',
-              component: () => import('@/views/admin/portal/organs/OrgansView.vue')
+              component: () => import('@/views/admin/portal/organs/AddOrganView.vue')
             },
             
           ]
