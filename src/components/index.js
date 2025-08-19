@@ -61,6 +61,7 @@ import ButtonActionAdmin from './admin/buttons/ButtonActionAdmin.vue';
 import ButtonDropdown from './admin/dropdown/ButtonDropdown.vue';
 import InputDateAdmin from './admin/input/InputDateAdmin.vue';
 import InputImageAdmin from './admin/input/InputImageAdmin.vue';
+import InputDocumentAdmin from './admin/input/InputDocumentAdmin.vue';
 import InputSelectAdmin from './admin/input/InputSelectAdmin.vue';
 import InputStringAdmin from './admin/input/InputStringAdmin.vue';
 import AdminGlobalContainer from './admin/layout/AdminGlobalContainer.vue';
@@ -120,6 +121,7 @@ export {
   ButtonDropdown,
   InputDateAdmin,
   InputImageAdmin,
+  InputDocumentAdmin,
   InputSelectAdmin,
   InputStringAdmin,
   AdminGlobalContainer,

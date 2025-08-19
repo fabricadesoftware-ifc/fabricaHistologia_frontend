@@ -51,7 +51,7 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
     {
       title: 'Material de Suporte',
       items: [
-        { label: 'Conteúdos', icon: ImageDocument, to: '/conteudos' }
+        { label: 'Conteúdos', icon: ImageDocument, to: '/admin/supporting' }
       ]
     }
   ])
