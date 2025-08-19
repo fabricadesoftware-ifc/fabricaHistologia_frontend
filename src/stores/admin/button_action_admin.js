@@ -13,15 +13,15 @@ export const useActionSelectorStore = defineStore('actionSelector', () => {
       label: 'Lâmina',
       options: {
         'Lâmina': '/admin/posts/add-post', // < modificar futuramente
-        'Ponto da Lâmina': '/laminas/ponto/create' // < modificar futuramente      
+        'Ponto da Lâmina': '/admin/posts/add-point' // < modificar futuramente      
       }
     },
-    perguntas: {
+    quiz: {
       label: 'Pergunta',
       options: {
-        'Pergunta': '/perguntas/create', // < modificar futuramente
-        'Resposta': '/perguntas/resposta/create' // < modificar futuramente         
-        }
+        'Pergunta': '/admin/quiz/add-quiz', // < modificar futuramente
+        'Resposta': '/admin/quiz/answer/add' // < modificar futuramente
+      }
     },
     organs: {
       label: 'Órgão',

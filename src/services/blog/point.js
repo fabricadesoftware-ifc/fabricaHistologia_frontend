@@ -32,6 +32,16 @@ class PointService {
         }
     }
 
+      async getPointsById(id) {
+        try {
+            const {data} = await api.get(`/points/?id=${id}`);
+            return data.results
+        } catch (error) {
+            console.log('Error in getPointsByPost', error);
+            throw error;
+        }
+    }
+
     /**
      * Creates a new Slide
      * @param {Object} newSlide - The new slide to be created 

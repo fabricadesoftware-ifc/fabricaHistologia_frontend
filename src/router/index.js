@@ -21,7 +21,6 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-
       meta: { activeUser: true },
       children: [
         {
@@ -39,7 +38,7 @@ const router = createRouter({
               name: '',
               component: () => import('@/views/admin/portal/systems/SystemView.vue')
             },
-             {
+            {
               path: 'add',
               name: '> Cadastrar Sistema',
               component: () => import('@/views/admin/portal/systems/AddSystemView.vue')
@@ -56,10 +55,27 @@ const router = createRouter({
               name: '',
               component: () => import('@/views/admin/portal/species/SpecieView.vue')
             },
-             {
+            {
               path: 'add',
               name: '> Cadastrar Espécie',
               component: () => import('@/views/admin/portal/species/AddSpecieView.vue')
+            },
+          ]
+        },
+        {
+          path: 'quiz',
+          name: 'Quiz',
+          meta: { activeUser: true },
+          children: [
+            {
+              path: '',
+              name: '',
+              component: () => import('@/views/admin/quiz/QuizView.vue')
+            },
+            {
+              path: 'add-quiz',
+              name: '> Cadastrar Pergunta',
+              component: () => import('@/views/admin/quiz/AddQuizView.vue')
             },
           ]
         },
@@ -73,15 +89,10 @@ const router = createRouter({
               name: '',
               component: () => import('@/views/admin/portal/organs/OrgansView.vue')
             },
-             {
+            {
               path: 'add',
               name: '> Cadastrar Órgão',
-              component: () => import('@/views/admin/portal/organs/OrgansView.vue')
-            },
-             {
-              path: ':id',
-              name: 'custom-name-organ',
-              component: () => import('@/views/admin/portal/posts/AddPointView.vue')
+              component: () => import('@/views/admin/portal/organs/AddOrganView.vue')
             },
           ]
         },
@@ -107,8 +118,13 @@ const router = createRouter({
             },
             {
               path: ':id',
-              name: 'custom-name-post',
-              component: () => import('@/views/admin/portal/posts/AddPointView.vue')
+              name: '> Atualizar Lâmina',
+              component: () => import('@/views/admin/portal/posts/PostView.vue')
+            },
+            {
+              path: 'points/:id',
+              name: '> Atualizar Ponto',
+              component: () => import('@/views/admin/portal/posts/PointView.vue')
             },
           ]
         },
@@ -165,11 +181,6 @@ const router = createRouter({
           name: 'quiz',
           component: () => import('@/views/portal/QuizHomeView.vue')
         },
-        // {
-        //   path: 'quiz',
-        //   name: 'quiz', 
-        //   component: () => import('@/views/portal/Quiziew.vue')
-        // },
         {
           path: 'quiz/:id',
           name: 'quiz-id',
@@ -186,4 +197,3 @@ const router = createRouter({
 })
 
 export default router
-
