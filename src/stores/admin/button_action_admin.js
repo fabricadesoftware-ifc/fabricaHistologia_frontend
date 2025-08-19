@@ -29,10 +29,10 @@ export const useActionSelectorStore = defineStore('actionSelector', () => {
         'Órgão': '/admin/organs/add' // < modificar futuramente      
         }
     },
-    conteudos: {
-        label: 'Conteúdo',
+    supporting: {
+        label: 'Materiais de Apoio',
         options: {
-            'Conteúdo': '/conteudos/create', // < modificar futuramente
+            'Materiais de Apoio': '/admin/supporting/add-supporting-material', // < modificar futuramente
         }
     },
     species: {
