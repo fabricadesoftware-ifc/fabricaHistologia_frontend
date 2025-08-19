@@ -1,11 +1,13 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onBeforeMount } from 'vue'
 import { useSystemStore } from '@/stores'
 import {
   TableFilterContainer,
   TableFilterCard,
   ButtonActionAdmin,
-  AdminGlobalContainer
+  AdminGlobalContainer,
+  ListTableAdmin,
+  DataGraph
 } from '@/components/index'
 
 import { useAdmin } from '@/stores/admin/filter_admin'
@@ -16,18 +18,20 @@ onBeforeMount(async () => {
   await systemStore.getSystems()
   console.log(systemStore.systems)
 })  
-
 </script>
 
 <template>
- 
-  <AdminGlobalContainer >
-
-    <div class="flex gap-5 h-56 items-center justify-between ">
-     <ButtonActionAdmin />
-     <div class=" bg-blue-400 h-[80%] w-[40%] mr-[5%] mt-10 mb-10"></div>
+  <AdminGlobalContainer>
+    <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
+      <ButtonActionAdmin />
+      <DataGraph
+        title="Sistemas"
+        :total="systemStore.systems.length"
+        seeMoreUrl="/admin/systems"
+        :items="systemStore.systems"
+        groupBy="category"
+      />
     </div>
-    
     
     <section>
       <div class="flex flex-col w-[90%] mx-auto">
@@ -43,10 +47,18 @@ onBeforeMount(async () => {
         </TableFilterContainer>
       </div>
 
-      <div class="p-16" v-for="(system, index) in systemStore.systems" :key="index">
-        <p> {{system.id}} - {{ system.name }}</p>
-        <img class=" w-24 h-24 object-cover" :src="system?.image?.url">
-      </div>
+      <section>
+        <ListTableAdmin
+          :rows="systemStore.systems"
+          :columns="[
+            { key: 'id', label: 'ID' },
+            { key: 'name', label: 'Nome', editable: true },
+            { key: 'description', label: 'Descrição', editable: true },
+            { key: 'image.url', label: 'Imagem', type: 'image' }
+          ]"
+          @update:cell="(e) => console.log('editou', e)"
+        />
+      </section>
     </section>
   </AdminGlobalContainer>
 </template>

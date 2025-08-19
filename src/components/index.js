@@ -69,6 +69,8 @@ import TableConfig from './admin/table/TableConfig.vue';
 import TablePagination from './admin/table/TablePagination.vue';
 
 import SucessModalAdmin from './admin/modal/SucessModalAdmin.vue';
+import ListTableAdmin from './admin/layout/ListTableAdmin.vue';
+import DataGraph from './admin/layout/DataGraph.vue';
 
 export {
   AddInfoGlobal,
@@ -128,4 +130,6 @@ export {
   TableConfig,
   TablePagination,
   SucessModalAdmin,
+  ListTableAdmin,
+  DataGraph,
 };
