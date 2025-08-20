@@ -20,6 +20,16 @@ class SpecieService {
         }
     }
 
+    async getSpeciesById(id) {
+        try {
+            const { data } = await api.get(`/species/${id}`);
+            return data;
+        } catch (error) {
+            console.log("error in getSpeciesById", error);
+            throw error;
+        }
+    }
+
     /**
      * Creates a new species.
      * @param {Object} newSpecie - The new species object to create.
@@ -44,8 +54,8 @@ class SpecieService {
      */
     async updateSpecies(specie) {
         try {
-            const { data } = await api.put(`/species/${specie.id}/`, {headers: {authorization: `Bearer ${token}`}});
-            return data.results;
+            const { data } = await api.put(`/species/${specie.id}/`, specie, {headers: {authorization: `Bearer ${token}`}});
+            return data;
         } catch (error) {
             console.log("error in updateSpecies", error);
             throw error;

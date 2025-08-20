@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount } from 'vue'
-import { useSupportingStore } from '@/stores'
+import { useSpecieStore } from '@/stores'
 import {
   TableFilterContainer,
   TableFilterCard,
@@ -11,13 +11,13 @@ import {
 } from '@/components/index'
 
 import { useAdmin } from '@/stores/admin/filter_admin'
-const supportingStore = useSupportingStore()
+const speciesStore = useSpecieStore()
 const { generalFilterData, changeActive } = useAdmin()
 
 onBeforeMount(async () => {
-  await supportingStore.getMaterials()
-  console.log(supportingStore.materials)
-})
+  await speciesStore.getSpecies()
+  console.log(speciesStore.species)
+})  
 </script>
 
 <template>
@@ -25,14 +25,15 @@ onBeforeMount(async () => {
     <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
       <ButtonActionAdmin />
       <DataGraph
-        title="Materiais de Apoio"
-        :total="supportingStore.materials.length"
-        seeMoreUrl="/admin/supporting"
-        :items="supportingStore.materials"
-        groupBy="system.name" 
+        title="Espécies"
+        :total="speciesStore.species.length"
+        seeMoreUrl="/admin/species"
+        :items="speciesStore.species"
+        groupBy="category"
       />
+      
     </div>
-
+    
     <section>
       <div class="flex flex-col w-[90%] mx-auto">
         <p class="text-xl font-medium mb-10">Cadastros Gerais</p>
@@ -49,11 +50,11 @@ onBeforeMount(async () => {
 
       <section>
         <ListTableAdmin
-          :rows="supportingStore.materials"
+          :rows="speciesStore.species"
           :columns="[
+            { key: 'id', label: 'ID' },
             { key: 'name', label: 'Nome', editable: true },
-            { key: 'document_supporting_material.description', label: 'Descrição', editable: true },
-            { key: 'system.name', label: 'Sistema', editable: true },
+            { key: 'category', label: 'Categoria', editable: true }
           ]"
           @update:cell="(e) => console.log('editou', e)"
         />

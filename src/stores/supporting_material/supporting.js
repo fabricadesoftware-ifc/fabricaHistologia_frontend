@@ -27,6 +27,7 @@ import { SupportingMaterialService } from '@/services'
 export const useSupportingStore = defineStore('supporting', () => {
   const state = reactive({
     materials: [],
+    materialById: null,
     materialsBySystem: [],
     searchResults: [],
     history: null,
@@ -36,6 +37,7 @@ export const useSupportingStore = defineStore('supporting', () => {
     connection: false
   })
   const materials = computed(() => state.materials)
+  const materialById = computed(() => state.materialById)
   const materialsBySystem = computed(() => state.materialsBySystem)
   const isLoading = computed(() => state.loading)
   const materialsCount = computed(() => state.organ.length)
@@ -51,8 +53,31 @@ export const useSupportingStore = defineStore('supporting', () => {
     try {
       const response = await SupportingMaterialService.getMaterials()
       state.materials = response
+      return response
     } catch (error) {
       state.error = error
+      throw error
+    } finally {
+      state.loading = false
+      state.connection = true
+    }
+  }
+
+    /**
+   * Fetches materials data.
+   * @async
+   * @function getMaterialsById
+   */
+  const getMaterialsById = async (id) => {
+    state.loading = true
+    try {
+      console.log('Buscando material com ID:', id)
+      const response = await SupportingMaterialService.getMaterialsById(id)
+      state.materialById = response
+      return response;
+    } catch (error) {
+      state.error = error
+      throw error
     } finally {
       state.loading = false
       state.connection = true
@@ -69,8 +94,10 @@ export const useSupportingStore = defineStore('supporting', () => {
     try {
       const response = await SupportingMaterialService.getMaterialsBySystem(systemId) 
       state.materialsBySystem = response
+      return response;
     } catch (error) {
       state.error = error
+      throw error
     } finally {
       state.loading = false
       state.connection = true
@@ -82,8 +109,10 @@ export const useSupportingStore = defineStore('supporting', () => {
     try {
       const response = await SupportingMaterialService.SearchMaterialsByName(name, system__id)
       state.searchResults = response
+      return response
     } catch (error) {
       state.error = error
+      throw error
     } finally {
       state.loading = false
       state.connection = true
@@ -99,9 +128,10 @@ export const useSupportingStore = defineStore('supporting', () => {
   const createMaterial = async (newMaterial) => {
     state.loading = true
     try {
-      state.materials.push(await SupportingMaterialService.createMaterial(newMaterial))
+      return state.materials.push(await SupportingMaterialService.createMaterial(newMaterial))
     } catch (error) {
       state.error = error
+      throw error;
     } finally {
       state.loading = false
     }
@@ -117,9 +147,11 @@ export const useSupportingStore = defineStore('supporting', () => {
     state.loading = true
     try {
       const index = state.materials.findIndex((s) => s.id === material.id)
-      state.materials[index] = await SupportingMaterialService.updateMaterials(material)
+      await SupportingMaterialService.updateMaterials(material)
+      return state.materials[index]
     } catch (error) {
       state.error = error
+      throw error
     } finally {
       state.loading = false
     }
@@ -133,10 +165,11 @@ export const useSupportingStore = defineStore('supporting', () => {
   const deleteMaterial = async (id) => {
     state.loading = true
     try {
-      const index = state.materials.findIndex((s) => s.id === id)
-      state.materials.splice(index, 1)
+      SupportingMaterialService.deleteMaterials(id)
+      return state.materials;
     } catch (error) {
       state.error = error
+      throw error
     } finally {
       state.loading = false
     }
@@ -149,8 +182,10 @@ export const useSupportingStore = defineStore('supporting', () => {
     materials,
     materialsBySystem,
     history,
+    materialById,
     getMaterialsBySystem,
     getMaterials,
+    getMaterialsById,
     createMaterial,
     updateMaterial,
     deleteMaterial,
