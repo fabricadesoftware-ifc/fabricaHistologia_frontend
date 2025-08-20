@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from "vue"
-import { RouterLink } from "vue-router"
+import { onMounted, ref } from "vue"
+import { useRoute, useRouter } from "vue-router"
 
 // Props
 const props = defineProps({
@@ -29,6 +29,9 @@ const props = defineProps({
 const emit = defineEmits(["update:cell", "edit", "delete"])
 const editingCell = ref(null)
 
+const route = useRoute()
+const router = useRouter()
+
 const startEdit = (rowId, key) => {
   editingCell.value = { rowId, key }
 }
@@ -41,6 +44,16 @@ const finishEdit = (row, key, event) => {
 const getNestedValue = (obj, path) => {
   return path.split(".").reduce((o, k) => (o ? o[k] : null), obj)
 }
+
+const appendId = (id) => {
+  const newPath = `${route.fullPath}/${id}`
+  router.push(newPath)
+}
+
+onMounted(() => {
+  console.log("ListTableAdmin mounted with rows:", props.rows)
+  console.log("Columns:", props.columns)
+})
 </script>
 
 <template>
@@ -106,8 +119,10 @@ const getNestedValue = (obj, path) => {
           </td>
 
           <td class="px-5 py-2 flex justify-start gap-2">
+
             <RouterLink
               :to="`${props.router}/${row.id}`"
+
               class="bg-[#29AC96] hover:bg-[#267A7A] text-white p-2 rounded-lg transition-colors"
               title="Editar"
             >

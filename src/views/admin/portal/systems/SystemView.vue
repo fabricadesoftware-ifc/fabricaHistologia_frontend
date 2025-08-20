@@ -15,7 +15,6 @@ import {
 
 import router from '@/router'
 import { useRoute } from 'vue-router'
-
 const systemStore = useSystemStore()
 const uploadStore = useUploadStore()
 const authStore = useAuthStore()
@@ -146,9 +145,11 @@ function closeErrorModal() {
 
 <template>
   <AdminGlobalContainer>
+
     <!-- Overlay de carregamento -->
     <div v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50">
       <div class="animate-spin rounded-full h-16 w-16 border-4 border-[#29AC96] border-t-transparent"></div>
+
     </div>
 
     <div v-else class="w-[90%] mx-auto space-y-6">
@@ -161,7 +162,9 @@ function closeErrorModal() {
           :hasLink="false"
         />
         <BtnDefault
+
           v-if="systemId"
+
           @click="tryDelete"
           class="mb-10 h-8 rounded-lg"
           text="Excluir"
@@ -197,17 +200,23 @@ function closeErrorModal() {
     </div>
   </AdminGlobalContainer>
 
+
   <!-- Modal de Sucesso -->
+
   <SucessModalAdmin
     :show="showSuccessModal"
     subtitle="Sucesso!"
     :title="successTitle"
+
     message="Operação concluída com sucesso."
+
     :cancel-label="null"
     :confirm-label="null"
   />
 
+
   <!-- Modal de Erro -->
+
   <SucessModalAdmin
     :show="showErrorModal"
     subtitle="Erro!"
@@ -219,7 +228,9 @@ function closeErrorModal() {
     @confirm="closeErrorModal"
   />
 
+
   <!-- Modal de Confirmação de Exclusão -->
+
   <SucessModalAdmin
     :show="showDeleteConfirm"
     subtitle="Confirmação"

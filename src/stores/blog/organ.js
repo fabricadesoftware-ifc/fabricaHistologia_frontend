@@ -1,164 +1,76 @@
-import { defineStore } from 'pinia'
-import { computed, reactive } from 'vue'
-import { OrganService } from '@/services'
-import { useStorage } from '@vueuse/core'
+import api from '../../plugins/api'
+const token = localStorage.getItem('psg_auth_token')
 
 /**
- * Store for managing organs data.
- * @typedef {Object} SpecieStore
- * @property {Object} state - The state object containing organs data.
- * @property {Array} state.species - The array of organs.
- * @property {Object|null} state.selectedSpecie - The currently selected organ.
- * @property {boolean} state.loading - Indicates if data is currently being loaded.
- * @property {Error|null} state.error - The error object, if any.
- * @property {boolean} isLoading - Computed property indicating if data is currently being loaded.
- * @property {number} speciesCount - Computed property indicating the number of organs.
- * @property {Function} getSpecies - Function to fetch organs data.
- * @property {Function} createSpecie - Function to create a new specie.
- * @property {Function} updateSpecie - Function to update an existing organ.
- * @property {Function} deleteSpecie - Function to delete a organ.
+ * Service class for handling organs related operations.
  */
-
-/**
- * Creates a new instance of the OrganStore.
- * @function useSpecieStore
- * @returns {SpecieStore} The OrganStore instance.
- */
-export const useOrganStore = defineStore('organ', () => {
-  const state = useStorage('organStorage', {
-    organs: [],
-    selectedOrgan: {},
-    organsBySystem: [],
-    loading: false,
-    error: null,
-    connection: false,
-    count: 0,
-  })
-
-  const organs = computed(() => state.value.organs)
-  const organsBySystem = computed(() => state.value.organsBySystem)
-  const selectedOrgan = computed(()=> state.value.selectedOrgan)
-  const isLoading = computed(() => state.value.loading)
-  const organsCount = computed(() => state.value.organs.length)
-  const count = computed(() => state.value.count)
-
-  /**
-   * Fetches organs data.
-   * @async
-   * @function getSpecies
-   */
-  const getOrgans = async (page) => {
-    state.value.loading = true
+class OrganService {
+  async getOrgans(page = "") {
     try {
-      const response = await OrganService.getOrgans(page)
-      state.value.organs = response.results
-      state.value.count = response.count
-      return response.results
+      const { data } = await api.get(`/organs/?page=${page}`)
+      return data
     } catch (error) {
-      state.value.error = error
-    } finally {
-      state.value.loading = false
-      state.value.connection = true
+      console.log('error in getOrgans', error)
+      throw error
     }
   }
 
-   /**
-   * Fetches organs data.
-   * @async
-   * @function getOrgansBySystem
-   */
-   const getOrgansBySystem = async (systemId) => {
-    state.value.loading = true
+  async getOrgansBySystem(systemId) {
     try {
-      const response = await OrganService.getOrgansBySystem(systemId)   
-      state.value.organsBySystem = response
-      return response
+      const { data } = await api.get(`/organs/?page=1&system_id=${systemId}`)
+      return data.results
     } catch (error) {
-      state.value.error = error
-    } finally {
-      state.value.loading = false
-      state.value.connection = true
+      console.log('error in getOrgansBySystem', error)
+      throw error
     }
   }
 
-  const getOrgansById = async (organId) => {
-    state.value.loading = true
+  async getOrgansById(organ_id) {
     try {
-      const response = await OrganService.getOrgansById(organId)   
-      state.value.selectedOrgan = response
+      const { data } = await api.get(`/organs/${organ_id}/`)
+      return data
     } catch (error) {
-      state.value.error = error
-    } finally {
-      state.value.loading = false
-      state.value.connection = true
+      console.log('error in getOrgansById', error)
+      throw error
     }
   }
 
-  /**
-   * Creates a new organ.
-   * @async
-   * @function createSpecie
-   * @param {Object} newSpecie - The new organ object to create.
-   */
-  const createOrgan = async (newOrgan) => {
-    state.value.loading = true
+  async createOrgan(newOrgan) {
     try {
-      state.value.organs.push(await OrganService.createOrgan(newOrgan))
+      const { data } = await api.post(`/organs/`, newOrgan, {
+        headers: { authorization: `Bearer ${token}` }
+      })
+      return data.results
     } catch (error) {
-      state.value.error = error
-    } finally {
-      state.value.loading = false
+      console.log('error in createOrgan', error)
+      throw error
     }
   }
 
-  /**
-   * Updates an existing organ.
-   * @async
-   * @function updateSpecie
-   * @param {Object} specie - The organ object to update.
-   */
-  const updateOrgan = async (organ) => {
-    state.value.loading = true
+  async updateOrgans(organ) {
     try {
-      const index = state.value.organs.findIndex((s) => s.id === organ.id)
-      state.value.organs[index] = await OrganService.updateOrgans(organ)
+      console.log('chegou longe')
+      const { data } = await api.put(`/organs/${organ.id}/`, organ, {
+        headers: { authorization: `Bearer ${token}` }
+      })
+      return data.results
     } catch (error) {
-      state.value.error = error
-    } finally {
-      state.value.loading = false
-    }
-  }
-  /**
-   * Deletes a organ.
-   * @async
-   * @function deleteSpecie
-   * @param {number} id - The ID of the organ to delete.
-   */
-  const deleteOrgan = async (id) => {
-    state.value.loading = true
-    try {
-      const index = state.value.organs.findIndex((s) => s.id === id)
-      state.value.organs.splice(index, 1)
-    } catch (error) {
-      state.value.error = error
-    } finally {
-      state.value.loading = false
+      console.log('error in updateOrgans', error)
+      throw error
     }
   }
 
-  return {
-    state,
-    isLoading,
-    organsCount,
-    organs,
-    organsBySystem,
-    selectedOrgan,
-    count,
-    getOrgansBySystem,
-    getOrgans,
-    getOrgansById,
-    createOrgan,
-    updateOrgan,
-    deleteOrgan
+  async deleteOrgans(id) {
+    try {
+      const { data } = await api.delete(`/organs/${id}/`, {
+        headers: { authorization: `Bearer ${token}` }
+      })
+      return data.results
+    } catch (error) {
+      console.log('error in deleteOrgan', error)
+      throw error
+    }
   }
-})
+}
+
+export default new OrganService()

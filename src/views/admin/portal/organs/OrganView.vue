@@ -62,22 +62,28 @@ watch(imageKey, (val) => {
 })
 
 // Modais de status
+
 const showSuccessModal = ref(false)
 const showErrorModal = ref(false)
 const showDeleteConfirm = ref(false)
 const errorMessage = ref('')
 
+
 const successAction = ref('edit')
+
 const successTitle = computed(() =>
   successAction.value === 'delete' ? 'Órgão Excluído' : 'Órgão Atualizado'
 )
 
 // Carrega dados iniciais
+
 onMounted(async () => {
   try {
     loading.value = true
     await Promise.all([
+
       uploadStore.getAllUploads('images'),
+
       systemStore.getSystems(),
       organStore.getOrgansById(organId)
     ])
@@ -117,11 +123,13 @@ const send = async () => {
 }
 
 // Tenta excluir órgão
+
 const tryDelete = () => {
   showDeleteConfirm.value = true
 }
 
 // Confirma exclusão
+
 const confirmDelete = async () => {
   try {
     await organStore.deleteOrgan(organId)
@@ -140,6 +148,7 @@ const confirmDelete = async () => {
 }
 
 // Fecha modal de erro
+
 function closeErrorModal() {
   showErrorModal.value = false
 }
@@ -216,16 +225,19 @@ function closeErrorModal() {
   </AdminGlobalContainer>
 
   <!-- Modal de sucesso -->
+
   <SucessModalAdmin
     :show="showSuccessModal"
     subtitle="Sucesso!"
     :title="successTitle"
     message="Ação realizada com sucesso."
+
     :cancel-label="null"
     :confirm-label="null"
   />
 
   <!-- Modal de erro -->
+
   <SucessModalAdmin
     :show="showErrorModal"
     subtitle="Erro!"
@@ -237,7 +249,7 @@ function closeErrorModal() {
     @confirm="closeErrorModal"
   />
 
-  <!-- Modal de confirmação para excluir -->
+
   <SucessModalAdmin
     :show="showDeleteConfirm"
     subtitle="Confirmação"

@@ -52,9 +52,12 @@ export const useSystemStore = defineStore('system', () => {
 
             state.value.systems = response.results;
             state.value.count = response.count;
+
+            return response;
         }
         catch (error) {
             state.value.error = error;
+            throw error;
         }
         finally {
             state.value.conected = true;  // just to see if the connection is established
@@ -87,10 +90,11 @@ export const useSystemStore = defineStore('system', () => {
     const createSystem = async (newSystem) => {
         state.value.loading = true;
         try {
-            state.value.systems.push(await SystemService.createSystems(newSystem));
+            return state.value.systems.push(await SystemService.createSystems(newSystem));
         }
         catch (error) {
             state.value.error = error;
+            throw error;
         }
         finally {
             state.value.conected = true;
@@ -107,8 +111,11 @@ export const useSystemStore = defineStore('system', () => {
     const updateSystem = async (system) => {
         state.value.loading = true;
         try {
+            console.log('Updating system:', system);
             const index = state.value.systems.findIndex((s) => s.id === system.id);
-            state.value.systems[index] = await SystemService.updateSystems(system);
+            const response = await SystemService.updateSystems(system);
+            state.value.systems[index] = response;
+            return response;
         }
         catch (error) {
             state.value.error = error;
@@ -128,12 +135,12 @@ export const useSystemStore = defineStore('system', () => {
     const deleteSystem = async (id) => {
         state.value.loading = true;
         try {
-            const index = state.value.systems.findIndex((s) => s.id === id);
-            state.value.systems.splice(index, 1);
             await SystemService.deleteSystems(id);
+            return;
         }
         catch (error) {
             state.value.error = error;
+            throw error;
         }
         finally {
             state.value.loading = false;

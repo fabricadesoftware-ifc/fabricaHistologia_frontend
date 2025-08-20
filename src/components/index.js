@@ -64,6 +64,8 @@ import InputImageAdmin from './admin/input/InputImageAdmin.vue';
 import InputDocumentAdmin from './admin/input/InputDocumentAdmin.vue';
 import InputSelectAdmin from './admin/input/InputSelectAdmin.vue';
 import InputStringAdmin from './admin/input/InputStringAdmin.vue';
+import InputTextAdmin from './admin/input/InputTextAdmin.vue';
+import InputUrlAdmin from './admin/input/InputUrlAdmin.vue';
 import AdminGlobalContainer from './admin/layout/AdminGlobalContainer.vue';
 import TableConfig from './admin/table/TableConfig.vue';
 import TablePagination from './admin/table/TablePagination.vue';
@@ -128,6 +130,8 @@ export {
   InputDocumentAdmin,
   InputSelectAdmin,
   InputStringAdmin,
+  InputTextAdmin,
+  InputUrlAdmin,
   AdminGlobalContainer,
   TableConfig,
   TablePagination,

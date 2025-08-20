@@ -139,6 +139,7 @@ const tryDelete = () => {
 
 const confirmDelete = async () => {
   try {
+    console.log('PORRA DO KARALHO')
     await postStore.deletePosts(postId)
     successAction.value = 'delete'
     showDeleteConfirm.value = false
@@ -178,7 +179,7 @@ function closeErrorModal() {
           :hasLink="false"
         />
         <BtnDefault
-          @click="tryDelete"
+          @click="confirmDelete"
           class="mb-10 h-8 rounded-lg"
           text="Excluir"
           background="bg-[#E40000]"
