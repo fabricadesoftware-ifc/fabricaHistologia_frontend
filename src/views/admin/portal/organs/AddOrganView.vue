@@ -8,6 +8,7 @@ import {
   InputImageAdmin,
   InputSelectAdmin,
   InputStringAdmin,
+  InputTextAdmin,
   AdminGlobalContainer,
   BtnDefault,
 } from '@/components/index'
@@ -72,7 +73,7 @@ onMounted(()=> {
       <form class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
         <InputStringAdmin label="Nome" :modelValue="newOrgan.name" @action="newOrgan.name = $event"/>
 
-        <InputStringAdmin label="Descrição" :modelValue="newOrgan.description" @action="newOrgan.description = $event"/>
+        <InputTextAdmin label="Descrição" :modelValue="newOrgan.description" @action="newOrgan.description = $event"/>
 
         <InputSelectAdmin label="Sistema" :modelValue="newOrgan.system" :options="systemStore.systems" @action="newOrgan.system = $event"/>
 

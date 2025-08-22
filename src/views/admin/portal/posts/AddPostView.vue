@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, onMounted, reactive, ref, onBeforeMount } from 'vue'
+import { onBeforeMount, reactive, ref } from 'vue'
 import { useSpecieStore, useOrganStore, useAuthStore, useUploadStore, usePostStore } from '@/stores'
 import {
   NavLateralAdmin,

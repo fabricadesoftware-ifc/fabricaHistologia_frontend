@@ -8,6 +8,7 @@ import {
   InputImageAdmin,
   InputSelectAdmin,
   InputStringAdmin,
+  InputTextAdmin,
   AdminGlobalContainer,
   BtnDefault,
 } from '@/components/index'
@@ -62,7 +63,7 @@ const send = async () => {
       <form class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
         <InputStringAdmin label="Nome" :modelValue="newSystem.name" @action="newSystem.name = $event"/>
 
-        <InputStringAdmin label="Descrição" :modelValue="newSystem.description" @action="newSystem.description = $event"/>
+        <InputTextAdmin label="Descrição" :modelValue="newSystem.description" @action="newSystem.description = $event"/>
 
 
         <div class="md:col-span-2 mb-10">

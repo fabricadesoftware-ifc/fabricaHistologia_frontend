@@ -36,13 +36,18 @@ const router = createRouter({
             {
               path: '',
               name: '',
-              component: () => import('@/views/admin/portal/systems/SystemView.vue')
+              component: () => import('@/views/admin/portal/systems/SystemsView.vue')
             },
             {
               path: 'add',
               name: '> Cadastrar Sistema',
               component: () => import('@/views/admin/portal/systems/AddSystemView.vue')
             },
+            {
+              path: ':id',
+              name: '> Atualizar Sistema',
+              component: () => import('@/views/admin/portal/systems/SystemView.vue')
+            }
           ]
         },
         {
@@ -53,13 +58,18 @@ const router = createRouter({
             {
               path: '',
               name: '',
-              component: () => import('@/views/admin/portal/species/SpecieView.vue')
+              component: () => import('@/views/admin/portal/species/SpeciesView.vue')
             },
             {
               path: 'add',
               name: '> Cadastrar Espécie',
               component: () => import('@/views/admin/portal/species/AddSpecieView.vue')
             },
+            {
+              path: ':id',
+              name: '> Atualizar Espécie',
+              component: () => import('@/views/admin/portal/species/SpecieView.vue')
+            }
           ]
         },
         {
@@ -70,7 +80,7 @@ const router = createRouter({
             {
               path: '',
               name: '',
-              component: () => import('@/views/admin/quiz/QuizView.vue')
+              component: () => import('@/views/admin/quiz/QuizzesView.vue')
             },
             {
               path: 'add-quiz',
@@ -89,11 +99,16 @@ const router = createRouter({
               name: '',
               component: () => import('@/views/admin/supporting_material/SupportingMaterialView.vue')
             },
-             {
+            {
               path: 'add-supporting-material',
               name: '> Cadastrar Material de Apoio',
               component: () => import('@/views/admin/supporting_material/AddSupportingMaterialView.vue')
             },
+            {
+              path: ':id',
+              name: '> Atualizar Material de Apoio',
+              component: () => import('@/views/admin/supporting_material/MaterialView.vue')
+            }
           ]
         },
         {
@@ -111,6 +126,11 @@ const router = createRouter({
               name: '> Cadastrar Órgão',
               component: () => import('@/views/admin/portal/organs/AddOrganView.vue')
             },
+            {
+              path: ':id',
+              name: '> Atualizar Órgão',
+              component: () => import('@/views/admin/portal/organs/OrganView.vue')
+            }
           ]
         },
         {

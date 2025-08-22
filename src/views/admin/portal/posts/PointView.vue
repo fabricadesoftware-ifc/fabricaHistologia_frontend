@@ -6,6 +6,7 @@ import router from '@/router'
 import { usePointStore, usePostStore } from '@/stores'
 import {
   InputStringAdmin,
+  InputTextAdmin,
   InputSelectAdmin,
   AdminGlobalContainer,
   BtnDefault,
@@ -304,7 +305,7 @@ function closeErrorModal() {
           :modelValue="newPoint.label_title"
           @action="newPoint.label_title = $event"
         />
-        <InputStringAdmin
+        <InputTextAdmin
           label="Descrição"
           :modelValue="newPoint.description"
           @action="newPoint.description = $event"

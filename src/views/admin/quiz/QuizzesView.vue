@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount } from 'vue'
-import { useSupportingStore } from '@/stores'
+import { useQuizStore } from '@/stores'
 import {
   TableFilterContainer,
   TableFilterCard,
@@ -11,12 +11,12 @@ import {
 } from '@/components/index'
 
 import { useAdmin } from '@/stores/admin/filter_admin'
-const supportingStore = useSupportingStore()
+const quizStore = useQuizStore()
 const { generalFilterData, changeActive } = useAdmin()
 
 onBeforeMount(async () => {
-  await supportingStore.getMaterials()
-  console.log(supportingStore.materials)
+  await quizStore.getQuiz()
+  console.log(quizStore.quiz)
 })
 </script>
 
@@ -25,11 +25,11 @@ onBeforeMount(async () => {
     <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
       <ButtonActionAdmin />
       <DataGraph
-        title="Materiais de Apoio"
-        :total="supportingStore.materials.length"
-        seeMoreUrl="/admin/supporting"
-        :items="supportingStore.materials"
-        groupBy="system.name" 
+        title="Quizzes"
+        :total="quizStore.quiz.length"
+        seeMoreUrl="/admin/quiz"
+        :items="quizStore.quiz"
+        groupBy="level" 
       />
     </div>
 
@@ -49,11 +49,13 @@ onBeforeMount(async () => {
 
       <section>
         <ListTableAdmin
-          :rows="supportingStore.materials"
+          :rows="quizStore.quiz"
           :columns="[
-            { key: 'name', label: 'Nome', editable: true },
-            { key: 'document_supporting_material.description', label: 'Descrição', editable: true },
-            { key: 'system.name', label: 'Sistema', editable: true },
+            { key: 'id', label: 'ID' },
+            { key: 'question', label: 'Pergunta', editable: true },
+            { key: 'system', label: 'Sistema', editable: true  },
+            { key: 'level', label: 'Nível', editable: true }
+
           ]"
           @update:cell="(e) => console.log('editou', e)"
         />

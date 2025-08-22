@@ -36,6 +36,7 @@ export const useSpecieStore = defineStore("specie",
         const isLoading = computed(() => state.loading);
         const speciesCount = computed(() => state.species.length);
         const species = computed(() => state.species)
+        const selectedSpecie = computed(() => state.selectedSpecie)
 
         /**
          * Fetches species data.
@@ -46,6 +47,23 @@ export const useSpecieStore = defineStore("specie",
             state.loading = true;
             try {
                 state.species = await SpecieService.getSpecies();
+            } catch (error) {
+                state.error = error;
+            } finally {
+                state.loading = false;
+                state.connection = true; // just to see if the connection is established
+            }
+        };
+
+                /**
+         * Fetches species data.
+         * @async
+         * @function getSpecies
+         */
+        const getSpeciesById = async (id) => {
+            state.loading = true;
+            try {
+                state.selectedSpecie = await SpecieService.getSpeciesById(id);
             } catch (error) {
                 state.error = error;
             } finally {
@@ -113,7 +131,9 @@ export const useSpecieStore = defineStore("specie",
             isLoading,
             speciesCount,
             species,
+            selectedSpecie,
             getSpecies,
+            getSpeciesById,
             createSpecie,
             updateSpecie,
             deleteSpecie

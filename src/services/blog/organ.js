@@ -49,6 +49,7 @@ class OrganService {
 
   async updateOrgans(organ) {
     try {
+      console.log('chegou longe')
       const { data } = await api.put(`/organs/${organ.id}/`, organ, {
         headers: { authorization: `Bearer ${token}` }
       })
@@ -61,7 +62,7 @@ class OrganService {
 
   async deleteOrgans(id) {
     try {
-      const { data } = await api.delete(`/organ/${id}/`, {
+      const { data } = await api.delete(`/organs/${id}/`, {
         headers: { authorization: `Bearer ${token}` }
       })
       return data.results
