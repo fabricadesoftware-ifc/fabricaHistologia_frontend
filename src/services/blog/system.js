@@ -10,10 +10,10 @@ class SystemService {
      * @returns {Promise<Array>} A promise that resolves to an array of systems.
      * @throws {Error} If an error occurs while retrieving the systems.
      */
-    async getSystems () {
+    async getSystems (page = "") {
         try {
-            const {data} = await api.get('/systems/');
-            return data.results;
+            const {data} = await api.get(`/systems/?page=${page}`);
+            return data;
         } catch (error) {
             console.log("error in getSystem", error);
             throw error;
@@ -29,6 +29,7 @@ class SystemService {
         try {
             console.log(id)
             const {data} = await api.get('/systems/' + id + '/');
+            console.log(data)
             return data;
         } catch (error) {
             console.log("error in getSystem", error);

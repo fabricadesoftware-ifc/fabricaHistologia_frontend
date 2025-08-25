@@ -72,6 +72,8 @@ import SucessModalAdmin from './admin/modal/SucessModalAdmin.vue';
 import ListTableAdmin from './admin/layout/ListTableAdmin.vue';
 import DataGraph from './admin/layout/DataGraph.vue';
 
+import LoadingSpinner from './portal/globals/LoadingSpinner.vue';
+
 export {
   AddInfoGlobal,
   PostInfo,
@@ -132,4 +134,5 @@ export {
   SucessModalAdmin,
   ListTableAdmin,
   DataGraph,
+  LoadingSpinner,
 };

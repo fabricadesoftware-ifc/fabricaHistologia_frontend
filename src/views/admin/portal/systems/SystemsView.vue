@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, ref, computed, watch } from 'vue'
-import { useOrganStore, useSystemStore } from '@/stores'
+import { useSystemStore } from '@/stores'
 import {
   TableFilterContainer,
   TableFilterCard,
@@ -15,37 +15,36 @@ import {
 import { useAdmin } from '@/stores/admin/filter_admin'
 
 // Stores
-const organStore = useOrganStore()
 const systemStore = useSystemStore()
 const { changeActive } = useAdmin()
 
 // Estado de carregamento
 const loading = ref(true)
 
-// Paginação
+// Controle de paginação
 const currentPage = ref(1)
 const itemsPerPage = 10
 
-// Lista de filtros
+// Filtros
 const filters = ref([])
 
-// Dados formatados (caso precise ajustar algo nos campos)
-const organsWithSystem = computed(() =>
-  organStore.organs.map(org => ({
-    ...org,
-    systemName: org.system?.name || 'Sem Sistema'
+// Dados formatados
+const systemsWithCategory = computed(() =>
+  systemStore.systems.map(s => ({
+    ...s,
+    categoryName: s.category || 'Sem Categoria'
   }))
 )
 
 // Carregar dados iniciais
 onBeforeMount(async () => {
   try {
-    await organStore.getOrgans(1)
-    await systemStore.getSystems()
+    await systemStore.getSystems(1)
+    const categories = [...new Set(systemStore.systems.map(s => s.category || 'Sem Categoria'))]
     filters.value = [
       { nome: 'Geral', active: true },
-      ...systemStore.systems.map(item => ({
-        nome: item.name,
+      ...categories.map(cat => ({
+        nome: cat,
         active: false
       }))
     ]
@@ -59,34 +58,34 @@ const activeFilter = computed(() =>
   filters.value.find(f => f.active)?.nome
 )
 
-// Filtrados
-const filteredOrgans = computed(() => {
+// Dados filtrados
+const filteredSystems = computed(() => {
   if (!activeFilter.value || activeFilter.value === 'Geral') {
-    return organsWithSystem.value
+    return systemsWithCategory.value
   }
-  return organsWithSystem.value.filter(org => org.system?.name === activeFilter.value)
+  return systemsWithCategory.value.filter(system => system.category === activeFilter.value)
 })
 
-// Paginação (API já retorna paginado, não precisa slice)
-const paginatedOrgans = computed(() => filteredOrgans.value)
+// Paginação (API já retorna paginado)
+const paginatedSystems = computed(() => filteredSystems.value)
 
-// Total de páginas com fallback
+// Total de páginas
 const totalPages = computed(() =>
-  Math.max(1, Math.ceil((organStore.count || filteredOrgans.value.length) / itemsPerPage))
+  Math.max(1, Math.ceil((systemStore.count || filteredSystems.value.length) / itemsPerPage))
 )
 
 // Atualiza dados ao mudar de página
 watch(currentPage, async (newPage) => {
   loading.value = true
-  await organStore.getOrgans(newPage)
+  await systemStore.getSystems(newPage)
   loading.value = false
 })
 
-// Reset para página 1 ao mudar filtro
+// Resetar para página 1 ao mudar filtro
 watch(activeFilter, async () => {
   currentPage.value = 1
   loading.value = true
-  await organStore.getOrgans(1)
+  await systemStore.getSystems(1)
   loading.value = false
 })
 </script>
@@ -101,11 +100,11 @@ watch(activeFilter, async () => {
       <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
         <ButtonActionAdmin />
         <DataGraph
-          title="Órgãos"
-          :total="organStore.count"
-          seeMoreUrl="/admin/organs"
-          :items="organsWithSystem"
-          groupBy="systemName"
+          title="Sistemas"
+          :total="systemStore.count"
+          seeMoreUrl="/admin/systems"
+          :items="systemsWithCategory"
+          groupBy="categoryName"
         />
       </div>
 
@@ -115,10 +114,10 @@ watch(activeFilter, async () => {
           <p class="text-xl font-medium mb-10">Cadastros Gerais</p>
           <TableFilterContainer :items="filters" :amount="filters.length">
             <TableFilterCard
-              v-for="(i, index) in filters"
+              v-for="(filter, index) in filters"
               :key="index"
-              :active="i.active"
-              :filter="i"
+              :active="filter.active"
+              :filter="filter"
               @change="changeActive(index, filters)"
             />
           </TableFilterContainer>
@@ -127,14 +126,14 @@ watch(activeFilter, async () => {
         <!-- Tabela -->
         <section class="mt-10 w-[90%] mx-auto flex flex-col items-center mb-10">
           <ListTableAdmin
-            :rows="paginatedOrgans"
+            :rows="paginatedSystems"
             :columns="[
               { key: 'id', label: 'ID' },
               { key: 'name', label: 'Nome', editable: true },
-              { key: 'systemName', label: 'Sistema', editable: true },
+              { key: 'description', label: 'Descrição', editable: true },
               { key: 'image.url', label: 'Imagem', type: 'image' }
             ]"
-            :router="'/admin/organs'"
+            :router="'/admin/systems'"
             @update:cell="(e) => console.log('editou', e)"
           />
 

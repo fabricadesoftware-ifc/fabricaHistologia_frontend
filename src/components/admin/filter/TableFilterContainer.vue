@@ -4,8 +4,12 @@ import { useAdmin } from '@/stores/admin/filter_admin'
 import { NavigationAdminFilterButton, SearchAdminFilter } from '@/components'
 
 const props = defineProps({
-  amount: Number
+  amount: Number,
+  items: Array,
 })
+
+// Emitir texto para o componente pai
+const emit = defineEmits(['search-text'])
 
 const { generalFilterData, handleFilterAction } = useAdmin()
 
@@ -36,6 +40,12 @@ const goDirection = (direction) => {
 }
 
 const returnMargin = computed(() => `-${margin.value}px`)
+
+// Recebe texto do componente SearchAdminFilter e reemite
+const handleSearchUpdate = (value) => {
+  console.log('Texto da busca:', value)
+  emit('search-text', value)
+}
 </script>
 
 <template>
@@ -82,10 +92,11 @@ const returnMargin = computed(() => `-${margin.value}px`)
         @change="handleFilterAction($event.target.value)"
         class="rounded-md bg-white border text-gray-700"
       >
-        <option v-for="i in generalFilterData" :key="i.key">{{ i.nome }}</option>
+        <option v-for="i in props.items" :key="i.key">{{ i.nome }}</option>
       </select>
     </div>
 
-    <SearchAdminFilter />
+    <!-- Busca -->
+    <SearchAdminFilter @update:query="handleSearchUpdate" />
   </div>
 </template>

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import imageBone from '@/assets/images/admin/bone-svgrepo-com.svg'
 import ImageLamina from '@/assets/images/admin/microscope-svgrepo-com.svg'
@@ -57,9 +57,12 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
   ])
 
     function navigateTo(to) {
-    open.value = false
+  open.value = false
+  setTimeout(() => {
     router.push(to)
-  }
+  }, 100)
+}
+
 
   function isCurrent(path) {
     return route.path === path

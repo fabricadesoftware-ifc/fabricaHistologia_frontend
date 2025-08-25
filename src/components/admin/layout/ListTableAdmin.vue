@@ -20,6 +20,9 @@ const props = defineProps({
         { key: "image.url", label: "Imagem", type: "image" },
       ]
     */
+  },
+  router: {
+    type: String,
   }
 })
 
@@ -104,7 +107,7 @@ const getNestedValue = (obj, path) => {
 
           <td class="px-5 py-2 flex justify-start gap-2">
             <RouterLink
-              :to="`/admin/posts/${row.id}`"
+              :to="`${props.router}/${row.id}`"
               class="bg-[#29AC96] hover:bg-[#267A7A] text-white p-2 rounded-lg transition-colors"
               title="Editar"
             >

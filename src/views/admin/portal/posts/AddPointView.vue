@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { usePointStore, usePostStore, useAuthStore } from '@/stores'
 import {
   AdminGlobalContainer,
@@ -29,6 +29,14 @@ const colors = [
   { name: 'Vermelho', id: 'red' },
   { name: 'Azul', id: 'blue' }
 ]
+
+const postOptions = computed(()=> {
+  console.log(postsStore.posts)
+  return postsStore.posts.map(post => ({
+    id: post?.id,
+    name: post?.name
+  }))
+})
 
 const canvas = ref(null)
 const ctx = ref(null)
@@ -176,7 +184,7 @@ function closeErrorModal() {
         <InputSelectAdmin 
           label="Post" 
           :modelValue="newPoint.posts" 
-          :options="postsStore.posts" 
+          :options="postOptions" 
           optionLabel="name" 
           optionValue="id" 
           @action="val => { newPoint.posts = val; setDefaultImage(); }"

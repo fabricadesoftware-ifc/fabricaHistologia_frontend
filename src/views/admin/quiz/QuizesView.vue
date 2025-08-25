@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, ref, computed, watch } from 'vue'
-import { useOrganStore, useSystemStore } from '@/stores'
+import { useQuizStore, useSystemStore } from '@/stores'
 import {
   TableFilterContainer,
   TableFilterCard,
@@ -15,7 +15,7 @@ import {
 import { useAdmin } from '@/stores/admin/filter_admin'
 
 // Stores
-const organStore = useOrganStore()
+const quizStore = useQuizStore()
 const systemStore = useSystemStore()
 const { changeActive } = useAdmin()
 
@@ -26,21 +26,28 @@ const loading = ref(true)
 const currentPage = ref(1)
 const itemsPerPage = 10
 
-// Lista de filtros
+// Filtros
 const filters = ref([])
 
-// Dados formatados (caso precise ajustar algo nos campos)
-const organsWithSystem = computed(() =>
-  organStore.organs.map(org => ({
-    ...org,
-    systemName: org.system?.name || 'Sem Sistema'
+// Mapa de níveis
+const levelMap = {
+  1: 'Fácil',
+  2: 'Médio',
+  3: 'Difícil',
+}
+
+// Dados formatados
+const quizzesWithLevelName = computed(() =>
+  quizStore.quiz.map(q => ({
+    ...q,
+    levelName: levelMap[q.level] || `Nível ${q.level}`
   }))
 )
 
 // Carregar dados iniciais
 onBeforeMount(async () => {
   try {
-    await organStore.getOrgans(1)
+    await quizStore.getQuiz(1)
     await systemStore.getSystems()
     filters.value = [
       { nome: 'Geral', active: true },
@@ -60,35 +67,37 @@ const activeFilter = computed(() =>
 )
 
 // Filtrados
-const filteredOrgans = computed(() => {
+const filteredQuizzes = computed(() => {
   if (!activeFilter.value || activeFilter.value === 'Geral') {
-    return organsWithSystem.value
+    return quizzesWithLevelName.value
   }
-  return organsWithSystem.value.filter(org => org.system?.name === activeFilter.value)
+  return quizzesWithLevelName.value.filter(q => q.system?.name === activeFilter.value)
 })
 
-// Paginação (API já retorna paginado, não precisa slice)
-const paginatedOrgans = computed(() => filteredOrgans.value)
+// A API já pagina, então a tabela usa diretamente os dados atuais
+const paginatedQuizzes = computed(() => filteredQuizzes.value)
 
-// Total de páginas com fallback
-const totalPages = computed(() =>
-  Math.max(1, Math.ceil((organStore.count || filteredOrgans.value.length) / itemsPerPage))
-)
+// === Cálculo de quantidade de páginas ===
+// Segue o padrão de posts: usa o count da store (fallback para length caso não venha)
+const totalPages = computed(() => Math.max(1, Math.ceil(quizStore.quizCountState / itemsPerPage)))
 
-// Atualiza dados ao mudar de página
+// Atualizar dados ao mudar de página
 watch(currentPage, async (newPage) => {
   loading.value = true
-  await organStore.getOrgans(newPage)
+  await quizStore.getQuiz(newPage)
   loading.value = false
 })
 
-// Reset para página 1 ao mudar filtro
+// Resetar para página 1 ao mudar filtro
 watch(activeFilter, async () => {
   currentPage.value = 1
   loading.value = true
-  await organStore.getOrgans(1)
+  await quizStore.getQuiz(1)
   loading.value = false
 })
+
+watch(totalPages, (val) => console.log('Total Pages:', val))
+
 </script>
 
 <template>
@@ -101,11 +110,11 @@ watch(activeFilter, async () => {
       <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
         <ButtonActionAdmin />
         <DataGraph
-          title="Órgãos"
-          :total="organStore.count"
-          seeMoreUrl="/admin/organs"
-          :items="organsWithSystem"
-          groupBy="systemName"
+          title="Quizzes"
+          :total="totalItems"
+          seeMoreUrl="/admin/quiz"
+          :items="quizzesWithLevelName"
+          groupBy="levelName"
         />
       </div>
 
@@ -127,23 +136,28 @@ watch(activeFilter, async () => {
         <!-- Tabela -->
         <section class="mt-10 w-[90%] mx-auto flex flex-col items-center mb-10">
           <ListTableAdmin
-            :rows="paginatedOrgans"
+            :rows="paginatedQuizzes"
             :columns="[
               { key: 'id', label: 'ID' },
-              { key: 'name', label: 'Nome', editable: true },
-              { key: 'systemName', label: 'Sistema', editable: true },
-              { key: 'image.url', label: 'Imagem', type: 'image' }
+              { key: 'question', label: 'Pergunta', editable: true },
+              { key: 'system.name', label: 'Sistema', editable: true },
+              { key: 'levelName', label: 'Nível' }
             ]"
-            :router="'/admin/organs'"
+            :router="'/admin/quiz'"
             @update:cell="(e) => console.log('editou', e)"
           />
 
           <!-- Paginação -->
           <TablePagination
+           
             :currentPage="currentPage"
+            
             :total-pages="totalPages"
             @page-change="(page) => (currentPage = page)"
           />
+          <!-- Se o seu TablePagination aceitar totalPages diretamente, pode passar também:
+          :totalPages="totalPages"
+          -->
         </section>
       </section>
     </template>
