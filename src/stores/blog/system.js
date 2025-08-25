@@ -31,24 +31,27 @@ export const useSystemStore = defineStore('system', () => {
         loading: false,
         error: null,
         selectedSystem: {},
+        count: 0,
     })
 
     const systems = computed(() => state.value.systems)
     const selectedSystem = computed(() => state.value.selectedSystem)
     const isLoading = computed(() => state.value.loading);
     const systemsCount = computed(() => state.value.systems.length);
+    const count = computed(() => state.value.count);
 
     /**
      * Fetches system data.
      * @async
      * @function getSystem
      */
-    const getSystems = async () => {
+    const getSystems = async (page) => {
         state.value.loading = true
         try {
-            const response = await SystemService.getSystems();
-            
-            state.value.systems = response
+            const response = await SystemService.getSystems(page);
+
+            state.value.systems = response.results;
+            state.value.count = response.count;
         }
         catch (error) {
             state.value.error = error;
@@ -64,6 +67,7 @@ export const useSystemStore = defineStore('system', () => {
         try {
             const response = await SystemService.getSystemById(id);
             state.value.selectedSystem = response
+            return response
         }
         catch (error) {
             state.value.error = error;
@@ -108,6 +112,7 @@ export const useSystemStore = defineStore('system', () => {
         }
         catch (error) {
             state.value.error = error;
+            throw error;
         }
         finally {
             state.value.loading = false;
@@ -135,5 +140,5 @@ export const useSystemStore = defineStore('system', () => {
         }
     }
 
-    return { state, isLoading, systemsCount, systems, selectedSystem, getSystems, getSystemById,  createSystem, updateSystem, deleteSystem };
+    return { state, isLoading, systemsCount, systems, selectedSystem, count, getSystems, getSystemById,  createSystem, updateSystem, deleteSystem };
 })

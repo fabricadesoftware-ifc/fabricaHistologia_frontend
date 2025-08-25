@@ -35,6 +35,7 @@ export const usePostStore = defineStore("post",
             loading: false,
             error: null,
             connection: false,
+            count: 0,
         });
         const posts = computed(() => state.value.posts)
         const isLoading = computed(() => state.value.loading);
@@ -42,6 +43,7 @@ export const usePostStore = defineStore("post",
         const postByOrganAndType = computed(()=> state.value.postsByOrganAndType)
         const selectedPost = computed(() => state.value.selectedPost)
         const postsByOrgan = computed(() => state.value.postsByOrgan)
+        const count = computed(() => state.value.count)
 
         const typeSelection = ref(1)
 
@@ -50,11 +52,12 @@ export const usePostStore = defineStore("post",
          * @async
          * @function getPosts
          */
-        const getPosts = async () => {
+        const getPosts = async (page) => {
             state.value.loading = true;
             try {
-                const response = await PostService.getPosts();
-                state.value.posts = response
+                const response = await PostService.getPosts(page);
+                state.value.count = response.count
+                state.value.posts = response.results
             } catch (error) {
                 state.value.error = error;
             } finally {
@@ -169,6 +172,7 @@ export const usePostStore = defineStore("post",
             selectedPost,
             postsByOrgan,
             typeSelection,
+            count,
             getPosts,
             getPostsByOrganAndType,
             getPostsByOrgan,

@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, ref, computed, watch } from 'vue'
-import { useOrganStore, usePostStore } from '@/stores'
+import { useSupportingStore } from '@/stores'
 import {
   TableFilterContainer,
   TableFilterCard,
@@ -15,8 +15,7 @@ import {
 import { useAdmin } from '@/stores/admin/filter_admin'
 
 // Stores
-const postStore = usePostStore()
-const organStore = useOrganStore()
+const supportingStore = useSupportingStore()
 const { changeActive } = useAdmin()
 
 // Estado de carregamento
@@ -26,26 +25,26 @@ const loading = ref(true)
 const currentPage = ref(1)
 const itemsPerPage = 10
 
-// Filtros
+// Filtros dinâmicos
 const filters = ref([])
 
-// Posts formatados com fallback para nome do órgão
-const postsWithOrganName = computed(() =>
-  postStore.posts.map(post => ({
-    ...post,
-    organName: post.organ?.name || 'Sem órgão'
+// Dados tratados para incluir nome do sistema
+const materialsWithSystem = computed(() =>
+  supportingStore.materials.map(material => ({
+    ...material,
+    systemName: material.system?.name || 'Sem Sistema'
   }))
 )
 
-// Carregar dados iniciais
+// Carrega dados iniciais
 onBeforeMount(async () => {
   try {
-    await postStore.getPosts(1)
-    await organStore.getOrgans()
+    await supportingStore.getMaterials(1)
+    const systems = [...new Set(supportingStore.materials.map(m => m.system?.name || 'Sem Sistema'))]
     filters.value = [
       { nome: 'Geral', active: true },
-      ...organStore.organs.map(org => ({
-        nome: org.name,
+      ...systems.map(sys => ({
+        nome: sys,
         active: false
       }))
     ]
@@ -59,34 +58,34 @@ const activeFilter = computed(() =>
   filters.value.find(f => f.active)?.nome
 )
 
-// Lista filtrada
-const filteredPosts = computed(() => {
+// Dados filtrados
+const filteredMaterials = computed(() => {
   if (!activeFilter.value || activeFilter.value === 'Geral') {
-    return postsWithOrganName.value
+    return materialsWithSystem.value
   }
-  return postsWithOrganName.value.filter(post => post.organ?.name === activeFilter.value)
+  return materialsWithSystem.value.filter(material => material.systemName === activeFilter.value)
 })
 
-// Paginação (API já retorna dados paginados)
-const paginatedPosts = computed(() => filteredPosts.value)
+// Paginação (API já paginada)
+const paginatedMaterials = computed(() => filteredMaterials.value)
 
-// Total de páginas com fallback para length
+// Total de páginas
 const totalPages = computed(() =>
-  Math.max(1, Math.ceil((postStore.count || filteredPosts.value.length) / itemsPerPage))
+  Math.max(1, Math.ceil((supportingStore.count || filteredMaterials.value.length) / itemsPerPage))
 )
 
-// Atualizar dados ao mudar de página
+// Atualiza ao mudar de página
 watch(currentPage, async (newPage) => {
   loading.value = true
-  await postStore.getPosts(newPage)
+  await supportingStore.getMaterials(newPage)
   loading.value = false
 })
 
-// Resetar para página 1 ao mudar filtro
+// Reset página ao trocar filtro
 watch(activeFilter, async () => {
   currentPage.value = 1
   loading.value = true
-  await postStore.getPosts(1)
+  await supportingStore.getMaterials(1)
   loading.value = false
 })
 </script>
@@ -101,11 +100,11 @@ watch(activeFilter, async () => {
       <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
         <ButtonActionAdmin />
         <DataGraph
-          title="Lâminas"
-          :total="postStore.count"
-          seeMoreUrl="/admin/posts"
-          :items="postsWithOrganName"
-          groupBy="organName"
+          title="Materiais de Apoio"
+          :total="supportingStore.count"
+          seeMoreUrl="/admin/supporting-materials"
+          :items="materialsWithSystem"
+          groupBy="systemName"
         />
       </div>
 
@@ -127,15 +126,13 @@ watch(activeFilter, async () => {
         <!-- Tabela -->
         <section class="mt-10 w-[90%] mx-auto flex flex-col items-center mb-10">
           <ListTableAdmin
-            :rows="paginatedPosts"
+            :rows="paginatedMaterials"
             :columns="[
-              { key: 'id', label: 'ID' },
               { key: 'name', label: 'Nome', editable: true },
-              { key: 'species.name', label: 'Espécie' },
-              { key: 'organName', label: 'Órgão' },
-              { key: 'image.url', label: 'Imagem', type: 'image' }
+              { key: 'description', label: 'Descrição', editable: true },
+              { key: 'systemName', label: 'Sistema', editable: false }
             ]"
-            :router="'/admin/posts'"
+            router="/admin/supporting"
             @update:cell="(e) => console.log('editou', e)"
           />
 

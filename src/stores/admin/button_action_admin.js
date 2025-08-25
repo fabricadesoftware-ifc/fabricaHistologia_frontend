@@ -20,7 +20,7 @@ export const useActionSelectorStore = defineStore('actionSelector', () => {
       label: 'Pergunta',
       options: {
         'Pergunta': '/admin/quiz/add-quiz', // < modificar futuramente
-        'Resposta': '/admin/quiz/answer/add' // < modificar futuramente
+        'Resposta': '/admin/quiz/add-answer' // < modificar futuramente
       }
     },
     organs: {

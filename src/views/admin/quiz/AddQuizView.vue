@@ -39,6 +39,7 @@ onMounted(async () => {
 
 const send = async () => {
   try {
+    console.log(newQuiz)
     await quizStore.createQuiz(newQuiz)
 
     router.push('/admin/quiz')

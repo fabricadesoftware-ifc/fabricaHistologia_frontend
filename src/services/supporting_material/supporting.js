@@ -6,10 +6,10 @@ const token = localStorage.getItem('psg_auth_token')
  */
 class SupportingMaterialService {
 
-  async getMaterials() {
+  async getMaterials(page = "") {
     try {
-      const { data } = await api.get(`/supporting-material/`)
-      return data.results
+      const { data } = await api.get(`/supporting-material/?page=${page}`)
+      return data
     } catch (error) {
       console.log('error in getMaterials', error)
       throw error
@@ -22,6 +22,16 @@ class SupportingMaterialService {
       return data.results
     } catch (error) {
       console.log('error in getMaterialsBySystem', error)
+      throw error
+    }
+  }
+
+  async getMaterialsById(id) {
+    try {
+      const { data } = await api.get(`/supporting-material/${id}/`)
+      return data
+    } catch (error) {
+      console.log('error in getMaterialsById', error)
       throw error
     }
   }

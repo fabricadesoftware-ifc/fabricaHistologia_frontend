@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, ref, computed, watch } from 'vue'
-import { useOrganStore, usePostStore } from '@/stores'
+import { useSpecieStore } from '@/stores'
 import {
   TableFilterContainer,
   TableFilterCard,
@@ -15,8 +15,7 @@ import {
 import { useAdmin } from '@/stores/admin/filter_admin'
 
 // Stores
-const postStore = usePostStore()
-const organStore = useOrganStore()
+const speciesStore = useSpecieStore()
 const { changeActive } = useAdmin()
 
 // Estado de carregamento
@@ -29,23 +28,24 @@ const itemsPerPage = 10
 // Filtros
 const filters = ref([])
 
-// Posts formatados com fallback para nome do órgão
-const postsWithOrganName = computed(() =>
-  postStore.posts.map(post => ({
-    ...post,
-    organName: post.organ?.name || 'Sem órgão'
+// Dados formatados
+const speciesWithCategory = computed(() =>
+  speciesStore.species.map(s => ({
+    ...s,
+    categoryName: s.category || 'Sem Categoria'
   }))
 )
 
 // Carregar dados iniciais
 onBeforeMount(async () => {
   try {
-    await postStore.getPosts(1)
-    await organStore.getOrgans()
+    await speciesStore.getSpecies(1)
+    // Monta filtros com base nas categorias únicas
+    const categories = [...new Set(speciesStore.species.map(s => s.category || 'Sem Categoria'))]
     filters.value = [
       { nome: 'Geral', active: true },
-      ...organStore.organs.map(org => ({
-        nome: org.name,
+      ...categories.map(cat => ({
+        nome: cat,
         active: false
       }))
     ]
@@ -60,25 +60,25 @@ const activeFilter = computed(() =>
 )
 
 // Lista filtrada
-const filteredPosts = computed(() => {
+const filteredSpecies = computed(() => {
   if (!activeFilter.value || activeFilter.value === 'Geral') {
-    return postsWithOrganName.value
+    return speciesWithCategory.value
   }
-  return postsWithOrganName.value.filter(post => post.organ?.name === activeFilter.value)
+  return speciesWithCategory.value.filter(specie => specie.category === activeFilter.value)
 })
 
-// Paginação (API já retorna dados paginados)
-const paginatedPosts = computed(() => filteredPosts.value)
+// Paginação (API já retorna paginado)
+const paginatedSpecies = computed(() => filteredSpecies.value)
 
-// Total de páginas com fallback para length
+// Total de páginas
 const totalPages = computed(() =>
-  Math.max(1, Math.ceil((postStore.count || filteredPosts.value.length) / itemsPerPage))
+  Math.max(1, Math.ceil((speciesStore.count || filteredSpecies.value.length) / itemsPerPage))
 )
 
-// Atualizar dados ao mudar de página
+// Atualiza dados ao mudar de página
 watch(currentPage, async (newPage) => {
   loading.value = true
-  await postStore.getPosts(newPage)
+  await speciesStore.getSpecies(newPage)
   loading.value = false
 })
 
@@ -86,7 +86,7 @@ watch(currentPage, async (newPage) => {
 watch(activeFilter, async () => {
   currentPage.value = 1
   loading.value = true
-  await postStore.getPosts(1)
+  await speciesStore.getSpecies(1)
   loading.value = false
 })
 </script>
@@ -101,11 +101,11 @@ watch(activeFilter, async () => {
       <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
         <ButtonActionAdmin />
         <DataGraph
-          title="Lâminas"
-          :total="postStore.count"
-          seeMoreUrl="/admin/posts"
-          :items="postsWithOrganName"
-          groupBy="organName"
+          title="Espécies"
+          :total="speciesStore.count"
+          seeMoreUrl="/admin/species"
+          :items="speciesWithCategory"
+          groupBy="categoryName"
         />
       </div>
 
@@ -127,15 +127,13 @@ watch(activeFilter, async () => {
         <!-- Tabela -->
         <section class="mt-10 w-[90%] mx-auto flex flex-col items-center mb-10">
           <ListTableAdmin
-            :rows="paginatedPosts"
+            :rows="paginatedSpecies"
             :columns="[
               { key: 'id', label: 'ID' },
               { key: 'name', label: 'Nome', editable: true },
-              { key: 'species.name', label: 'Espécie' },
-              { key: 'organName', label: 'Órgão' },
-              { key: 'image.url', label: 'Imagem', type: 'image' }
+              { key: 'categoryName', label: 'Categoria', editable: true }
             ]"
-            :router="'/admin/posts'"
+            :router="'/admin/species'"
             @update:cell="(e) => console.log('editou', e)"
           />
 

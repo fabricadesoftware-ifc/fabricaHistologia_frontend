@@ -10,12 +10,22 @@ class SpecieService {
      * @returns {Promise<Array>} A promise that resolves to an array of species.
      * @throws {Error} If an error occurs while retrieving the species.
      */
-    async getSpecies() {
+    async getSpecies(page = "") {
         try {
-            const { data } = await api.get(`/species`);
-            return data.results;
+            const { data } = await api.get(`/species/?page=${page}`);
+            return data;
         } catch (error) {
             console.log("error in getSpecies", error);
+            throw error;
+        }
+    }
+
+       async getSpeciesById(id) {
+        try {
+            const { data } = await api.get(`/species/${id}`);
+            return data;
+        } catch (error) {
+            console.log("error in getSpeciesById", error);
             throw error;
         }
     }
@@ -44,7 +54,12 @@ class SpecieService {
      */
     async updateSpecies(specie) {
         try {
-            const { data } = await api.put(`/species/${specie.id}/`, {headers: {authorization: `Bearer ${token}`}});
+            const { data } = await api.put(`/species/${specie.id}/`, specie, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
             return data.results;
         } catch (error) {
             console.log("error in updateSpecies", error);

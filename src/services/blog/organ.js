@@ -5,10 +5,10 @@ const token = localStorage.getItem('psg_auth_token')
  * Service class for handling organs related operations.
  */
 class OrganService {
-  async getOrgans() {
+  async getOrgans(page = "") {
     try {
-      const { data } = await api.get(`/organs`)
-      return data.results
+      const { data } = await api.get(`/organs/?page=${page}`)
+      return data
     } catch (error) {
       console.log('error in getOrgans', error)
       throw error

@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, ref, computed, watch } from 'vue'
-import { useOrganStore, usePostStore } from '@/stores'
+import { useQuizStore, useSystemStore } from '@/stores'
 import {
   TableFilterContainer,
   TableFilterCard,
@@ -15,37 +15,44 @@ import {
 import { useAdmin } from '@/stores/admin/filter_admin'
 
 // Stores
-const postStore = usePostStore()
-const organStore = useOrganStore()
+const quizStore = useQuizStore()
+const systemStore = useSystemStore()
 const { changeActive } = useAdmin()
 
 // Estado de carregamento
 const loading = ref(true)
 
-// Controle de paginação
+// Paginação
 const currentPage = ref(1)
 const itemsPerPage = 10
 
 // Filtros
 const filters = ref([])
 
-// Posts formatados com fallback para nome do órgão
-const postsWithOrganName = computed(() =>
-  postStore.posts.map(post => ({
-    ...post,
-    organName: post.organ?.name || 'Sem órgão'
+// Mapa de níveis
+const levelMap = {
+  1: 'Fácil',
+  2: 'Médio',
+  3: 'Difícil',
+}
+
+// Dados formatados
+const quizzesWithLevelName = computed(() =>
+  quizStore.quiz.map(q => ({
+    ...q,
+    levelName: levelMap[q.level] || `Nível ${q.level}`
   }))
 )
 
 // Carregar dados iniciais
 onBeforeMount(async () => {
   try {
-    await postStore.getPosts(1)
-    await organStore.getOrgans()
+    await quizStore.getQuiz(1)
+    await systemStore.getSystems()
     filters.value = [
       { nome: 'Geral', active: true },
-      ...organStore.organs.map(org => ({
-        nome: org.name,
+      ...systemStore.systems.map(item => ({
+        nome: item.name,
         active: false
       }))
     ]
@@ -59,26 +66,25 @@ const activeFilter = computed(() =>
   filters.value.find(f => f.active)?.nome
 )
 
-// Lista filtrada
-const filteredPosts = computed(() => {
+// Filtrados
+const filteredQuizzes = computed(() => {
   if (!activeFilter.value || activeFilter.value === 'Geral') {
-    return postsWithOrganName.value
+    return quizzesWithLevelName.value
   }
-  return postsWithOrganName.value.filter(post => post.organ?.name === activeFilter.value)
+  return quizzesWithLevelName.value.filter(q => q.system?.name === activeFilter.value)
 })
 
-// Paginação (API já retorna dados paginados)
-const paginatedPosts = computed(() => filteredPosts.value)
+// A API já pagina, então a tabela usa diretamente os dados atuais
+const paginatedQuizzes = computed(() => filteredQuizzes.value)
 
-// Total de páginas com fallback para length
-const totalPages = computed(() =>
-  Math.max(1, Math.ceil((postStore.count || filteredPosts.value.length) / itemsPerPage))
-)
+// === Cálculo de quantidade de páginas ===
+// Segue o padrão de posts: usa o count da store (fallback para length caso não venha)
+const totalPages = computed(() => Math.max(1, Math.ceil(quizStore.quizCountState / itemsPerPage)))
 
 // Atualizar dados ao mudar de página
 watch(currentPage, async (newPage) => {
   loading.value = true
-  await postStore.getPosts(newPage)
+  await quizStore.getQuiz(newPage)
   loading.value = false
 })
 
@@ -86,9 +92,12 @@ watch(currentPage, async (newPage) => {
 watch(activeFilter, async () => {
   currentPage.value = 1
   loading.value = true
-  await postStore.getPosts(1)
+  await quizStore.getQuiz(1)
   loading.value = false
 })
+
+watch(totalPages, (val) => console.log('Total Pages:', val))
+
 </script>
 
 <template>
@@ -101,11 +110,11 @@ watch(activeFilter, async () => {
       <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
         <ButtonActionAdmin />
         <DataGraph
-          title="Lâminas"
-          :total="postStore.count"
-          seeMoreUrl="/admin/posts"
-          :items="postsWithOrganName"
-          groupBy="organName"
+          title="Quizzes"
+          :total="totalItems"
+          seeMoreUrl="/admin/quiz"
+          :items="quizzesWithLevelName"
+          groupBy="levelName"
         />
       </div>
 
@@ -115,10 +124,10 @@ watch(activeFilter, async () => {
           <p class="text-xl font-medium mb-10">Cadastros Gerais</p>
           <TableFilterContainer :items="filters" :amount="filters.length">
             <TableFilterCard
-              v-for="(filter, index) in filters"
+              v-for="(i, index) in filters"
               :key="index"
-              :active="filter.active"
-              :filter="filter"
+              :active="i.active"
+              :filter="i"
               @change="changeActive(index, filters)"
             />
           </TableFilterContainer>
@@ -127,24 +136,28 @@ watch(activeFilter, async () => {
         <!-- Tabela -->
         <section class="mt-10 w-[90%] mx-auto flex flex-col items-center mb-10">
           <ListTableAdmin
-            :rows="paginatedPosts"
+            :rows="paginatedQuizzes"
             :columns="[
               { key: 'id', label: 'ID' },
-              { key: 'name', label: 'Nome', editable: true },
-              { key: 'species.name', label: 'Espécie' },
-              { key: 'organName', label: 'Órgão' },
-              { key: 'image.url', label: 'Imagem', type: 'image' }
+              { key: 'question', label: 'Pergunta', editable: true },
+              { key: 'system.name', label: 'Sistema', editable: true },
+              { key: 'levelName', label: 'Nível' }
             ]"
-            :router="'/admin/posts'"
+            :router="'/admin/quiz'"
             @update:cell="(e) => console.log('editou', e)"
           />
 
           <!-- Paginação -->
           <TablePagination
+           
             :currentPage="currentPage"
+            
             :total-pages="totalPages"
             @page-change="(page) => (currentPage = page)"
           />
+          <!-- Se o seu TablePagination aceitar totalPages diretamente, pode passar também:
+          :totalPages="totalPages"
+          -->
         </section>
       </section>
     </template>

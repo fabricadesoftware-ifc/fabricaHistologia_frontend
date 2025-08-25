@@ -11,19 +11,19 @@ class QuizService {
      * @returns {Promise<Array>} A promise that resolves to an array of slides
      * @throws {Error} If an error occurs while retrieving the slides
      */
-    async getQuiz() {
+    async getQuiz(page = "") {
         try {
-            const { data } = await api.get('/quiz',);
-            return data.results;
+            const { data } = await api.get(`/quiz/?page=${page}`);
+            return data;
         } catch (error) {
             console.log("Service: GetQuiz - return error", error);
             throw error;
         }
     }
     
-    async getAnswers() {
+    async getAnswers(page = "") {
         try {
-            const { data } = await api.get('/answer');
+            const { data } = await api.get(`/answer/?page=${page}`);
             return data.results;
         } catch (error) {
             console.log("Service: GetAnswer - return error", error);
@@ -40,6 +40,27 @@ class QuizService {
             throw error;
         }
     }
+
+       async getQuizById(quiz_id) {
+        try {
+            const { data } = await api.get(`/quiz/${quiz_id}/`);
+            return data;
+        } catch (error) {
+            console.log("Service: GetQuiz - return error", error);
+            throw error;
+        }
+    }
+
+     async getAnswerById(answer_id) {
+        try {
+            const { data } = await api.get(`/answer/${answer_id}/`);
+            return data;
+        } catch (error) {
+            console.log("Service: GetAnswer - return error", error);
+            throw error;
+        }
+    }
+
 
     async getQuizBySystem(system_id, level) {
         try {
@@ -66,6 +87,16 @@ class QuizService {
             throw error;
         }
     }
+
+    async createAnswersBulk(newAnswers) {
+        try {
+            const { data } = await api.post('/answer/bulk-create/', newAnswers, {headers: {'authorization': `Bearer ${token}`}});
+            return data.results;
+        } catch (error) {
+            console.log("Service: AddAnswerBulk - return error", error);
+            throw error;
+        }
+    }
     
     async createQuiz(newQuiz) {
         try {
@@ -85,21 +116,39 @@ class QuizService {
      * @throws {Error} If an error occurs while updating the slide
      */
     async updateAnswers(answer) {
+        console.log('to maluco')
         try {
-            const { data } = await api.put(`/answer/${answer.id}/`, answer, {headers: {'authorization': `Bearer ${token}`}});
+            console.log('aqtbm')
+            const { data } = await api.put(`/answer/${answer.id}/`, answer, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
             console.log( "Service: UpdatePost - return success")
-            return data.results;
+            return data;
         } catch (error) {
+            console.log('aqtbm')
+
             console.log("Service: UpdatePost - return error", error);
             throw error;
         }
     }
 
     async updateQuiz(quiz) {
+        console.log('[DEBUG] Função send disparada')
+
         try {
-            const { data } = await api.put(`/quiz/${quiz.id}/`, quiz, {headers: {'authorization': `Bearer ${token}`}});
+
+            const { data } = await api.put(`/quiz/${quiz.id}/`, quiz, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
             console.log( "Service: UpdateQuiz - return success")
-            return data.results;
+            return data;
         } catch (error) {
             console.log("Service: UpdateQuiz - return error", error);
             throw error;
@@ -114,7 +163,7 @@ class QuizService {
      */
     async deleteAnswers(id) {
         try {
-            const { data } = await api.delete(`/answer/${id}`, {headers: {'authorization': `Bearer ${token}`}});
+            const { data } = await api.delete(`/answer/${id}/`, {headers: {'authorization': `Bearer ${token}`}});
             return data.results;
         } catch (error) {
             console.log("Service: DeleteAnswer - return error", error);

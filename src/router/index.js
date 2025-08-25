@@ -134,23 +134,6 @@ const router = createRouter({
           ]
         },
         {
-          path: 'supporting',
-          name: 'Materiais de Apoio',
-          meta: { activeUser: true },
-          children: [
-            {
-              path: '',
-              name: '',
-              component: () => import('@/views/admin/supporting_material/SupportingMaterialView.vue')
-            },
-             {
-              path: 'add-supporting-material',
-              name: '> Cadastrar Material de Apoio',
-              component: () => import('@/views/admin/supporting_material/AddSupportingMaterialView.vue')
-            },
-          ]
-        },
-        {
           path: 'organs',
           name: 'Órgãos',
           meta: { activeUser: true },

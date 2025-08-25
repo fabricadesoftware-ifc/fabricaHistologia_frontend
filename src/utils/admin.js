@@ -25,3 +25,15 @@ export function useAdmin() {
     changeActive
   }
 }
+
+export function deepIncludes(obj, query) {
+  if (!obj) return false
+  if (typeof obj === 'string' || typeof obj === 'number') {
+    return String(obj).toLowerCase().includes(query)
+  }
+  if (typeof obj === 'object') {
+    return Object.values(obj).some(value => deepIncludes(value, query))
+  }
+  return false
+}
+

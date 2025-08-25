@@ -28,29 +28,34 @@ export const useSupportingStore = defineStore('supporting', () => {
   const state = reactive({
     materials: [],
     materialsBySystem: [],
+    selectedMaterial: null,
     searchResults: [],
     history: null,
     nameHistory: '',
     loading: false,
     error: null,
-    connection: false
+    connection: false,
+    count: 0,
   })
   const materials = computed(() => state.materials)
   const materialsBySystem = computed(() => state.materialsBySystem)
+  const selectedMaterial = computed(()=> state.selectedMaterial)
   const isLoading = computed(() => state.loading)
   const materialsCount = computed(() => state.organ.length)
   const history = computed(()=> state.history)
+  const count = computed(()=> state.count)
 
   /**
    * Fetches materials data.
    * @async
    * @function getSpecies
    */
-  const getMaterials = async () => {
+  const getMaterials = async (page) => {
     state.loading = true
     try {
-      const response = await SupportingMaterialService.getMaterials()
-      state.materials = response
+      const response = await SupportingMaterialService.getMaterials(page)
+      state.materials = response.results
+      state.count = response.count
     } catch (error) {
       state.error = error
     } finally {
@@ -69,6 +74,19 @@ export const useSupportingStore = defineStore('supporting', () => {
     try {
       const response = await SupportingMaterialService.getMaterialsBySystem(systemId) 
       state.materialsBySystem = response
+    } catch (error) {
+      state.error = error
+    } finally {
+      state.loading = false
+      state.connection = true
+    }
+  }
+
+  const getMaterialsById = async (id) => {
+    state.loading = true
+    try {
+      const response = await SupportingMaterialService.getMaterialsById(id)
+      state.selectedMaterial = response
     } catch (error) {
       state.error = error
     } finally {
@@ -149,8 +167,10 @@ export const useSupportingStore = defineStore('supporting', () => {
     materials,
     materialsBySystem,
     history,
+    selectedMaterial,
     getMaterialsBySystem,
     getMaterials,
+    getMaterialsById,
     createMaterial,
     updateMaterial,
     deleteMaterial,
