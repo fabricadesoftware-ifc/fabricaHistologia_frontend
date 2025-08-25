@@ -124,9 +124,10 @@ export const useOrganStore = defineStore('organ', () => {
     state.value.loading = true
     try {
       const index = state.value.organs.findIndex((s) => s.id === organ.id)
-      state.value.organs[index] = await OrganService.updateOrgans(organ)
+      return state.value.organs[index] = await OrganService.updateOrgans(organ)
     } catch (error) {
       state.value.error = error
+      return error
       throw error;
     } finally {
       state.value.loading = false

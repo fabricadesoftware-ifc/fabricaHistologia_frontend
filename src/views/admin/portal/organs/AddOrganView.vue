@@ -10,6 +10,7 @@ import {
   InputStringAdmin,
   InputTextAdmin,
   AdminGlobalContainer,
+  SucessModalAdmin,
   BtnDefault,
 } from '@/components/index'
 import router from '@/router'
@@ -30,6 +31,10 @@ const newImage = reactive({
   file: null,
   description: '',
 })
+
+const showSuccessModal = ref(false)
+const showErrorModal = ref(false)
+const errorMessage = ref("")
 
 onMounted(async ()=> {
   await systemStore.getSystems()
@@ -52,16 +57,21 @@ const send = async () => {
     console.log(newOrgan)
     }
     await organStore.createOrgan(newOrgan)
-
-    router.push('/admin/organs')
+  showSuccessModal.value = true
+  setTimeout(()=>{
+router.push('/admin/organs')
+  },1000)
+    
   } catch (err) {
     console.error('Erro ao fazer upload da imagem:', err)
+    errorMessage.value = err?.message || "Erro inesperado ao cadastrar a Órgão."
+    showErrorModal.value = true
   }
 }
 
-onMounted(()=> {
-  
-})
+function closeErrorModal() {
+  showErrorModal.value = false
+}
 </script>
 
 <template>
@@ -85,4 +95,22 @@ onMounted(()=> {
       </form>
     </div>
   </AdminGlobalContainer>
+
+    <SucessModalAdmin
+    :show="showSuccessModal"
+    subtitle="Sucesso!"
+    title="Órgão cadastrado"
+  />
+
+  <!-- Modal de erro -->
+  <SucessModalAdmin
+    :show="showErrorModal"
+    subtitle="Erro!"
+    :title="errorMessage"
+    message="Tente novamente ou contate o suporte."
+    confirm-label="Fechar"
+    :cancel-label="null"
+    confirm-class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-xl"
+    @confirm="closeErrorModal"
+  />
 </template>

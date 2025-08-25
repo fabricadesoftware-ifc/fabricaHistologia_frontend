@@ -76,17 +76,6 @@ export const useSpecieStore = defineStore("specie",
          * @async
          * @function getSpecies
          */
-        const getSpeciesById = async (id) => {
-            state.loading = true;
-            try {
-                state.selectedSpecie = await SpecieService.getSpeciesById(id);
-            } catch (error) {
-                state.error = error;
-            } finally {
-                state.loading = false;
-                state.connection = true; // just to see if the connection is established
-            }
-        };
 
         /**
          * Creates a new specie.
@@ -100,6 +89,7 @@ export const useSpecieStore = defineStore("specie",
                 state.species.push(await SpecieService.createSpecies(newSpecie));
             } catch (error) {
                 state.error = error;
+                throw error;
             } finally {
                 state.loading = false;
             }
@@ -115,9 +105,10 @@ export const useSpecieStore = defineStore("specie",
             state.loading = true;
             try {
                 const index = state.species.findIndex((s) => s.id === specie.id);
-                state.species[index] = await SpecieService.updateSpecies(specie);
+                return state.species[index] = await SpecieService.updateSpecies(specie);
             } catch (error) {
                 state.error = error;
+                return error;
             } finally {
                 state.loading = false;
             }

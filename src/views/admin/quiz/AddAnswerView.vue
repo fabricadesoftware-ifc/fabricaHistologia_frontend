@@ -5,7 +5,8 @@ import {
   InputStringAdmin,
   InputSelectAdmin,
   AdminGlobalContainer,
-  BtnDefault
+  BtnDefault,
+  SucessModalAdmin,
 } from '@/components/index'
 import router from '@/router'
 
@@ -35,9 +36,9 @@ const newAnswers = reactive([
 
 // Buscar quizzes existentes
 onBeforeMount(async () => {
-  await quizStore.getQuiz()
-  console.log(quizStore.quiz)
-  quizOptions.value = quizStore.quiz.map(q => ({
+  await quizStore.getAllQuizes()
+  console.log(quizStore.allQuizes)
+  quizOptions.value = quizStore.allQuizes.map(q => ({
     id: q.id,
     name: q.question,
   }))
@@ -61,6 +62,10 @@ const removeAnswer = (index) => {
   }
 }
 
+const showSuccessModal = ref(false)
+const showErrorModal = ref(false)
+const errorMessage = ref("")
+
 // Enviar respostas
 const send = async () => {
   try {
@@ -74,10 +79,20 @@ const send = async () => {
     console.log('Payload enviado para API:', JSON.stringify(payload, null, 2))
 
     await quizStore.createAnswersBulk(payload)
+    showSuccessModal.value = true
+    setTimeout(()=>{
     router.push('/admin/quiz')
+
+    },1000)
   } catch (err) {
     console.error('Erro ao criar as respostas:', err.response?.data || err)
+    errorMessage.value = err?.message || "Erro inesperado ao cadastrar a Resposta."
+    showErrorModal.value = true
   }
+}
+
+function closeErrorModal() {
+  showErrorModal.value = false
 }
 
 </script>
@@ -149,4 +164,22 @@ const send = async () => {
       </form>
     </div>
   </AdminGlobalContainer>
+
+      <SucessModalAdmin
+    :show="showSuccessModal"
+    subtitle="Sucesso!"
+    title="Resposta cadastrada"
+  />
+
+  <!-- Modal de erro -->
+  <SucessModalAdmin
+    :show="showErrorModal"
+    subtitle="Erro!"
+    :title="errorMessage"
+    message="Tente novamente ou contate o suporte."
+    confirm-label="Fechar"
+    :cancel-label="null"
+    confirm-class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-xl"
+    @confirm="closeErrorModal"
+  />
 </template>

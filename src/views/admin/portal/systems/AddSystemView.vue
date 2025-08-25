@@ -11,6 +11,7 @@ import {
   InputTextAdmin,
   AdminGlobalContainer,
   BtnDefault,
+  SucessModalAdmin,
 } from '@/components/index'
 import router from '@/router'
 
@@ -33,6 +34,11 @@ onMounted(async ()=> {
   console.log('Dados iniciais do sistema:', newSystem)
 })
 
+
+const showSuccessModal = ref(false)
+const showErrorModal = ref(false)
+const errorMessage = ref("")
+
 const send = async () => {
   try {
     if (newImage.file) {
@@ -47,11 +53,19 @@ const send = async () => {
     console.log(newSystem)
     }
     await systemsStore.createSystem(newSystem)
-
+    showSuccessModal.value = true
+    setTimeout(()=> {
     router.push('/admin/systems')
+    }, 1000)
   } catch (err) {
     console.error('Erro ao fazer upload da imagem:', err)
+    errorMessage.value = err?.message || "Erro inesperado ao cadastrar a Sistema."
+    showErrorModal.value = true
   }
+}
+
+function closeErrorModal() {
+  showErrorModal.value = false
 }
 </script>
 
@@ -74,4 +88,22 @@ const send = async () => {
       </form>
     </div>
   </AdminGlobalContainer>
+
+     <SucessModalAdmin
+    :show="showSuccessModal"
+    subtitle="Sucesso!"
+    title="Sistema cadastrado"
+  />
+
+  <!-- Modal de erro -->
+  <SucessModalAdmin
+    :show="showErrorModal"
+    subtitle="Erro!"
+    :title="errorMessage"
+    message="Tente novamente ou contate o suporte."
+    confirm-label="Fechar"
+    :cancel-label="null"
+    confirm-class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-xl"
+    @confirm="closeErrorModal"
+  />
 </template>

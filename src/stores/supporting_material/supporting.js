@@ -73,21 +73,6 @@ export const useSupportingStore = defineStore('supporting', () => {
    * @async
    * @function getMaterialsById
    */
-  const getMaterialsById = async (id) => {
-    state.loading = true
-    try {
-      console.log('Buscando material com ID:', id)
-      const response = await SupportingMaterialService.getMaterialsById(id)
-      state.materialById = response
-      return response;
-    } catch (error) {
-      state.error = error
-      throw error
-    } finally {
-      state.loading = false
-      state.connection = true
-    }
-  }
 
    /**
    * Fetches Material data.
