@@ -66,12 +66,14 @@ class SystemService {
      */
     async updateSystems (system) {
         try {
+            console.log('chegou:', system);
             const {data} = await api.put(`/systems/${system.id}/`, system, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`,
                     'Content-Type': 'application/json'
                 }
             });
+            console.log("System updated successfully:", data);
             return data.results;
         } catch (error) {
             console.log("error in putSystem", error);

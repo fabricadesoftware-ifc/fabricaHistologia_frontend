@@ -146,5 +146,6 @@ watch(activeFilter, async () => {
         </section>
       </section>
     </template>
+
   </AdminGlobalContainer>
 </template>

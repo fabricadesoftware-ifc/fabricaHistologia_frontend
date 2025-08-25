@@ -59,17 +59,24 @@ const router = createRouter({
               path: '',
               name: '',
               component: () => import('@/views/admin/portal/species/SpeciesView.vue')
+
             },
              {
               path: ':id',
               name: '> Atualizar Espécie',
               component: () => import('@/views/admin/portal/species/SpecieView.vue')
+
             },
             {
               path: 'add',
               name: '> Cadastrar Espécie',
               component: () => import('@/views/admin/portal/species/AddSpecieView.vue')
             },
+            {
+              path: ':id',
+              name: '> Atualizar Espécie',
+              component: () => import('@/views/admin/portal/species/SpecieView.vue')
+            }
           ]
         },
         {
@@ -114,7 +121,7 @@ const router = createRouter({
               name: '',
               component: () => import('@/views/admin/supporting_material/SupportingMaterialsView.vue')
             },
-             {
+            {
               path: 'add-supporting-material',
               name: '> Cadastrar Material de Apoio',
               component: () => import('@/views/admin/supporting_material/AddSupportingMaterialView.vue')

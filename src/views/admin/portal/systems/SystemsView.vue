@@ -1,5 +1,7 @@
 <script setup>
+
 import { onBeforeMount, ref, computed, watch } from 'vue'
+
 import { useSystemStore } from '@/stores'
 import {
   TableFilterContainer,
@@ -92,6 +94,7 @@ watch(activeFilter, async () => {
 
 <template>
   <AdminGlobalContainer>
+
     <!-- Loading -->
     <LoadingSpinner v-if="loading" class="my-10" />
 
@@ -146,5 +149,6 @@ watch(activeFilter, async () => {
         </section>
       </section>
     </template>
+
   </AdminGlobalContainer>
 </template>

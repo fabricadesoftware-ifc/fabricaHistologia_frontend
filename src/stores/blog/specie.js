@@ -71,6 +71,23 @@ export const useSpecieStore = defineStore("specie",
             }
         };
 
+                /**
+         * Fetches species data.
+         * @async
+         * @function getSpecies
+         */
+        const getSpeciesById = async (id) => {
+            state.loading = true;
+            try {
+                state.selectedSpecie = await SpecieService.getSpeciesById(id);
+            } catch (error) {
+                state.error = error;
+            } finally {
+                state.loading = false;
+                state.connection = true; // just to see if the connection is established
+            }
+        };
+
         /**
          * Creates a new specie.
          * @async

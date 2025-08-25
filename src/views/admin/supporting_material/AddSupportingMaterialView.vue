@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { onBeforeMount, onMounted, reactive, ref } from 'vue'
 import { useSystemStore, useAuthStore, useQuizStore, useUploadStore, useSupportingStore } from '@/stores'
 import {
   NavLateralAdmin,
@@ -9,6 +9,8 @@ import {
   InputDocumentAdmin,
   InputSelectAdmin,
   InputStringAdmin,
+  InputTextAdmin,
+  InputUrlAdmin,
   AdminGlobalContainer,
   BtnDefault
 } from '@/components/index'
@@ -38,7 +40,7 @@ const newDocument = reactive({
   description: ''
 })
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await systemStore.getSystems()
   console.log(authStore.userInfo)
 
@@ -85,33 +87,34 @@ onMounted(() => {})
       <form class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
         <InputStringAdmin label="Nome" :modelValue="newMaterial.name" @action="newMaterial.name = $event" />
 
-        <InputStringAdmin label="Descrição" :modelValue="newMaterial.description" @action="newMaterial.description = $event"/>
+        <InputTextAdmin label="Descrição" :modelValue="newMaterial.description" @action="newMaterial.description = $event"/>
 
-        <InputStringAdmin label="URL para material de estudo" :modelValue="newMaterial.field_name" @action="newMaterial.field_name = $event"/>
+        <InputUrlAdmin label="URL para material de estudo" :modelValue="newMaterial.field_name" @action="newMaterial.field_name = $event"/>
 
 
         <InputSelectAdmin
           label="Sistema"
           :modelValue="newMaterial.system"
-          :options="systemStore.systems"
+          :options="systemStore?.systems"
           @action="newMaterial.system = $event"
         />
 
 
         <div class="md:col-span-2 mb-10">
           <InputDocumentAdmin
-            label="Documento"   
+            v-show="newImage.file === null"
+            label="Documento"
             :modelValue="newDocument.file"
             @action="newDocument.file = $event"
           />
         </div>
 
-        <div class="md:col-span-2 mb-10 flex items-center justify-center font-semibold text-[#29AC96]">
+        <div v-show="newDocument.file === null && newImage.file === null" class="md:col-span-2 mb-10 flex items-center justify-center font-semibold text-[#29AC96]">
             <span>OU</span>
         </div>
 
         <div class="md:col-span-2 mb-10">
-          <InputImageAdmin label="Imagem" :modelValue="newImage.file" @action="newImage.file = $event"/>
+          <InputImageAdmin v-show="newDocument.file === null" label="Imagem" :modelValue="newImage.file" @action="newImage.file = $event"/>
         </div>
 
         <BtnDefault class="mb-10" text="Cadastrar" background="bg-[#29AC96]" :hasLink="false" />

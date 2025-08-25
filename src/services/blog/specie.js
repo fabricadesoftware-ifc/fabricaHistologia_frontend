@@ -20,6 +20,7 @@ class SpecieService {
         }
     }
 
+
        async getSpeciesById(id) {
         try {
             const { data } = await api.get(`/species/${id}`);
@@ -61,6 +62,7 @@ class SpecieService {
                 }
             });
             return data.results;
+
         } catch (error) {
             console.log("error in updateSpecies", error);
             throw error;

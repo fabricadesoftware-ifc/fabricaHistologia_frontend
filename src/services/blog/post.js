@@ -96,6 +96,7 @@ class PostService {
      */
     async deletePosts(idPost) {
         try {
+            console.log('CHEGOU PORRA', idPost)
             const { data } = await api.delete(`/posts/${idPost}`, {headers: {'authorization': `Bearer ${token}`}});
             console.log( "Service: DeletePost - return success")
             return data.results;

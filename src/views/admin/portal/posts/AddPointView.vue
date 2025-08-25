@@ -4,6 +4,7 @@ import { usePointStore, usePostStore, useAuthStore } from '@/stores'
 import {
   AdminGlobalContainer,
   InputStringAdmin,
+  InputTextAdmin,
   InputSelectAdmin,
   BtnDefault,
   SucessModalAdmin
@@ -49,8 +50,9 @@ const showSuccessModal = ref(false)
 const showErrorModal = ref(false)
 const errorMessage = ref("")
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await postsStore.getPosts()
+  console.log(postsStore.posts)
   ctx.value = canvas.value.getContext('2d')
 })
 
@@ -177,7 +179,7 @@ function closeErrorModal() {
         
         <!-- inputs normais -->
         <InputStringAdmin label="Título" :modelValue="newPoint.label_title" @action="newPoint.label_title = $event"/>
-        <InputStringAdmin label="Descrição" :modelValue="newPoint.description" @action="newPoint.description = $event"/>
+        <InputTextAdmin label="Descrição" :modelValue="newPoint.description" @action="newPoint.description = $event"/>
         <InputSelectAdmin label="Cor" :modelValue="newPoint.color" :options="colors" optionLabel="name" optionValue="id" @action="newPoint.color = $event"/>
         
         <!-- POST com evento para carregar a imagem -->

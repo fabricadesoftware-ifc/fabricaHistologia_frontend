@@ -86,8 +86,10 @@ export const useOrganStore = defineStore('organ', () => {
     try {
       const response = await OrganService.getOrgansById(organId)   
       state.value.selectedOrgan = response
+      return response;
     } catch (error) {
       state.value.error = error
+      throw error;
     } finally {
       state.value.loading = false
       state.value.connection = true
@@ -103,9 +105,10 @@ export const useOrganStore = defineStore('organ', () => {
   const createOrgan = async (newOrgan) => {
     state.value.loading = true
     try {
-      state.value.organs.push(await OrganService.createOrgan(newOrgan))
+      return state.value.organs.push(await OrganService.createOrgan(newOrgan))
     } catch (error) {
       state.value.error = error
+      throw error;
     } finally {
       state.value.loading = false
     }
@@ -124,6 +127,7 @@ export const useOrganStore = defineStore('organ', () => {
       state.value.organs[index] = await OrganService.updateOrgans(organ)
     } catch (error) {
       state.value.error = error
+      throw error;
     } finally {
       state.value.loading = false
     }
@@ -139,8 +143,11 @@ export const useOrganStore = defineStore('organ', () => {
     try {
       const index = state.value.organs.findIndex((s) => s.id === id)
       state.value.organs.splice(index, 1)
+      await OrganService.deleteOrgans(id)
+      return state.value.organs
     } catch (error) {
       state.value.error = error
+      throw error;
     } finally {
       state.value.loading = false
     }

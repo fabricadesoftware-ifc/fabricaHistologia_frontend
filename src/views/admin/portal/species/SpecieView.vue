@@ -12,6 +12,7 @@ import {
 import router from '@/router'
 import { useRoute } from 'vue-router'
 
+
 // Stores
 const specieStore = useSpecieStore()
 
@@ -29,12 +30,15 @@ const specie = reactive({
 })
 
 // Modais de status
+
 const showSuccessModal = ref(false)
 const showErrorModal = ref(false)
 const showDeleteConfirm = ref(false)
 const errorMessage = ref('')
 
+
 const successAction = ref('edit')
+
 const successTitle = computed(() =>
   successAction.value === 'delete' ? 'Espécie Excluída' : 'Espécie Atualizada'
 )
@@ -155,6 +159,7 @@ const closeErrorModal = () => {
   />
 
   <!-- Modal de erro -->
+
   <SucessModalAdmin
     :show="showErrorModal"
     subtitle="Erro!"
@@ -166,7 +171,9 @@ const closeErrorModal = () => {
     @confirm="closeErrorModal"
   />
 
+
   <!-- Modal de confirmação de exclusão -->
+
   <SucessModalAdmin
     :show="showDeleteConfirm"
     subtitle="Confirmação"
