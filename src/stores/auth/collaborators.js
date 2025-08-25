@@ -83,6 +83,32 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         }
       }
 
+        const getAddress = async () => {
+        state.loading = true
+        try {
+          const response = await CollaboratorsService.getAddress()
+          return response
+        } catch (error) {
+          state.error = error
+        } finally {
+          state.loading = false
+          state.connection = true
+        }
+      }
+
+        const getAddressById = async (id) => {
+        state.loading = true
+        try {
+          const response = await CollaboratorsService.getAddressById(id)
+          return response
+        } catch (error) {
+          state.error = error
+        } finally {
+          state.loading = false
+          state.connection = true
+        }
+      }
+
          /**
      * Adds a new collaborator.
      * @async
@@ -97,6 +123,23 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
           const response = await CollaboratorsService.PostCollaborators(newCollaborator)
           state.collaborators.push(response)
           successMsg.value = true
+        } catch (error) {
+          state.error = error
+        } finally {
+          state.loading = false
+          state.connection = true
+        }
+      }
+
+      const postAddress = async (data) => {
+        state.loading = true
+        try {
+          
+          const response = await CollaboratorsService.PostAddress(data)
+          successMsg.value = true
+          console.log(response)
+          return response
+          
         } catch (error) {
           state.error = error
         } finally {
@@ -151,6 +194,9 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         isLoading,
         collaboratorsCount,
         successMsg,
+        postAddress,
+        getAddress,
+        getAddressById,
         getCollaborators,
         getCollaboratorsByUser,
         postCollaborators,

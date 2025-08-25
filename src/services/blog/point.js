@@ -11,11 +11,11 @@ class PointService {
      * @returns {Promise<Array>} A promise that resolves to an array of slides
      * @throws {Error} If an error occurs while retrieving the slides
      */
-    async getPoints() {
+    async getPoints(page = "") {
         try {
-            const { data } = await api.get('/points');
+            const { data } = await api.get(`/points/?page=${page}`);
             console.log( "Service: GetPost - return success")
-            return data.results;
+            return data;
         } catch (error) {
             console.log("Service: GetPost - return error", error);
             throw error;
@@ -25,6 +25,16 @@ class PointService {
     async getPointsByPost(post_id) {
         try {
             const {data} = await api.get(`/points/?posts_id=${post_id}`);
+            return data.results
+        } catch (error) {
+            console.log('Error in getPointsByPost', error);
+            throw error;
+        }
+    }
+
+      async getPointsById(id) {
+        try {
+            const {data} = await api.get(`/points/?id=${id}`);
             return data.results
         } catch (error) {
             console.log('Error in getPointsByPost', error);

@@ -1,58 +1,66 @@
 import api from "@/plugins/api";
+const token = localStorage.getItem('psg_auth_token')
 
 /**
  * Service class for handling Material related operations.
  */
-
 class SupportingMaterialService {
-     /**
-   * Retrieves all Material.
-   * @returns {Promise<Array>} A promise that resolves to an array of Material.
-   * @throws {Error} If an error occurs while retrieving the Material.
-   */
-  async getMaterials() {
+
+  async getMaterials(page = "") {
     try {
-      const { data } = await api.get(`/supporting-material/`)
-      return data.results
+      const { data } = await api.get(`/supporting-material/?page=${page}`)
+      return data
     } catch (error) {
-      console.log('error in getMaterial', error)
+      console.log('error in getMaterials', error)
       throw error
     }
   }
 
-  /**
-   * Retrieves all Material.
-   * @returns {Promise<Array>} A promise that resolves to an array of Material filtered by systems.
-   * @throws {Error} If an error occurs while retrieving the Material.
-   */
-    async getMaterialsBySystem(systemId) {
-      try {
-        const { data } = await api.get(`/supporting-material/?system_id=${systemId}`)
-        return data.results
-      } catch (error) {
-        console.log('error in getMaterial', error)
-        throw error
-      }
-    }
-
-    async SearchMaterialsByName(name, system_id) {
-
-      try {
-        const {data} = await api.get(`/supporting-material/?search=${name}&system_id=${system_id}`)
-      return data.results
-      } catch (error) {
-        throw error;
-      }
-    }
-  /**
-   * Creates a new Material.
-   * @param {Object} newSpecie - The new Material object to create.
-   * @returns {Promise<Object>} A promise that resolves to the created Material object.
-   * @throws {Error} If an error occurs while creating the Material.
-   */
-  async createMaterial(newOrgan) {
+  async getMaterialsById(id) {
     try {
-      const { data } = await api.post(`/supporting-material/`, newOrgan)
+      const { data } = await api.get(`/supporting-material/${id}/`)
+      return data
+    } catch (error) {
+      console.log('error in getMaterial by id', error)
+      throw error
+    }
+  }
+
+  async getMaterialsBySystem(systemId) {
+    try {
+      const { data } = await api.get(`/supporting-material/?system_id=${systemId}`)
+      return data.results
+    } catch (error) {
+      console.log('error in getMaterialsBySystem', error)
+      throw error
+    }
+  }
+
+  async getMaterialsById(id) {
+    try {
+      const { data } = await api.get(`/supporting-material/${id}/`)
+      return data
+    } catch (error) {
+      console.log('error in getMaterialsById', error)
+      throw error
+    }
+  }
+
+  async SearchMaterialsByName(name, system_id) {
+    try {
+      const { data } = await api.get(`/supporting-material/?search=${name}&system_id=${system_id}`)
+      return data.results
+    } catch (error) {
+      console.log('error in SearchMaterialsByName', error)
+      throw error
+    }
+  }
+
+  async createMaterial(newMaterial) {
+    try {
+      const { data } = await api.post(`/supporting-material/`, newMaterial, {
+        headers: { authorization: `Bearer ${token}` }
+      })
       return data.results
     } catch (error) {
       console.log('error in createMaterial', error)
@@ -60,34 +68,26 @@ class SupportingMaterialService {
     }
   }
 
-  /**
-   * Updates an existing Material.
-   * @param {Object} specie - The Material object to update.
-   * @returns {Promise<Object>} A promise that resolves to the updated Material object.
-   * @throws {Error} If an error occurs while updating the Material.
-   */
-  async updateMaterials(organ) {
+  async updateMaterials(material) {
     try {
-      const { data } = await api.put(`/supporting-material/${organ.id}/`)
+      const { data } = await api.put(`/supporting-material/${material.id}/`, material, {
+        headers: { authorization: `Bearer ${token}` }
+      })
       return data.results
     } catch (error) {
-      console.log('error in updateMaterial')
+      console.log('error in updateMaterials', error)
       throw error
     }
   }
 
-  /**
-   * Deletes a Material by its ID.
-   * @param {number} id - The ID of the Material to delete.
-   * @returns {Promise<Object>} A promise that resolves to the deleted Material object.
-   * @throws {Error} If an error occurs while deleting the Material.
-   */
   async deleteMaterials(id) {
     try {
-      const { data } = await api.delete(`/supporting-material/${id}/`)
+      const { data } = await api.delete(`/supporting-material/${id}/`, {
+        headers: { authorization: `Bearer ${token}` }
+      })
       return data.results
     } catch (error) {
-      console.log('error in deleteMaterial', error)
+      console.log('error in deleteMaterials', error)
       throw error
     }
   }

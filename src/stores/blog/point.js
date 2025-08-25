@@ -36,22 +36,25 @@ export const usePointStore = defineStore("point",
             loading: false,
             error: null,
             connection: false,
+            count : 0,
         });
         const points = computed(() => state.points)
         const isLoading = computed(() => state.loading);
         const pointCount = computed(() => state.points.length);
         const pointsByPosts = computed(() => state.pointsByPosts)
+        const count = computed(() => state.count)
 
         /**
          * Fetches post data.
          * @async
          * @function getPosts
          */
-        const getPoints = async () => {
+        const getPoints = async (page) => {
             state.loading = true;
             try {
-                const response = await PointService.getPoints();
-                const data = Object.assign(response, {visible: false})
+                const response = await PointService.getPoints(page);
+                const data = Object.assign(response.results, {visible: false})
+                state.count = response.count
                 state.points = data
             } catch (error) {
                 state.error = error;
@@ -75,6 +78,21 @@ export const usePointStore = defineStore("point",
             }
         }
 
+         const getPointsById = async (id) => {
+            state.loading = true;
+            try {
+                const response = await PointService.getPointsById(id)
+        
+                state.selectedPoint = response
+                return response
+            } catch (error) {
+                state.error = error
+            } finally {
+                state.loading = false
+                state.connection = true
+            }
+        }
+
         /**
          * Creates a new post.
          * @async
@@ -88,6 +106,7 @@ export const usePointStore = defineStore("point",
                 state.points.push(await PointService.createPoint(newPoint));
             } catch (error) {
                 state.error = error;
+                throw error;
             } finally {
                 state.loading = false;
             }
@@ -99,13 +118,17 @@ export const usePointStore = defineStore("point",
          * @function updatePosts
          * @param {Object} PosupdatePosts - The PosupdatePosts object to update.
          */
-        const updatePoints = async (point) => {
+        const updatePoints = async (point, id) => {
             state.loading = true;
             try {
-                const index = state.posts.findIndex((s) => s.id === point.id);
-                state.points[index] = await PointService.updatePoints(point);
+                console.log('updatePoints', point, id)
+            
+                const response = await PointService.updatePoints(point, id);
+                return response
             } catch (error) {
+              console.log(error)
                 state.error = error;
+                return error;
             } finally {
                 state.loading = false;
             }
@@ -199,7 +222,9 @@ export const usePointStore = defineStore("point",
             canvas,
             ctx,
             image,
+            count,
             getPoints,
+            getPointsById,
             getPointsByPosts,
             createPoint,
             updatePoints,

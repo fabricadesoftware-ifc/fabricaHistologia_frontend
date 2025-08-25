@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import imageBone from '@/assets/images/admin/bone-svgrepo-com.svg'
 import ImageLamina from '@/assets/images/admin/microscope-svgrepo-com.svg'
@@ -10,6 +10,8 @@ import ImagePet from '@/assets/images/admin/pet-svgrepo-com.svg'
 import ImageSystem from '@/assets/images/admin/dog-svgrepo-com.svg'
 import ImageLogout from '@/assets/images/admin/logout-svgrepo-com.svg'
 import ImageReturn from '@/assets/images/admin/arrow-back-svgrepo-com.svg'
+import ImageMenu from '@/assets/images/admin/menuadmin.svg'
+import { eraseWords } from '@/utils/admin'
 
 export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
   const isMobile = ref(false)
@@ -21,14 +23,17 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
 
   //NavbarAdminMenu.vue
 
+
+
   const menuSections = ref([
     {
       title: 'Portal',
       items: [
-        { label: 'Órgãos', icon: imageBone, to: '/orgaos' },
-        { label: 'Lâminas', icon: ImageLamina, to: '/laminas' },
-        { label: 'Espécies', icon: ImagePet, to: '/especies' },
-        { label: 'Sistemas', icon: ImageSystem, to: '/sistemas' }
+        { label: 'Geral', icon: ImageMenu, to: eraseWords('admin', '')},
+        { label: 'Órgãos', icon: imageBone, to: eraseWords('admin', 'organs') },
+        { label: 'Lâminas', icon: ImageLamina, to: eraseWords('admin', 'posts') },
+        { label: 'Espécies', icon: ImagePet, to: eraseWords('admin', 'species') },
+        { label: 'Sistemas', icon: ImageSystem, to: eraseWords('admin', 'systems') }
       ]
     },
     {
@@ -40,21 +45,24 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
     {
       title: 'Quiz',
       items: [
-        { label: 'Perguntas', icon: ImageTest, to: '/perguntas' }
+        { label: 'Perguntas', icon: ImageTest, to: '/admin/quiz' }
       ]
     },
     {
       title: 'Material de Suporte',
       items: [
-        { label: 'Conteúdos', icon: ImageDocument, to: '/conteudos' }
+        { label: 'Conteúdos', icon: ImageDocument, to: '/admin/supporting' }
       ]
     }
   ])
 
     function navigateTo(to) {
-    open.value = false
+  open.value = false
+  setTimeout(() => {
     router.push(to)
-  }
+  }, 100)
+}
+
 
   function isCurrent(path) {
     return route.path === path
@@ -119,6 +127,8 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
   function checkIsMobile() {
     isMobile.value = window.innerWidth <= 1150
   }
+
+
 
   function initResizeListener() {
     onMounted(() => {

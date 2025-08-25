@@ -44,6 +44,6 @@ onMounted(async ()=> {
 
 <template>
     <CardsContainer :gap="props.gap" :justify="props.justify"> 
-        <SmallCardDefault :count="counts[i.id] ?? 'carregando'" v-for="i in props.datas" :key="i.name" :item="i" :context="context" />
+        <SmallCardDefault :count="counts[i?.id] ?? 'carregando'" v-for="i in props.datas" :key="i?.name" :item="i" :context="context" />
     </CardsContainer>
 </template>

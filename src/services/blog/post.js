@@ -11,11 +11,11 @@ class PostService {
      * @returns {Promise<Array>} A promise that resolves to an array of slides
      * @throws {Error} If an error occurs while retrieving the slides
      */
-    async getPosts() {
+    async getPosts(page = "") {
         try {
-            const { data } = await api.get('/posts');
+            const { data } = await api.get(`/posts/?page=${page}`);
             console.log( "Service: GetPost - return success")
-            return data.results;
+            return data;
         } catch (error) {
             console.log("Service: GetPost - return error", error);
             throw error;
@@ -96,6 +96,7 @@ class PostService {
      */
     async deletePosts(idPost) {
         try {
+            console.log('CHEGOU PORRA', idPost)
             const { data } = await api.delete(`/posts/${idPost}`, {headers: {'authorization': `Bearer ${token}`}});
             console.log( "Service: DeletePost - return success")
             return data.results;
