@@ -136,7 +136,7 @@ export const usePostStore = defineStore("post",
             state.value.loading = true;
             try {
                 const index = state.value.posts.findIndex((s) => s.id === post.id);
-                state.value.posts[index] = await PostService.updatePosts(post, id);
+                return state.value.posts[index] = await PostService.updatePosts(post, id);
             } catch (error) {
                 state.value.error = error;
             } finally {

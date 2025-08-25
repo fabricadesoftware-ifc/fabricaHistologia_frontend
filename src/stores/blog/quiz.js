@@ -29,6 +29,7 @@ export const useQuizStore = defineStore("quiz",
     () => {
         const state = useStorage('quizStorage', {
             quiz: [],
+            allQuizes: [],
             answers: [],
             quizBySystem: [],
             answersByQuestion: [],
@@ -46,6 +47,7 @@ export const useQuizStore = defineStore("quiz",
         })
 
         const answers = computed(() => state.value.answers)
+        const allQuizes = computed(()=> state.value.allQuizes)
         const quiz = computed(() => state.value.quiz)
         const selectedQuiz = computed(()=> state.value.selectedQuiz)
         const selectedAnswers = computed(()=> state.value.selectedAnswers)
@@ -84,6 +86,18 @@ export const useQuizStore = defineStore("quiz",
                 state.value.connection = true; // just to see if the connection is established
             }
         };
+
+         const getAllQuizes = async () => {
+            state.value.loading = true;
+            try {
+              const response = await QuizService.getAllQuizes();
+              state.value.allQuizes = response;
+            } catch (error) {
+              state.value.error = error;
+            } finally {
+              state.value.loading = false;
+            }
+          };
 
         const getQuizById = async (quiz_id) => {
             state.value.loading = true;
@@ -180,6 +194,7 @@ export const useQuizStore = defineStore("quiz",
                 state.value.quiz.push(await QuizService.createQuiz(newQuiz));
             } catch (error) {
                 state.value.error = error;
+                throw error;
             } finally {
                 state.value.loading = false;
             }
@@ -191,6 +206,7 @@ export const useQuizStore = defineStore("quiz",
                 state.value.answers.push(await QuizService.createAnswers(newAnswer));
             } catch (error) {
                 state.value.error = error;
+                throw error;
             } finally {
                 state.value.loading = false;
             }
@@ -202,6 +218,7 @@ export const useQuizStore = defineStore("quiz",
                 state.value.answers.push(await QuizService.createAnswersBulk(newAnswers));
             } catch (error) {
                 state.value.error = error;
+                throw error;
             } finally {
                 state.value.loading = false;
             }
@@ -217,7 +234,7 @@ export const useQuizStore = defineStore("quiz",
             state.value.loading = true;
             try { 
                 const index = state.value.quiz.findIndex((s) => s.id === quiz.id);
-                state.value.quiz[index] = await QuizService.updateQuiz(quiz);
+                return state.value.quiz[index] = await QuizService.updateQuiz(quiz);
             } catch (error) {
                 state.value.error = error;
             } finally {
@@ -229,7 +246,8 @@ export const useQuizStore = defineStore("quiz",
     console.log('chega')
     state.value.loading = true;
     try {
-       await QuizService.updateAnswers(answer)
+       const response = await QuizService.updateAnswers(answer)
+       return response
     } catch (error) {
         console.log('erro?', error);
         state.value.error = error;
@@ -279,6 +297,7 @@ export const useQuizStore = defineStore("quiz",
             answersCount,
             countSavedAnswers,
             quiz,
+            allQuizes,
             answers,
             selectedAnswers,
             quizBySystem,
@@ -290,6 +309,7 @@ export const useQuizStore = defineStore("quiz",
             answersCountState,
             quizCountState,
             getMarkedAnswers,
+            getAllQuizes,
             getAnswerById,
             getQuizById,
             getQuiz,

@@ -123,10 +123,12 @@ export const usePointStore = defineStore("point",
             try {
                 console.log('updatePoints', point, id)
             
-                await PointService.updatePoints(point, id);
+                const response = await PointService.updatePoints(point, id);
+                return response
             } catch (error) {
               console.log(error)
                 state.error = error;
+                return error;
             } finally {
                 state.loading = false;
             }

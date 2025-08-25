@@ -33,7 +33,7 @@ const answer = reactive({
 
 // Opções para perguntas
 const questionsOptions = computed(() => {
-  return quizStore.quiz?.map((q) => ({
+  return quizStore.allQuizes?.map((q) => ({
     id: q.id,
     name: q.question
   })) || []
@@ -73,7 +73,7 @@ onMounted(async () => {
 
     // Carrega quiz e resposta
     await Promise.all([
-      quizStore.getQuiz(),
+      quizStore.getAllQuizes(),
       quizStore.getAnswerById(answerId)
     ])
 
@@ -108,9 +108,9 @@ const send = async () => {
     console.log('Payload enviado:', payload)
     await quizStore.updateAnswers(payload)
 
-    // setTimeout(()=> {
-    //     router.push('/admin/quiz')
-    // }, 1000)
+    setTimeout(()=> {
+        router.push('/admin/quiz')
+    }, 1000)
     successAction.value = 'edit'
     showSuccessModal.value = true
   } catch (err) {

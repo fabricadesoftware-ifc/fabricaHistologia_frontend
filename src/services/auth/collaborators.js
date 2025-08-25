@@ -19,6 +19,26 @@ class CollaboratorsService{
         }
     }
 
+    async getAddress() {
+        try {
+            const { data } = await api.get('/address', {headers: {'authorization': `Bearer ${token}`}})
+            return data.results
+        } catch (error) {
+            console.log('error in getAddress', error)
+            throw error
+        }
+    }
+
+     async getAddressById(id) {
+        try {
+            const { data } = await api.get(`/address/${id}`, {headers: {'authorization': `Bearer ${token}`}})
+            return data.results
+        } catch (error) {
+            console.log('error in getAddressById', error)
+            throw error
+        }
+    }
+
     async getCollaboratorsByUser(UserId) {
         try {
             const { data } = await api.get(`/personal/?user_id=${UserId}`)
@@ -38,6 +58,18 @@ class CollaboratorsService{
             throw error
         }
     }
+
+     async PostAddress(newData) {
+        try {
+            const { data } = await api.post('/address/', newData, {headers: {'authorization': `Bearer ${token}`}})
+            console.log(data)
+            return data.results
+        } catch (error) {
+            console.log('error in PostAddress', error)
+            throw error
+        }
+    }
+
     async updateCollaborators(personalData) {
         try {
             const { data } = await api.put(`/personal/${personalData.id}`, personalData)
