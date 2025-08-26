@@ -73,7 +73,12 @@ const send = async () => {
       newImage.description = `${newPost.name} - ${imageUiqueDescriptionId}`
       newPost.autor_user = authStore.userInfo.id
 
-      const result = await uploadStore.createUpload(`images`, newImage)
+      // Cria FormData
+      const formData = new FormData()
+      formData.append('file', newImage.file)
+      formData.append('description', newImage.description)
+
+      const result = await uploadStore.createUpload(`images`, formData)
       newPost.image = result.attachment_key
     }
     await postStore.createPost(newPost)
