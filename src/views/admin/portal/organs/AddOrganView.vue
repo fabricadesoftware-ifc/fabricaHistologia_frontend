@@ -50,7 +50,11 @@ const send = async () => {
     newImage.description = `${newOrgan.name} - ${imageUniqueDescriptionId}`
     newOrgan.autor_user = authStore.userInfo.id
 
-    const result = await uploadStore.createUpload(`images`, newImage)
+    const formData = new FormData()
+      formData.append('file', newImage.file)
+      formData.append('description', newImage.description)
+
+    const result = await uploadStore.createUpload(`images`, formData)
     console.log('imagem criada', result)
 
     newOrgan.image = result.attachment_key
