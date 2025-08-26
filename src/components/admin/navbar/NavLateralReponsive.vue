@@ -50,7 +50,7 @@ const store = useNavBarAdminStore()
   max-width: 100%;
   min-height: 100dvh;
   overflow-y: auto;
-  z-index: 40;
+  z-index: 99999;
 }
 
 @media (min-width: 500px) {

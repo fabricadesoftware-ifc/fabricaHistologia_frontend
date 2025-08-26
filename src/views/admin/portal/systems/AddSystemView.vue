@@ -73,7 +73,6 @@ const send = async () => {
         <InputImageAdmin label="Imagem" :modelValue="newImage.file" @action="newImage.file = $event"/>
       </div>
       <BtnDefault class="mb-10" text="Cadastrar" background="bg-[#29AC96]" :hasLink="false"/>
-      <input type="file" @change="e => console.log(e.target.files[0])"/>
 
     </form>
   </div>
