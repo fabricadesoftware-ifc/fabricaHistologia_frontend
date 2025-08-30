@@ -107,7 +107,7 @@ const confirmDelete = async () => {
     showDeleteConfirm.value = false
     showSuccessModal.value = true
     setTimeout(() => {
-      router.push('/admin/quizzes')
+      router.push('/admin/quiz')
     }, 1000)
   } catch (err) {
     console.error('Erro ao deletar quiz:', err)

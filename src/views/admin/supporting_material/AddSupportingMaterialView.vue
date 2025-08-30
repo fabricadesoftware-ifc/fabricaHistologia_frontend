@@ -59,7 +59,11 @@ const send = async () => {
       newImage.description = `${newMaterial.name} - ${imageUiqueDescriptionId}`
       newMaterial.autor_user = authStore.userInfo.id
 
-      const result = await uploadStore.createUpload(`images`, newImage)
+      const formData = new FormData()
+      formData.append('file', newImage.file)
+      formData.append('description', newImage.description)
+
+      const result = await uploadStore.createUpload(`images`, formData)
       console.log('imagem criada', result)
 
       newMaterial.image_supporting_material = result.attachment_key
@@ -69,7 +73,11 @@ const send = async () => {
       newDocument.description = `${newMaterial.name} - ${documentUiqueDescriptionId}`
       newMaterial.autor_user = authStore.userInfo.id
 
-      const result = await uploadStore.createUpload(`documents`, newDocument)
+      const formData = new FormData()
+      formData.append('file', newDocument.file)
+      formData.append('description', newDocument.description)
+
+      const result = await uploadStore.createUpload(`documents`, formData)
       console.log('documento criado', result)
 
       newMaterial.document_supporting_material = result.attachment_key

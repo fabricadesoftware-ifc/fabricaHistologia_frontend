@@ -37,7 +37,7 @@ onMounted(()=> {
 <template>
     <main class=" flex items-center w-dvw h-dvh justify-end bg-gray-100 relative ">
     
-    <div class="fixed top-0 left-0">
+    <div class="top-0 left-0">
     <NavLateralAdmin  />
     </div>
 
