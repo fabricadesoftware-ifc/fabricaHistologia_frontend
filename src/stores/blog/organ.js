@@ -62,6 +62,20 @@ export const useOrganStore = defineStore('organ', () => {
     }
   }
 
+  const getAllOrgans = async (page) => {
+    state.value.loading = true
+    try {
+      const response = await OrganService.getAllOrgans()
+      state.value.organs = response
+      return response
+    } catch (error) {
+      state.value.error = error
+    } finally {
+      state.value.loading = false
+      state.value.connection = true
+    }
+  }
+
    /**
    * Fetches organs data.
    * @async
@@ -127,7 +141,7 @@ export const useOrganStore = defineStore('organ', () => {
       return state.value.organs[index] = await OrganService.updateOrgans(organ)
     } catch (error) {
       state.value.error = error
-      return error
+
       throw error;
     } finally {
       state.value.loading = false
@@ -162,6 +176,7 @@ export const useOrganStore = defineStore('organ', () => {
     organsBySystem,
     selectedOrgan,
     count,
+    getAllOrgans,
     getOrgansBySystem,
     getOrgans,
     getOrgansById,

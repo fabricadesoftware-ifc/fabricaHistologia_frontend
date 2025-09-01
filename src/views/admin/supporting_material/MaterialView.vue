@@ -43,7 +43,7 @@ const newDocument = reactive({
 })
 
 onBeforeMount(async () => {
-  await systemStore.getSystems()
+  await systemStore.getAllSystems()
   const existing = await supportingStore.getMaterialsById(materialId)
   Object.assign(material, existing)
   material.system = material.system.id 

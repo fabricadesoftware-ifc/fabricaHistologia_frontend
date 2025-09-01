@@ -32,7 +32,7 @@ const levelOptions = [
 ]
 
 onMounted(async () => {
-  await systemStore.getSystems()
+  await systemStore.getAllSystems()
   console.log(authStore.userInfo)
 
   console.log('Dados iniciais do quiz:', newQuiz)

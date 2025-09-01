@@ -84,7 +84,7 @@ onMounted(async () => {
 
       uploadStore.getAllUploads('images'),
 
-      systemStore.getSystems(),
+      systemStore.getAllSystems(),
       organStore.getOrgansById(organId)
     ])
 
@@ -112,12 +112,12 @@ const send = async () => {
     await organStore.updateOrgan(organ)
     successAction.value = 'edit'
     showSuccessModal.value = true
-    setTimeout(() => {
-      router.push('/admin/organs')
-    }, 1000)
+    // setTimeout(() => {
+    //   router.push('/admin/organs')
+    // }, 1000)
   } catch (err) {
     console.error('Erro ao editar órgão:', err)
-    errorMessage.value = err?.message || 'Erro inesperado ao atualizar o órgão.'
+    errorMessage.value = err?.response?.data || 'Erro inesperado ao atualizar o órgão.'
     showErrorModal.value = true
   }
 }
@@ -231,7 +231,7 @@ function closeErrorModal() {
     subtitle="Sucesso!"
     :title="successTitle"
     message="Ação realizada com sucesso."
-
+    :duration="1"
     :cancel-label="null"
     :confirm-label="null"
   />

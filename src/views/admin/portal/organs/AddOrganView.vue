@@ -2,16 +2,14 @@
 import { onMounted, reactive, ref } from 'vue'
 import { useSystemStore, useOrganStore, useAuthStore, useUploadStore } from '@/stores'
 import {
-  NavLateralAdmin,
-  ButtonActionAdmin,
-  InputDateAdmin,
-  InputImageAdmin,
-  InputSelectAdmin,
+  AdminGlobalContainer,
+  BtnDefault,
   InputStringAdmin,
   InputTextAdmin,
-  AdminGlobalContainer,
-  SucessModalAdmin,
-  BtnDefault,
+  InputSelectAdmin,
+  InputImageAdmin,
+  LoadingSpinner,
+  SucessModalAdmin
 } from '@/components/index'
 import router from '@/router'
 
@@ -35,41 +33,50 @@ const newImage = reactive({
 const showSuccessModal = ref(false)
 const showErrorModal = ref(false)
 const errorMessage = ref("")
+const loading = ref(false)
 
-onMounted(async ()=> {
-  await systemStore.getSystems()
-  console.log(authStore.userInfo)
-
-  console.log('Dados iniciais do post:', newOrgan)
+onMounted(async () => {
+  loading.value = true
+  await systemStore.getAllSystems()
+  loading.value = false
 })
 
 const send = async () => {
+  loading.value = true
   try {
+    // Upload da imagem, se houver
     if (newImage.file) {
-    const imageUniqueDescriptionId = crypto.randomUUID()
-    newImage.description = `${newOrgan.name} - ${imageUniqueDescriptionId}`
-    newOrgan.autor_user = authStore.userInfo.id
+      const imageUniqueDescriptionId = crypto.randomUUID()
+      newImage.description = `${newOrgan.name} - ${imageUniqueDescriptionId}`
+      newOrgan.autor_user = authStore.userInfo.id
 
-    const formData = new FormData()
+      const formData = new FormData()
       formData.append('file', newImage.file)
       formData.append('description', newImage.description)
 
-    const result = await uploadStore.createUpload(`images`, formData)
-    console.log('imagem criada', result)
-
-    newOrgan.image = result.attachment_key
-    console.log(newOrgan)
+      const result = await uploadStore.createUpload(`images`, formData)
+      newOrgan.image = result.attachment_key
     }
+
+    // Criação do órgão
     await organStore.createOrgan(newOrgan)
-  showSuccessModal.value = true
-  setTimeout(()=>{
-router.push('/admin/organs')
-  },1000)
-    
+    showSuccessModal.value = true
+
+    setTimeout(() => {
+      router.push('/admin/organs')
+    }, 1000)
+
   } catch (err) {
-    console.error('Erro ao fazer upload da imagem:', err)
-    errorMessage.value = err?.message || "Erro inesperado ao cadastrar a Órgão."
-    showErrorModal.value = true
+  if (err?.response?.data) {
+    // Concatena todas as mensagens de erro em uma string legível
+
+    errorMessage.value = err?.response?.data
+  } else {
+    errorMessage.value = "Erro inesperado ao cadastrar o Órgão."
+  }
+  showErrorModal.value = true
+  } finally {
+    loading.value = false
   }
 }
 
@@ -79,35 +86,34 @@ function closeErrorModal() {
 </script>
 
 <template>
-  
-    
-    <AdminGlobalContainer>
+  <AdminGlobalContainer>
     <div class="w-[90%] mx-auto space-y-6">
 
-      <form class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
+      <LoadingSpinner v-if="loading" class="mt-20" />
+
+      <form v-else class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
         <InputStringAdmin label="Nome" :modelValue="newOrgan.name" @action="newOrgan.name = $event"/>
-
         <InputTextAdmin label="Descrição" :modelValue="newOrgan.description" @action="newOrgan.description = $event"/>
-
         <InputSelectAdmin label="Sistema" :modelValue="newOrgan.system" :options="systemStore.systems" @action="newOrgan.system = $event"/>
-
         <div class="md:col-span-2 mb-10">
           <InputImageAdmin label="Imagem" :modelValue="newImage.file" @action="newImage.file = $event"/>
         </div>
-
         <BtnDefault class="mb-10" text="Cadastrar" background="bg-[#29AC96]" :hasLink="false" />
       </form>
     </div>
   </AdminGlobalContainer>
 
-    <SucessModalAdmin
+  <SucessModalAdmin
+   :duration="1"
     :show="showSuccessModal"
     subtitle="Sucesso!"
     title="Órgão cadastrado"
+    confirm-label=""
+    cancel-label=""
   />
 
-  <!-- Modal de erro -->
   <SucessModalAdmin
+     :duration="0"
     :show="showErrorModal"
     subtitle="Erro!"
     :title="errorMessage"

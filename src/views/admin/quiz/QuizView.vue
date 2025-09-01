@@ -64,7 +64,7 @@ onMounted(async () => {
     await Promise.all([
       quizStore.getQuizById(quizId),
       quizStore.getAnswersByQuestion(quizId),
-      systemStore.getSystems()
+      systemStore.getAllSystems()
     ])
 
     console.log(quizStore.answersByQuestion)

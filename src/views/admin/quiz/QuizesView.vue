@@ -48,7 +48,7 @@ const quizzesWithLevelName = computed(() =>
 onBeforeMount(async () => {
   try {
     await quizStore.getQuiz(1)
-    await systemStore.getSystems()
+    await systemStore.getAllSystems()
     filters.value = [
       { nome: 'Geral', active: true },
       ...systemStore.systems.map(item => ({
