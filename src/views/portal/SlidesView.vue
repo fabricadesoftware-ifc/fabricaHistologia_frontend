@@ -51,7 +51,8 @@ const push = async(id) => {
 
 onBeforeUnmount(() => {
   for (let state of postStore.buttons) {
-    state.selected = !state.selected
+    postStore.buttons[0].selected = true
+    postStore.buttons[1].selected = false
     postStore.typeSelection = state.post
   }
 })
