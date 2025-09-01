@@ -15,6 +15,16 @@ class OrganService {
     }
   }
 
+  async getAllOrgans() {
+    try {
+      const { data } = await api.get(`/organs/?page_size=0`)
+      return data
+    } catch (error) {
+      console.log('error in getAllOrgans', error)
+      throw error
+    }
+  }
+
   async getOrgansBySystem(systemId) {
     try {
       const { data } = await api.get(`/organs/?page=1&system_id=${systemId}`)

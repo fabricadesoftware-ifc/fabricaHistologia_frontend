@@ -73,10 +73,10 @@ onMounted(async () => {
   try {
     loading.value = true
     await Promise.all([
-      uploadStore.getUploads('images'),
-      uploadStore.getUploads('documents'),
+      uploadStore.getAllUploads('images'),
+      uploadStore.getAllUploads('documents'),
       supportingMaterialStore.getMaterialsById(materialId),
-      systemStore.getSystems()
+      systemStore.getAllSystems()
     ])
 
     Object.assign(material, supportingMaterialStore.selectedMaterial)

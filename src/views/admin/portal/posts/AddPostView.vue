@@ -60,8 +60,8 @@ const showErrorModal = ref(false)
 const errorMessage = ref("")
 
 onBeforeMount(async ()=> {
-  await specieStore.getSpecies()
-  await organStore.getOrgans()
+  await specieStore.getAllSpecies()
+  await organStore.getAllOrgans()
   newPost.date_analysis = formatedData()
   newPost.post_date = formatedData()
 })
@@ -117,7 +117,7 @@ function closeErrorModal() {
           <InputDateAdmin class="w-[48%]" label="Data de Postagem" :modelValue="newPost.post_date" @action="newPost.post_date = $event"/>
         </div>
 
-        <InputSelectAdmin label="Espécie" :modelValue="newPost.species" :options="specieStore.species" @action="newPost.species = $event"/>
+        <InputSelectAdmin label="Espécie" :modelValue="newPost.species" :options="specieStore.allSpecies" @action="newPost.species = $event"/>
         <InputStringAdmin label="Tipo de Corte" :modelValue="newPost.type_cut" @action="newPost.type_cut = $event"/>
         <InputStringAdmin label="Aumento" :modelValue="newPost.increase" @action="newPost.increase = $event"/>
         <InputStringAdmin label="Coloração" :modelValue="newPost.coloring" @action="newPost.coloring = $event"/>

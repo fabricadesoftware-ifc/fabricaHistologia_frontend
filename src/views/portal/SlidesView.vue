@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { SpecieFilterComponent } from '@/components/index';
 import { useOrganStore, usePostStore, useNavigationStore, useSystemStore, useQuizStore } from '@/stores';
@@ -24,13 +24,8 @@ const organ_id = router.params.id
 const system_id = systemStore.selectedSystem.id
 const specieFilterRef = ref(null)
 
-const buttons = ref([
-  {text: 'Histologia', selected: true, post: 1},
-  {text: 'Patologia', selected: false, post: 2}
-])
-
 const selectPostType = (item) => {
-  for (let state of buttons.value) {
+  for (let state of postStore.buttons) {
     state.selected = !state.selected
     postStore.typeSelection = state.post
   }
@@ -38,11 +33,11 @@ const selectPostType = (item) => {
   specieFilterRef.value?.clearFilters()
 }
 
-watch(()=> buttons.value.find((s) => s.selected == true).post, (newVal) => {
+watch(() => postStore.buttons.find((s) => s.selected == true).post, (newVal) => {
   postStore.typeSelection = newVal
 })
 
-onMounted(async()=>{
+onMounted(async () => {
   await organStore.getOrgansById(organ_id)
   await postStore.getPostsByOrganAndType(organ_id, 1, '')
   postStore.typeSelection = 1
@@ -54,6 +49,13 @@ const push = async(id) => {
     routerUse.push('/portal/quiz/' + id)
 }
 
+onBeforeUnmount(() => {
+  for (let state of postStore.buttons) {
+    state.selected = !state.selected
+    postStore.typeSelection = state.post
+  }
+})
+
 </script>
 <template>
   <main class=" min-h-screen-minus-80 relative">
@@ -62,12 +64,12 @@ const push = async(id) => {
     <SpecieFilterComponent ref="specieFilterRef" />
 
      <div class=" flex justify-center gap-10">
-      <p @click="selectPostType(button)" :class="button.selected ? 'text-[#267A7A] text-[18px] font-semibold selectedType' : ' hover:opacity-75' + ' duration-200 ease-in-out cursor-pointer'" v-for="(button, index) in buttons" :key="index" >{{ button.text }}</p>
+      <p @click="selectPostType(button)" :class="button.selected ? 'text-[#267A7A] text-[18px] font-semibold selectedType' : ' hover:opacity-75' + ' duration-200 ease-in-out cursor-pointer'" v-for="(button, index) in postStore.buttons" :key="index" >{{ button.text }}</p>
       
     </div>
    
     <div class="w-full h-96 flex justify-center items-center flex-col" v-if="postStore.postByOrganAndType.length  == 0">
-    <h1 class="text-3xl md:text-5xl text-center break-all">Lâminas não encontradas</h1>
+    <h1 class="text-3xl md:text-5xl sm:text-xl text-center break-all">Lâminas não encontradas</h1>
     </div>
     <section v-else>
       
