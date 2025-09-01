@@ -51,8 +51,8 @@ const showErrorModal = ref(false)
 const errorMessage = ref("")
 
 onBeforeMount(async () => {
-  await postsStore.getPosts()
-  console.log(postsStore.posts)
+  await postsStore.getAllPosts()
+
   ctx.value = canvas.value.getContext('2d')
 })
 

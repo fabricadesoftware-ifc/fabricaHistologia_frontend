@@ -20,6 +20,17 @@ class SystemService {
         }
     }
 
+      async getAllSystems () {
+        try {
+            const {data} = await api.get(`/systems/?page_size=0`);
+            return data;
+        } catch (error) {
+            console.log("error in getAllSystems", error);
+            throw error;
+        }
+    }
+
+
     /**
      * Retrieves all systems.
     * @returns {Promise<Array>} A promise that resolves to an array of systems.

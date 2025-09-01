@@ -28,6 +28,7 @@ export const useSpecieStore = defineStore("specie",
     () => {
         const state = reactive({
             species: [],
+            allSpecies: [],
             selectedSpecie: null,
             loading: false,
             error: null,
@@ -38,6 +39,7 @@ export const useSpecieStore = defineStore("specie",
         const speciesCount = computed(() => state.species.length);
         const species = computed(() => state.species)
         const selectedSpecie = computed(() => state.selectedSpecie);
+        const allSpecies = computed(()=> state.allSpecies)
         const count = computed(() => state.count);
 
         /**
@@ -51,6 +53,20 @@ export const useSpecieStore = defineStore("specie",
                 const response = await SpecieService.getSpecies(page);
                 state.species = response.results;
                 state.count = response.count;
+            } catch (error) {
+                state.error = error;
+            } finally {
+                state.loading = false;
+                state.connection = true; // just to see if the connection is established
+            }
+        };
+
+            const getAllSpecies = async () => {
+            state.loading = true;
+            try {
+                const response = await SpecieService.getAllSpecies();
+                console.log(response)
+                state.allSpecies = response;
             } catch (error) {
                 state.error = error;
             } finally {
@@ -139,7 +155,9 @@ export const useSpecieStore = defineStore("specie",
             speciesCount,
             species,
             selectedSpecie,
+            allSpecies,
             count,
+            getAllSpecies,
             getSpecies,
             getSpeciesById,
             createSpecie,

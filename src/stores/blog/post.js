@@ -40,12 +40,18 @@ export const usePostStore = defineStore("post",
         const posts = computed(() => state.value.posts)
         const isLoading = computed(() => state.value.loading);
         const postCount = computed(() => state.value.posts.length);
-        const postByOrganAndType = computed(()=> state.value.postsByOrganAndType)
+        const postByOrganAndType = computed(() => state.value.postsByOrganAndType)
         const selectedPost = computed(() => state.value.selectedPost)
         const postsByOrgan = computed(() => state.value.postsByOrgan)
         const count = computed(() => state.value.count)
+        const type = computed(() => state.value.type)
 
         const typeSelection = ref(1)
+
+        const buttons = useStorage('buttonsStorage', [
+            { text: 'Histologia', selected: true, post: 1 },
+            { text: 'Patologia', selected: false, post: 2 }
+        ])
 
         /**
          * Fetches post data.
@@ -66,11 +72,25 @@ export const usePostStore = defineStore("post",
             }
         };
 
+         const getAllPosts = async () => {
+            state.value.loading = true;
+            try {
+                const response = await PostService.getAllPosts();
+                state.value.posts = response
+                return response
+            } catch (error) {
+                state.value.error = error;
+            } finally {
+                state.value.loading = false;
+                state.value.connection = true; // just to see if the connection is established
+            }
+        };
+
         const getPostsById = async (id) => {
             state.value.loading = true;
             try {
                 const response = await PostService.getPostsById(id)
-                
+
                 state.value.selectedPost = response
             } catch (error) {
                 state.value.error = error
@@ -125,7 +145,7 @@ export const usePostStore = defineStore("post",
                 state.value.loading = false;
             }
         };
-        
+
         /**
          * Updates an existing post.
          * @async
@@ -150,21 +170,21 @@ export const usePostStore = defineStore("post",
          * @function deletePosts
          * @param {number} id - The ID of the Posts to delete.
         */
-       const deletePosts = async (id) => {
-           state.value.loading = true;
-           try {
+        const deletePosts = async (id) => {
+            state.value.loading = true;
+            try {
                 console.log('TA QUASE', id)
 
-               const index = state.value.posts.findIndex((s) => s.id === id);
-               state.value.posts.splice(index, 1);
-               await PostService.deletePosts(id);
+                const index = state.value.posts.findIndex((s) => s.id === id);
+                state.value.posts.splice(index, 1);
+                await PostService.deletePosts(id);
             } catch (error) {
                 state.value.error = error;
             } finally {
                 state.value.loading = false;
             }
         };
-        
+
         return {
             state,
             isLoading,
@@ -175,6 +195,8 @@ export const usePostStore = defineStore("post",
             postsByOrgan,
             typeSelection,
             count,
+            buttons,
+            getAllPosts,
             getPosts,
             getPostsByOrganAndType,
             getPostsByOrgan,
@@ -183,6 +205,6 @@ export const usePostStore = defineStore("post",
             updatePosts,
             deletePosts
         };
-        
+
     }
 )

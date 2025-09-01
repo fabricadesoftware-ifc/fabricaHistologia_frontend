@@ -20,6 +20,16 @@ class SpecieService {
         }
     }
 
+    async getAllSpecies() {
+        try {
+            const { data } = await api.get(`/species/?page_size=0`);
+            return data;
+        } catch (error) {
+            console.log("error in getAllSpecies", error);
+            throw error;
+        }
+    }
+
 
        async getSpeciesById(id) {
         try {

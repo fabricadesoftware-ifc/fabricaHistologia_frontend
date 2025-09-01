@@ -90,8 +90,8 @@ onMounted(async () => {
     loading.value = true
     await Promise.all([
       uploadStore.getAllUploads('images'),
-      specieStore.getSpecies(),
-      organStore.getOrgans(),
+      specieStore.getAllSpecies(),
+      organStore.getAllOrgans(),
       postStore.getPostsById(postId),
       pointStore.getPointsByPosts(postId)
     ])
@@ -207,7 +207,7 @@ function closeErrorModal() {
         <InputSelectAdmin
           label="Espécie"
           :modelValue="newPost.species"
-          :options="specieStore.species"
+          :options="specieStore.allSpecies"
           @action="newPost.species = $event"
         />
         <InputStringAdmin

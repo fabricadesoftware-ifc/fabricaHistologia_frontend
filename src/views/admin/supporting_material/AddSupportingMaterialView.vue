@@ -42,7 +42,7 @@ const newDocument = reactive({
 })
 
 onBeforeMount(async () => {
-  await systemStore.getSystems()
+  await systemStore.getAllSystems()
   console.log(authStore.userInfo)
 
   console.log('Dados iniciais do post:', newMaterial)
