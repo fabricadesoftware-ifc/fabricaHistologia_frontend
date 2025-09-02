@@ -134,6 +134,28 @@ const router = createRouter({
           ]
         },
         {
+          path: 'user',
+          name: 'Usuários',
+          meta: { activeUser: true },
+          children: [
+            {
+              path: '',
+              name: '',
+              component: () => import('@/views/admin/users/UsersView.vue')
+            },
+            // {
+            //   path: 'add-supporting-material',
+            //   name: '> Cadastrar Material de Apoio',
+            //   component: () => import('@/views/admin/supporting_material/AddSupportingMaterialView.vue')
+            // },
+            // {
+            //   path: ':id',
+            //   name: '> Atualizar Material de Apoio',
+            //   component: () => import('@/views/admin/supporting_material/SupportingMaterialView.vue')
+            // },
+          ]
+        },
+        {
           path: 'organs',
           name: 'Órgãos',
           meta: { activeUser: true },

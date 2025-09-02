@@ -39,7 +39,7 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
     {
       title: 'Usuários',
       items: [
-        { label: 'Usuários', icon: ImageUser, to: '/usuarios' }
+        { label: 'Usuários', icon: ImageUser, to: '/admin/user' }
       ]
     },
     {
