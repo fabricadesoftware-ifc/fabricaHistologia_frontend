@@ -79,6 +79,10 @@ import LoadingSpinner from './portal/globals/LoadingSpinner.vue';
 //buttons
 import ButtonRanking from './portal/buttons/ButtonRanking.vue';
 
+//quiz
+import TableRanking from './portal/quiz/TableRanking.vue';
+import ButtonsRanking from './portal/quiz/ButtonsRanking.vue';
+
 export {
   AddInfoGlobal,
   PostInfo,
@@ -143,4 +147,6 @@ export {
   DataGraph,
   LoadingSpinner,
   ButtonRanking,
+  TableRanking,
+  ButtonsRanking,
 };

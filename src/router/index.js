@@ -19,6 +19,11 @@ const router = createRouter({
       component: () => import('@/views/auth/LoginView.vue')
     },
     {
+      path: '/ranking',
+      name: '> Ranking de Usuários',
+      component: () => import('@/views/portal/RakingQuiz.vue')
+    },
+    {
       path: '/admin',
       name: 'admin',
       meta: { activeUser: true },
@@ -61,7 +66,7 @@ const router = createRouter({
               component: () => import('@/views/admin/portal/species/SpeciesView.vue')
 
             },
-             {
+            {
               path: ':id',
               name: '> Atualizar Espécie',
               component: () => import('@/views/admin/portal/species/SpecieView.vue')
@@ -108,11 +113,6 @@ const router = createRouter({
               path: 'add-answer',
               name: '> Cadastrar Resposta',
               component: () => import('@/views/admin/quiz/AddAnswerView.vue')
-            },
-            {
-              path: 'ranking',
-              name: '> Ranking de Usuários',
-              component: () => import('@/views/portal/RakingQuiz.vue')
             },
           ]
         },
