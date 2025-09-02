@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, onMounted, reactive, ref } from 'vue'
+import { onBeforeMount, reactive, ref } from 'vue'
 import { useSystemStore, useAuthStore, useQuizStore, useUploadStore, useSupportingStore } from '@/stores'
 import {
   NavLateralAdmin,
@@ -13,7 +13,8 @@ import {
   InputUrlAdmin,
   AdminGlobalContainer,
   BtnDefault,
-  SucessModalAdmin
+  SucessModalAdmin,
+  LoadingSpinner
 } from '@/components/index'
 import router from '@/router'
 
@@ -22,6 +23,13 @@ const authStore = useAuthStore()
 const uploadStore = useUploadStore()
 const supportingStore = useSupportingStore()
 
+// Estado
+const loading = ref(true)
+const showSuccessModal = ref(false)
+const showErrorModal = ref(false)
+const errorMessage = ref('')
+
+// Objetos reativos
 const newMaterial = reactive({
   name: '',
   description: '',
@@ -41,77 +49,81 @@ const newDocument = reactive({
   description: ''
 })
 
+// Carregar sistemas
 onBeforeMount(async () => {
-  await systemStore.getAllSystems()
-  console.log(authStore.userInfo)
-
-  console.log('Dados iniciais do post:', newMaterial)
+  try {
+    await systemStore.getAllSystems()
+  } catch (err) {
+    errorMessage.value = 'Erro ao carregar sistemas. Tente novamente mais tarde.'
+    showErrorModal.value = true
+  } finally {
+    loading.value = false
+  }
 })
 
-const showSuccessModal = ref(false)
-const showErrorModal = ref(false)
-const errorMessage = ref("")
-
+// Envio de dados
 const send = async () => {
+  loading.value = true
   try {
     if (newImage.file) {
-      const imageUiqueDescriptionId = crypto.randomUUID()
-      newImage.description = `${newMaterial.name} - ${imageUiqueDescriptionId}`
+      const imageUniqueId = crypto.randomUUID()
+      newImage.description = `${newMaterial.name} - ${imageUniqueId}`
       newMaterial.autor_user = authStore.userInfo.id
 
       const formData = new FormData()
       formData.append('file', newImage.file)
       formData.append('description', newImage.description)
 
-      const result = await uploadStore.createUpload(`images`, formData)
-      console.log('imagem criada', result)
-
+      const result = await uploadStore.createUpload('images', formData)
       newMaterial.image_supporting_material = result.attachment_key
-      console.log(newMaterial)
     } else if (newDocument.file) {
-      const documentUiqueDescriptionId = crypto.randomUUID()
-      newDocument.description = `${newMaterial.name} - ${documentUiqueDescriptionId}`
+      const documentUniqueId = crypto.randomUUID()
+      newDocument.description = `${newMaterial.name} - ${documentUniqueId}`
       newMaterial.autor_user = authStore.userInfo.id
 
       const formData = new FormData()
       formData.append('file', newDocument.file)
       formData.append('description', newDocument.description)
 
-      const result = await uploadStore.createUpload(`documents`, formData)
-      console.log('documento criado', result)
-
+      const result = await uploadStore.createUpload('documents', formData)
       newMaterial.document_supporting_material = result.attachment_key
     }
 
     await supportingStore.createMaterial(newMaterial)
-  showSuccessModal.value = true
-    setTimeout(()=>{
-    router.push('/admin/supporting')
-
-    },1000)
+    showSuccessModal.value = true
+    setTimeout(() => router.push('/admin/supporting'), 1000)
   } catch (err) {
-    console.error('Erro ao fazer upload da imagem:', err)
-    errorMessage.value = err?.message || "Erro inesperado ao cadastrar Material de Suporte."
+if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = err?.message || "Erro inesperado ao cadastrar a Espécie."
+    }
     showErrorModal.value = true
+  } finally {
+    loading.value = false
   }
 }
 
-function closeErrorModal() {
+const closeErrorModal = () => {
   showErrorModal.value = false
 }
-
 </script>
 
 <template>
   <AdminGlobalContainer>
-    <div class="w-[90%] mx-auto space-y-6">
+    <!-- Spinner -->
+    <LoadingSpinner v-if="loading" class="my-10" />
+
+    <div v-else class="w-[90%] mx-auto space-y-6">
       <form class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
         <InputStringAdmin label="Nome" :modelValue="newMaterial.name" @action="newMaterial.name = $event" />
 
-        <InputTextAdmin label="Descrição" :modelValue="newMaterial.description" @action="newMaterial.description = $event"/>
+        <InputTextAdmin label="Descrição" :modelValue="newMaterial.description" @action="newMaterial.description = $event" />
 
-        <InputUrlAdmin label="URL para material de estudo" :modelValue="newMaterial.field_name" @action="newMaterial.field_name = $event"/>
-
+        <InputUrlAdmin label="URL para material de estudo" :modelValue="newMaterial.field_name" @action="newMaterial.field_name = $event" />
 
         <InputSelectAdmin
           label="Sistema"
@@ -119,7 +131,6 @@ function closeErrorModal() {
           :options="systemStore?.systems"
           @action="newMaterial.system = $event"
         />
-
 
         <div class="md:col-span-2 mb-10">
           <InputDocumentAdmin
@@ -131,11 +142,11 @@ function closeErrorModal() {
         </div>
 
         <div v-show="newDocument.file === null && newImage.file === null" class="md:col-span-2 mb-10 flex items-center justify-center font-semibold text-[#29AC96]">
-            <span>OU</span>
+          <span>OU</span>
         </div>
 
         <div class="md:col-span-2 mb-10">
-          <InputImageAdmin v-show="newDocument.file === null" label="Imagem" :modelValue="newImage.file" @action="newImage.file = $event"/>
+          <InputImageAdmin v-show="newDocument.file === null" label="Imagem" :modelValue="newImage.file" @action="newImage.file = $event" />
         </div>
 
         <BtnDefault class="mb-10" text="Cadastrar" background="bg-[#29AC96]" :hasLink="false" />
@@ -143,11 +154,14 @@ function closeErrorModal() {
     </div>
   </AdminGlobalContainer>
 
-  
-    <SucessModalAdmin
+  <!-- Modal de sucesso -->
+  <SucessModalAdmin
     :show="showSuccessModal"
     subtitle="Sucesso!"
     title="Material de Apoio cadastrado"
+    confirm-label=""
+    cancel-label=""
+    :duration="1"
   />
 
   <!-- Modal de erro -->

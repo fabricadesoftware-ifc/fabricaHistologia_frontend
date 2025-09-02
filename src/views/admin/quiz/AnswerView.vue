@@ -6,7 +6,8 @@ import {
   InputSelectAdmin,
   AdminGlobalContainer,
   BtnDefault,
-  SucessModalAdmin
+  SucessModalAdmin,
+  LoadingSpinner
 } from '@/components/index'
 
 import router from '@/router'
@@ -20,18 +21,35 @@ const authStore = useAuthStore()
 const route = useRoute()
 const answerId = route.params.id
 
-const loading = ref(true)
+// Estado de carregamento e mensagens
+const loading = ref(false)
+const showSuccessModal = ref(false)
+const showErrorModal = ref(false)
+const showDeleteConfirm = ref(false)
+const errorMessage = ref('')
+
+// Controle de sucesso (edição ou exclusão)
+const successAction = ref('edit')
+const successTitle = computed(() =>
+  successAction.value === 'delete' ? 'Resposta Excluída' : 'Resposta Atualizada'
+)
 
 // Modelo da resposta
 const answer = reactive({
   id: '',
-  question: null, // sempre objeto { id, name } ou null
+  question: null,
   option: '',
   correct: false,
   comment_answer: ''
 })
 
-// Opções para perguntas
+// Controle de resposta correta
+const correctValue = ref(false)
+watch(correctValue, (val) => {
+  answer.correct = val
+})
+
+// Lista de perguntas para o select
 const questionsOptions = computed(() => {
   return quizStore.allQuizes?.map((q) => ({
     id: q.id,
@@ -39,39 +57,19 @@ const questionsOptions = computed(() => {
   })) || []
 })
 
-// Controle booleano da resposta correta
-const correctValue = ref(false)
-watch(correctValue, (val) => {
-  answer.correct = val
-})
-
-// Computed para simplificar binding com o select
+// Computed para bind com o select
 const selectedQuestionId = computed({
   get: () => answer.question?.id || null,
   set: (id) => {
-    // Se encontrou a pergunta correspondente, substitui o objeto inteiro
     const found = questionsOptions.value.find(q => q.id == id)
     answer.question = found ? { id: found.id, name: found.name } : null
   }
 })
 
-// Modais de status
-const showSuccessModal = ref(false)
-const showErrorModal = ref(false)
-const showDeleteConfirm = ref(false)
-const errorMessage = ref('')
-
-const successAction = ref('edit')
-const successTitle = computed(() =>
-  successAction.value === 'delete' ? 'Resposta Excluída' : 'Resposta Atualizada'
-)
-
-// Carregamento inicial
+// Função para carregar os dados
 onMounted(async () => {
+  loading.value = true
   try {
-    loading.value = true
-
-    // Carrega quiz e resposta
     await Promise.all([
       quizStore.getAllQuizes(),
       quizStore.getAnswerById(answerId)
@@ -80,66 +78,81 @@ onMounted(async () => {
     Object.assign(answer, quizStore.selectedAnswers)
     correctValue.value = quizStore.selectedAnswers.correct
 
-    // Ajusta objeto de pergunta (caso API traga só ID ou objeto)
     const selected = quizStore.selectedAnswers.question
     const matchedQuestion = questionsOptions.value.find(q =>
       typeof selected === 'object' ? q.id === selected.id : q.id === selected
     )
     answer.question = matchedQuestion || null
-
-    console.log('Resposta carregada:', matchedQuestion)
   } catch (err) {
-    console.error('Erro ao carregar dados da resposta:', err)
-    errorMessage.value = 'Falha ao carregar dados. Verifique o servidor.'
+    errorMessage.value = err?.response?.data
+      ? Object.values(err.response.data)
+          .map(v => Array.isArray(v) ? v.join(', ') : v)
+          .join('\n')
+      : 'Falha ao carregar os dados da resposta.'
     showErrorModal.value = true
   } finally {
     loading.value = false
   }
 })
 
-// Atualiza resposta
+// Atualização da resposta
 const send = async () => {
+  loading.value = true
   try {
     const payload = {
       ...answer,
       question: answer.question?.id || null
     }
 
-    console.log('Payload enviado:', payload)
     await quizStore.updateAnswers(payload)
 
-    setTimeout(()=> {
-        router.push('/admin/quiz')
-    }, 1000)
     successAction.value = 'edit'
     showSuccessModal.value = true
-  } catch (err) {
-    console.error('Erro ao editar resposta:', err)
-    errorMessage.value = err?.message || 'Erro inesperado ao atualizar a resposta.'
-    showErrorModal.value = true
-  }
-}
 
-// Tenta excluir resposta
-const tryDelete = () => {
-  showDeleteConfirm.value = true
-}
-
-// Confirma exclusão
-const confirmDelete = async () => {
-  try {
-    await quizStore.deleteAnswers(answerId)
-    successAction.value = 'delete'
-    showDeleteConfirm.value = false
-    showSuccessModal.value = true
     setTimeout(() => {
       router.push('/admin/quiz')
     }, 1000)
   } catch (err) {
-    console.error('Erro ao deletar resposta:', err)
-    errorMessage.value = err?.message || 'Erro inesperado ao deletar a resposta.'
+    console.log(err)
+    errorMessage.value = err?.response?.data
+      ? Object.values(err.response.data)
+          .map(v => Array.isArray(v) ? v.join(', ') : v)
+          .join('\n')
+      : err?.message || 'Erro inesperado ao atualizar a resposta.'
+    showErrorModal.value = true
+  } finally {
+    loading.value = false
+  }
+}
+
+// Solicitar confirmação de exclusão
+const tryDelete = () => {
+  showDeleteConfirm.value = true
+}
+
+// Exclusão confirmada
+const confirmDelete = async () => {
+  loading.value = true
+  try {
+    await quizStore.deleteAnswers(answerId)
+
+    successAction.value = 'delete'
+    showDeleteConfirm.value = false
+    showSuccessModal.value = true
+
+    setTimeout(() => {
+      router.push('/admin/quiz')
+    }, 1000)
+  } catch (err) {
+    errorMessage.value = err?.response?.data
+      ? Object.values(err.response.data)
+          .map(v => Array.isArray(v) ? v.join(', ') : v)
+          .join('\n')
+      : err?.message || 'Erro inesperado ao deletar a resposta.'
     showDeleteConfirm.value = false
     showErrorModal.value = true
+  } finally {
+    loading.value = false
   }
 }
 
@@ -151,12 +164,11 @@ function closeErrorModal() {
 
 <template>
   <AdminGlobalContainer>
-    <!-- Overlay de carregamento -->
-    <div v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50">
-      <div class="animate-spin rounded-full h-16 w-16 border-4 border-[#29AC96] border-t-transparent"></div>
-    </div>
+    <!-- Loading -->
+    <LoadingSpinner v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50" />
 
     <div v-else class="w-[90%] mx-auto space-y-6">
+      <!-- Botões de ação -->
       <div class="absolute top-0 right-0 p-5 z-10 flex gap-5">
         <BtnDefault
           @click="send"
@@ -174,8 +186,8 @@ function closeErrorModal() {
         />
       </div>
 
+      <!-- Formulário -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
-        <!-- Pergunta -->
         <InputSelectAdmin
           label="Pergunta"
           :modelValue="selectedQuestionId"
@@ -183,14 +195,12 @@ function closeErrorModal() {
           @action="selectedQuestionId = $event"
         />
 
-        <!-- Opção -->
         <InputStringAdmin
           label="Opção"
           :modelValue="answer.option"
           @action="answer.option = $event"
         />
 
-        <!-- Comentário da resposta -->
         <div class="md:col-span-2">
           <InputStringAdmin
             label="Comentário da Resposta"
@@ -199,7 +209,6 @@ function closeErrorModal() {
           />
         </div>
 
-        <!-- Correta -->
         <div class="md:col-span-2 flex items-center gap-4">
           <label class="font-semibold">Correta?</label>
           <input
@@ -220,6 +229,7 @@ function closeErrorModal() {
     message="Ação realizada com sucesso."
     :cancel-label="null"
     :confirm-label="null"
+    :duration="1"
   />
 
   <!-- Modal de erro -->

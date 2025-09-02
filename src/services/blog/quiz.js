@@ -65,6 +65,7 @@ class QuizService {
      async getAnswerById(answer_id) {
         try {
             const { data } = await api.get(`/answer/${answer_id}/`);
+            console.log(data)
             return data;
         } catch (error) {
             console.log("Service: GetAnswer - return error", error);

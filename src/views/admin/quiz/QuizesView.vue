@@ -9,7 +9,8 @@ import {
   ListTableAdmin,
   DataGraph,
   LoadingSpinner,
-  TablePagination
+  TablePagination,
+  SucessModalAdmin
 } from '@/components/index'
 
 import { useAdmin } from '@/stores/admin/filter_admin'
@@ -21,6 +22,11 @@ const { changeActive } = useAdmin()
 
 // Estado de carregamento
 const loading = ref(true)
+
+// Tratamento de erro
+const showErrorModal = ref(false)
+const errorMessage = ref('')
+const closeErrorModal = () => { showErrorModal.value = false }
 
 // Paginação
 const currentPage = ref(1)
@@ -44,10 +50,30 @@ const quizzesWithLevelName = computed(() =>
   }))
 )
 
+// Função para buscar quizzes com tratamento de erro
+const fetchQuizzes = async (page = 1) => {
+  loading.value = true
+  try {
+    await quizStore.getQuiz(page)
+  } catch (err) {
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => (Array.isArray(v) ? v.join(', ') : v))
+        .join('\n')
+    } else {
+      errorMessage.value = err?.message || 'Erro inesperado ao carregar quizzes.'
+    }
+    showErrorModal.value = true
+  } finally {
+    loading.value = false
+  }
+}
+
 // Carregar dados iniciais
 onBeforeMount(async () => {
   try {
-    await quizStore.getQuiz(1)
+    await fetchQuizzes(1)
     await systemStore.getAllSystems()
     filters.value = [
       { nome: 'Geral', active: true },
@@ -56,6 +82,9 @@ onBeforeMount(async () => {
         active: false
       }))
     ]
+  } catch (err) {
+    errorMessage.value = 'Erro ao carregar sistemas.'
+    showErrorModal.value = true
   } finally {
     loading.value = false
   }
@@ -74,36 +103,29 @@ const filteredQuizzes = computed(() => {
   return quizzesWithLevelName.value.filter(q => q.system?.name === activeFilter.value)
 })
 
-// A API já pagina, então a tabela usa diretamente os dados atuais
+// Dados paginados
 const paginatedQuizzes = computed(() => filteredQuizzes.value)
 
-// === Cálculo de quantidade de páginas ===
-// Segue o padrão de posts: usa o count da store (fallback para length caso não venha)
-const totalPages = computed(() => Math.max(1, Math.ceil(quizStore.quizCountState / itemsPerPage)))
+// Total de páginas
+const totalPages = computed(() =>
+  Math.max(1, Math.ceil(quizStore.quizCountState / itemsPerPage))
+)
 
-// Atualizar dados ao mudar de página
+// Watchers para paginação e filtro
 watch(currentPage, async (newPage) => {
-  loading.value = true
-  await quizStore.getQuiz(newPage)
-  loading.value = false
+  await fetchQuizzes(newPage)
 })
 
-// Resetar para página 1 ao mudar filtro
 watch(activeFilter, async () => {
   currentPage.value = 1
-  loading.value = true
-  await quizStore.getQuiz(1)
-  loading.value = false
+  await fetchQuizzes(1)
 })
-
-watch(totalPages, (val) => console.log('Total Pages:', val))
-
 </script>
 
 <template>
   <AdminGlobalContainer>
     <!-- Loading -->
-    <LoadingSpinner v-if="loading" class="my-10" />
+    <LoadingSpinner v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50" />
 
     <template v-else>
       <!-- Gráfico -->
@@ -111,7 +133,7 @@ watch(totalPages, (val) => console.log('Total Pages:', val))
         <ButtonActionAdmin />
         <DataGraph
           title="Quizzes"
-          :total="totalItems"
+          :total="quizStore.quizCountState"
           seeMoreUrl="/admin/quiz"
           :items="quizzesWithLevelName"
           groupBy="levelName"
@@ -149,17 +171,24 @@ watch(totalPages, (val) => console.log('Total Pages:', val))
 
           <!-- Paginação -->
           <TablePagination
-           
             :currentPage="currentPage"
-            
             :total-pages="totalPages"
             @page-change="(page) => (currentPage = page)"
           />
-          <!-- Se o seu TablePagination aceitar totalPages diretamente, pode passar também:
-          :totalPages="totalPages"
-          -->
         </section>
       </section>
     </template>
+
+    <!-- Modal de erro -->
+    <SucessModalAdmin
+      :show="showErrorModal"
+      subtitle="Erro!"
+      :title="errorMessage"
+      message="Tente novamente ou contate o suporte."
+      confirm-label="Fechar"
+      :cancel-label="null"
+      confirm-class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-xl"
+      @confirm="closeErrorModal"
+    />
   </AdminGlobalContainer>
 </template>

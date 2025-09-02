@@ -103,7 +103,9 @@ export const useQuizStore = defineStore("quiz",
             state.value.loading = true;
             try {
                 const response = await QuizService.getQuizById(quiz_id);
+                console.log(response)
                 state.value.selectedQuiz = response;
+                return response;
             } catch (error) {
                 state.value.error = error;
             } finally {
@@ -237,6 +239,7 @@ export const useQuizStore = defineStore("quiz",
                 return state.value.quiz[index] = await QuizService.updateQuiz(quiz);
             } catch (error) {
                 state.value.error = error;
+                throw error;
             } finally {
                 state.value.loading = false;
             }
@@ -251,7 +254,7 @@ export const useQuizStore = defineStore("quiz",
     } catch (error) {
         console.log('erro?', error);
         state.value.error = error;
-        return error;
+        throw error;
     } finally {
         state.value.loading = false;
     }

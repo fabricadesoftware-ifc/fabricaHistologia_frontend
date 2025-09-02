@@ -37,8 +37,21 @@ const loading = ref(false)
 
 onMounted(async () => {
   loading.value = true
-  await systemStore.getAllSystems()
-  loading.value = false
+  try {
+    await systemStore.getAllSystems()
+  } catch (err) {
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = "Erro inesperado ao carregar sistemas."
+    }
+    showErrorModal.value = true
+  } finally {
+    loading.value = false
+  }
 })
 
 const send = async () => {
@@ -67,14 +80,15 @@ const send = async () => {
     }, 1000)
 
   } catch (err) {
-  if (err?.response?.data) {
-    // Concatena todas as mensagens de erro em uma string legível
-
-    errorMessage.value = err?.response?.data
-  } else {
-    errorMessage.value = "Erro inesperado ao cadastrar o Órgão."
-  }
-  showErrorModal.value = true
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = "Erro inesperado ao cadastrar o órgão."
+    }
+    showErrorModal.value = true
   } finally {
     loading.value = false
   }
@@ -84,6 +98,7 @@ function closeErrorModal() {
   showErrorModal.value = false
 }
 </script>
+
 
 <template>
   <AdminGlobalContainer>

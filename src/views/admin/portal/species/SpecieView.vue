@@ -8,10 +8,8 @@ import {
   SucessModalAdmin,
   LoadingSpinner
 } from '@/components/index'
-
 import router from '@/router'
 import { useRoute } from 'vue-router'
-
 
 // Stores
 const specieStore = useSpecieStore()
@@ -30,15 +28,12 @@ const specie = reactive({
 })
 
 // Modais de status
-
 const showSuccessModal = ref(false)
 const showErrorModal = ref(false)
 const showDeleteConfirm = ref(false)
 const errorMessage = ref('')
 
-
 const successAction = ref('edit')
-
 const successTitle = computed(() =>
   successAction.value === 'delete' ? 'Espécie Excluída' : 'Espécie Atualizada'
 )
@@ -50,8 +45,14 @@ onBeforeMount(async () => {
     await specieStore.getSpeciesById(specieId)
     Object.assign(specie, specieStore.selectedSpecie)
   } catch (err) {
-    console.error('Erro ao carregar espécie:', err)
-    errorMessage.value = 'Falha ao carregar os dados da espécie.'
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = err?.message || 'Falha ao carregar os dados da espécie.'
+    }
     showErrorModal.value = true
   } finally {
     loading.value = false
@@ -67,8 +68,14 @@ const send = async () => {
     showSuccessModal.value = true
     setTimeout(() => router.push('/admin/species'), 1000)
   } catch (err) {
-    console.error('Erro ao editar espécie:', err)
-    errorMessage.value = err?.message || 'Erro inesperado ao atualizar a espécie.'
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = err?.message || 'Erro inesperado ao atualizar a espécie.'
+    }
     showErrorModal.value = true
   } finally {
     loading.value = false
@@ -90,8 +97,14 @@ const confirmDelete = async () => {
     showSuccessModal.value = true
     setTimeout(() => router.push('/admin/species'), 1000)
   } catch (err) {
-    console.error('Erro ao deletar espécie:', err)
-    errorMessage.value = err?.message || 'Erro inesperado ao deletar a espécie.'
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = err?.message || 'Erro inesperado ao deletar a espécie.'
+    }
     showDeleteConfirm.value = false
     showErrorModal.value = true
   } finally {
@@ -107,45 +120,45 @@ const closeErrorModal = () => {
 
 <template>
   <AdminGlobalContainer>
-    <!-- Loading -->
-    <LoadingSpinner v-if="loading" class="my-10" />
+    <!-- overlay de loading -->
+    <div v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50">
+      <LoadingSpinner class="mt-0" />
+    </div>
 
     <!-- Conteúdo -->
-    <template v-else>
-      <div class="w-[90%] mx-auto space-y-6">
-        <!-- Botões de ação -->
-        <div class="absolute top-0 right-0 p-5 z-10 flex gap-5">
-          <BtnDefault
-            @click="send"
-            class="mb-10 h-8 rounded-lg"
-            text="Editar"
-            background="bg-[#29AC96]"
-            :hasLink="false"
-          />
-          <BtnDefault
-            @click="tryDelete"
-            class="mb-10 h-8 rounded-lg"
-            text="Excluir"
-            background="bg-[#E40000]"
-            :hasLink="false"
-          />
-        </div>
-
-        <!-- Formulário -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
-          <InputStringAdmin
-            label="Nome"
-            :modelValue="specie.name"
-            @action="specie.name = $event"
-          />
-          <InputStringAdmin
-            label="Categoria"
-            :modelValue="specie.category"
-            @action="specie.category = $event"
-          />
-        </div>
+    <div v-else class="w-[90%] mx-auto space-y-6">
+      <!-- Botões de ação -->
+      <div class="absolute top-0 right-0 p-5 z-10 flex gap-5">
+        <BtnDefault
+          @click="send"
+          class="mb-10 h-8 rounded-lg"
+          text="Editar"
+          background="bg-[#29AC96]"
+          :hasLink="false"
+        />
+        <BtnDefault
+          @click="tryDelete"
+          class="mb-10 h-8 rounded-lg"
+          text="Excluir"
+          background="bg-[#E40000]"
+          :hasLink="false"
+        />
       </div>
-    </template>
+
+      <!-- Formulário -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+        <InputStringAdmin
+          label="Nome"
+          :modelValue="specie.name"
+          @action="specie.name = $event"
+        />
+        <InputStringAdmin
+          label="Categoria"
+          :modelValue="specie.category"
+          @action="specie.category = $event"
+        />
+      </div>
+    </div>
   </AdminGlobalContainer>
 
   <!-- Modal de sucesso -->
@@ -156,10 +169,10 @@ const closeErrorModal = () => {
     message="Ação realizada com sucesso."
     :cancel-label="null"
     :confirm-label="null"
+    :duration="1"
   />
 
   <!-- Modal de erro -->
-
   <SucessModalAdmin
     :show="showErrorModal"
     subtitle="Erro!"
@@ -171,9 +184,7 @@ const closeErrorModal = () => {
     @confirm="closeErrorModal"
   />
 
-
   <!-- Modal de confirmação de exclusão -->
-
   <SucessModalAdmin
     :show="showDeleteConfirm"
     subtitle="Confirmação"

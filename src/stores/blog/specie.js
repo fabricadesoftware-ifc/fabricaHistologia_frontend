@@ -124,7 +124,7 @@ export const useSpecieStore = defineStore("specie",
                 return state.species[index] = await SpecieService.updateSpecies(specie);
             } catch (error) {
                 state.error = error;
-                return error;
+                throw error;
             } finally {
                 state.loading = false;
             }

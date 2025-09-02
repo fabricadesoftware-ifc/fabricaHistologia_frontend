@@ -9,7 +9,8 @@ import {
   ListTableAdmin,
   DataGraph,
   LoadingSpinner,
-  TablePagination
+  TablePagination,
+  SucessModalAdmin
 } from '@/components/index'
 
 import { useAdmin } from '@/stores/admin/filter_admin'
@@ -18,8 +19,10 @@ import { useAdmin } from '@/stores/admin/filter_admin'
 const supportingStore = useSupportingStore()
 const { changeActive } = useAdmin()
 
-// Estado de carregamento
+// Estado de carregamento e erro
 const loading = ref(true)
+const error = ref(null)
+const showErrorModal = ref(false)
 
 // Controle de paginação
 const currentPage = ref(1)
@@ -36,10 +39,12 @@ const materialsWithSystem = computed(() =>
   }))
 )
 
-// Carrega dados iniciais
-onBeforeMount(async () => {
+// Função para carregar materiais
+const loadMaterials = async (page = 1) => {
+  loading.value = true
+  error.value = null
   try {
-    await supportingStore.getMaterials(1)
+    await supportingStore.getMaterials(page)
     const systems = [...new Set(supportingStore.materials.map(m => m.system?.name || 'Sem Sistema'))]
     filters.value = [
       { nome: 'Geral', active: true },
@@ -48,10 +53,17 @@ onBeforeMount(async () => {
         active: false
       }))
     ]
+  } catch (err) {
+    console.error('Erro ao carregar materiais:', err)
+    error.value = err?.message || 'Erro inesperado ao carregar materiais.'
+    showErrorModal.value = true
   } finally {
     loading.value = false
   }
-})
+}
+
+// Carrega dados iniciais
+onBeforeMount(() => loadMaterials(1))
 
 // Filtro ativo
 const activeFilter = computed(() =>
@@ -66,7 +78,7 @@ const filteredMaterials = computed(() => {
   return materialsWithSystem.value.filter(material => material.systemName === activeFilter.value)
 })
 
-// Paginação (API já paginada)
+// Paginação
 const paginatedMaterials = computed(() => filteredMaterials.value)
 
 // Total de páginas
@@ -75,19 +87,18 @@ const totalPages = computed(() =>
 )
 
 // Atualiza ao mudar de página
-watch(currentPage, async (newPage) => {
-  loading.value = true
-  await supportingStore.getMaterials(newPage)
-  loading.value = false
-})
+watch(currentPage, (newPage) => loadMaterials(newPage))
 
 // Reset página ao trocar filtro
-watch(activeFilter, async () => {
+watch(activeFilter, () => {
   currentPage.value = 1
-  loading.value = true
-  await supportingStore.getMaterials(1)
-  loading.value = false
+  loadMaterials(1)
 })
+
+// Fechar modal de erro
+const closeErrorModal = () => {
+  showErrorModal.value = false
+}
 </script>
 
 <template>
@@ -95,6 +106,7 @@ watch(activeFilter, async () => {
     <!-- Loading -->
     <LoadingSpinner v-if="loading" class="my-10" />
 
+    <!-- Conteúdo -->
     <template v-else>
       <!-- Gráfico -->
       <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
@@ -145,5 +157,17 @@ watch(activeFilter, async () => {
         </section>
       </section>
     </template>
+
+    <!-- Modal de erro -->
+    <SucessModalAdmin
+      :show="showErrorModal"
+      subtitle="Erro!"
+      :title="error"
+      message="Não foi possível carregar os materiais. Tente novamente."
+      confirm-label="Fechar"
+      :cancel-label="null"
+      confirm-class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-xl"
+      @confirm="closeErrorModal"
+    />
   </AdminGlobalContainer>
 </template>

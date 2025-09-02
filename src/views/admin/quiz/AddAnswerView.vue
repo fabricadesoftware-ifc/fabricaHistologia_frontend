@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, onMounted, reactive, ref } from 'vue'
+import { onBeforeMount, reactive, ref } from 'vue'
 import { useSystemStore, useAuthStore, useQuizStore } from '@/stores'
 import {
   InputStringAdmin,
@@ -7,13 +7,20 @@ import {
   AdminGlobalContainer,
   BtnDefault,
   SucessModalAdmin,
-} from '@/components/index'
+  LoadingSpinner,
+} from '@/components'
 import router from '@/router'
 
 // Stores
 const systemStore = useSystemStore()
 const authStore = useAuthStore()
 const quizStore = useQuizStore()
+
+// Estado
+const loading = ref(false)
+const showSuccessModal = ref(false)
+const showErrorModal = ref(false)
+const errorMessage = ref('')
 
 // Lista de quizzes carregados
 const quizOptions = ref([])
@@ -36,13 +43,20 @@ const newAnswers = reactive([
 
 // Buscar quizzes existentes
 onBeforeMount(async () => {
-  await quizStore.getAllQuizes()
-  console.log(quizStore.allQuizes)
-  quizOptions.value = quizStore.allQuizes.map(q => ({
-    id: q.id,
-    name: q.question,
-  }))
-  console.log('Usuário logado:', authStore.userInfo)
+  try {
+    loading.value = true
+    await quizStore.getAllQuizes()
+    quizOptions.value = quizStore.allQuizes.map(q => ({
+      id: q.id,
+      name: q.question,
+    }))
+  } catch (err) {
+    console.error('Erro ao buscar quizzes:', err)
+    errorMessage.value = 'Erro ao carregar perguntas. Tente novamente.'
+    showErrorModal.value = true
+  } finally {
+    loading.value = false
+  }
 })
 
 // Adicionar nova linha de resposta
@@ -62,12 +76,14 @@ const removeAnswer = (index) => {
   }
 }
 
-const showSuccessModal = ref(false)
-const showErrorModal = ref(false)
-const errorMessage = ref("")
+// Fechar modal de erro
+const closeErrorModal = () => {
+  showErrorModal.value = false
+}
 
 // Enviar respostas
 const send = async () => {
+  loading.value = true
   try {
     const payload = newAnswers.map(a => ({
       question: a.question,
@@ -76,30 +92,35 @@ const send = async () => {
       comment_answer: a.comment_answer
     }))
 
-    console.log('Payload enviado para API:', JSON.stringify(payload, null, 2))
-
     await quizStore.createAnswersBulk(payload)
     showSuccessModal.value = true
-    setTimeout(()=>{
-    router.push('/admin/quiz')
-
-    },1000)
+    setTimeout(() => {
+      router.push('/admin/quiz')
+    }, 1000)
   } catch (err) {
-    console.error('Erro ao criar as respostas:', err.response?.data || err)
-    errorMessage.value = err?.message || "Erro inesperado ao cadastrar a Resposta."
+    console.error('Erro ao criar respostas:', err || err)
+    if (err?.response?.data) {
+      
+      errorMessage.value = err?.response?.data[0]
+    } else {
+      errorMessage.value = err?.message || 'Erro inesperado ao cadastrar as Respostas.'
+    }
     showErrorModal.value = true
+  } finally {
+    loading.value = false
   }
 }
-
-function closeErrorModal() {
-  showErrorModal.value = false
-}
-
 </script>
 
 <template>
   <AdminGlobalContainer>
-    <div class="w-[90%] mx-auto space-y-6">
+    <!-- Overlay de loading -->
+    <LoadingSpinner
+      v-if="loading"
+      class="fixed inset-0 bg-white/70 flex items-center justify-center z-50"
+    />
+
+    <div v-else class="w-[90%] mx-auto space-y-6">
       <form class="space-y-8 mb-10" @submit.prevent="send">
         <!-- Loop de respostas -->
         <div
@@ -108,7 +129,8 @@ function closeErrorModal() {
           class="grid grid-cols-1 md:grid-cols-2 gap-6 border p-4 rounded-xl shadow-sm relative"
         >
           <!-- Selecionar Quiz -->
-          <InputSelectAdmin class="mt-10"
+          <InputSelectAdmin
+            class="mt-10"
             label="Pergunta"
             :modelValue="answer.question"
             :options="quizOptions"
@@ -150,25 +172,33 @@ function closeErrorModal() {
 
         <!-- Botão para adicionar mais -->
         <div class="flex gap-5 h-auto">
-        <button
-          type="button"
-          class="bg-gray-200 rounded-2xl px-4 py-2 text-sm hover:bg-gray-300 transition"
-          @click="addAnswer"
-        >
-          + Adicionar outra resposta
-        </button>
+          <button
+            type="button"
+            class="bg-gray-200 rounded-2xl px-4 py-2 text-sm hover:bg-gray-300 transition"
+            @click="addAnswer"
+          >
+            + Adicionar outra resposta
+          </button>
 
-        <!-- Botão para salvar -->
-        <BtnDefault text="Cadastrar Respostas" background="bg-[#29AC96]" :hasLink="false" />
+          <!-- Botão para salvar -->
+          <BtnDefault
+            text="Cadastrar Respostas"
+            background="bg-[#29AC96]"
+            :hasLink="false"
+          />
         </div>
       </form>
     </div>
   </AdminGlobalContainer>
 
-      <SucessModalAdmin
+  <!-- Modal de sucesso -->
+  <SucessModalAdmin
     :show="showSuccessModal"
     subtitle="Sucesso!"
-    title="Resposta cadastrada"
+    title="Respostas cadastradas"
+    confirm-label=""
+    cancel-label=""
+    :duration="1"
   />
 
   <!-- Modal de erro -->

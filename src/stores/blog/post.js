@@ -159,6 +159,7 @@ export const usePostStore = defineStore("post",
                 return state.value.posts[index] = await PostService.updatePosts(post, id);
             } catch (error) {
                 state.value.error = error;
+                throw error;
             } finally {
                 state.value.loading = false;
             }

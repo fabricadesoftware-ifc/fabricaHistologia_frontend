@@ -11,7 +11,6 @@ import {
   LoadingSpinner,
   TablePagination
 } from '@/components/index'
-
 import { useAdmin } from '@/stores/admin/filter_admin'
 
 // Stores
@@ -21,6 +20,7 @@ const { changeActive } = useAdmin()
 
 // Estado de carregamento
 const loading = ref(true)
+const errorMessage = ref("")
 
 // Controle de paginação
 const currentPage = ref(1)
@@ -38,21 +38,26 @@ const postsWithOrganName = computed(() =>
 )
 
 // Carregar dados iniciais
-onBeforeMount(async () => {
+const loadInitialData = async () => {
   try {
-    await postStore.getPosts(1)
-    await organStore.getOrgans()
+    loading.value = true
+    await Promise.all([
+      postStore.getPosts(currentPage.value),
+      organStore.getOrgans()
+    ])
     filters.value = [
       { nome: 'Geral', active: true },
-      ...organStore.organs.map(org => ({
-        nome: org.name,
-        active: false
-      }))
+      ...organStore.organs.map(org => ({ nome: org.name, active: false }))
     ]
+  } catch (err) {
+    console.error("Erro ao carregar dados:", err)
+    errorMessage.value = "Erro ao carregar posts ou órgãos."
   } finally {
     loading.value = false
   }
-})
+}
+
+onBeforeMount(loadInitialData)
 
 // Filtro ativo
 const activeFilter = computed(() =>
@@ -61,39 +66,49 @@ const activeFilter = computed(() =>
 
 // Lista filtrada
 const filteredPosts = computed(() => {
-  if (!activeFilter.value || activeFilter.value === 'Geral') {
-    return postsWithOrganName.value
-  }
+  if (!activeFilter.value || activeFilter.value === 'Geral') return postsWithOrganName.value
   return postsWithOrganName.value.filter(post => post.organ?.name === activeFilter.value)
 })
 
 // Paginação (API já retorna dados paginados)
 const paginatedPosts = computed(() => filteredPosts.value)
 
-// Total de páginas com fallback para length
+// Total de páginas
 const totalPages = computed(() =>
   Math.max(1, Math.ceil((postStore.count || filteredPosts.value.length) / itemsPerPage))
 )
 
 // Atualizar dados ao mudar de página
 watch(currentPage, async (newPage) => {
-  loading.value = true
-  await postStore.getPosts(newPage)
-  loading.value = false
+  try {
+    loading.value = true
+    await postStore.getPosts(newPage)
+  } catch (err) {
+    console.error("Erro ao mudar de página:", err)
+    errorMessage.value = "Erro ao carregar posts da página selecionada."
+  } finally {
+    loading.value = false
+  }
 })
 
 // Resetar para página 1 ao mudar filtro
 watch(activeFilter, async () => {
   currentPage.value = 1
-  loading.value = true
-  await postStore.getPosts(1)
-  loading.value = false
+  try {
+    loading.value = true
+    await postStore.getPosts(1)
+  } catch (err) {
+    console.error("Erro ao aplicar filtro:", err)
+    errorMessage.value = "Erro ao filtrar posts."
+  } finally {
+    loading.value = false
+  }
 })
 </script>
 
 <template>
   <AdminGlobalContainer>
-    <!-- Loading -->
+    <!-- Loading Overlay -->
     <LoadingSpinner v-if="loading" class="my-10" />
 
     <template v-else>
@@ -143,7 +158,7 @@ watch(activeFilter, async () => {
           <TablePagination
             :currentPage="currentPage"
             :total-pages="totalPages"
-            @page-change="(page) => (currentPage = page)"
+            @page-change="(page) => currentPage.value = page"
           />
         </section>
       </section>
