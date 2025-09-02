@@ -32,10 +32,10 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
     const state = reactive({
         collaborators: [],
         selectedCollaborator: {},
-        collaboratorByUser: [],
         address: [],
         currentAdress: null,
         users: [],
+        collaboratorByUser: {},
         loading: false,
         error: null,
         connection: false,

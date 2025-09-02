@@ -21,7 +21,7 @@ onMounted(async ()=> {
         navigationStore.messageBody.title = "Você já é um colaborador"
         navigationStore.activeError = true
         navigationStore.formState = true
-    } else if (collaboratorStore.collaboratorByUser) {
+    } else if (collaboratorStore.collaboratorByUser.name) {
         navigationStore.messageBody.title = 'Seu registro está em análise';
         navigationStore.activeError = true;
         navigationStore.formState = true;
