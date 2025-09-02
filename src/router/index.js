@@ -109,6 +109,11 @@ const router = createRouter({
               name: '> Cadastrar Resposta',
               component: () => import('@/views/admin/quiz/AddAnswerView.vue')
             },
+            {
+              path: 'ranking',
+              name: '> Ranking de Usuários',
+              component: () => import('@/views/portal/RakingQuiz.vue')
+            },
           ]
         },
         {

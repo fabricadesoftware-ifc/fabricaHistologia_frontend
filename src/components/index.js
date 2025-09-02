@@ -76,6 +76,9 @@ import DataGraph from './admin/layout/DataGraph.vue';
 
 import LoadingSpinner from './portal/globals/LoadingSpinner.vue';
 
+//buttons
+import ButtonRanking from './portal/buttons/ButtonRanking.vue';
+
 export {
   AddInfoGlobal,
   PostInfo,
@@ -139,4 +142,5 @@ export {
   ListTableAdmin,
   DataGraph,
   LoadingSpinner,
+  ButtonRanking,
 };
