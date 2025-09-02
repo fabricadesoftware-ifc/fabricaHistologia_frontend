@@ -5,7 +5,7 @@ import { BackButton, ContainerGlobal, Footer, PersonaDataForm, FormModal, Messag
 import { useRouter } from 'vue-router';
 import { computed, onMounted } from 'vue';
 const router = useRouter()
-const store = useCollaboratorsStore()
+const collaboratorStore = useCollaboratorsStore()
 const navigationStore = useNavigationStore()
 const authStore = useAuthStore()
 
@@ -13,10 +13,18 @@ const go = () => {
     navigationStore.showFormState ? router.push('/') : ''
 }
 onMounted(async ()=> {
+    const userId = authStore.userInfo.id;
+    await collaboratorStore.getCollaboratorsByUser(userId);
+
+
     if (authStore.userInfo.is_verified) {
         navigationStore.messageBody.title = "Você já é um colaborador"
         navigationStore.activeError = true
         navigationStore.formState = true
+    } else if (collaboratorStore.collaboratorByUser) {
+        navigationStore.messageBody.title = 'Seu registro está em análise';
+        navigationStore.activeError = true;
+        navigationStore.formState = true;
     }
 
     const response = await store.getAddress()
@@ -35,7 +43,6 @@ onMounted(async ()=> {
     <ContainerGlobal v-else class="py-8 flex flex-col items-center">
         <PersonaDataForm />
     </ContainerGlobal>
-    <FormModal v-show="store.successMsg" />
     </main>
     <Footer />
 </template>
