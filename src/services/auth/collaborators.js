@@ -19,7 +19,17 @@ class CollaboratorsService{
         }
     }
 
-    async getAddress() {
+    async getUsers() {
+        try {
+            const { data } = await api.get('/users', {headers: {'authorization': `Bearer ${token}`}})
+            return data.results
+        } catch (error) {
+            console.log('error in getUsers', error)
+            throw error
+        }
+    }
+
+      async getAddress() {
         try {
             const { data } = await api.get('/address', {headers: {'authorization': `Bearer ${token}`}})
             return data.results
@@ -32,7 +42,7 @@ class CollaboratorsService{
      async getAddressById(id) {
         try {
             const { data } = await api.get(`/address/${id}`, {headers: {'authorization': `Bearer ${token}`}})
-            return data.results
+            return data
         } catch (error) {
             console.log('error in getAddressById', error)
             throw error
@@ -63,7 +73,7 @@ class CollaboratorsService{
         try {
             const { data } = await api.post('/address/', newData, {headers: {'authorization': `Bearer ${token}`}})
             console.log(data)
-            return data.results
+            return data
         } catch (error) {
             console.log('error in PostAddress', error)
             throw error
@@ -79,12 +89,33 @@ class CollaboratorsService{
             throw error
         }
     }
+
+    async updateUsers(users) {
+        try {
+            const { data } = await api.put(`/users/${users.id}`, users, {headers: {'authorization': `Bearer ${token}`}})
+            return data.results
+        } catch (error) {
+            console.log('error in updateUsers', error)
+            throw error
+        }
+    }
+
     async deleteCollaborators(id) {
         try {
             const { data } = await api.delete(`/personal/${id}/`)
             return data.results
         } catch (error) {
             console.log('error in getCollaborators', error)
+            throw error
+        }
+    }
+
+    async deleteAddress(id) {
+        try {
+            const { data } = await api.delete(`/address/${id}/`, {headers: {'authorization': `Bearer ${token}`}})
+            return data
+        } catch (error) {
+            console.log('error in getAddress', error)
             throw error
         }
     }

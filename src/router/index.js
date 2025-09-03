@@ -134,7 +134,7 @@ const router = createRouter({
           ]
         },
         {
-          path: 'user',
+          path: 'users',
           name: 'Usuários',
           meta: { activeUser: true },
           children: [
@@ -143,15 +143,25 @@ const router = createRouter({
               name: '',
               component: () => import('@/views/admin/users/UsersView.vue')
             },
-            // {
-            //   path: 'add-supporting-material',
-            //   name: '> Cadastrar Material de Apoio',
-            //   component: () => import('@/views/admin/supporting_material/AddSupportingMaterialView.vue')
+            {
+              path: 'add-personal',
+              name: '> Cadastrar Dados Pessoais',
+              component: () => import('@/views/admin/users/AddPersonalDataView.vue')
+            },
+            {
+              path: ':id',
+              name: '> Atualizar Dados Pessoais',
+              component: () => import('@/views/admin/users/PersonalDataView.vue')
+            },
+            //  {
+            //   path: 'add-address',
+            //   name: '> Cadastrar Endereço',
+            //   component: () => import('@/views/admin/users/AddAddressView.vue')
             // },
             // {
-            //   path: ':id',
-            //   name: '> Atualizar Material de Apoio',
-            //   component: () => import('@/views/admin/supporting_material/SupportingMaterialView.vue')
+            //   path: 'address/:id',
+            //   name: '> Atualizar Endereço',
+            //   component: () => import('@/views/admin/users/AdressView.vue')
             // },
           ]
         },

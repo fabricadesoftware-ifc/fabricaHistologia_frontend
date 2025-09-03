@@ -36,12 +36,12 @@ export const useNavBarAdminStore = defineStore('navbarAdminStore', () => {
         { label: 'Sistemas', icon: ImageSystem, to: eraseWords('admin', 'systems') }
       ]
     },
-    {
-      title: 'Usuários',
-      items: [
-        { label: 'Usuários', icon: ImageUser, to: '/admin/user' }
-      ]
-    },
+    // {
+    //   title: 'Usuários',
+    //   items: [
+    //     { label: 'Usuários', icon: ImageUser, to: '/admin/users' }
+    //   ]
+    // },
     {
       title: 'Quiz',
       items: [
