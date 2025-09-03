@@ -28,9 +28,6 @@ const divideRoute = () => {
     }
 }
 
-onMounted(()=> {
-    console.log(getNameOfPath.value)
-})
 
 </script>
 

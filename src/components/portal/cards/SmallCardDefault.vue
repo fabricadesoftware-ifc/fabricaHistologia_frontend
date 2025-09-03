@@ -16,9 +16,6 @@ const props = defineProps({
     }
 })
 
-onMounted(()=> {
-    console.log(props.item)
-})
 
 </script>
 

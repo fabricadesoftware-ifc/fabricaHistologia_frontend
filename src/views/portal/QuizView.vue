@@ -61,6 +61,8 @@ onUpdated(()=>{
     if (quizStore.markedAnswers.length == 0) {
          quizStore.getMarkedAnswers()
     }
+
+    console.log('respostas marcadas =====================//==========', quizStore.markedAnswers)
 })
 
 const answeredAll = computed(()=> {

@@ -71,9 +71,7 @@ const getMousePos = (canvas, evt) => {
    REDRAW CANVAS
 ================================ */
 const redrawCanvas = () => {
-  console.log("🎨 redrawCanvas chamado")
   if (!canvasRef.value || !loadedImage.value) {
-    console.warn("⚠️ redrawCanvas cancelado: canvas ou imagem ainda não prontos")
     return
   }
 
