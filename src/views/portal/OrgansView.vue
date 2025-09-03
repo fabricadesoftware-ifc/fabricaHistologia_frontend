@@ -40,7 +40,7 @@ onMounted(async () => {
     await supportingStore.getMaterialsBySystem(id)
     setAdditionalInfo.value
     await listAnalysis()
-    
+    console.log('additionalData', additionalData.value)
 })
 
 const push = async(id) => { 
@@ -58,7 +58,7 @@ const push = async(id) => {
     <HeaderPortal class="mt-10" :title="systemStore.selectedSystem.name" size="text-3xl md:text-center" />
     <CardsGlobal :analisys_datas="countItems" :justify="'start'" :datas="organStore.organsBySystem" context="organ" />
     <ContainerGlobal class="mt-16 ">
-        <AddInfoGlobal :data='additionalData' />
+        <AddInfoGlobal v-if="additionalData[0].material.length > 0 || additionalData[1].material.length > 0" :data='additionalData' />
         <div class="my-10">
             <BtnDefault @click="push(id)" text="Acessar Quiz deste Sistema" :link="'/portal/quiz/' + id" background="bg-[#267A7A]" block />
         </div>

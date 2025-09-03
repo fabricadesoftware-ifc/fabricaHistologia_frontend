@@ -1,7 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { usePostStore, usePointStore, useQuizStore, useSystemStore } from '@/stores';
+import { usePostStore, usePointStore, useQuizStore, useSystemStore, useSupportingStore } from '@/stores';
 import {
   HeaderPortal,
   ContainerGlobal,
@@ -24,6 +24,8 @@ const pointStore = usePointStore();
 const quizStore = useQuizStore();
 const systemStore = useSystemStore()
 const system_id = systemStore.selectedSystem.id
+const supportingStore = useSupportingStore()
+
 const image = ref(null)
 
 onMounted(async () => {
@@ -37,9 +39,22 @@ onMounted(async () => {
     pointStore.redrawCanvas();
   }
   }
+  await supportingStore.getMaterialsBySystem(system_id)
+  setAdditionalInfo.value
 
   console.log(postsStore.selectedPost)
 });
+
+const additionalData = ref([
+    {title: 'Aulas', material: []},
+    {title: 'PDFs', material: []}
+])
+
+const setAdditionalInfo = computed(()=>{
+    additionalData.value[0].material = supportingStore.state.materialsBySystem.filter(s => s.image_supporting_material == null && s.document_supporting_material == null)
+
+    additionalData.value[1].material = supportingStore.state.materialsBySystem.filter(s => s.image_supporting_material != null || s.document_supporting_material != null)
+})
 
 const push = async(id) => { 
     resetAll(quizStore)
@@ -76,7 +91,7 @@ const push = async(id) => {
       </section>
       <section>
         <div class="mt-12">
-          <AddInfoGlobal />
+          <AddInfoGlobal  v-if="additionalData[0].material.length > 0 || additionalData[1].material.length > 0" :data='additionalData' />
         </div>
       </section>
       <section class="mt-8">
