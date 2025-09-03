@@ -59,7 +59,6 @@ class OrganService {
 
   async updateOrgans(organ) {
     try {
-      console.log('chegou longe')
       const { data } = await api.put(`/organs/${organ.id}/`, organ, {
         headers: { authorization: `Bearer ${token}` }
       })

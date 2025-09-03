@@ -61,7 +61,6 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         state.loading = true
         try {
           const response = await CollaboratorsService.getCollaborators()
-          console.log(response)
           state.collaborators = response
         } catch (error) {
           state.error = error
@@ -75,7 +74,6 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         state.loading = true
         try {
           const response = await CollaboratorsService.getUsers()
-          console.log(response)
           state.users = response
         } catch (error) {
           state.error = error
@@ -108,7 +106,6 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         state.loading = true
         try {
           const response = await CollaboratorsService.getAddress()
-          console.log(response)
           state.address = response
           return response
         } catch (error) {
@@ -162,7 +159,6 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
           
           const response = await CollaboratorsService.PostAddress(data)
           successMsg.value = true
-          console.log(response)
           state.currentAdress = response
           return response
           

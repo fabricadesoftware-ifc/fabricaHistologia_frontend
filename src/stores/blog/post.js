@@ -174,7 +174,6 @@ export const usePostStore = defineStore("post",
         const deletePosts = async (id) => {
             state.value.loading = true;
             try {
-                console.log('TA QUASE', id)
 
                 const index = state.value.posts.findIndex((s) => s.id === id);
                 state.value.posts.splice(index, 1);

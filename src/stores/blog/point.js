@@ -102,7 +102,6 @@ export const usePointStore = defineStore("point",
         const createPoint = async (newPoint) => {
             state.loading = true;
             try {
-                console.log(newPoint)
                 state.points.push(await PointService.createPoint(newPoint));
             } catch (error) {
                 state.error = error;
@@ -121,12 +120,10 @@ export const usePointStore = defineStore("point",
         const updatePoints = async (point, id) => {
             state.loading = true;
             try {
-                console.log('updatePoints', point, id)
             
                 const response = await PointService.updatePoints(point, id);
                 return response
             } catch (error) {
-              console.log(error)
                 state.error = error;
                 return error;
             } finally {
@@ -154,10 +151,7 @@ export const usePointStore = defineStore("point",
         };
 
         const redrawCanvas = () => {
-            console.log('redrawCanvas')
-            console.log(ctx.value)
             if (!ctx.value || !canvas.value) return
-            console.log('redrawCanvas 2')
             ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
             ctx.value.drawImage(image.value, 0, 0)
         

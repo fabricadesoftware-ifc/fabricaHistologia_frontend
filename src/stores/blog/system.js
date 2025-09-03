@@ -130,7 +130,6 @@ export const useSystemStore = defineStore('system', () => {
     const updateSystem = async (system) => {
         state.value.loading = true;
         try {
-            console.log('Updating system:', system);
             const index = state.value.systems.findIndex((s) => s.id === system.id);
             const response = await SystemService.updateSystems(system);
             state.value.systems[index] = response;

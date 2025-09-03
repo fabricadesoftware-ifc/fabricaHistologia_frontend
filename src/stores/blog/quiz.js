@@ -103,7 +103,6 @@ export const useQuizStore = defineStore("quiz",
             state.value.loading = true;
             try {
                 const response = await QuizService.getQuizById(quiz_id);
-                console.log(response)
                 state.value.selectedQuiz = response;
                 return response;
             } catch (error) {
@@ -246,7 +245,6 @@ export const useQuizStore = defineStore("quiz",
         };
 
         const updateAnswers = async (answer) => {
-    console.log('chega')
     state.value.loading = true;
     try {
        const response = await QuizService.updateAnswers(answer)

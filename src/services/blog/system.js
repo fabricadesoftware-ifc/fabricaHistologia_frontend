@@ -38,9 +38,7 @@ class SystemService {
     */
     async getSystemById (id) {
         try {
-            console.log(id)
             const {data} = await api.get('/systems/' + id + '/');
-            console.log(data)
             return data;
         } catch (error) {
             console.log("error in getSystem", error);
