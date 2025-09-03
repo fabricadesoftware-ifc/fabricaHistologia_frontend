@@ -113,7 +113,6 @@ const send = async () => {
       router.push('/admin/quiz')
     }, 1000)
   } catch (err) {
-    console.log(err)
     errorMessage.value = err?.response?.data
       ? Object.values(err.response.data)
           .map(v => Array.isArray(v) ? v.join(', ') : v)

@@ -24,9 +24,6 @@ const showSuccessModal = ref(false)
 const showErrorModal = ref(false)
 const errorMessage = ref("")
 
-onMounted(async ()=> {
-  console.log('Dados iniciais da espécie:', newSpecies)
-})
 
 const send = async () => {
   loading.value = true

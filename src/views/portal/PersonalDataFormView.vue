@@ -20,7 +20,6 @@ onMounted(async ()=> {
     }
 
     const response = await store.getAddress()
-    console.log(response)
 })
 
 </script>

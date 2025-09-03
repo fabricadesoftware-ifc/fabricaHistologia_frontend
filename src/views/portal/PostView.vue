@@ -42,7 +42,6 @@ onMounted(async () => {
   await supportingStore.getMaterialsBySystem(system_id)
   setAdditionalInfo.value
 
-  console.log(postsStore.selectedPost)
 });
 
 const additionalData = ref([

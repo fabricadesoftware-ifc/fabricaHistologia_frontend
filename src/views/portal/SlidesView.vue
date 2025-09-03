@@ -42,10 +42,8 @@ watch(() => postStore.buttons.find((s) => s.selected == true).post, (newVal) => 
 onMounted(async () => {
   await organStore.getOrgansById(organ_id)
   await postStore.getPostsByOrganAndType(organ_id, 1, '')
-  console.log(organStore.organs[0])
   await supportingStore.getMaterialsBySystem(organStore.organs[0].system.id)
   setAdditionalInfo.value
-  console.log(additionalData.value)
   postStore.typeSelection = 1
 })
 

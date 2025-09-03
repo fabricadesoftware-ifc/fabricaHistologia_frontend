@@ -37,9 +37,7 @@ const showErrorModal = ref(false)
 const errorMessage = ref('')
 
 onMounted(async () => {
-  console.log('Dados iniciais do PersonalData:', newPersonalData)
   await personalDataStore.getUsers()
-  console.log(personalDataStore.users)
 })
 
 const usersToSelect = computed(()=> personalDataStore.users.map(user => ({
@@ -63,10 +61,8 @@ const send = async () => {
   try {
     if (newAddress.city != '' || newAddress.state != '') {
        const response = await personalDataStore.postAddress(newAddress)
-    console.log(response)
     await personalDataStore.postCollaborators({ ...newPersonalData, address: response.id })
     }
-    console.log(newPersonalData)
   await personalDataStore.postCollaborators({ ...newPersonalData })
     showSuccessModal.value = true
     setTimeout(() => {

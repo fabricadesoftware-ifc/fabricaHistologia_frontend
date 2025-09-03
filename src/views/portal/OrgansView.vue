@@ -40,7 +40,6 @@ onMounted(async () => {
     await supportingStore.getMaterialsBySystem(id)
     setAdditionalInfo.value
     await listAnalysis()
-    console.log('additionalData', additionalData.value)
 })
 
 const push = async(id) => { 
