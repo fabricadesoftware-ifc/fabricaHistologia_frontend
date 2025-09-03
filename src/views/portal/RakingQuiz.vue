@@ -1,5 +1,11 @@
 <script setup>
-import { TablePagination, Footer, TableRanking, ButtonsRanking } from '@/components/index'
+import {
+  TablePagination,
+  Footer,
+  TableRanking,
+  ButtonsRanking,
+  TitleRanking
+} from '@/components/index'
 import { ref } from 'vue'
 
 const currentPage = ref(1)
@@ -13,17 +19,18 @@ const changePage = (page) => {
 }
 </script>
 <template>
-    <div class="w-[50%] flex flex-col gap-2 items-center justify-center min-h-screen mx-auto">
-<ButtonsRanking />
-  <TableRanking />
+  <div class="w-[50%] flex flex-col gap-2 items-center justify-center min-h-screen mx-auto">
+    <TitleRanking title="Ranking de Conhecimentos Gerais" />
+    <ButtonsRanking />
+    <TableRanking />
 
-  <TablePagination
-    class="mt-6"
-    :current-page="currentPage"
-    :total-pages="totalPages"
-    @page-change="(page) => (currentPage = page)"
-  />
+    <TablePagination
+      class="mt-6"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      @page-change="(page) => (currentPage = page)"
+    />
 
-  <Footer />
+    <Footer />
   </div>
 </template>
