@@ -32,14 +32,14 @@ const divideRoute = () => {
 </script>
 
 <template>
-    <main class=" flex items-center w-dvw h-dvh justify-end bg-gray-100 relative ">
+    <main class=" flex items-center w-dvw h-dvh sm:flex-col justify-end overflow-y-hidden bg-gray-100 relative ">
     
-    <div class="top-0 left-0">
+    <div class=" top-0 left-0 sm:z-[99999] sm:w-full flex justify-start p-5">
     <NavLateralAdmin  />
     </div>
 
-    <div class=" shadow-md h-[98%] overflow-y-auto max-h-[98%] w-[81%] rounded-xl mr-3 bg-white relative flex-col ">
-        <div class=" pt-5 pl-[5%] w-full h-[10%] ">
+    <div class=" shadow-md h-[98%] overflow-y-auto max-h-[98%] w-[81%] sm:w-[100%] sm:h-[100%] rounded-xl mr-3 bg-white relative flex-col ">
+        <div class=" pt-5 pl-[5%] w-full h-[10%]">
                 <div class="flex gap-1">
                  <p v-if="divideRoute().length == 1" v-for="(routes, index) in divideRoute()" :class="`text-xl font-medium text-black`">{{ routes }}</p>
 

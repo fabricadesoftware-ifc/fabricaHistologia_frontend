@@ -106,7 +106,7 @@ function closeErrorModal() {
 
       <LoadingSpinner v-if="loading" class="mt-20" />
 
-      <form v-else class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
+      <form v-else class="flex flex-col md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
         <InputStringAdmin label="Nome" :modelValue="newOrgan.name" @action="newOrgan.name = $event"/>
         <InputTextAdmin label="Descrição" :modelValue="newOrgan.description" @action="newOrgan.description = $event"/>
         <InputSelectAdmin label="Sistema" :modelValue="newOrgan.system" :options="systemStore.systems" @action="newOrgan.system = $event"/>

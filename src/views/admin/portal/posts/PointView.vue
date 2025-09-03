@@ -302,7 +302,7 @@ function closeErrorModal() {
         />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <div class="flex flex-col gap-10 w-full">
         <InputStringAdmin
           label="Título"
           :modelValue="newPoint.label_title"
@@ -332,7 +332,7 @@ function closeErrorModal() {
       </div>
 
       <!-- Canvas + visibilidade -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div class="flex flex-col gap-10">
         <div class="flex justify-center flex-col items-center">
           <canvas
             class="w-8/12 border rounded-lg shadow"

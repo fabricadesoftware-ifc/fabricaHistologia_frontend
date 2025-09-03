@@ -185,7 +185,7 @@ function closeErrorModal() {
         <LoadingSpinner />
       </div>
 
-      <form v-else class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="addPoint">
+      <form v-else class="flex flex-col gap-10 w-full" @submit.prevent="addPoint">
         
         <InputStringAdmin label="Título" :modelValue="newPoint.label_title" @action="newPoint.label_title = $event"/>
         <InputTextAdmin label="Descrição" :modelValue="newPoint.description" @action="newPoint.description = $event"/>

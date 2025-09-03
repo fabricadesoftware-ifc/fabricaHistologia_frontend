@@ -126,7 +126,7 @@ const send = async () => {
         <div
           v-for="(answer, index) in newAnswers"
           :key="index"
-          class="grid grid-cols-1 md:grid-cols-2 gap-6 border p-4 rounded-xl shadow-sm relative"
+          class="flex flex-col gap-6 border p-4 rounded-xl shadow-sm relative"
         >
           <!-- Selecionar Quiz -->
           <InputSelectAdmin

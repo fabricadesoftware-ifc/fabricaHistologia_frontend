@@ -71,7 +71,7 @@ const send = async () => {
   <LoadingSpinner v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50"/>
 
   <div v-else class="w-[90%] mx-auto space-y-6">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+    <div class="flex flex-col gap-10 w-full">
       <InputStringAdmin label="Nome" :modelValue="newSystem.name" @action="newSystem.name = $event"/>
       <InputTextAdmin label="Descrição" :modelValue="newSystem.description" @action="newSystem.description = $event"/>
       <div class="md:col-span-2 mb-10">

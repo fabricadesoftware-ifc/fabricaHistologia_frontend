@@ -146,7 +146,7 @@ const closeErrorModal = () => showErrorModal.value = false
     </div>
 
     <!-- Formulário -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+    <div class="flex flex-col gap-10 w-full">
       <InputStringAdmin label="Nome" :modelValue="newSystem.name" @action="newSystem.name = $event" />
       <InputStringAdmin label="Descrição" :modelValue="newSystem.description" @action="newSystem.description = $event" />
 

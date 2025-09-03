@@ -135,12 +135,12 @@ function closeErrorModal() {
       <LoadingSpinner v-if="loading" class="mt-20" />
 
       <!-- Formulário -->
-      <form v-else class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
+      <form v-else class="flex flex-col gap-10 w-full" @submit.prevent="send">
         <InputStringAdmin label="Nome" :modelValue="newPost.name" @action="newPost.name = $event"/>
 
-        <div class="w-full flex justify-between gap-10">
-          <InputDateAdmin class="w-[48%]" label="Data de Análise" :modelValue="newPost.date_analysis" @action="newPost.date_analysis = $event"/>
-          <InputDateAdmin class="w-[48%]" label="Data de Postagem" :modelValue="newPost.post_date" @action="newPost.post_date = $event"/>
+        <div class="w-full flex justify-between sm:flex-col gap-10">
+          <InputDateAdmin class="w-[48%] sm:w-full" label="Data de Análise" :modelValue="newPost.date_analysis" @action="newPost.date_analysis = $event"/>
+          <InputDateAdmin class="w-[48%] sm:w-full" label="Data de Postagem" :modelValue="newPost.post_date" @action="newPost.post_date = $event"/>
         </div>
 
         <InputSelectAdmin label="Espécie" :modelValue="newPost.species" :options="specieStore.allSpecies" @action="newPost.species = $event"/>

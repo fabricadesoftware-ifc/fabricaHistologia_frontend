@@ -165,7 +165,7 @@ watch(currentPage, async (newPage) => {
 
     <template v-else>
       <!-- Gráficos -->
-<div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
+<div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center flex-col justify-between">
       <ButtonActionAdmin />
 
       <div class="flex w-full max-w-[60%] ml-[2%] overflow-auto gap-10 mt-20">

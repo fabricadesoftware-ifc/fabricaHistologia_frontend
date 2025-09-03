@@ -186,7 +186,7 @@ function closeErrorModal() {
       </div>
 
       <!-- Formulário -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <div class="flex flex-col gap-10 w-full">
         <InputSelectAdmin
           label="Pergunta"
           :modelValue="selectedQuestionId"

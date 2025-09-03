@@ -118,7 +118,7 @@ const closeErrorModal = () => {
     <LoadingSpinner v-if="loading" class="my-10" />
 
     <div v-else class="w-[90%] mx-auto space-y-6">
-      <form class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
+      <form class="flex flex-col gap-10 w-full" @submit.prevent="send">
         <InputStringAdmin label="Nome" :modelValue="newMaterial.name" @action="newMaterial.name = $event" />
 
         <InputTextAdmin label="Descrição" :modelValue="newMaterial.description" @action="newMaterial.description = $event" />

@@ -76,6 +76,7 @@ const handleFilterAction = (item) => {
 
 
 const changeActive = (index, itens) => {
+  console.log(index, itens)
     itens.forEach(item => {
         item.active = false
     })
@@ -84,11 +85,21 @@ const changeActive = (index, itens) => {
     handleFilterAction(itens[index].nome)
 }
 
+const changeActiveMobile = (itens) => {
+  console.log(itens)
+    itens.itens.forEach(item => {
+        item.active = false
+    })
+
+    itens.itens[itens.index].active = true 
+    handleFilterAction(itens.itens[itens.index].nome)
+}
+
 const activeSearch = ref(false)
 
 
 return {
-  generalFilterData, changeActive, handleFilterAction, activeSearch
+  generalFilterData, changeActive, changeActiveMobile, handleFilterAction, activeSearch
 }
 }
 

@@ -17,7 +17,7 @@ import { useAdmin } from '@/stores/admin/filter_admin'
 
 // Stores
 const supportingStore = useSupportingStore()
-const { changeActive } = useAdmin()
+const { changeActive, changeActiveMobile } = useAdmin()
 
 // Estado de carregamento e erro
 const loading = ref(true)
@@ -109,7 +109,7 @@ const closeErrorModal = () => {
     <!-- Conteúdo -->
     <template v-else>
       <!-- Gráfico -->
-      <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
+      <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center sm:flex-col sm:mx-auto sm:w-[90%] justify-between">
         <ButtonActionAdmin />
         <DataGraph
           title="Materiais de Apoio"
@@ -122,9 +122,9 @@ const closeErrorModal = () => {
 
       <!-- Filtros -->
       <section>
-        <div class="flex flex-col w-[90%] mx-auto">
+        <div class="flex flex-col w-[90%] mx-auto sm:mt-24">
           <p class="text-xl font-medium mb-10">Cadastros Gerais</p>
-          <TableFilterContainer :items="filters" :amount="filters.length">
+          <TableFilterContainer @filter="changeActiveMobile" :items="filters" :amount="filters.length">
             <TableFilterCard
               v-for="(filter, index) in filters"
               :key="index"

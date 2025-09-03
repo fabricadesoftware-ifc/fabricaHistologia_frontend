@@ -81,7 +81,7 @@ const closeErrorModal = () => { showErrorModal.value = false }
     <LoadingSpinner v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50"/>
 
     <div v-else class="w-[90%] mx-auto space-y-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <div class="flex flex-col gap-10 w-full">
         <InputStringAdmin label="Título" :modelValue="newQuiz.title" @action="newQuiz.title = $event"/>
         <InputStringAdmin label="Pergunta" :modelValue="newQuiz.question" @action="newQuiz.question = $event"/>
         <InputSelectAdmin label="Sistema" :modelValue="newQuiz.system" :options="systemStore.systems" @action="newQuiz.system = $event"/>

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted, nextTick } from 'vue'
+import { computed, ref, onMounted, nextTick, watch } from 'vue'
 import { useAdmin } from '@/stores/admin/filter_admin'
 import { NavigationAdminFilterButton, SearchAdminFilter } from '@/components'
 
@@ -9,7 +9,7 @@ const props = defineProps({
 })
 
 // Emitir texto para o componente pai
-const emit = defineEmits(['search-text'])
+const emit = defineEmits(['search-text', 'filter'])
 
 const { generalFilterData, handleFilterAction } = useAdmin()
 
@@ -46,6 +46,14 @@ const handleSearchUpdate = (value) => {
   console.log('Texto da busca:', value)
   emit('search-text', value)
 }
+
+
+
+const selected = ref(null)
+
+watch(selected.value, (newval) => {
+  console.log(newval)
+})
 </script>
 
 <template>
@@ -88,8 +96,8 @@ const handleSearchUpdate = (value) => {
 
     <!-- select (quando tela é grande) -->
     <div class="z-50 invisible lg:visible">
-      <select
-        @change="handleFilterAction($event.target.value)"
+      <select 
+        @change="emit('filter', {itens: props.items, index: props.items.findIndex(i => i.nome === $event.target.value)})"
         class="rounded-md bg-white border text-gray-700"
       >
         <option v-for="i in props.items" :key="i.key">{{ i.nome }}</option>

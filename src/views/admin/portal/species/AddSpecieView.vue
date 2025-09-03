@@ -61,7 +61,7 @@ function closeErrorModal() {
     </div>
 
     <div v-else class="w-[90%] mx-auto space-y-6">
-      <form class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
+      <form class="flex flex-col gap-10 w-full" @submit.prevent="send">
         <InputStringAdmin label="Nome" :modelValue="newSpecies.name" @action="newSpecies.name = $event"/>
         <InputStringAdmin label="Categoria" :modelValue="newSpecies.category" @action="newSpecies.category = $event"/>
         <BtnDefault class="mb-10" text="Cadastrar" background="bg-[#29AC96]" :hasLink="false" />

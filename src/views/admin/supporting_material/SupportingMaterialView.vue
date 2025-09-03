@@ -177,7 +177,7 @@ function closeErrorModal() {
         />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <div class="flex flex-col gap-10 w-full">
         <InputStringAdmin label="Nome" :modelValue="material.name" @action="material.name = $event" />
 
         <InputStringAdmin label="Descrição" :modelValue="material.description" @action="material.description = $event" />

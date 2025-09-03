@@ -6,8 +6,8 @@ const store = useNavBarAdminStore()
 </script>
 
 <template>
-  <nav class="bg-transparent fixed top-0 left-0 z-40 flex items-center p-4">
-    <button @click="store.toggleMenu" aria-label="Toggle Menu" class="text-2xl text-white">☰</button>
+  <nav class="bg-transparent z-40 flex items-center p-4">
+    <button @click="store.toggleMenu" aria-label="Toggle Menu" class="text-2xl text-black">☰</button>
   </nav>
 
   <transition name="slide">

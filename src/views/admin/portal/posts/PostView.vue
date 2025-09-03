@@ -210,7 +210,7 @@ function closeErrorModal() {
         />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <div class="flex flex-col gap-10 w-full">
         <InputStringAdmin label="Nome" :modelValue="newPost.name" @action="newPost.name = $event" />
         <div class="w-full flex justify-between gap-10">
           <InputDateAdmin
@@ -268,7 +268,7 @@ function closeErrorModal() {
           @action="imageKey = $event"
         />
 
-        <div class="md:col-span-2 mb-10">
+        <div class="flex flex-col mb-10">
           <img
             :src="newPost.image?.url"
             alt="Pré-visualização da imagem"
