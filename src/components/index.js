@@ -82,6 +82,7 @@ import ButtonRanking from './portal/buttons/ButtonRanking.vue';
 //quiz
 import TableRanking from './portal/quiz/TableRanking.vue';
 import ButtonsRanking from './portal/quiz/ButtonsRanking.vue';
+import ButtonFilterRanking from './portal/buttons/ButtonFilterRanking.vue';
 
 export {
   AddInfoGlobal,
@@ -149,4 +150,5 @@ export {
   ButtonRanking,
   TableRanking,
   ButtonsRanking,
+  ButtonFilterRanking,
 };

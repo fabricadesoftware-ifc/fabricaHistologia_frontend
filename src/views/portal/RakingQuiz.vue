@@ -1,5 +1,5 @@
 <script setup>
-import { TablePagination, Footer, TableRankin0, ButtonsRanking } from '@/components/index'
+import { TablePagination, Footer, TableRanking, ButtonsRanking } from '@/components/index'
 import { ref } from 'vue'
 
 const currentPage = ref(1)
@@ -13,7 +13,7 @@ const changePage = (page) => {
 }
 </script>
 <template>
-    <div class="w-full flex flex-col items-center">
+    <div class="w-[50%] flex flex-col gap-2 items-center justify-center min-h-screen mx-auto">
 <ButtonsRanking />
   <TableRanking />
 

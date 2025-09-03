@@ -17,7 +17,7 @@ const rankingData = ref([
 </script>
 
 <template>
-    <div class="overflow-x-auto w-[55%] rounded-2xl border border-gray-200 shadow-sm">
+    <div class="overflow-x-auto w-[100%] rounded-2xl border border-gray-200 shadow-sm">
       <table class="w-full text-left border-collapse">
         <thead class="bg-gray-50">
           <tr class="text-gray-500">
