@@ -16,18 +16,19 @@ onMounted(async ()=> {
     const userId = authStore.userInfo.id;
     await collaboratorStore.getCollaboratorsByUser(userId);
 
-
+    console.log(collaboratorStore?.collaboratorByUser?.id)
     if (authStore.userInfo.is_verified) {
         navigationStore.messageBody.title = "Você já é um colaborador"
         navigationStore.activeError = true
         navigationStore.formState = true
-    } else if (collaboratorStore.collaboratorByUser.name) {
+    } else if (collaboratorStore?.collaboratorByUser?.id != undefined) {
         navigationStore.messageBody.title = 'Seu registro está em análise';
         navigationStore.activeError = true;
         navigationStore.formState = true;
     }
 
-    const response = await store.getAddress()
+    const response = await collaboratorStore.getAddress()
+    console.log(collaboratorStore.collaboratorByUser)
 })
 
 </script>

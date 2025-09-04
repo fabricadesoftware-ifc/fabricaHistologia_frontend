@@ -132,7 +132,7 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         state.loading = true
         try {
           const response = await CollaboratorsService.getCollaboratorsByUser(UserId)
-          state.collaboratorByUser = response
+          state.collaboratorByUser = response[0]
         } catch (error) {
           state.error = error
         } finally {

@@ -73,15 +73,15 @@ async function saveCollaborator() {
         const addressId = addressResponse?.id;
         console.log(addressId)
 
-        // // Cria colaborador associado ao endereço
-        // await collaboratorStore.postCollaborators({
-        //     ...newCollaborator.value,
-        //     address: addressId
-        // });
+        // Cria colaborador associado ao endereço
+        await collaboratorStore.postCollaborators({
+            ...newCollaborator.value,
+            address: addressId
+        });
 
-        // navigationStore.messageBody.title = 'Sucesso!';
-        // navigationStore.messageBody.description = 'Colaborador criado com sucesso. Aguarde a verificação das informações.';
-        // navigationStore.formState = true;
+        navigationStore.messageBody.title = 'Sucesso!';
+        navigationStore.messageBody.description = 'Colaborador criado com sucesso. Aguarde a verificação das informações.';
+        navigationStore.formState = true;
     } catch (error) {
         console.error('Erro ao salvar colaborador:', error);
         navigationStore.messageBody.title = 'Erro';
