@@ -1,16 +1,15 @@
 <script setup>
-import { onBeforeMount, onMounted, reactive, ref } from 'vue'
+import { onBeforeMount, reactive, ref } from 'vue'
 import { useSpecieStore, useOrganStore, useAuthStore, useUploadStore, usePostStore } from '@/stores'
 import {
-  NavLateralAdmin,
-  ButtonActionAdmin,
+  AdminGlobalContainer,
+  BtnDefault,
   InputDateAdmin,
   InputImageAdmin,
   InputSelectAdmin,
   InputStringAdmin,
-  AdminGlobalContainer,
-  BtnDefault,
-  SucessModalAdmin,
+  LoadingSpinner,
+  SucessModalAdmin
 } from '@/components/index'
 
 import router from '@/router'
@@ -42,9 +41,14 @@ const newImage = reactive({
 })
 
 const postOptions = [
-  {name: 'Histologia', id: 1},
-  {name: 'Patologia', id: 2}
+  { name: 'Histologia', id: 1 },
+  { name: 'Patologia', id: 2 }
 ]
+
+const showSuccessModal = ref(false)
+const showErrorModal = ref(false)
+const errorMessage = ref("")
+const loading = ref(false)
 
 const formatedData = () => {
   const now = new Date()
@@ -54,26 +58,38 @@ const formatedData = () => {
   return `${year}-${month}-${day}`
 }
 
-// controla os modais
-const showSuccessModal = ref(false)
-const showErrorModal = ref(false)
-const errorMessage = ref("")
-
-onBeforeMount(async ()=> {
-  await specieStore.getAllSpecies()
-  await organStore.getAllOrgans()
-  newPost.date_analysis = formatedData()
-  newPost.post_date = formatedData()
+onBeforeMount(async () => {
+  loading.value = true
+  try {
+    await specieStore.getAllSpecies()
+    await organStore.getAllOrgans()
+    newPost.date_analysis = formatedData()
+    newPost.post_date = formatedData()
+  } catch (err) {
+  if (err?.response?.data) {
+    const data = err.response.data
+    const messages = Object.values(data)
+      .map(v => Array.isArray(v) ? v.join(', ') : v)
+      .join('\n')
+    errorMessage.value = messages
+  } else {
+    errorMessage.value = "Erro inesperado ao cadastrar a lâmina."
+  }
+  showErrorModal.value = true
+}
+finally {
+    loading.value = false
+  }
 })
 
 const send = async () => {
+  loading.value = true
   try {
     if (newImage.file) {
       const imageUiqueDescriptionId = crypto.randomUUID()
       newImage.description = `${newPost.name} - ${imageUiqueDescriptionId}`
       newPost.autor_user = authStore.userInfo.id
 
-      // Cria FormData
       const formData = new FormData()
       formData.append('file', newImage.file)
       formData.append('description', newImage.description)
@@ -81,26 +97,31 @@ const send = async () => {
       const result = await uploadStore.createUpload(`images`, formData)
       newPost.image = result.attachment_key
     }
-    await postStore.createPost(newPost)
 
-    // abre modal de sucesso
+    await postStore.createPost(newPost)
     showSuccessModal.value = true
+
+    setTimeout(() => {
+      router.push('/admin/posts/add-point')
+    }, 1000)
+
   } catch (err) {
-    console.error('Erro ao criar post:', err)
-    errorMessage.value = err?.message || "Erro inesperado ao cadastrar a lâmina."
-    showErrorModal.value = true
+  if (err?.response?.data) {
+    const data = err.response.data
+    // transforma cada valor em array e junta todos os textos
+    const messages = Object.values(data)
+      .map(v => Array.isArray(v) ? v.join(', ') : v)
+      .join('\n')
+    errorMessage.value = messages
+  } else {
+    errorMessage.value = "Erro inesperado ao cadastrar a lâmina."
+  }
+  showErrorModal.value = true
+} finally {
+    loading.value = false
   }
 }
 
-// ações do modal de sucesso
-function handleConfirm() {
-  router.push('/admin/posts/add-point') // vai para tela de pontos
-}
-function handleCancel() {
-  router.push('/admin/posts') // vai para lista de posts
-}
-
-// fechar modal de erro
 function closeErrorModal() {
   showErrorModal.value = false
 }
@@ -109,12 +130,17 @@ function closeErrorModal() {
 <template>
   <AdminGlobalContainer>
     <div class="w-[90%] mx-auto space-y-6">
-      <form class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
+
+      <!-- Loading Spinner -->
+      <LoadingSpinner v-if="loading" class="mt-20" />
+
+      <!-- Formulário -->
+      <form v-else class="flex flex-col gap-10 w-full" @submit.prevent="send">
         <InputStringAdmin label="Nome" :modelValue="newPost.name" @action="newPost.name = $event"/>
 
-        <div class="w-full flex justify-between gap-10">
-          <InputDateAdmin class="w-[48%]" label="Data de Análise" :modelValue="newPost.date_analysis" @action="newPost.date_analysis = $event"/>
-          <InputDateAdmin class="w-[48%]" label="Data de Postagem" :modelValue="newPost.post_date" @action="newPost.post_date = $event"/>
+        <div class="w-full flex justify-between sm:flex-col gap-10">
+          <InputDateAdmin class="w-[48%] sm:w-full" label="Data de Análise" :modelValue="newPost.date_analysis" @action="newPost.date_analysis = $event"/>
+          <InputDateAdmin class="w-[48%] sm:w-full" label="Data de Postagem" :modelValue="newPost.post_date" @action="newPost.post_date = $event"/>
         </div>
 
         <InputSelectAdmin label="Espécie" :modelValue="newPost.species" :options="specieStore.allSpecies" @action="newPost.species = $event"/>
@@ -135,18 +161,17 @@ function closeErrorModal() {
 
   <!-- Modal de sucesso -->
   <SucessModalAdmin
+    :duration="1"
     :show="showSuccessModal"
     subtitle="Sucesso!"
     title="Lâmina cadastrada"
-    message="Deseja criar pontos a lâmina?"
-    confirm-label="Sim"
-    cancel-label="Não"
-    @confirm="handleConfirm"
-    @cancel="handleCancel"
+    confirm-label=""
+    cancel-label=""
   />
 
   <!-- Modal de erro -->
   <SucessModalAdmin
+    :duration="0"
     :show="showErrorModal"
     subtitle="Erro!"
     :title="errorMessage"

@@ -33,6 +33,9 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         collaborators: [],
         selectedCollaborator: {},
         collaboratorByUser: [],
+        address: [],
+        currentAdress: null,
+        users: [],
         loading: false,
         error: null,
         connection: false,
@@ -45,6 +48,9 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
       const isLoading = computed(() => state.loading)
       const collaboratorsCount = computed(() => state.collaborators.length)
       const successMsg = ref(false)
+      const address = computed(() => state.address)
+      const users = computed(()=> state.users)
+      const currentAdress = computed(()=> state.currentAdress)
 
           /**
      * Fetches collaborators data from the server.
@@ -56,6 +62,58 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         try {
           const response = await CollaboratorsService.getCollaborators()
           state.collaborators = response
+        } catch (error) {
+          state.error = error
+        } finally {
+          state.loading = false
+          state.connection = true
+        }
+      }
+
+      const getMaterialsBySearch = async (search) => {
+        state.loading = true
+        try {
+          const response = await CollaboratorsService.getCollaboratorsBySearch(search)
+          state.collaborators = response
+        } catch (error) {
+          state.error = error
+        } finally {
+          state.loading = false
+          state.connection = true
+        }
+      }
+
+      const getUsersBySearch = async (search) => {
+        state.loading = true
+        try {
+          const response = await CollaboratorsService.getUsersBySearch(search)
+          state.users = response
+        } catch (error) {
+          state.error = error
+        } finally {
+          state.loading = false
+          state.connection = true
+        }
+      }
+
+      const getAddressBySearch = async (search) => {
+        state.loading = true
+        try {
+          const response = await CollaboratorsService.getAddressBySearch(search)
+          state.address = response
+        } catch (error) {
+          state.error = error
+        } finally {
+          state.loading = false
+          state.connection = true
+        }
+      }
+
+      const getUsers = async () => {
+        state.loading = true
+        try {
+          const response = await CollaboratorsService.getUsers()
+          state.users = response
         } catch (error) {
           state.error = error
         } finally {
@@ -87,6 +145,7 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         state.loading = true
         try {
           const response = await CollaboratorsService.getAddress()
+          state.address = response
           return response
         } catch (error) {
           state.error = error
@@ -100,6 +159,7 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         state.loading = true
         try {
           const response = await CollaboratorsService.getAddressById(id)
+          state.address = response
           return response
         } catch (error) {
           state.error = error
@@ -125,6 +185,7 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
           successMsg.value = true
         } catch (error) {
           state.error = error
+          throw error;
         } finally {
           state.loading = false
           state.connection = true
@@ -137,11 +198,12 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
           
           const response = await CollaboratorsService.PostAddress(data)
           successMsg.value = true
-          console.log(response)
+          state.currentAdress = response
           return response
           
         } catch (error) {
           state.error = error
+          throw error;
         } finally {
           state.loading = false
           state.connection = true
@@ -167,6 +229,18 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         }
       }
 
+       const updateUsers = async (usersDataUpdated) => {
+        state.loading = true
+        try {
+          const response = await CollaboratorsService.updateUsers(usersDataUpdated)
+          state.users = response
+        } catch (error) {
+          state.error = error
+        } finally {
+          state.loading = false
+          state.connection = true
+        }
+      }
       /**
      * Deletes a collaborator.
      * @async
@@ -186,6 +260,19 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         }
       }
 
+         const deleteAddress = async (id) => {
+        state.loading = true
+        try {
+          const response = await CollaboratorsService.deleteAddress(id)
+          return response
+        } catch (error) {
+          state.error = error
+        } finally {
+          state.loading = false
+          state.connection = true
+        }
+      }
+
       return {
         state,
         collaborators,
@@ -194,13 +281,22 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         isLoading,
         collaboratorsCount,
         successMsg,
+        address,
+        users,
+        currentAdress,
         postAddress,
+        updateUsers,
+        getUsers,
         getAddress,
         getAddressById,
         getCollaborators,
         getCollaboratorsByUser,
+        getMaterialsBySearch,
+        getUsersBySearch,
+        getAddressBySearch,
         postCollaborators,
         updateCollaborators,
         deleteCollaborators,
+        deleteAddress,
       }
 })

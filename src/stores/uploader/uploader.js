@@ -34,7 +34,6 @@ export const useUploadStore = defineStore('upload', () => {
     state.value.loading = true;
     try {
       const response = await UploaderService.getUploads(url);
-      console.log('🟡 response recebido na store:', response)
       if (url === 'images') {
         state.value.images = response;
       } else if (url === 'documents') {
@@ -69,7 +68,6 @@ export const useUploadStore = defineStore('upload', () => {
     try {
       const response = await UploaderService.createUpload(url, newUpload);
       state.value.uploads.push(response);
-      console.log('🟡 response recebido na store:', response)
 
       return response
     } catch (error) {

@@ -19,6 +19,7 @@ import {
   useSupportingStore
 } from '@/stores'
 import { useAdmin } from '@/utils/admin'
+import { useDebounceFn } from '@vueuse/core'
 
 const postStore = usePostStore()
 const organStore = useOrganStore()
@@ -29,8 +30,11 @@ const supportingStore = useSupportingStore()
 
 const { generalFilterData, changeActive } = useAdmin()
 
-// Estado de carregamento
+// Estado de carregamento global (primeiro load e paginação)
 const loading = ref(true)
+
+// Estado de carregamento apenas para busca
+const searchLoading = ref(false)
 
 onBeforeMount(async () => {
   try {
@@ -42,6 +46,7 @@ onBeforeMount(async () => {
       quizStore.getQuiz(1),
       supportingStore.getMaterials(1)
     ])
+    console.log(generalFilterData.value)
   } finally {
     loading.value = false
   }
@@ -152,8 +157,7 @@ const filteredData = computed(() => {
 const currentPage = ref(1)
 const itemsPerPage = 10
 
-
-const paginatedData = computed(() =>  filteredData.value)
+const paginatedData = computed(() => filteredData.value)
 const storeMap = {
   posts: postStore,
   organs: organStore,
@@ -176,13 +180,11 @@ const totalPages = computed(() => {
     ? Math.ceil(storeMap[activeKey].count / itemsPerPage)
     : 1
 })
+
 watch(currentPage, async (newPage) => {
   const activeKey = activeFilter.value?.key
   if (!activeKey) return
 
-  const store = storeMap[activeKey]
-
-  // Mapeia os métodos corretamente para cada store
   const fetchMethods = {
     posts: () => postStore.getPosts(newPage),
     organs: () => organStore.getOrgans(newPage),
@@ -198,14 +200,58 @@ watch(currentPage, async (newPage) => {
     loading.value = false
   }
 })
+
+/**
+ * Função para buscar nos stores quando digitar no search
+ * Agora com debounce + loading separado
+ */
+const _onSearch = async (searchText) => {
+  const activeKey = activeFilter.value?.key
+  if (!activeKey) return
+
+  const fetchBySearch = {
+    posts: (text) => postStore.getPostsBySearch(text),
+    organs: (text) => organStore.getOrgansBySearch(text),
+    systems: (text) => systemStore.getSystemsBySearch(text),
+    species: (text) => specieStore.getSpeciesBySearch(text),
+    quiz: (text) => quizStore.getQuizBySearch(text),
+    'supporting-materials': (text) => supportingStore.getMaterialsBySearch(text)
+  }
+
+  // se search vazio → volta pro fetch normal
+  if (!searchText) {
+    const page = currentPage.value || 1
+    const fetchDefault = {
+      posts: () => postStore.getPosts(page),
+      organs: () => organStore.getOrgans(page),
+      systems: () => systemStore.getSystems(page),
+      species: () => specieStore.getSpecies(page),
+      quiz: () => quizStore.getQuiz(page),
+      'supporting-materials': () => supportingStore.getMaterials(page)
+    }
+    searchLoading.value = true
+    await fetchDefault[activeKey]()
+    searchLoading.value = false
+    return
+  }
+
+  if (fetchBySearch[activeKey]) {
+    searchLoading.value = true
+    await fetchBySearch[activeKey](searchText)
+    searchLoading.value = false
+  }
+}
+
+// debounce de 400ms
+const onSearch = useDebounceFn(_onSearch, 400)
 </script>
 
 <template>
   <AdminGlobalContainer subtitle="Veja um resumo do que há cadastrado no portal">
-    <!-- Exibe o loading -->
-    <LoadingSpinner v-if="loading" class="mt-20" />
+    <!-- Loading global só no primeiro carregamento/paginação -->
+    <LoadingSpinner v-if="loading && !searchLoading" class="mt-20" />
 
-    <!-- Conteúdo só aparece quando terminar o carregamento -->
+    <!-- Conteúdo só aparece quando terminar o carregamento inicial -->
     <template v-else>
       <!-- gráficos de cima -->
       <div class="flex w-full max-w-[98%] ml-[2%] overflow-auto gap-10 mt-20">
@@ -251,7 +297,10 @@ watch(currentPage, async (newPage) => {
       <section>
         <div class="flex flex-col w-[90%] mx-auto mt-10">
           <p class="text-xl font-medium mb-10">Filtros</p>
-          <TableFilterContainer :amount="generalFilterData.length">
+          <TableFilterContainer 
+            @search-text="onSearch" 
+            :amount="generalFilterData.length"
+          >
             <TableFilterCard
               v-for="(i, index) in generalFilterData"
               :key="i.key"
@@ -265,17 +314,21 @@ watch(currentPage, async (newPage) => {
 
       <!-- tabela -->
       <section class="mt-10 w-[90%] mx-auto flex flex-col items-center mb-10">
+        <!-- Loading só da busca -->
+        <p v-if="searchLoading" class="text-gray-500 mt-6">Buscando...</p>
+
         <ListTableAdmin
-          v-if="paginatedData.length"
+          v-else-if="paginatedData.length"
           :rows="paginatedData"
           :columns="tableColumns"
           :router="tableRoute"
           @update:cell="(e) => console.log('editou', e)"
         />
 
+        <p v-else class="text-gray-500 mt-6">Nenhum resultado encontrado</p>
+
         <!-- Paginação -->
         <TablePagination
-          
           class="mt-6"
           :current-page="currentPage"
           :total-pages="totalPages"

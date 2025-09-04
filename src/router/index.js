@@ -134,6 +134,38 @@ const router = createRouter({
           ]
         },
         {
+          path: 'users',
+          name: 'Usuários',
+          meta: { activeUser: true },
+          children: [
+            {
+              path: '',
+              name: '',
+              component: () => import('@/views/admin/users/UsersView.vue')
+            },
+            {
+              path: 'add-personal',
+              name: '> Cadastrar Dados Pessoais',
+              component: () => import('@/views/admin/users/AddPersonalDataView.vue')
+            },
+            {
+              path: ':id',
+              name: '> Atualizar Dados Pessoais',
+              component: () => import('@/views/admin/users/PersonalDataView.vue')
+            },
+            //  {
+            //   path: 'add-address',
+            //   name: '> Cadastrar Endereço',
+            //   component: () => import('@/views/admin/users/AddAddressView.vue')
+            // },
+            // {
+            //   path: 'address/:id',
+            //   name: '> Atualizar Endereço',
+            //   component: () => import('@/views/admin/users/AdressView.vue')
+            // },
+          ]
+        },
+        {
           path: 'organs',
           name: 'Órgãos',
           meta: { activeUser: true },

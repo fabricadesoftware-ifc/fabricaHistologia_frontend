@@ -14,7 +14,8 @@ import {
   InputStringAdmin,
   AdminGlobalContainer,
   BtnDefault,
-  SucessModalAdmin
+  SucessModalAdmin,
+  LoadingSpinner
 } from '@/components/index'
 
 import router from '@/router'
@@ -30,7 +31,11 @@ const pointStore = usePointStore()
 const route = useRoute()
 const postId = route.params.id
 
-const loading = ref(true)
+const loading = ref(false)
+const showSuccessModal = ref(false)
+const showErrorModal = ref(false)
+const errorMessage = ref('')
+const showDeleteConfirm = ref(false) // modal de confirmação delete
 
 const newPost = reactive({
   name: '',
@@ -75,19 +80,14 @@ watch(imageKey, (val) => {
   }
 })
 
-const showSuccessModal = ref(false)
-const showErrorModal = ref(false)
-const showDeleteConfirm = ref(false) // <-- modal de confirmação delete
-const errorMessage = ref('')
-
 const successAction = ref('edit')
 const successTitle = computed(() =>
   successAction.value === 'delete' ? 'Lâmina Excluída' : 'Lâmina Atualizada'
 )
 
 onMounted(async () => {
+  loading.value = true
   try {
-    loading.value = true
     await Promise.all([
       uploadStore.getAllUploads('images'),
       specieStore.getAllSpecies(),
@@ -101,7 +101,7 @@ onMounted(async () => {
     newPost.species = postStore.selectedPost.species?.id || ''
     newPost.organ = postStore.selectedPost.organ?.id || ''
     newPost.type_post = postStore.selectedPost.type_post || ''
-    console.log('points do post:', pointStore.pointsByPosts)
+
     if (postStore.selectedPost.image) {
       newPost.image = {
         name: postStore.selectedPost.image.description,
@@ -111,12 +111,23 @@ onMounted(async () => {
       }
       imageKey.value = newPost.image.name
     }
+  } catch (err) {
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = "Erro inesperado ao carregar dados."
+    }
+    showErrorModal.value = true
   } finally {
     loading.value = false
   }
 })
 
 const send = async () => {
+  loading.value = true
   try {
     newPost.image = newPost.image.attachment_key
     await postStore.updatePosts(newPost, route.params.id)
@@ -126,20 +137,27 @@ const send = async () => {
       router.push('/admin/posts')
     }, 1000)
   } catch (err) {
-    console.error('Erro ao editar post:', err)
-    errorMessage.value = err?.message || 'Erro inesperado ao atualizar a lâmina.'
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = err?.message || "Erro inesperado ao atualizar a lâmina."
+    }
     showErrorModal.value = true
+  } finally {
+    loading.value = false
   }
 }
 
-// abre modal de confirmação antes de deletar
 const tryDelete = () => {
   showDeleteConfirm.value = true
 }
 
 const confirmDelete = async () => {
+  loading.value = true
   try {
-    console.log('PORRA DO KARALHO')
     await postStore.deletePosts(postId)
     successAction.value = 'delete'
     showDeleteConfirm.value = false
@@ -148,10 +166,18 @@ const confirmDelete = async () => {
       router.push('/admin/posts')
     }, 1000)
   } catch (err) {
-    console.error('Erro ao deletar post:', err)
-    errorMessage.value = err?.message || 'Erro inesperado ao deletar a lâmina.'
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = err?.message || "Erro inesperado ao deletar a lâmina."
+    }
     showDeleteConfirm.value = false
     showErrorModal.value = true
+  } finally {
+    loading.value = false
   }
 }
 
@@ -160,14 +186,11 @@ function closeErrorModal() {
 }
 </script>
 
+
 <template>
   <AdminGlobalContainer>
     <!-- overlay de carregamento -->
-    <div v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50">
-      <div
-        class="animate-spin rounded-full h-16 w-16 border-4 border-[#29AC96] border-t-transparent"
-      ></div>
-    </div>
+    <LoadingSpinner v-if="loading" class="mt-20" />
 
     <div v-else class="w-[90%] mx-auto space-y-6">
       <div class="absolute top-0 right-0 p-5 z-10 flex gap-5">
@@ -187,7 +210,7 @@ function closeErrorModal() {
         />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <div class="flex flex-col gap-10 w-full">
         <InputStringAdmin label="Nome" :modelValue="newPost.name" @action="newPost.name = $event" />
         <div class="w-full flex justify-between gap-10">
           <InputDateAdmin
@@ -245,7 +268,7 @@ function closeErrorModal() {
           @action="imageKey = $event"
         />
 
-        <div class="md:col-span-2 mb-10">
+        <div class="flex flex-col mb-10">
           <img
             :src="newPost.image?.url"
             alt="Pré-visualização da imagem"
@@ -281,6 +304,7 @@ function closeErrorModal() {
     :message="successMessage"
     :cancel-label="null"
     :confirm-label="null"
+    :duration="1"
   />
 
   <!-- modal de erro -->

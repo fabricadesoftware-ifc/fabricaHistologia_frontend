@@ -1,15 +1,18 @@
 <script setup>
-import { computed, ref, onMounted, nextTick } from 'vue'
+import { computed, ref, onMounted, nextTick, watch } from 'vue'
 import { useAdmin } from '@/stores/admin/filter_admin'
 import { NavigationAdminFilterButton, SearchAdminFilter } from '@/components'
 
 const props = defineProps({
   amount: Number,
-  items: Array,
+  items: {
+    type: Array,
+    default: () => []
+  },
 })
 
 // Emitir texto para o componente pai
-const emit = defineEmits(['search-text'])
+const emit = defineEmits(['search-text', 'filter'])
 
 const { generalFilterData, handleFilterAction } = useAdmin()
 
@@ -46,6 +49,39 @@ const handleSearchUpdate = (value) => {
   console.log('Texto da busca:', value)
   emit('search-text', value)
 }
+
+// controle do select
+const selectedValue = ref(null)
+
+
+watch(
+  () => (props.items ?? []).map(i => i?.nome), // rastreia mudanças internas
+  async (names) => {
+    // mantém seleção se ainda existir; senão pega a primeira
+    if (names.length) {
+      if (!names.includes(selectedValue.value)) {
+        selectedValue.value = names[0]
+      }
+    } else {
+      selectedValue.value = null
+    }
+
+    // se o conteúdo mudou, atualiza medidas e margem
+    await nextTick()
+    if (wrapperRef.value) containerWidth.value = wrapperRef.value.offsetWidth
+    if (listRef.value) listWidth.value = listRef.value.scrollWidth
+    margin.value = Math.min(margin.value, Math.max(listWidth.value - containerWidth.value, 0))
+  },
+  { immediate: true }
+)
+
+const onSelectChange = () => {
+  console.log(selectedValue.value)
+  const idx = props.items.findIndex(i => i.nome === selectedValue.value)
+  emit('filter', { itens: props.items, index: idx })
+}
+
+
 </script>
 
 <template>
@@ -87,13 +123,17 @@ const handleSearchUpdate = (value) => {
     </div>
 
     <!-- select (quando tela é grande) -->
-    <div class="z-50 invisible lg:visible">
+    <div class="z-50 hidden lg:block">
       <select
-        @change="handleFilterAction($event.target.value)"
-        class="rounded-md bg-white border text-gray-700"
-      >
-        <option v-for="i in props.items" :key="i.key">{{ i.nome }}</option>
-      </select>
+  :key="(props.items ?? []).map(i => i?.nome).join('|')"
+  v-model="selectedValue"
+  @change="onSelectChange"
+  class="rounded-md bg-white border text-gray-700 px-3 py-1"
+>
+  <option v-for="(i, idx) in props.items" :key="idx" :value="i.nome">
+    {{ i.nome }}
+  </option>
+</select>
     </div>
 
     <!-- Busca -->

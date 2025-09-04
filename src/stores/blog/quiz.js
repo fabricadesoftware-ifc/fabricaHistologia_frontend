@@ -87,6 +87,20 @@ export const useQuizStore = defineStore("quiz",
             }
         };
 
+
+        const getQuizBySearch = async (search) => {
+            state.value.loading = true;
+            try {
+                const response = await QuizService.getQuizBySearch(search);
+                state.value.quiz = response;
+            } catch (error) {
+                state.value.error = error;
+            } finally {
+                state.value.loading = false;
+                state.value.connection = true;
+            }
+        };
+
          const getAllQuizes = async () => {
             state.value.loading = true;
             try {
@@ -104,6 +118,7 @@ export const useQuizStore = defineStore("quiz",
             try {
                 const response = await QuizService.getQuizById(quiz_id);
                 state.value.selectedQuiz = response;
+                return response;
             } catch (error) {
                 state.value.error = error;
             } finally {
@@ -237,13 +252,13 @@ export const useQuizStore = defineStore("quiz",
                 return state.value.quiz[index] = await QuizService.updateQuiz(quiz);
             } catch (error) {
                 state.value.error = error;
+                throw error;
             } finally {
                 state.value.loading = false;
             }
         };
 
         const updateAnswers = async (answer) => {
-    console.log('chega')
     state.value.loading = true;
     try {
        const response = await QuizService.updateAnswers(answer)
@@ -251,7 +266,7 @@ export const useQuizStore = defineStore("quiz",
     } catch (error) {
         console.log('erro?', error);
         state.value.error = error;
-        return error;
+        throw error;
     } finally {
         state.value.loading = false;
     }
@@ -317,6 +332,7 @@ export const useQuizStore = defineStore("quiz",
             getAnswers,
             getQuizBySystem,
             getAnswersByQuestion,
+            getQuizBySearch,
             createQuiz,
             createAnswers,
             updateQuiz,

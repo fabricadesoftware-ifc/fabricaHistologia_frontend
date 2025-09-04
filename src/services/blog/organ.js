@@ -15,6 +15,18 @@ class OrganService {
     }
   }
 
+    async getOrgansBySearch(search) {
+    try {
+      const { data } = await api.get(`/organs/?name=${search}`)
+      console.log(data)
+      return data.results
+    } catch (error) {
+      console.log('error in getOrgansBySearch', error)
+      throw error
+    }
+  }
+
+
   async getAllOrgans() {
     try {
       const { data } = await api.get(`/organs/?page_size=0`)
@@ -59,7 +71,6 @@ class OrganService {
 
   async updateOrgans(organ) {
     try {
-      console.log('chegou longe')
       const { data } = await api.put(`/organs/${organ.id}/`, organ, {
         headers: { authorization: `Bearer ${token}` }
       })

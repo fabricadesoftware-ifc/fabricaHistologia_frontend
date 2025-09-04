@@ -15,7 +15,8 @@ import {
   InputSelectAdmin,
   AdminGlobalContainer,
   BtnDefault,
-  SucessModalAdmin
+  SucessModalAdmin,
+  LoadingSpinner
 } from '@/components/index'
 
 // Stores
@@ -30,6 +31,7 @@ const materialId = route.params.id
 
 // State
 const loading = ref(true)
+const actionLoading = ref(false)
 
 const material = reactive({
   name: '',
@@ -45,6 +47,7 @@ const showErrorModal = ref(false)
 const showDeleteConfirm = ref(false)
 const errorMessage = ref('')
 const successAction = ref('edit')
+
 const successTitle = computed(() =>
   successAction.value === 'delete'
     ? 'Material Excluído'
@@ -54,18 +57,18 @@ const successTitle = computed(() =>
 // Options for selects
 const imagesOptions = computed(() =>
   uploadStore.images?.map((upload) => ({
-      name: upload.description,
-      id: upload.attachment_key,
-      url: upload.url
-    })) || []
+    name: upload.description,
+    id: upload.attachment_key,
+    url: upload.url
+  })) || []
 )
 
 const documentsOptions = computed(() =>
   uploadStore.documents?.map((doc) => ({
-      name: doc.description,
-      id: doc.attachment_key,
-      url: doc.url,
-    })) || []
+    name: doc.description,
+    id: doc.attachment_key,
+    url: doc.url
+  })) || []
 )
 
 // Load data
@@ -81,19 +84,18 @@ onMounted(async () => {
 
     Object.assign(material, supportingMaterialStore.selectedMaterial)
     material.image_supporting_material =
-      supportingMaterialStore.selectedMaterial.image_supporting_material
-        ?.attachment_key || null
+      supportingMaterialStore.selectedMaterial.image_supporting_material?.attachment_key || null
     material.document_supporting_material =
-      supportingMaterialStore.selectedMaterial.document_supporting_material
-        ?.attachment_key || null
-
-        material.system = supportingMaterialStore.selectedMaterial.system?.id || ''
-
-    console.log(uploadStore.allUploads)
+      supportingMaterialStore.selectedMaterial.document_supporting_material?.attachment_key || null
+    material.system = supportingMaterialStore.selectedMaterial.system?.id || ''
   } catch (err) {
     console.error('Erro ao carregar material:', err)
     errorMessage.value =
-      err?.message || 'Erro ao carregar o material para edição.'
+      err?.response?.data
+        ? Object.values(err.response.data)
+            .map(v => Array.isArray(v) ? v.join(', ') : v)
+            .join('\n')
+        : err?.message || 'Erro ao carregar o material para edição.'
     showErrorModal.value = true
   } finally {
     loading.value = false
@@ -102,26 +104,28 @@ onMounted(async () => {
 
 // Actions
 const send = async () => {
+  actionLoading.value = true
   try {
-    await supportingMaterialStore.updateMaterial(
-      material
-    )
+    await supportingMaterialStore.updateMaterial(material)
     successAction.value = 'edit'
     showSuccessModal.value = true
     setTimeout(() => router.push('/admin/supporting'), 1000)
   } catch (err) {
     console.error('Erro ao editar material:', err)
     errorMessage.value =
-      err?.message || 'Erro inesperado ao atualizar o material.'
+      err?.response?.data
+        ? Object.values(err.response.data)
+            .map(v => Array.isArray(v) ? v.join(', ') : v)
+            .join('\n')
+        : err?.message || 'Erro inesperado ao atualizar o material.'
     showErrorModal.value = true
+  } finally {
+    actionLoading.value = false
   }
 }
 
-const tryDelete = () => {
-  showDeleteConfirm.value = true
-}
-
 const confirmDelete = async () => {
+  actionLoading.value = true
   try {
     await supportingMaterialStore.deleteSupportingMaterial(materialId)
     successAction.value = 'delete'
@@ -131,9 +135,14 @@ const confirmDelete = async () => {
   } catch (err) {
     console.error('Erro ao deletar material:', err)
     errorMessage.value =
-      err?.message || 'Erro inesperado ao deletar o material.'
-    showDeleteConfirm.value = false
+      err?.response?.data
+        ? Object.values(err.response.data)
+            .map(v => Array.isArray(v) ? v.join(', ') : v)
+            .join('\n')
+        : err?.message || 'Erro inesperado ao deletar o material.'
     showErrorModal.value = true
+  } finally {
+    actionLoading.value = false
   }
 }
 
@@ -144,14 +153,9 @@ function closeErrorModal() {
 
 <template>
   <AdminGlobalContainer>
-    <!-- Loading -->
-    <div
-      v-if="loading"
-      class="fixed inset-0 bg-white/70 flex items-center justify-center z-50"
-    >
-      <div
-        class="animate-spin rounded-full h-16 w-16 border-4 border-[#29AC96] border-t-transparent"
-      ></div>
+    <!-- Loading geral -->
+    <div v-if="loading || actionLoading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50">
+      <LoadingSpinner class="mt-0" />
     </div>
 
     <!-- Form -->
@@ -165,7 +169,7 @@ function closeErrorModal() {
           :hasLink="false"
         />
         <BtnDefault
-          @click="tryDelete"
+          @click="showDeleteConfirm = true"
           class="mb-10 h-8 rounded-lg"
           text="Excluir"
           background="bg-[#E40000]"
@@ -173,46 +177,18 @@ function closeErrorModal() {
         />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
-        <InputStringAdmin
-          label="Nome"
-          :modelValue="material.name"
-          @action="material.name = $event"
-        />
+      <div class="flex flex-col gap-10 w-full">
+        <InputStringAdmin label="Nome" :modelValue="material.name" @action="material.name = $event" />
 
-        <InputStringAdmin
-          label="Descrição"
-          :modelValue="material.description"
-          @action="material.description = $event"
-        />
+        <InputStringAdmin label="Descrição" :modelValue="material.description" @action="material.description = $event" />
 
-        <InputStringAdmin
-          label="Link para o conteúdo"
-          :modelValue="material.field_name"
-          @action="material.field_name = $event"
-        />
+        <InputStringAdmin label="Link para o conteúdo" :modelValue="material.field_name" @action="material.field_name = $event" />
 
-        <!-- Alterado para Select -->
-        <InputSelectAdmin
-          label="Sistema"
-          :modelValue="material.system"
-          :options="systemStore.systems"
-          @action="material.system = $event"
-        />
+        <InputSelectAdmin label="Sistema" :modelValue="material.system" :options="systemStore.systems" @action="material.system = $event" />
 
-        <InputSelectAdmin
-          label="Imagem"
-          :modelValue="material.image_supporting_material"
-          :options="imagesOptions"
-          @action="material.image_supporting_material = $event"
-        />
+        <InputSelectAdmin label="Imagem" :modelValue="material.image_supporting_material" :options="imagesOptions" @action="material.image_supporting_material = $event" />
 
-        <InputSelectAdmin
-          label="Documento"
-          :modelValue="material.document_supporting_material"
-          :options="documentsOptions"
-          @action="material.document_supporting_material = $event"
-        />
+        <InputSelectAdmin label="Documento" :modelValue="material.document_supporting_material" :options="documentsOptions" @action="material.document_supporting_material = $event" />
       </div>
     </div>
   </AdminGlobalContainer>
@@ -223,6 +199,9 @@ function closeErrorModal() {
     subtitle="Sucesso!"
     :title="successTitle"
     message="Operação realizada com sucesso!"
+    confirm-label=""
+    cancel-label=""
+    :duration="1"
   />
 
   <SucessModalAdmin
@@ -231,7 +210,9 @@ function closeErrorModal() {
     :title="errorMessage"
     message="Tente novamente ou contate o suporte."
     confirm-label="Fechar"
+    cancel-label=""
     @confirm="closeErrorModal"
+    confirm-class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-xl"
   />
 
   <SucessModalAdmin

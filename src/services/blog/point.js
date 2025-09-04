@@ -22,6 +22,17 @@ class PointService {
         }
     }
 
+    async getPointsBySearch(search) {
+        try {
+            const { data } = await api.get(`/points/?label_title=${search}`);
+            console.log( "Service: GetPost - return success")
+            return data;
+        } catch (error) {
+            console.log("Service: GetPost - return error", error);
+            throw error;
+        }
+    }
+
     async getPointsByPost(post_id) {
         try {
             const {data} = await api.get(`/points/?posts_id=${post_id}`);

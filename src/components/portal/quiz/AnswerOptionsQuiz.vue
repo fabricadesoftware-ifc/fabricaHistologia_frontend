@@ -18,7 +18,7 @@ const transform = (number) => {
 }
 
 const verifyAnswered = (answer) => {
-  const getsaved =  quizStore.savedAnswers.filter(s => s.question_id == answer.question)
+  const getsaved =  quizStore.savedAnswers.filter(s => s.question_id.question == answer.question.question)
   return getsaved.length == 0 ? false : true
 }
 
