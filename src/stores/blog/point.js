@@ -64,6 +64,21 @@ export const usePointStore = defineStore("point",
             }
         };
 
+       
+      const getPointsBySearch = async (search) => {
+          state.loading = true;
+          try {
+              const response = await PointService.getPointsBySearch(search);
+              const data = Object.assign(response, {visible: false})
+              state.points = data
+          } catch (error) {
+              state.error = error;
+          } finally {
+              state.loading = false;
+              state.connection = true;
+          }
+      }
+
         const getPointsByPosts = async (post_id) => {
             state.loading = true;
             try {
@@ -220,6 +235,7 @@ export const usePointStore = defineStore("point",
             getPoints,
             getPointsById,
             getPointsByPosts,
+            getPointsBySearch,
             createPoint,
             updatePoints,
             deletePoints,

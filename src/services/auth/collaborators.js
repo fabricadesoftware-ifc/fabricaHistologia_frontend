@@ -19,6 +19,16 @@ class CollaboratorsService{
         }
     }
 
+    async getCollaboratorsBySearch(search) {
+        try {
+            const { data } = await api.get(`/personal/?user=${search}`, {headers: {'authorization': `Bearer ${token}`}})
+            return data.results
+        } catch (error) {
+            console.log('error in getCollaboratorsBySearch', error)
+            throw error
+        }
+    }
+
     async getUsers() {
         try {
             const { data } = await api.get('/users', {headers: {'authorization': `Bearer ${token}`}})
@@ -29,12 +39,32 @@ class CollaboratorsService{
         }
     }
 
+        async getUsersBySearch(search) {
+        try {
+            const { data } = await api.get(`/users/?email=${search}`, {headers: {'authorization': `Bearer ${token}`}})
+            return data.results
+        } catch (error) {
+            console.log('error in getUsersBySearch', error)
+            throw error
+        }
+    }
+
       async getAddress() {
         try {
             const { data } = await api.get('/address', {headers: {'authorization': `Bearer ${token}`}})
             return data.results
         } catch (error) {
             console.log('error in getAddress', error)
+            throw error
+        }
+    }
+
+      async getAddressBySearch(search) {
+        try {
+            const { data } = await api.get(`/address/?city=${search}`, {headers: {'authorization': `Bearer ${token}`}})
+            return data.results
+        } catch (error) {
+            console.log('error in getAddressBySearch', error)
             throw error
         }
     }

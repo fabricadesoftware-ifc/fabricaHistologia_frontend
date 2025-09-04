@@ -21,6 +21,16 @@ class QuizService {
         }
     }
 
+    async getQuizBySearch(search) {
+        try {
+            const { data } = await api.get(`/quiz/?question=${search}`);
+            return data;
+        } catch (error) {
+            console.log("Service: GetQuiz - return error", error);
+            throw error;
+        }
+    }
+
     async getAllQuizes() {
     try {
       const { data } = await api.get(`/quiz/?page_size=0`, {headers: {'authorization': `Bearer ${token}`,  "Content-Type": 'multipart/form-data'}})

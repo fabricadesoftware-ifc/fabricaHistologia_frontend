@@ -46,12 +46,16 @@ const updateQuery = (e) => {
   <div
     @click="toggleSearch"
     v-if="activeSearch"
-    class="w-dvw z-30 h-dvh fixed top-0 left-0"
+    class="w-dvw z-30 h-dvh fixed top-0 left-0 scrollControll"
   ></div>
 </template>
 
 <style scoped>
 input::placeholder {
   color: white;
+}
+
+.scrollControll {
+  pointer-events:none;
 }
 </style>

@@ -72,6 +72,20 @@ export const usePostStore = defineStore("post",
             }
         };
 
+
+        const getPostsBySearch = async (search) => {
+            state.value.loading = true;
+            try {
+                const response = await PostService.getPostsBySearch(search);
+                state.value.posts = response;
+            } catch (error) {
+                state.value.error = error;
+            } finally {
+                state.value.loading = false;
+                state.value.connection = true;
+            }
+        };
+
          const getAllPosts = async () => {
             state.value.loading = true;
             try {
@@ -201,6 +215,7 @@ export const usePostStore = defineStore("post",
             getPostsByOrganAndType,
             getPostsByOrgan,
             getPostsById,
+            getPostsBySearch,
             createPost,
             updatePosts,
             deletePosts

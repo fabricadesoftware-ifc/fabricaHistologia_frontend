@@ -86,13 +86,14 @@ const changeActive = (index, itens) => {
 }
 
 const changeActiveMobile = (itens) => {
-  console.log(itens)
-    itens.itens.forEach(item => {
-        item.active = false
-    })
+  const selected = itens.itens[itens.index]
 
-    itens.itens[itens.index].active = true 
-    handleFilterAction(itens.itens[itens.index].nome)
+  // desmarca todos
+  itens.itens.forEach(item => { item.active = false })
+  selected.active = true 
+
+  // sempre chama handleFilterAction (mesmo que já fosse ativo antes)
+  handleFilterAction(selected.nome)
 }
 
 const activeSearch = ref(false)

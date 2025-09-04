@@ -65,6 +65,19 @@ export const useSystemStore = defineStore('system', () => {
         }
     };
 
+    const getSystemsBySearch = async (search) => {
+        state.value.loading = true;
+        try {
+            const response = await SystemService.getSystemsBySearch(search);
+            state.value.systems = response;
+        } catch (error) {
+            state.value.error = error;
+        } finally {
+            state.value.loading = false;
+            state.value.connection = true;
+        }
+    };
+
       const getAllSystems = async () => {
         state.value.loading = true
         try {
@@ -165,5 +178,5 @@ export const useSystemStore = defineStore('system', () => {
         }
     }
 
-    return { state, isLoading, systemsCount, systems, selectedSystem, count, getAllSystems, getSystems, getSystemById,  createSystem, updateSystem, deleteSystem };
+    return { state, isLoading, systemsCount, systems, selectedSystem, count, getAllSystems, getSystems, getSystemsBySearch, getSystemById,  createSystem, updateSystem, deleteSystem };
 })

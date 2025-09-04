@@ -22,6 +22,17 @@ class PostService {
         }
     }
 
+    async getPostsBySearch(search) {
+        try {
+            const { data } = await api.get(`/posts/?name=${search}`);
+            console.log(data)
+            return data.results;
+        } catch (error) {
+            console.log("Service: GetPost - return error", error);
+            throw error;
+        }
+    }
+
      async getAllPosts() {
         try {
             const { data } = await api.get(`/posts/?page_size=0`);

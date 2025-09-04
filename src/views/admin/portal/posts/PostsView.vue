@@ -12,22 +12,21 @@ import {
   TablePagination
 } from '@/components/index'
 import { useAdmin } from '@/stores/admin/filter_admin'
+import { useDebounceFn } from '@vueuse/core'
 
 // Stores
 const postStore = usePostStore()
 const organStore = useOrganStore()
 const { changeActive, changeActiveMobile } = useAdmin()
 
-// Estado de carregamento
+// Estados
 const loading = ref(true)
+const searchLoading = ref(false)
 const errorMessage = ref("")
-
-// Controle de paginação
 const currentPage = ref(1)
 const itemsPerPage = 10
-
-// Filtros
 const filters = ref([])
+const searchText = ref("")
 
 // Posts formatados com fallback para nome do órgão
 const postsWithOrganName = computed(() =>
@@ -45,10 +44,12 @@ const loadInitialData = async () => {
       postStore.getPosts(currentPage.value),
       organStore.getOrgans()
     ])
-    filters.value = [
-      { nome: 'Geral', active: true },
-      ...organStore.organs.map(org => ({ nome: org.name, active: false }))
-    ]
+    if (!filters.value.length) {
+      filters.value = [
+        { nome: 'Geral', active: true },
+        ...organStore.organs.map(org => ({ nome: org.name, active: false }))
+      ]
+    }
   } catch (err) {
     console.error("Erro ao carregar dados:", err)
     errorMessage.value = "Erro ao carregar posts ou órgãos."
@@ -66,14 +67,20 @@ const activeFilter = computed(() =>
 
 // Lista filtrada
 const filteredPosts = computed(() => {
-  if (!activeFilter.value || activeFilter.value === 'Geral') return postsWithOrganName.value
-  return postsWithOrganName.value.filter(post => post.organ?.name === activeFilter.value)
+  let data = postsWithOrganName.value
+  if (activeFilter.value && activeFilter.value !== 'Geral') {
+    data = data.filter(post => post.organ?.name === activeFilter.value)
+  }
+  if (searchText.value) {
+    data = data.filter(post =>
+      post.name.toLowerCase().includes(searchText.value.toLowerCase())
+    )
+  }
+  return data
 })
 
-// Paginação (API já retorna dados paginados)
+// Paginação
 const paginatedPosts = computed(() => filteredPosts.value)
-
-// Total de páginas
 const totalPages = computed(() =>
   Math.max(1, Math.ceil((postStore.count || filteredPosts.value.length) / itemsPerPage))
 )
@@ -82,7 +89,13 @@ const totalPages = computed(() =>
 watch(currentPage, async (newPage) => {
   try {
     loading.value = true
-    await postStore.getPosts(newPage)
+    if (!searchText.value) {
+      await postStore.getPosts(newPage)
+    } else {
+      searchLoading.value = true
+      await postStore.getPostsBySearch(searchText.value)
+      searchLoading.value = false
+    }
   } catch (err) {
     console.error("Erro ao mudar de página:", err)
     errorMessage.value = "Erro ao carregar posts da página selecionada."
@@ -95,21 +108,42 @@ watch(currentPage, async (newPage) => {
 watch(activeFilter, async () => {
   currentPage.value = 1
   try {
-    loading.value = true
-    await postStore.getPosts(1)
+    if (!searchText.value) {
+      loading.value = true
+      await postStore.getPosts(1)
+      loading.value = false
+    } else {
+      searchLoading.value = true
+      await postStore.getPostsBySearch(searchText.value)
+      searchLoading.value = false
+    }
   } catch (err) {
     console.error("Erro ao aplicar filtro:", err)
     errorMessage.value = "Erro ao filtrar posts."
-  } finally {
-    loading.value = false
   }
 })
+
+// Função de search com debounce
+const _onSearch = async (text) => {
+  searchText.value = text
+  currentPage.value = 1
+  if (!text) {
+    loading.value = true
+    await postStore.getPosts(1)
+    loading.value = false
+  } else {
+    searchLoading.value = true
+    await postStore.getPostsBySearch(text)
+    searchLoading.value = false
+  }
+}
+const onSearch = useDebounceFn(_onSearch, 400)
 </script>
 
 <template>
   <AdminGlobalContainer>
-    <!-- Loading Overlay -->
-    <LoadingSpinner v-if="loading" class="my-10" />
+    <!-- Loading global -->
+    <LoadingSpinner v-if="loading && !searchLoading" class="my-10" />
 
     <template v-else>
       <!-- Gráfico -->
@@ -128,7 +162,12 @@ watch(activeFilter, async () => {
       <section>
         <div class="flex flex-col w-[90%] mx-auto">
           <p class="text-xl font-medium mb-10">Cadastros Gerais</p>
-          <TableFilterContainer @filter="changeActiveMobile" :items="filters" :amount="filters.length">
+          <TableFilterContainer
+            @filter="changeActiveMobile"
+            @search-text="onSearch"
+            :items="filters"
+            :amount="filters.length"
+          >
             <TableFilterCard
               v-for="(filter, index) in filters"
               :key="index"
@@ -141,7 +180,11 @@ watch(activeFilter, async () => {
 
         <!-- Tabela -->
         <section class="mt-10 w-[90%] mx-auto flex flex-col items-center mb-10">
+          <!-- Loading da busca -->
+          <p v-if="searchLoading" class="text-gray-500 mt-6">Buscando...</p>
+
           <ListTableAdmin
+            v-else-if="paginatedPosts.length"
             :rows="paginatedPosts"
             :columns="[
               { key: 'id', label: 'ID' },
@@ -154,9 +197,11 @@ watch(activeFilter, async () => {
             @update:cell="(e) => console.log('editou', e)"
           />
 
+          <p v-else class="text-gray-500 mt-6">Nenhum resultado encontrado</p>
+
           <!-- Paginação -->
           <TablePagination
-            :currentPage="currentPage"
+            :current-page="currentPage"
             :total-pages="totalPages"
             @page-change="(page) => currentPage.value = page"
           />

@@ -20,6 +20,17 @@ class SystemService {
         }
     }
 
+    async getSystemsBySearch (search) {
+        try {
+            const {data} = await api.get(`/systems/?name=${search}`);
+            console.log(data)
+            return data.results;
+        } catch (error) {
+            console.log("error in getSystemsBySearch", error);
+            throw error;
+        }
+    }
+
       async getAllSystems () {
         try {
             const {data} = await api.get(`/systems/?page_size=0`);

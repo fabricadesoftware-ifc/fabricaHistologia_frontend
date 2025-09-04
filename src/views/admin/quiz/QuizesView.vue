@@ -12,35 +12,27 @@ import {
   TablePagination,
   SucessModalAdmin
 } from '@/components/index'
-
 import { useAdmin } from '@/stores/admin/filter_admin'
+import { useDebounceFn } from '@vueuse/core'
 
 // Stores
 const quizStore = useQuizStore()
 const systemStore = useSystemStore()
 const { changeActive, changeActiveMobile } = useAdmin()
 
-// Estado de carregamento
+// Estados
 const loading = ref(true)
-
-// Tratamento de erro
-const showErrorModal = ref(false)
-const errorMessage = ref('')
-const closeErrorModal = () => { showErrorModal.value = false }
-
-// Paginação
+const searchLoading = ref(false)
 const currentPage = ref(1)
 const itemsPerPage = 10
-
-// Filtros
 const filters = ref([])
+const searchText = ref("")
+const showErrorModal = ref(false)
+const errorMessage = ref("")
+const closeErrorModal = () => { showErrorModal.value = false }
 
 // Mapa de níveis
-const levelMap = {
-  1: 'Fácil',
-  2: 'Médio',
-  3: 'Difícil',
-}
+const levelMap = { 1: 'Fácil', 2: 'Médio', 3: 'Difícil' }
 
 // Dados formatados
 const quizzesWithLevelName = computed(() =>
@@ -50,23 +42,18 @@ const quizzesWithLevelName = computed(() =>
   }))
 )
 
-// Função para buscar quizzes com tratamento de erro
-const fetchQuizzes = async (page = 1) => {
-  loading.value = true
+// Função para carregar quizzes com tratamento de erro
+const fetchQuizzes = async (page = 1, search = "") => {
   try {
-    await quizStore.getQuiz(page)
+    if (search) searchLoading.value = true
+    else loading.value = true
+    await quizStore.getQuiz(page, search)
   } catch (err) {
-    if (err?.response?.data) {
-      const data = err.response.data
-      errorMessage.value = Object.values(data)
-        .map(v => (Array.isArray(v) ? v.join(', ') : v))
-        .join('\n')
-    } else {
-      errorMessage.value = err?.message || 'Erro inesperado ao carregar quizzes.'
-    }
+    errorMessage.value = err?.message || 'Erro inesperado ao carregar quizzes.'
     showErrorModal.value = true
   } finally {
     loading.value = false
+    searchLoading.value = false
   }
 }
 
@@ -77,16 +64,11 @@ onBeforeMount(async () => {
     await systemStore.getAllSystems()
     filters.value = [
       { nome: 'Geral', active: true },
-      ...systemStore.systems.map(item => ({
-        nome: item.name,
-        active: false
-      }))
+      ...systemStore.systems.map(s => ({ nome: s.name, active: false }))
     ]
   } catch (err) {
     errorMessage.value = 'Erro ao carregar sistemas.'
     showErrorModal.value = true
-  } finally {
-    loading.value = false
   }
 })
 
@@ -95,37 +77,49 @@ const activeFilter = computed(() =>
   filters.value.find(f => f.active)?.nome
 )
 
-// Filtrados
+// Lista filtrada
 const filteredQuizzes = computed(() => {
-  if (!activeFilter.value || activeFilter.value === 'Geral') {
-    return quizzesWithLevelName.value
+  let data = quizzesWithLevelName.value
+  if (activeFilter.value && activeFilter.value !== 'Geral') {
+    data = data.filter(q => q.system?.name === activeFilter.value)
   }
-  return quizzesWithLevelName.value.filter(q => q.system?.name === activeFilter.value)
+  if (searchText.value) {
+    data = data.filter(q =>
+      q.question.toLowerCase().includes(searchText.value.toLowerCase())
+    )
+  }
+  return data
 })
 
-// Dados paginados
+// Paginação
 const paginatedQuizzes = computed(() => filteredQuizzes.value)
-
-// Total de páginas
 const totalPages = computed(() =>
-  Math.max(1, Math.ceil(quizStore.quizCountState / itemsPerPage))
+  Math.max(1, Math.ceil((quizStore.quizCountState || filteredQuizzes.value.length) / itemsPerPage))
 )
 
-// Watchers para paginação e filtro
+// Watchers
 watch(currentPage, async (newPage) => {
-  await fetchQuizzes(newPage)
+  await fetchQuizzes(newPage, searchText.value)
 })
 
 watch(activeFilter, async () => {
   currentPage.value = 1
-  await fetchQuizzes(1)
+  await fetchQuizzes(1, searchText.value)
 })
+
+// Função de search com debounce
+const _onSearch = async (text) => {
+  searchText.value = text
+  currentPage.value = 1
+  await fetchQuizzes(1, text)
+}
+const onSearch = useDebounceFn(_onSearch, 400)
 </script>
 
 <template>
   <AdminGlobalContainer>
-    <!-- Loading -->
-    <LoadingSpinner v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50" />
+    <!-- Loading global -->
+    <LoadingSpinner v-if="loading && !searchLoading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50" />
 
     <template v-else>
       <!-- Gráfico -->
@@ -140,11 +134,16 @@ watch(activeFilter, async () => {
         />
       </div>
 
-      <!-- Filtros -->
+      <!-- Filtros + Search -->
       <section>
         <div class="flex flex-col w-[90%] mx-auto">
           <p class="text-xl font-medium mb-10">Cadastros Gerais</p>
-          <TableFilterContainer @filter="changeActiveMobile" :items="filters" :amount="filters.length">
+          <TableFilterContainer
+            @filter="changeActiveMobile"
+            @search-text="onSearch"
+            :items="filters"
+            :amount="filters.length"
+          >
             <TableFilterCard
               v-for="(i, index) in filters"
               :key="index"
@@ -157,7 +156,10 @@ watch(activeFilter, async () => {
 
         <!-- Tabela -->
         <section class="mt-10 w-[90%] mx-auto flex flex-col items-center mb-10">
+          <p v-if="searchLoading" class="text-gray-500 mt-6">Buscando...</p>
+
           <ListTableAdmin
+            v-else-if="paginatedQuizzes.length"
             :rows="paginatedQuizzes"
             :columns="[
               { key: 'id', label: 'ID' },
@@ -169,9 +171,11 @@ watch(activeFilter, async () => {
             @update:cell="(e) => console.log('editou', e)"
           />
 
+          <p v-else class="text-gray-500 mt-6">Nenhum resultado encontrado</p>
+
           <!-- Paginação -->
           <TablePagination
-            :currentPage="currentPage"
+            :current-page="currentPage"
             :total-pages="totalPages"
             @page-change="(page) => (currentPage = page)"
           />

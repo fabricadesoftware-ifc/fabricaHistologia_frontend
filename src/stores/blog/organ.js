@@ -62,6 +62,19 @@ export const useOrganStore = defineStore('organ', () => {
     }
   }
 
+  const getOrgansBySearch = async (search) => {
+    state.value.loading = true
+    try {
+      const response = await OrganService.getOrgansBySearch(search)
+      state.value.organs = response
+    } catch (error) {
+      state.value.error = error
+    } finally {
+      state.value.loading = false
+      state.value.connection = true
+    }
+  }
+
   const getAllOrgans = async (page) => {
     state.value.loading = true
     try {
@@ -180,6 +193,7 @@ export const useOrganStore = defineStore('organ', () => {
     getOrgansBySystem,
     getOrgans,
     getOrgansById,
+    getOrgansBySearch,
     createOrgan,
     updateOrgan,
     deleteOrgan

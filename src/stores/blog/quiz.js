@@ -87,6 +87,20 @@ export const useQuizStore = defineStore("quiz",
             }
         };
 
+
+        const getQuizBySearch = async (search) => {
+            state.value.loading = true;
+            try {
+                const response = await QuizService.getQuizBySearch(search);
+                state.value.quiz = response;
+            } catch (error) {
+                state.value.error = error;
+            } finally {
+                state.value.loading = false;
+                state.value.connection = true;
+            }
+        };
+
          const getAllQuizes = async () => {
             state.value.loading = true;
             try {
@@ -318,6 +332,7 @@ export const useQuizStore = defineStore("quiz",
             getAnswers,
             getQuizBySystem,
             getAnswersByQuestion,
+            getQuizBySearch,
             createQuiz,
             createAnswers,
             updateQuiz,
