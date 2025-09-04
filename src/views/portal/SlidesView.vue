@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { SpecieFilterComponent } from '@/components/index';
-import { useOrganStore, usePostStore, useNavigationStore, useSystemStore, useQuizStore } from '@/stores';
+import { useOrganStore, usePostStore, useNavigationStore, useSystemStore, useQuizStore, useSupportingStore } from '@/stores';
 import { resetAll } from '@/utils/quiz';
 import {
   ContainerGlobal,
@@ -17,6 +17,8 @@ const systemStore = useSystemStore()
 const organStore = useOrganStore()
 const postStore = usePostStore()
 const quizStore = useQuizStore()
+const supportingStore = useSupportingStore()
+
 const router = useRoute()
 const routerUse = useRouter()
 
@@ -40,8 +42,23 @@ watch(() => postStore.buttons.find((s) => s.selected == true).post, (newVal) => 
 onMounted(async () => {
   await organStore.getOrgansById(organ_id)
   await postStore.getPostsByOrganAndType(organ_id, 1, '')
+  await supportingStore.getMaterialsBySystem(organStore.organs[0].system.id)
+  setAdditionalInfo.value
   postStore.typeSelection = 1
 })
+
+const additionalData = ref([
+    {title: 'Aulas', material: []},
+    {title: 'PDFs', material: []}
+])
+
+const setAdditionalInfo = computed(()=>{
+    additionalData.value[0].material = supportingStore.state.materialsBySystem.filter(s => s.image_supporting_material == null && s.document_supporting_material == null)
+
+    additionalData.value[1].material = supportingStore.state.materialsBySystem.filter(s => s.image_supporting_material != null || s.document_supporting_material != null)
+})
+
+
 
 const push = async(id) => {
     resetAll(quizStore)
@@ -79,7 +96,7 @@ onBeforeUnmount(() => {
     
     </CardsContainer>
     <ContainerGlobal class="flex justify-center flex-col">
-      <AddInfoGlobal />
+      <AddInfoGlobal v-if="additionalData[0].material.length > 0 || additionalData[1].material.length > 0" :data='additionalData' />
       <BtnDefault @click='push(system_id)' :text="'Acessar Quiz deste Órgão'" :link="'/portal/quiz/' + system_id" :block="true" class="mt-12 mb-5" />
     </ContainerGlobal>
   </section>

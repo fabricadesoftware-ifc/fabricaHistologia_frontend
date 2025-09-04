@@ -14,7 +14,7 @@ const store = useActionSelectorStore()
         <span class="text-xl font-normal">Adicionar {{ store.showSelect ? store.selectedOption : store.session.label }}</span>
       </button>
 
-        <ButtonDropdown v-if="store.showSelect" :options="store.options" v-model="store.selectedOption"/>
+        <ButtonDropdown class="sm:absolute sm:left-0 sm:top-[55px]" v-if="store.showSelect" :options="store.options" v-model="store.selectedOption"/>
     </div>
   </div>
 </template>

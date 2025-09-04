@@ -61,6 +61,7 @@ onUpdated(()=>{
     if (quizStore.markedAnswers.length == 0) {
          quizStore.getMarkedAnswers()
     }
+
 })
 
 const answeredAll = computed(()=> {

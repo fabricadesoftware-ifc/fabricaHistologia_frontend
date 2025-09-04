@@ -10,7 +10,8 @@ import {
   InputSelectAdmin,
   AdminGlobalContainer,
   BtnDefault,
-  SucessModalAdmin
+  SucessModalAdmin,
+  LoadingSpinner
 } from '@/components/index'
 
 const route = useRoute()
@@ -70,9 +71,7 @@ const getMousePos = (canvas, evt) => {
    REDRAW CANVAS
 ================================ */
 const redrawCanvas = () => {
-  console.log("🎨 redrawCanvas chamado")
   if (!canvasRef.value || !loadedImage.value) {
-    console.warn("⚠️ redrawCanvas cancelado: canvas ou imagem ainda não prontos")
     return
   }
 
@@ -239,10 +238,16 @@ const send = async () => {
       router.push(`/admin/posts/`)
     }, 1000)
   } catch (err) {
-    console.error('Erro ao editar ponto:', err)
+  if (err?.response?.data) {
+    const data = err.response.data
+    errorMessage.value = Object.values(data)
+      .map(v => Array.isArray(v) ? v.join(', ') : v)
+      .join('\n')
+  } else {
     errorMessage.value = err?.message || 'Erro inesperado ao atualizar ponto.'
-    showErrorModal.value = true
   }
+  showErrorModal.value = true
+}
 }
 
 /* ==============================
@@ -277,9 +282,7 @@ function closeErrorModal() {
 <template>
   <AdminGlobalContainer>
     <!-- loading overlay -->
-    <div v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50">
-      <div class="animate-spin rounded-full h-16 w-16 border-4 border-[#29AC96] border-t-transparent"></div>
-    </div>
+    <LoadingSpinner v-if="loading" class="mt-20" />
 
     <div v-else class="w-[90%] mx-auto space-y-6">
       <div class="absolute top-0 right-0 p-5 z-10 flex gap-5">
@@ -299,7 +302,7 @@ function closeErrorModal() {
         />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <div class="flex flex-col gap-10 w-full">
         <InputStringAdmin
           label="Título"
           :modelValue="newPoint.label_title"
@@ -329,7 +332,7 @@ function closeErrorModal() {
       </div>
 
       <!-- Canvas + visibilidade -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div class="flex flex-col gap-10">
         <div class="flex justify-center flex-col items-center">
           <canvas
             class="w-8/12 border rounded-lg shadow"
@@ -380,14 +383,15 @@ function closeErrorModal() {
   </AdminGlobalContainer>
 
   <!-- sucesso -->
-  <SucessModalAdmin
-    :show="showSuccessModal"
-    subtitle="Sucesso!"
-    :title="successTitle"
-    message="Ação concluída com sucesso!"
-    :cancel-label="null"
-    :confirm-label="null"
-  />
+ <SucessModalAdmin
+  :show="showSuccessModal"
+  subtitle="Sucesso!"
+  :title="successTitle"
+  message="Ação concluída com sucesso!"
+  :cancel-label="null"
+  :confirm-label="null"
+  :duration="1"
+/>
 
   <!-- erro -->
   <SucessModalAdmin

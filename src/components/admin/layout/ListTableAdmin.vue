@@ -50,10 +50,6 @@ const appendId = (id) => {
   router.push(newPath)
 }
 
-onMounted(() => {
-  console.log("ListTableAdmin mounted with rows:", props.rows)
-  console.log("Columns:", props.columns)
-})
 </script>
 
 <template>

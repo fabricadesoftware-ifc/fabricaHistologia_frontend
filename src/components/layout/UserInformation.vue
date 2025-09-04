@@ -51,11 +51,12 @@ const reduceEmail = (email) => {
 .container-information{
     padding-top: 4px;
     transition: .5s;
+    height: 30px;
     & .logout-pop {
         height: 0px;
         opacity: 0;
         transition: .5s;
-
+        visibility: hidden;
         & button {
             height: 0px;
             transition: .5s;
@@ -65,10 +66,12 @@ const reduceEmail = (email) => {
     &:hover {
         background-color: rgb(238, 238, 238);
         align-items: center;
+        height: auto;
         & .logout-pop {
             height: 30px;
             visibility: visible;
             opacity: 1;
+            visibility: visible;
         & button {
             height: 35px;
         }

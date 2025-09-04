@@ -72,6 +72,20 @@ export const usePostStore = defineStore("post",
             }
         };
 
+
+        const getPostsBySearch = async (search) => {
+            state.value.loading = true;
+            try {
+                const response = await PostService.getPostsBySearch(search);
+                state.value.posts = response;
+            } catch (error) {
+                state.value.error = error;
+            } finally {
+                state.value.loading = false;
+                state.value.connection = true;
+            }
+        };
+
          const getAllPosts = async () => {
             state.value.loading = true;
             try {
@@ -159,6 +173,7 @@ export const usePostStore = defineStore("post",
                 return state.value.posts[index] = await PostService.updatePosts(post, id);
             } catch (error) {
                 state.value.error = error;
+                throw error;
             } finally {
                 state.value.loading = false;
             }
@@ -173,7 +188,6 @@ export const usePostStore = defineStore("post",
         const deletePosts = async (id) => {
             state.value.loading = true;
             try {
-                console.log('TA QUASE', id)
 
                 const index = state.value.posts.findIndex((s) => s.id === id);
                 state.value.posts.splice(index, 1);
@@ -201,6 +215,7 @@ export const usePostStore = defineStore("post",
             getPostsByOrganAndType,
             getPostsByOrgan,
             getPostsById,
+            getPostsBySearch,
             createPost,
             updatePosts,
             deletePosts

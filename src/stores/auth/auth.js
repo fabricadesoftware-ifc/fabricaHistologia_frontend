@@ -9,8 +9,11 @@ import { useStorage } from '@vueuse/core';
 export const useAuthStore = defineStore('auth', () => {
   const active = useStorage('activated', {
     active: false,
-    user: {}
+    user: {},
+    users: [],
   })
+
+  const users = computed(()=> active.value.users)
   
   
   const verifyUser = () => {
@@ -31,6 +34,17 @@ export const useAuthStore = defineStore('auth', () => {
   
     active.value.user = userData
     active.value.user ? active.value.active = true : active.value.active = false
+  }
+
+  const getUsers = async () => {
+    try {
+      const response = await AuthService.getUsers();
+      active.value.users = response
+      return response
+    } catch (error) {
+      console.error('Error fetching users:', error)
+      throw error;
+    }
   }
 
   const email = computed(() => active.value.user ? active.value.user.email : '')
@@ -63,5 +77,5 @@ export const useAuthStore = defineStore('auth', () => {
     },800)
   }
 
-  return { email, getUser, verifyUser, logout, activeUser, userInfo };
+  return { email, users, getUsers, getUser, verifyUser, logout, activeUser, userInfo };
 });

@@ -107,6 +107,19 @@ export const useSupportingStore = defineStore('supporting', () => {
     }
   }
 
+  const getMaterialsBySearch = async (search) => {
+    state.loading = true
+    try {
+      const response = await SupportingMaterialService.getMaterialsBySearch(search)
+      state.materials = response
+    } catch (error) {
+      state.error = error
+    } finally {
+      state.loading = false
+      state.connection = true
+    }
+  }
+
   const searchMaterialsByName = async (name, system__id) => {
     state.loading = true
     try {
@@ -190,6 +203,7 @@ export const useSupportingStore = defineStore('supporting', () => {
     getMaterialsBySystem,
     getMaterials,
     getMaterialsById,
+    getMaterialsBySearch,
     createMaterial,
     updateMaterial,
     deleteMaterial,

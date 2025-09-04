@@ -61,11 +61,23 @@ export const useSpecieStore = defineStore("specie",
             }
         };
 
+        const getSpecieBySearch = async (search) => {
+            state.loading = true;
+            try {
+                const response = await SpecieService.getSpeciesBySearch(search);
+                state.species = response;
+            } catch (error) {
+                state.error = error;
+            } finally {
+                state.loading = false;
+                state.connection = true;
+            }
+        };
+
             const getAllSpecies = async () => {
             state.loading = true;
             try {
                 const response = await SpecieService.getAllSpecies();
-                console.log(response)
                 state.allSpecies = response;
             } catch (error) {
                 state.error = error;
@@ -124,7 +136,7 @@ export const useSpecieStore = defineStore("specie",
                 return state.species[index] = await SpecieService.updateSpecies(specie);
             } catch (error) {
                 state.error = error;
-                return error;
+                throw error;
             } finally {
                 state.loading = false;
             }
@@ -160,6 +172,7 @@ export const useSpecieStore = defineStore("specie",
             getAllSpecies,
             getSpecies,
             getSpeciesById,
+            getSpecieBySearch,
             createSpecie,
             updateSpecie,
             deleteSpecie

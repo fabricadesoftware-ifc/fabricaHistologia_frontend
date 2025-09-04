@@ -150,9 +150,7 @@ export const useSlideStore = defineStore('slide', () => {
   ])
 
   const redrawCanvas = () => {
-    console.log('redrawCanvas')
     if (!ctx.value || !canvas.value) return
-    console.log('redrawCanvas 2')
     ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
     ctx.value.drawImage(image.value, 0, 0)
 

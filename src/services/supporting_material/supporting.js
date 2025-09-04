@@ -16,6 +16,16 @@ class SupportingMaterialService {
     }
   }
 
+  async getMaterialsBySearch(search) {
+    try {
+      const { data } = await api.get(`/supporting-material/?name=${search}`)
+      return data
+    } catch (error) {
+      console.log('error in getMaterialsBySearch', error)
+      throw error
+    }
+  }
+
   async getMaterialsById(id) {
     try {
       const { data } = await api.get(`/supporting-material/${id}/`)
