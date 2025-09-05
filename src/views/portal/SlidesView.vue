@@ -118,7 +118,7 @@ const loadFirstAvailableType = async () => {
     }
 
     if (!loaded) {
-      // Nenhuma lâmina encontrada, marca o primeiro botão como padrão
+      
       postStore.buttons.forEach(b => b.selected = false)
       postStore.buttons[0].selected = true
       postStore.typeSelection = postStore.buttons[0].post
@@ -128,8 +128,6 @@ const loadFirstAvailableType = async () => {
   }
 }
 
-
-const initialType = router.params.type || 1
 
 onBeforeMount(async () => {
  await loadFirstAvailableType()
