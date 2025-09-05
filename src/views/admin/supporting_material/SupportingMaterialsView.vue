@@ -71,8 +71,13 @@ const loadMaterials = async (page = 1, search = "") => {
     if (search) searchLoading.value = true
     else loading.value = true
 
+    if (search === "") {
     await supportingStore.getMaterials(page, search)
+    } else {
+    await supportingStore.getMaterialsBySearch(search)
 
+    }
+    console.log('Materiais carregados:', supportingStore.materials)
     // Atualiza filtros
     const systems = [...new Set(supportingStore.materials.map(m => m.system?.name || 'Sem Sistema'))]
     filters.value = [
@@ -103,7 +108,7 @@ watch(activeFilter, () => {
 const _onSearch = async (text) => {
   searchText.value = text
   currentPage.value = 1
-  await loadMaterials(1, text)
+  await loadMaterials('', text) // busca a página 1 com filtro
 }
 const onSearch = useDebounceFn(_onSearch, 400)
 </script>

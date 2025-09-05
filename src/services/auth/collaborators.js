@@ -81,7 +81,7 @@ class CollaboratorsService{
 
     async getCollaboratorsByUser(UserId) {
         try {
-            const { data } = await api.get(`/personal/?user_id=${UserId}`,{headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.get(`/personal/?user_id=${UserId}`, {headers: {'authorization': `Bearer ${token}`}})
             return data.results
         } catch (error) {
             console.log('error in getCollaborators', error)

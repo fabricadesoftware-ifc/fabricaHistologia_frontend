@@ -47,7 +47,7 @@ const divideRoute = () => {
                 <p v-if="divideRoute().length > 1 && index == 0"  :class="`text-xl font-medium text-black`">{{ routes }}</p>
                 </div>
                 
-                <div class="flex" v-for="(routes, index) in divideRoute()[1]">
+                <div class="flex sm:hidden" v-for="(routes, index) in divideRoute()[1]">
                 <p v-if="divideRoute().length > 1" :class="`text-xl font-medium ${getNameOfPath == routes.name ? ' text-gray-500' : 'text-black'}`">{{ routes.name }}</p>
                 </div>
                 

@@ -60,7 +60,6 @@ const successTitle = computed(() =>
 ================================ */
 const getMousePos = (canvas, evt) => {
   const rect = canvas.getBoundingClientRect()
-  // traduz coord da tela -> coord do canvas real (resolvido por width/height do canvas)
   return {
     x: (evt.clientX - rect.left) * (canvas.width / rect.width),
     y: (evt.clientY - rect.top) * (canvas.height / rect.height),
@@ -71,34 +70,26 @@ const getMousePos = (canvas, evt) => {
    REDRAW CANVAS
 ================================ */
 const redrawCanvas = () => {
-  if (!canvasRef.value || !loadedImage.value) {
-    return
-  }
+  if (!canvasRef.value || !loadedImage.value) return
 
   const canvas = canvasRef.value
   const ctx = canvas.getContext("2d")
 
-  canvas.width = loadedImage.value.width
-  canvas.height = loadedImage.value.height
-
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   ctx.drawImage(loadedImage.value, 0, 0)
 
-  // 🔹 desenhar linha contínua (desenho livre)
-  if (newPoint.visible && newPoint.position?.length) {
+  // 🔹 desenho existente ou manual
+  if (newPoint.visible && newPoint.position?.length > 0) {
     ctx.strokeStyle = newPoint.color || "blue"
-    ctx.lineWidth = 2
+    ctx.lineWidth = 5
     ctx.beginPath()
     ctx.moveTo(newPoint.position[0].x, newPoint.position[0].y)
-
     for (let i = 1; i < newPoint.position.length; i++) {
       ctx.lineTo(newPoint.position[i].x, newPoint.position[i].y)
     }
-
     ctx.stroke()
   }
 }
-
 
 /* ==============================
    SET DEFAULT IMAGE
@@ -120,7 +111,11 @@ const setDefaultImage = () => {
 
   img.onload = () => {
     loadedImage.value = img
-    redrawCanvas()
+    if (canvasRef.value) {
+      canvasRef.value.width = img.width
+      canvasRef.value.height = img.height
+      redrawCanvas()
+    }
   }
 
   img.onerror = (err) => {
@@ -129,38 +124,33 @@ const setDefaultImage = () => {
 }
 
 /* ==============================
-   TOGGLE VISIBILIDADE (sem chamar store)
+   TOGGLE VISIBILIDADE
 ================================ */
 const onToggleVisible = () => {
-  // NÃO chamamos pointStore.visibleLabel aqui para não disparar o redraw da store (que quebra).
   redrawCanvas()
 }
 
 /* ==============================
-   Eventos de desenho no canvas
+   Eventos de desenho
 ================================ */
 const startDrawing = (e) => {
   if (!loadedImage.value || !canvasRef.value) return
   isDrawing.value = true
-  // ao começar a desenhar, zera o polígono atual pra redesenhar do zero
   newPoint.position = []
-  const pos = getMousePos(canvasRef.value, e)
-  newPoint.position.push(pos)
-  redrawCanvas() // desenha fundo limpo
+  newPoint.position.push(getMousePos(canvasRef.value, e))
+  redrawCanvas()
 }
 
 const draw = (e) => {
   if (!isDrawing.value || !canvasRef.value) return
-  const pos = getMousePos(canvasRef.value, e)
-  newPoint.position.push(pos)
+  newPoint.position.push(getMousePos(canvasRef.value, e))
 
-  // desenha rápido (incremental) sobre a imagem
   const canvas = canvasRef.value
   const ctx = canvas.getContext('2d')
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   ctx.drawImage(loadedImage.value, 0, 0)
 
-  if (newPoint.visible && newPoint.position.length) {
+  if (newPoint.visible && newPoint.position.length > 0) {
     ctx.strokeStyle = newPoint.color || 'blue'
     ctx.lineWidth = 2
     ctx.beginPath()
@@ -175,7 +165,6 @@ const draw = (e) => {
 const endDrawing = () => {
   if (!isDrawing.value) return
   isDrawing.value = false
-  // fecha polígono no redraw completo
   redrawCanvas()
 }
 
@@ -191,7 +180,6 @@ watch(loading, async (val) => {
   if (!val) {
     await nextTick()
     if (canvasRef.value) {
-      // expõe canvas/ctx pra store se ela usar, mas a gente controla o redraw local
       pointStore.canvas = canvasRef.value
       pointStore.ctx = canvasRef.value.getContext('2d')
       setDefaultImage()
@@ -204,7 +192,6 @@ watch(() => newPoint.visible, () => {
 })
 
 watch(() => newPoint.position, () => {
-  // sempre que mudar posição por algum outro lugar, redesenha
   redrawCanvas()
 }, { deep: true })
 
@@ -214,9 +201,16 @@ watch(() => newPoint.position, () => {
 onMounted(async () => {
   try {
     loading.value = true
-    await pointStore.getPoints()
+    await pointStore.getAllPoints()
     const point = await pointStore.getPointsById(pointId)
-    Object.assign(newPoint, point[0] || {})
+
+    if (point[0]) {
+      Object.assign(newPoint, point[0])
+      // 🔹 garante que position seja array
+      newPoint.position = Array.isArray(point[0].position)
+        ? point[0].position
+        : JSON.parse(point[0].position || "[]")
+    }
 
     if (newPoint.posts) {
       await postStore.getPostsById(newPoint.posts)
@@ -231,23 +225,27 @@ onMounted(async () => {
 ================================ */
 const send = async () => {
   try {
-    await pointStore.updatePoints(newPoint, route.params.id)
+    const payload = {
+  ...newPoint,
+  position: JSON.stringify(newPoint.position) // converte array para string
+}
+    await pointStore.updatePoints(payload, route.params.id)
     successAction.value = 'edit'
     showSuccessModal.value = true
     setTimeout(() => {
       router.push(`/admin/posts/`)
     }, 1000)
   } catch (err) {
-  if (err?.response?.data) {
-    const data = err.response.data
-    errorMessage.value = Object.values(data)
-      .map(v => Array.isArray(v) ? v.join(', ') : v)
-      .join('\n')
-  } else {
-    errorMessage.value = err?.message || 'Erro inesperado ao atualizar ponto.'
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = err?.message || 'Erro inesperado ao atualizar ponto.'
+    }
+    showErrorModal.value = true
   }
-  showErrorModal.value = true
-}
 }
 
 /* ==============================
@@ -281,54 +279,20 @@ function closeErrorModal() {
 
 <template>
   <AdminGlobalContainer>
-    <!-- loading overlay -->
     <LoadingSpinner v-if="loading" class="mt-20" />
 
     <div v-else class="w-[90%] mx-auto space-y-6">
       <div class="absolute top-0 right-0 p-5 z-10 flex gap-5">
-        <BtnDefault
-          @click="send"
-          class="mb-10 h-8 rounded-lg"
-          text="Editar"
-          background="bg-[#29AC96]"
-          :hasLink="false"
-        />
-        <BtnDefault
-          @click="tryDelete"
-          class="mb-10 h-8 rounded-lg"
-          text="Excluir"
-          background="bg-[#E40000]"
-          :hasLink="false"
-        />
+        <BtnDefault @click="send" class="mb-10 h-8 rounded-lg" text="Editar" background="bg-[#29AC96]" :hasLink="false" />
+        <BtnDefault @click="tryDelete" class="mb-10 h-8 rounded-lg" text="Excluir" background="bg-[#E40000]" :hasLink="false" />
       </div>
 
       <div class="flex flex-col gap-10 w-full">
-        <InputStringAdmin
-          label="Título"
-          :modelValue="newPoint.label_title"
-          @action="newPoint.label_title = $event"
-        />
-        <InputTextAdmin
-          label="Descrição"
-          :modelValue="newPoint.description"
-          @action="newPoint.description = $event"
-        />
-        <InputStringAdmin
-          label="Estruturas Analisadas"
-          :modelValue="newPoint.analyzed_structures"
-          @action="newPoint.analyzed_structures = $event"
-        />
-        <InputStringAdmin
-          label="Funções Analisadas"
-          :modelValue="newPoint.analyzed_functions"
-          @action="newPoint.analyzed_functions = $event"
-        />
-        <InputSelectAdmin
-          label="Cor"
-          :modelValue="newPoint.color"
-          :options="colorOptions"
-          @action="newPoint.color = $event"
-        />
+        <InputStringAdmin label="Título" :modelValue="newPoint.label_title" @action="newPoint.label_title = $event" />
+        <InputTextAdmin label="Descrição" :modelValue="newPoint.description" @action="newPoint.description = $event" />
+        <InputStringAdmin label="Estruturas Analisadas" :modelValue="newPoint.analyzed_structures" @action="newPoint.analyzed_structures = $event" />
+        <InputStringAdmin label="Funções Analisadas" :modelValue="newPoint.analyzed_functions" @action="newPoint.analyzed_functions = $event" />
+        <InputSelectAdmin label="Cor" :modelValue="newPoint.color" :options="colorOptions" @action="newPoint.color = $event" />
       </div>
 
       <!-- Canvas + visibilidade -->
@@ -344,13 +308,7 @@ function closeErrorModal() {
           ></canvas>
 
           <div class="mt-2 text-right">
-            <button
-              type="button"
-              class="text-sm text-[#267A7A] underline"
-              @click="resetDrawing"
-            >
-              Refazer desenho
-            </button>
+            <button type="button" class="text-sm text-[#267A7A] underline" @click="resetDrawing">Refazer desenho</button>
           </div>
         </div>
 
@@ -358,40 +316,20 @@ function closeErrorModal() {
           <h2 class="font-semibold text-lg mb-4 text-[#267A7A]">Visibilidade do Ponto</h2>
           <label class="flex cursor-pointer select-none items-center gap-4 pb-2 hover:brightness-95">
             <div class="relative">
-              <input
-                v-model="newPoint.visible"
-                type="checkbox"
-                class="sr-only"
-                @change="onToggleVisible"
-              />
+              <input v-model="newPoint.visible" type="checkbox" class="sr-only" @change="onToggleVisible" />
               <div class="block h-8 w-14 rounded-full bg-[#E5E7EB]"></div>
-              <div
-                :class="{ 'translate-x-full !bg-[#8181FF]': newPoint.visible }"
-                class="dot absolute left-1 top-1 h-6 w-6 bg-white rounded-full transition-all"
-              ></div>
+              <div :class="{ 'translate-x-full !bg-[#8181FF]': newPoint.visible }" class="dot absolute left-1 top-1 h-6 w-6 bg-white rounded-full transition-all"></div>
             </div>
-            <p class="font-normal text-lg">
-              {{ newPoint.label_title }}
-            </p>
+            <p class="font-normal text-lg">{{ newPoint.label_title }}</p>
           </label>
-          <p class="text-left text-gray-400 transition" v-show="newPoint.visible">
-            {{ newPoint.description }}
-          </p>
+          <p class="text-left text-gray-400 transition" v-show="newPoint.visible">{{ newPoint.description }}</p>
         </div>
       </div>
     </div>
   </AdminGlobalContainer>
 
   <!-- sucesso -->
- <SucessModalAdmin
-  :show="showSuccessModal"
-  subtitle="Sucesso!"
-  :title="successTitle"
-  message="Ação concluída com sucesso!"
-  :cancel-label="null"
-  :confirm-label="null"
-  :duration="1"
-/>
+  <SucessModalAdmin :show="showSuccessModal" subtitle="Sucesso!" :title="successTitle" message="Ação concluída com sucesso!" :cancel-label="null" :confirm-label="null" :duration="1" />
 
   <!-- erro -->
   <SucessModalAdmin

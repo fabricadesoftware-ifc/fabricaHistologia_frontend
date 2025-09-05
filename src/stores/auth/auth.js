@@ -18,11 +18,18 @@ export const useAuthStore = defineStore('auth', () => {
   
   const verifyUser = () => {
     const authToken = localStorage.getItem('psg_auth_token');
+    if (active.value.user.is_verified) {
+      sessionStorage.setItem('verified_user', true)
+    } else {
+      sessionStorage.setItem('verified_user', false)
+    }
     if (authToken) {
       active.value.active = true
+      sessionStorage.setItem('active_user', true)
       return true
     } else {
       active.value.active = false
+      sessionStorage.setItem('active_user', false)
       return false
     }
   }

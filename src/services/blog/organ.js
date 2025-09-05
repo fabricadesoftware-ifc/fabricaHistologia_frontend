@@ -37,10 +37,20 @@ class OrganService {
     }
   }
 
-  async getOrgansBySystem(systemId) {
+  async getOrgansBySystem(systemId, page = '') {
     try {
-      const { data } = await api.get(`/organs/?page=1&system_id=${systemId}`)
+      const { data } = await api.get(`/organs/?page=1&system_id=${systemId}&page=${page}`)
       return data.results
+    } catch (error) {
+      console.log('error in getOrgansBySystem', error)
+      throw error
+    }
+  }
+
+  async getAllOrgansBySystem(systemId) {
+    try {
+      const { data } = await api.get(`/organs/?page=1&system_id=${systemId}&page_size=0`)
+      return data
     } catch (error) {
       console.log('error in getOrgansBySystem', error)
       throw error

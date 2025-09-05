@@ -93,7 +93,7 @@ onMounted(async () => {
       specieStore.getAllSpecies(),
       organStore.getAllOrgans(),
       postStore.getPostsById(postId),
-      pointStore.getPointsByPosts(postId)
+      pointStore.getAllPointsByPosts(postId)
     ])
 
     Object.assign(newPost, postStore.selectedPost)

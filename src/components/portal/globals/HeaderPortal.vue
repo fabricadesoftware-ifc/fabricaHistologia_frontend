@@ -33,7 +33,7 @@ const props = defineProps({
         <TitleGlobal :content="props.title" :size="props.size" position="justify-center" class="xl:mt-16" />
     
         <div class="relative  w-20">
-        <UserInformation  position="absolute" position_directions=" right-0" v-if="authStore.activeUser && router.meta.activeUser" />
+        <UserInformation  position="absolute" position_directions=" right-0" v-if="authStore.activeUser" />
         </div>
     </ContainerGlobal>
 
@@ -45,7 +45,7 @@ const props = defineProps({
                  <BackButton class="w-20" position="relative" />
 
                   <div class="relative  w-20">
-        <UserInformation  position="absolute" position_directions=" right-0" v-if="authStore.activeUser && router.meta.activeUser" />
+        <UserInformation  position="absolute" position_directions=" right-0" v-if="authStore.activeUser" />
         </div>
             </div>
 

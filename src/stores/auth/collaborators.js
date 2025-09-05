@@ -32,10 +32,10 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
     const state = reactive({
         collaborators: [],
         selectedCollaborator: {},
-        collaboratorByUser: [],
         address: [],
         currentAdress: null,
         users: [],
+        collaboratorByUser: {},
         loading: false,
         error: null,
         connection: false,
@@ -132,7 +132,7 @@ export const useCollaboratorsStore = defineStore('collaborators', () => {
         state.loading = true
         try {
           const response = await CollaboratorsService.getCollaboratorsByUser(UserId)
-          state.collaboratorByUser = response
+          state.collaboratorByUser = response[0]
         } catch (error) {
           state.error = error
         } finally {
