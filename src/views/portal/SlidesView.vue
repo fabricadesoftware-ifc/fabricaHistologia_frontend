@@ -124,10 +124,12 @@ onBeforeUnmount(() => {
       </CardsContainer>
 
       <ContainerGlobal class="flex justify-center flex-col">
+        <div v-if="additionalData[0].material.length > 0 || additionalData[1].material.length > 0">
         <AddInfoGlobal
-          v-if="additionalData[0].material.length > 0 || additionalData[1].material.length > 0"
+          
           :data="additionalData"
         />
+        </div>
         <BtnDefault
           @click="push(system_id)"
           :text="'Acessar Quiz deste Órgão'"
