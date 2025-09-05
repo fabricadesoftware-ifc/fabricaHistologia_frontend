@@ -101,12 +101,36 @@ const push = async (id) => {
     routerUse.push('/portal/quiz/' + id)
 }
 
-onBeforeUnmount(() => {
-  for (let state of postStore.buttons) {
-    postStore.buttons[0].selected = false
-    postStore.buttons[1].selected = true
-    if (state.selected) postStore.typeSelection = state.post;
+const loadFirstAvailableType = async () => {
+  loading.value = true
+  try {
+    let loaded = false
+    for (let button of postStore.buttons) {
+      await postStore.getPostsByOrganAndType(organ_id, button.post, '')
+      if (postStore.postByOrganAndType.length > 0) {
+        
+        postStore.buttons.forEach(b => b.selected = false)
+        button.selected = true
+        postStore.typeSelection = button.post
+        loaded = true
+        break
+      }
+    }
+
+    if (!loaded) {
+      
+      postStore.buttons.forEach(b => b.selected = false)
+      postStore.buttons[0].selected = true
+      postStore.typeSelection = postStore.buttons[0].post
+    }
+  } finally {
+    loading.value = false
   }
+}
+
+
+onBeforeMount(async () => {
+ await loadFirstAvailableType()
 })
 </script>
 
