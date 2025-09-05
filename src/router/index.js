@@ -21,7 +21,7 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      meta: { activeUser: true },
+      meta: { verifiedUser: true },
       children: [
         {
           path: '',
@@ -31,7 +31,7 @@ const router = createRouter({
         {
           path: 'systems',
           name: 'Sistemas',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
@@ -53,7 +53,7 @@ const router = createRouter({
         {
           path: 'species',
           name: 'Espécies',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
@@ -82,7 +82,7 @@ const router = createRouter({
         {
           path: 'quiz',
           name: 'Quiz',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
@@ -114,7 +114,7 @@ const router = createRouter({
         {
           path: 'supporting',
           name: 'Materiais de Apoio',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
@@ -136,7 +136,7 @@ const router = createRouter({
         {
           path: 'users',
           name: 'Usuários',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
@@ -168,7 +168,7 @@ const router = createRouter({
         {
           path: 'organs',
           name: 'Órgãos',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
@@ -190,7 +190,7 @@ const router = createRouter({
         {
           path: 'posts',
           name: 'Lâmina',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
@@ -225,7 +225,6 @@ const router = createRouter({
     {
       path: '/portal',
       name: 'portal',
-      meta: { activeUser: true },
       children: [
         {
           path: '',
@@ -286,5 +285,18 @@ const router = createRouter({
     },
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const verified = sessionStorage.getItem('verified_user') === 'true'
+
+  const requiresVerify = to.matched.some(record => record.meta.verifiedUser)
+
+  if (requiresVerify && !verified) {
+    next({ name: 'login' })
+  } else {
+    next()
+  }
+})
+
 
 export default router
