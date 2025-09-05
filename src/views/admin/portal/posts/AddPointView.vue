@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onBeforeMount, computed } from 'vue'
+import { ref, reactive, onBeforeMount, onMounted, computed } from 'vue'
 import { usePointStore, usePostStore } from '@/stores'
 import {
   AdminGlobalContainer,
@@ -18,8 +18,9 @@ const postsStore = usePostStore()
 const loading = ref(false)
 const showSuccessModal = ref(false)
 const showErrorModal = ref(false)
-const errorMessage = ref("")
+const errorMessage = ref('')
 
+// novo ponto
 const newPoint = reactive({
   label_title: '',
   description: '',
@@ -30,94 +31,139 @@ const newPoint = reactive({
   analyzed_functions: ''
 })
 
+// opções de cor
 const colors = [
   { name: 'Amarelo', id: 'yellow' },
   { name: 'Vermelho', id: 'red' },
   { name: 'Azul', id: 'blue' }
 ]
 
-const postOptions = computed(() => postsStore.posts.map(post => ({
-  id: post?.id,
-  name: post?.name
-})))
+// opções de posts
+const postOptions = computed(() => {
+  return postsStore.posts.map((post) => ({
+    id: post?.id,
+    name: post?.name
+  }))
+})
 
+// canvas e desenho
 const canvas = ref(null)
 const ctx = ref(null)
 const image = ref(null)
 const isDrawing = ref(false)
 const BlockDrawn = ref(false)
 const labeledAreas = ref([])
+const scale = ref(1) // escala do canvas em relação à imagem original
 
-// Inicializa canvas
+// Carregar posts antes do mount (sem tocar no DOM)
 onBeforeMount(async () => {
+  loading.value = true
   try {
-    loading.value = true
     await postsStore.getAllPosts()
-    ctx.value = canvas.value.getContext('2d')
-  } catch (err) {
-    errorMessage.value = "Erro ao carregar os posts."
+  } catch (error) {
+    console.error('[DEBUG] Erro ao carregar os posts:', error)
+    errorMessage.value = 'Erro ao carregar os posts. Tente novamente mais tarde.'
     showErrorModal.value = true
   } finally {
     loading.value = false
   }
 })
 
+// Inicializa canvas/ctx após o DOM montar
+onMounted(() => {
+  if (!canvas.value) return
+  ctx.value = canvas.value.getContext('2d')
+  if (newPoint.posts) setDefaultImage()
+})
+
 /* ==============================
    CARREGAR IMAGEM DO POST
 ================================ */
 const setDefaultImage = () => {
-  const postSelected = postsStore.posts.find(p => p.id === Number(newPoint.posts))
-  if (!postSelected || !postSelected.image?.url) return
+  const postSelected = postsStore.posts.find((p) => p.id === Number(newPoint.posts))
+  if (!postSelected || !postSelected.image?.url) {
+    console.warn('[WARN] Post não encontrado ou sem imagem')
+    if (ctx.value && canvas.value) ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
+    return
+  }
 
   image.value = new Image()
+  image.value.crossOrigin = 'anonymous'
   image.value.src = postSelected.image.url
+
   image.value.onload = () => {
-    canvas.value.width = image.value.width
-    canvas.value.height = image.value.height
-    ctx.value?.clearRect(0, 0, canvas.value.width, canvas.value.height)
-    ctx.value?.drawImage(image.value, 0, 0)
+    if (!canvas.value) return
+    if (!ctx.value) ctx.value = canvas.value.getContext('2d')
+
+    // definir canvas com tamanho da imagem original
+    canvas.value.width = image.value.naturalWidth
+    canvas.value.height = image.value.naturalHeight
+    scale.value = 1
+
+    // limitar tamanho de exibição se muito grande
+    const maxDisplayWidth = canvas.value.parentElement?.clientWidth || 800
+    if (canvas.value.width > maxDisplayWidth) {
+      scale.value = maxDisplayWidth / canvas.value.width
+      canvas.value.width = Math.round(canvas.value.width * scale.value)
+      canvas.value.height = Math.round(canvas.value.height * scale.value)
+    }
+
+    redrawCanvas()
+  }
+
+  image.value.onerror = (e) => {
+    console.error('[DEBUG] Falha ao carregar a imagem:', e)
   }
 }
 
 /* ==============================
    FUNÇÕES DE DESENHO
 ================================ */
-const getMousePos = (canvas, evt) => {
-  const rect = canvas.getBoundingClientRect()
+const getMousePos = (canvasEl, evt) => {
+  const rect = canvasEl.getBoundingClientRect()
+  const x = (evt.clientX - rect.left) * (canvasEl.width / rect.width)
+  const y = (evt.clientY - rect.top) * (canvasEl.height / rect.height)
+  // normaliza para coordenadas da imagem original
   return {
-    x: (evt.clientX - rect.left) * (canvas.width / rect.width),
-    y: (evt.clientY - rect.top) * (canvas.height / rect.height)
+    x: Math.round(x / scale.value),
+    y: Math.round(y / scale.value)
   }
 }
 
 const startDrawing = (e) => {
+  if (!ctx.value) return
   if (!newPoint.label_title || !newPoint.color || !newPoint.description || BlockDrawn.value) return
   isDrawing.value = true
   labeledAreas.value.push({ position: [] })
   ctx.value.strokeStyle = newPoint.color
-  ctx.value.lineWidth = 2
+  ctx.value.lineWidth = 4
   ctx.value.beginPath()
   const pos = getMousePos(canvas.value, e)
-  ctx.value.moveTo(pos.x, pos.y)
-}
-
-const draw = (e) => {
-  if (!isDrawing.value) return
-  const pos = getMousePos(canvas.value, e)
-  ctx.value.lineTo(pos.x, pos.y)
-  ctx.value.stroke()
+  ctx.value.moveTo(pos.x * scale.value, pos.y * scale.value)
   labeledAreas.value[labeledAreas.value.length - 1].position.push(pos)
 }
 
+const draw = (e) => {
+  if (!isDrawing.value || !ctx.value) return
+  const pos = getMousePos(canvas.value, e)
+  const last = labeledAreas.value[labeledAreas.value.length - 1]
+  if (!last) return
+  last.position.push(pos)
+  ctx.value.lineTo(pos.x * scale.value, pos.y * scale.value)
+  ctx.value.stroke()
+}
+
 const endDrawing = () => {
-  if (!isDrawing.value) return
+  if (!isDrawing.value || !ctx.value) return
   isDrawing.value = false
   ctx.value.closePath()
+  const last = labeledAreas.value[labeledAreas.value.length - 1]
+  if (!last) return
   labeledAreas.value[labeledAreas.value.length - 1] = {
     ...newPoint,
-    position: labeledAreas.value[labeledAreas.value.length - 1].position
+    position: last.position
   }
-  newPoint.position = labeledAreas.value[0].position
+  newPoint.position = last.position
   BlockDrawn.value = true
 }
 
@@ -125,8 +171,28 @@ const deletePoint = () => {
   labeledAreas.value.pop()
   newPoint.position = []
   BlockDrawn.value = false
+  redrawCanvas()
+}
+
+const redrawCanvas = () => {
+  if (!ctx.value || !canvas.value || !image.value) return
   ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
-  if (image.value) ctx.value.drawImage(image.value, 0, 0)
+  ctx.value.drawImage(image.value, 0, 0, canvas.value.width, canvas.value.height)
+
+  labeledAreas.value.forEach((area) => {
+    if (!area.position || !area.position.length) return
+    ctx.value.strokeStyle = area.color
+    ctx.value.lineWidth = 4
+    ctx.value.beginPath()
+    area.position.forEach((p, i) => {
+      const x = p.x * scale.value
+      const y = p.y * scale.value
+      if (i === 0) ctx.value.moveTo(x, y)
+      else ctx.value.lineTo(x, y)
+    })
+    ctx.value.stroke()
+    ctx.value.closePath()
+  })
 }
 
 /* ==============================
@@ -135,15 +201,25 @@ const deletePoint = () => {
 const addPoint = async () => {
   if (loading.value) return
   try {
-    if (!BlockDrawn.value) {
-      throw new Error("Preencha os campos e desenhe o ponto antes de salvar.")
-    }
+    if (!BlockDrawn.value) throw new Error('Preencha os campos e desenhe o ponto antes de salvar.')
     loading.value = true
-    await pointStore.createPoint(newPoint)
+
+    const payload = {
+      label_title: newPoint.label_title,
+      description: newPoint.description,
+      position: JSON.stringify(newPoint.position), // posição original da imagem
+      color: newPoint.color,
+      posts: Number(newPoint.posts),
+      analyzed_structures: newPoint.analyzed_structures,
+      analyzed_functions: newPoint.analyzed_functions
+    }
+
+    await pointStore.createPoint(payload)
     showSuccessModal.value = true
   } catch (err) {
-    console.error("Erro ao criar ponto:", err)
-    errorMessage.value = err?.message || "Erro inesperado ao cadastrar o ponto."
+    console.error('[ERROR] Erro ao criar ponto:', err)
+    if (err?.response?.data) errorMessage.value = JSON.stringify(err.response.data)
+    else errorMessage.value = err?.message || 'Erro inesperado ao cadastrar o ponto.'
     showErrorModal.value = true
   } finally {
     loading.value = false
@@ -162,8 +238,7 @@ function handleConfirm() {
   newPoint.position = []
   labeledAreas.value = []
   BlockDrawn.value = false
-  ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
-  if (image.value) ctx.value.drawImage(image.value, 0, 0)
+  redrawCanvas()
   showSuccessModal.value = false
 }
 
@@ -176,48 +251,85 @@ function closeErrorModal() {
 }
 </script>
 
+
 <template>
   <AdminGlobalContainer>
     <div class="w-[90%] mx-auto space-y-6 relative">
-
       <!-- Overlay de Loading -->
       <div v-if="loading" class="mt-20">
         <LoadingSpinner />
       </div>
 
       <form v-else class="flex flex-col gap-10 w-full" @submit.prevent="addPoint">
-        
-        <InputStringAdmin label="Título" :modelValue="newPoint.label_title" @action="newPoint.label_title = $event"/>
-        <InputTextAdmin label="Descrição" :modelValue="newPoint.description" @action="newPoint.description = $event"/>
-        <InputSelectAdmin label="Cor" :modelValue="newPoint.color" :options="colors" optionLabel="name" optionValue="id" @action="newPoint.color = $event"/>
-        
-        <InputSelectAdmin 
-          label="Post" 
-          :modelValue="newPoint.posts" 
-          :options="postOptions" 
-          optionLabel="name" 
-          optionValue="id" 
-          @action="val => { newPoint.posts = val; setDefaultImage(); }"
+        <InputStringAdmin
+          label="Título"
+          :modelValue="newPoint.label_title"
+          @action="newPoint.label_title = $event"
+        />
+        <InputTextAdmin
+          label="Descrição"
+          :modelValue="newPoint.description"
+          @action="newPoint.description = $event"
+        />
+        <InputSelectAdmin
+          label="Cor"
+          :modelValue="newPoint.color"
+          :options="colors"
+          optionLabel="name"
+          optionValue="id"
+          @action="newPoint.color = $event"
         />
 
-        <InputStringAdmin label="Estruturas Analisadas" :modelValue="newPoint.analyzed_structures" @action="newPoint.analyzed_structures = $event"/>
-        <InputStringAdmin label="Funções Analisadas" :modelValue="newPoint.analyzed_functions" @action="newPoint.analyzed_functions = $event"/>
+        <InputSelectAdmin
+          label="Post"
+          :modelValue="newPoint.posts"
+          :options="postOptions"
+          optionLabel="name"
+          optionValue="id"
+          @action="
+            (val) => {
+              newPoint.posts = val
+              setDefaultImage()
+            }
+          "
+        />
+
+        <InputStringAdmin
+          label="Estruturas Analisadas"
+          :modelValue="newPoint.analyzed_structures"
+          @action="newPoint.analyzed_structures = $event"
+        />
+        <InputStringAdmin
+          label="Funções Analisadas"
+          :modelValue="newPoint.analyzed_functions"
+          @action="newPoint.analyzed_functions = $event"
+        />
 
         <div class="md:col-span-2 mb-10 flex flex-col items-center">
           <p class="mb-2 text-sm text-gray-600">Desenhe o ponto no canvas abaixo</p>
           <canvas
-            class=" w-8/12 border-2 rounded-lg"
+            class="w-8/12 border-2 rounded-lg"
             ref="canvas"
             @mousedown="startDrawing"
             @mousemove="draw"
             @mouseup="endDrawing"
           ></canvas>
-          <p class="mt-2 text-xs text-gray-500">Errou? 
-            <span class="text-[#267A7A] underline cursor-pointer" @click="deletePoint()">Clique aqui para refazer</span>
+          <p class="mt-2 text-xs text-gray-500">
+            Errou?
+            <span class="text-[#267A7A] underline cursor-pointer" @click="deletePoint()"
+              >Clique aqui para refazer</span
+            >
           </p>
         </div>
 
-        <BtnDefault :disabled="loading" @click="addPoint" class="mb-10" text="Cadastrar" background="bg-[#29AC96]" :hasLink="false" />
+        <BtnDefault
+          :disabled="loading"
+          @click="addPoint"
+          class="mb-10"
+          text="Cadastrar"
+          background="bg-[#29AC96]"
+          :hasLink="false"
+        />
       </form>
     </div>
   </AdminGlobalContainer>

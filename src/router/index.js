@@ -35,7 +35,7 @@ const router = createRouter({
           children: [
             {
               path: '',
-              name: '',
+              name: 'systems-admin-home',
               component: () => import('@/views/admin/portal/systems/SystemsView.vue')
             },
             {
@@ -57,7 +57,7 @@ const router = createRouter({
           children: [
             {
               path: '',
-              name: '',
+              name: 'species-admin-home',
               component: () => import('@/views/admin/portal/species/SpeciesView.vue')
 
             },
@@ -86,7 +86,7 @@ const router = createRouter({
           children: [
             {
               path: '',
-              name: '',
+              name: 'quiz-admin-home',
               component: () => import('@/views/admin/quiz/QuizesView.vue')
             },
             {
@@ -118,7 +118,7 @@ const router = createRouter({
           children: [
             {
               path: '',
-              name: '',
+              name: 'supporting-admin-home',
               component: () => import('@/views/admin/supporting_material/SupportingMaterialsView.vue')
             },
             {
@@ -140,7 +140,7 @@ const router = createRouter({
           children: [
             {
               path: '',
-              name: '',
+              name: 'users-admin-home',
               component: () => import('@/views/admin/users/UsersView.vue')
             },
             {
@@ -172,7 +172,7 @@ const router = createRouter({
           children: [
             {
               path: '',
-              name: '',
+              name: 'organs-admin-home',
               component: () => import('@/views/admin/portal/organs/OrgansView.vue')
             },
             {
@@ -194,7 +194,7 @@ const router = createRouter({
           children: [
             {
               path: '',
-              name: '',
+              name: 'posts-admin-home',
               component: () => import('@/views/admin/portal/posts/PostsView.vue'),
             },
             {
