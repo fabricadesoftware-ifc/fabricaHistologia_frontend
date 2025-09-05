@@ -48,7 +48,7 @@ watch(
 
 <template>
   <div
-    class="absolute right-44 sm:right-1/2 sm:left-1/2 sm:-translate-x-1/2 mt-[10px] sm:mt-[-50px] flex flex-col items-center"
+    class="absolute right-44 sm:right-1/2 sm:left-1/2 sm:-translate-x-1/2 mt-[10px] sm:mt-[-50px] flex flex-col items-center z-[200]"
   >
     <!-- Header sempre visível e clicável (abre/fecha) -->
     <div
@@ -68,7 +68,7 @@ watch(
     <transition name="fade">
       <section
         v-if="activated"
-        class="w-[324px] bg-white z-[99] select-none absolute h-auto max-h-[464px] border-[1.8px] flex flex-col gap-2 rounded-2xl border-zinc-300 mt-10"
+        class="w-[324px] bg-white z-[200] select-none absolute h-auto max-h-[464px] border-[1.8px] flex flex-col gap-2 rounded-2xl border-zinc-300 mt-10"
         :class="delayActive ? 'open-comp' : 'close-comp'"
       >
         <div class="w-full items-start sm:justify-center flex justify-start px-4 pt-3">
@@ -106,7 +106,7 @@ watch(
           <p>Espécie Não Encontrada</p>
         </div>
 
-        <div v-else class="h-auto w-full max-h-64 min-32 overflow-y-auto flex flex-col gap-3 p-3 items-center species-nav">
+        <div v-else class="h-auto w-full max-h-64 min-32 overflow-y-auto flex flex-col gap-3 z-[200] p-3 items-center species-nav">
           <button
             v-for="specie in filteredSpecies"
             :key="specie.id"
@@ -126,7 +126,7 @@ watch(
   <div
       v-if="activated"
       @click="setTime(false)"
-      class="absolute inset-0 w-dvw h-dvh top-0 left-0 bg-transparent z-[200]"
+      class="absolute inset-0 w-dvw h-dvh top-0 left-0 bg-transparent z-[90]"
     ></div>
 </template>
 

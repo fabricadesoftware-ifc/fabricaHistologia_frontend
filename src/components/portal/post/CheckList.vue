@@ -8,13 +8,13 @@ const pointStore = usePointStore();
 const id = router.params.id;
 
 onMounted(async () => {
-    await pointStore.getPointsByPosts(id)
+    await pointStore.getAllPointsByPosts(id)
 })
 
 </script>
 <template>
-    <div v-for="(area, index) in pointStore.pointsByPosts" :key="index">
-        <label class="flex cursor-pointer select-none items-center gap-4 pb-4 hover:brightness-95">
+    <div class="py-2" v-for="(area, index) in pointStore.pointsByPosts" :key="index">
+        <label class="flex cursor-pointer select-none items-center gap-4 hover:brightness-95">
             <div class="relative">
                 <input v-model="area.visible" type="checkbox" class="sr-only" @change="
     pointStore.visibleLabel(area);"  />
@@ -24,7 +24,7 @@ onMounted(async () => {
                     class="dot absolute left-1 top-1 h-6 w-6 bg-white rounded-full transition-all"
                 ></div>
             </div>
-            <p class="font-normal text-lg">
+            <p class="font-normal text-lg max-w-[70%] text-left">
                 {{ area.label_title }}
             </p>
         </label>

@@ -64,6 +64,21 @@ export const usePointStore = defineStore("point",
             }
         };
 
+        const getAllPoints = async () => {
+            state.loading = true;
+            try {
+                const response = await PointService.getAllPoints();
+                const data = Object.assign(response.results, {visible: false})
+                state.count = response.count
+                state.points = data
+            } catch (error) {
+                state.error = error;
+            } finally {
+                state.loading = false;
+                state.connection = true; // just to see if the connection is established
+            }
+        };
+
        
       const getPointsBySearch = async (search) => {
           state.loading = true;
@@ -83,6 +98,20 @@ export const usePointStore = defineStore("point",
             state.loading = true;
             try {
                 const response = await PointService.getPointsByPost(post_id)
+                const data = Object.assign(response, {visible: false})
+                state.pointsByPosts = data
+            } catch (error) {
+                state.error = error
+            } finally {
+                state.loading = false
+                state.connection = true
+            }
+        }
+
+        const getAllPointsByPosts = async (post_id) => {
+            state.loading = true;
+            try {
+                const response = await PointService.getAllPointsByPost(post_id)
                 const data = Object.assign(response, {visible: false})
                 state.pointsByPosts = data
             } catch (error) {
@@ -166,37 +195,53 @@ export const usePointStore = defineStore("point",
         };
 
         const redrawCanvas = () => {
-            if (!ctx.value || !canvas.value) return
-            ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
-            ctx.value.drawImage(image.value, 0, 0)
-        
-            // Desenhar áreas baseadas no estado atual
-            pointsByPosts.value.forEach((area) => {
-              if (area.visible) {
-                ctx.value.strokeStyle = area.color
-                ctx.value.lineWidth = 6
-                ctx.value.beginPath()
-                area.position.forEach((point, index) => {
-                  if (index === 0) {
-                    ctx.value.moveTo(point.x, point.y)
-                  } else {
-                    ctx.value.lineTo(point.x, point.y)
-                  }
-                })
-                ctx.value.stroke()
-                ctx.value.closePath()
-        
-                // Exibir rótulo
-                if (area.label_title) {
-                  ctx.value.fillStyle = area.color
-                  ctx.value.font = 'bold 15px Arial'
-                  const midpoint = area.position[Math.floor(area.position.length / 2)]
-                  ctx.value.fillText(area.label_title, midpoint.x, midpoint.y - 10)
-                }
-              }
-            })
-          }
-        
+    if (!ctx.value || !canvas.value || !image.value) return;
+
+    ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height);
+    ctx.value.drawImage(image.value, 0, 0);
+
+    pointsByPosts.value.forEach((area) => {
+        if (!area.visible) return;
+
+        // garante que seja array
+        let positions = [];
+        if (Array.isArray(area.position)) {
+            positions = area.position;
+        } else if (typeof area.position === 'string') {
+            try {
+                positions = JSON.parse(area.position);
+            } catch (e) {
+                console.warn('Posição inválida no ponto', area.id);
+                positions = [];
+            }
+        }
+
+        if (!positions.length) return;
+
+        ctx.value.strokeStyle = area.color || 'black';
+        ctx.value.lineWidth = 6; // traço mais grosso
+        ctx.value.beginPath();
+
+        positions.forEach((point, index) => {
+            if (index === 0) {
+                ctx.value.moveTo(point.x, point.y);
+            } else {
+                ctx.value.lineTo(point.x, point.y);
+            }
+        });
+        ctx.value.stroke();
+        ctx.value.closePath();
+
+        // exibir label
+        if (area.label_title) {
+            ctx.value.fillStyle = area.color || 'black';
+            ctx.value.font = 'bold 30px Arial';
+            const midpoint = positions[Math.floor(positions.length / 2)];
+            ctx.value.fillText(area.label_title, midpoint.x, midpoint.y - 10);
+        }
+    });
+};
+
           const loadCanvas = (imageSrc) => {
             // Carregue a imagem e configure o canvas aqui
             image.value = new Image()
@@ -233,9 +278,11 @@ export const usePointStore = defineStore("point",
             image,
             count,
             getPoints,
+            getAllPoints,
             getPointsById,
             getPointsByPosts,
             getPointsBySearch,
+            getAllPointsByPosts,
             createPoint,
             updatePoints,
             deletePoints,

@@ -5,6 +5,7 @@ const store = useNavBarAdminStore()
 const emit = defineEmits(['logout'])
 
 function handleClick(item) {
+  store.isDropdownOpen = false
   if (item.event === 'logout') {
     emit('logout')
   } else if (item.to) {

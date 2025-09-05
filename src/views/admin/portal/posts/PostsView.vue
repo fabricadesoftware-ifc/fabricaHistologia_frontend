@@ -203,7 +203,7 @@ const onSearch = useDebounceFn(_onSearch, 400)
           <TablePagination
             :current-page="currentPage"
             :total-pages="totalPages"
-            @page-change="(page) => currentPage.value = page"
+            @page-change="(page) => currentPage = page"
           />
         </section>
       </section>
