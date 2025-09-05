@@ -71,6 +71,7 @@ async function saveCollaborator() {
         // Cria endereço primeiro
         const addressResponse = await collaboratorStore.postAddress(PersonaAddress);
         const addressId = addressResponse?.id;
+        console.log(addressId)
 
         // Cria colaborador associado ao endereço
         await collaboratorStore.postCollaborators({

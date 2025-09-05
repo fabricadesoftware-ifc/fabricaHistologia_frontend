@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { SpecieFilterComponent } from '@/components/index';
 import { useOrganStore, usePostStore, useSystemStore, useQuizStore, useSupportingStore } from '@/stores';
@@ -48,7 +48,24 @@ watch(() => postStore.buttons.find((s) => s.selected == true)?.post, (newVal) =>
   postStore.typeSelection = newVal
 })
 
+onBeforeMount(async () => {
+  await postStore.getPostsByOrganAndType(organ_id, 1, '')
+  if (postStore.postByOrganAndType.length > 0) {
+    postStore.buttons[0].selected = true
+    postStore.buttons[1].selected = false
+  }
+  else {
+    postStore.buttons[0].selected = false
+    postStore.buttons[1].selected = true
+  }
+
+  for (let state of postStore.buttons) {
+    if (state.selected == true) postStore.typeSelection = state.post;
+  }
+})
+
 onMounted(async () => {
+
   loading.value = true
   try {
     await organStore.getOrgansById(organ_id)
@@ -61,6 +78,7 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
+
 })
 
 const additionalData = ref([
@@ -85,9 +103,9 @@ const push = async (id) => {
 
 onBeforeUnmount(() => {
   for (let state of postStore.buttons) {
-    postStore.buttons[0].selected = true
-    postStore.buttons[1].selected = false
-    postStore.typeSelection = state.post
+    postStore.buttons[0].selected = false
+    postStore.buttons[1].selected = true
+    if (state.selected) postStore.typeSelection = state.post;
   }
 })
 </script>
