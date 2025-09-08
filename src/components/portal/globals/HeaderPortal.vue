@@ -13,7 +13,7 @@ const props = defineProps({
     title: {
         type: String,
         required: false,
-        default: 'Sem título',
+        default: null,
     },
     size: {
         type: String,
@@ -30,8 +30,8 @@ const props = defineProps({
         <div class="relative w-20">
         <BackButton position="absolute" />
         </div>
-        <TitleGlobal :content="props.title" :size="props.size" position="justify-center" class="xl:mt-16" />
-    
+        <TitleGlobal v-if="props.title" :content="props.title" :size="props.size" position="justify-center" class="xl:mt-16" />
+
         <div class="relative  w-20">
         <UserInformation  position="absolute" position_directions=" right-0" v-if="authStore.activeUser" />
         </div>
