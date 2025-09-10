@@ -1,6 +1,6 @@
 <script setup>
-import {ButtonFilterRanking} from '@/components/index'
-import { ref } from 'vue'
+import { ButtonFilterRanking } from '@/components/index'
+import { ref, watch } from 'vue'
 
 const difficulties = ['Fácil', 'Médio', 'Difícil']
 const selectedDifficulty = ref('Fácil')
@@ -9,6 +9,12 @@ const selectedDifficulty = ref('Fácil')
 function changeDifficulty(difficulty) {
   selectedDifficulty.value = difficulty
 }
+
+// emitir para o pai
+const emit = defineEmits(['difficulty-change'])
+watch(selectedDifficulty, (newVal) => {
+  emit('difficulty-change', newVal)
+})
 </script>
 
 <template>

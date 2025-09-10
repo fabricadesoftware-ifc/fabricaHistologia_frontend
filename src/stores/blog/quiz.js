@@ -61,6 +61,8 @@ export const useQuizStore = defineStore("quiz",
         const selectedLevel = computed(()=> state.value.selectedLevel)
         const answersCountState = computed(()=> state.value.answersCount)
         const quizCountState = computed(()=> state.value.quizesCount)
+          const ranking = computed(() => state.value.ranking);
+
 
         const countSavedAnswers = computed(()=> {
             const correctAnswers = state.value.savedAnswers.filter(s => s.correct == true)
@@ -73,6 +75,17 @@ export const useQuizStore = defineStore("quiz",
          * @async
          * @function getPosts
          */
+
+          const getRanking = async (level) => {
+    state.value.loading = true;
+    try {
+      state.value.ranking = await QuizService.getRanking(level);
+    } catch (error) {
+      state.value.error = error;
+    } finally {
+      state.value.loading = false;
+    }
+  };
         const getQuiz = async (page) => {
             state.value.loading = true;
             try {
@@ -313,6 +326,7 @@ export const useQuizStore = defineStore("quiz",
             getAnswerById,
             getQuizById,
             getQuiz,
+            getRanking,
             createAnswersBulk,
             getAnswers,
             getQuizBySystem,

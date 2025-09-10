@@ -191,6 +191,16 @@ class QuizService {
             throw error;
         }
     }
+    async getRanking(level) {
+  try {
+    const { data } = await api.get(`/score/ranking/?level=${level}`);
+    return data;
+  } catch (error) {
+    console.log("Service: GetRanking - return error", error);
+    throw error;
+  }
+}
+
 }
 
 export default new QuizService();

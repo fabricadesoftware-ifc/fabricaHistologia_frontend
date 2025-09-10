@@ -80,10 +80,10 @@ import LoadingSpinner from './portal/globals/LoadingSpinner.vue';
 import ButtonRanking from './portal/buttons/ButtonRanking.vue';
 
 //quiz
-import TableRanking from './portal/quiz/TableRanking.vue';
-import ButtonsRanking from './portal/quiz/ButtonsRanking.vue';
+import TableRanking from './portal/quiz/ranking/TableRanking.vue';
+import ButtonsRanking from './portal/quiz/ranking/ButtonsRanking.vue';
 import ButtonFilterRanking from './portal/buttons/ButtonFilterRanking.vue';
-import TitleRanking from './portal/quiz/TitleRanking.vue';
+import TitleRanking from './portal/quiz/ranking/TitleRanking.vue';
 
 export {
   AddInfoGlobal,
