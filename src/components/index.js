@@ -76,6 +76,15 @@ import DataGraph from './admin/layout/DataGraph.vue';
 
 import LoadingSpinner from './portal/globals/LoadingSpinner.vue';
 
+//buttons
+import ButtonRanking from './portal/buttons/ButtonRanking.vue';
+
+//quiz
+import TableRanking from './portal/quiz/ranking/TableRanking.vue';
+import ButtonsRanking from './portal/quiz/ranking/ButtonsRanking.vue';
+import ButtonFilterRanking from './portal/buttons/ButtonFilterRanking.vue';
+import TitleRanking from './portal/quiz/ranking/TitleRanking.vue';
+
 export {
   AddInfoGlobal,
   PostInfo,
@@ -139,4 +148,9 @@ export {
   ListTableAdmin,
   DataGraph,
   LoadingSpinner,
+  ButtonRanking,
+  TableRanking,
+  ButtonsRanking,
+  ButtonFilterRanking,
+  TitleRanking,
 };
