@@ -200,6 +200,56 @@ class QuizService {
     throw error;
   }
 }
+// ------------------- SCORE -------------------
+
+async createScore(newScore) {
+  try {
+    const { data } = await api.post('/score/', newScore, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    return data
+  } catch (error) {
+    console.log("Service: CreateScore - error", error)
+    throw error
+  }
+}
+
+async getScores(params = {}) {
+  try {
+    const query = new URLSearchParams(params).toString()
+    const { data } = await api.get(`/score/?${query}`)
+    return data
+  } catch (error) {
+    console.log("Service: GetScores - error", error)
+    throw error
+  }
+}
+
+async getScoreById(id) {
+  try {
+    const { data } = await api.get(`/score/${id}/`)
+    return data
+  } catch (error) {
+    console.log("Service: GetScoreById - error", error)
+    throw error
+  }
+}
+
+async deleteScore(id) {
+  try {
+    await api.delete(`/score/${id}/`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    return true
+  } catch (error) {
+    console.log("Service: DeleteScore - error", error)
+    throw error
+  }
+}
+
 
 }
 

@@ -43,49 +43,49 @@ export const useQuizStore = defineStore("quiz",
             connection: false,
             answersCount: 0,
             quizesCount: 0,
-            
+
         })
 
         const answers = computed(() => state.value.answers)
-        const allQuizes = computed(()=> state.value.allQuizes)
+        const allQuizes = computed(() => state.value.allQuizes)
         const quiz = computed(() => state.value.quiz)
-        const selectedQuiz = computed(()=> state.value.selectedQuiz)
-        const selectedAnswers = computed(()=> state.value.selectedAnswers)
-        const savedAnswers = computed(()=> state.value.savedAnswers)
+        const selectedQuiz = computed(() => state.value.selectedQuiz)
+        const selectedAnswers = computed(() => state.value.selectedAnswers)
+        const savedAnswers = computed(() => state.value.savedAnswers)
         const isLoading = computed(() => state.value.loading);
         const answersCount = computed(() => state.value.answers.length);
         const quizCount = computed(() => state.value.quiz.length);
-        const answersByQuestion = computed(()=> state.value.answersByQuestion)
-        const quizBySystem = computed(()=> state.value.quizBySystem)
-        const markedAnswers = computed(()=> state.value.markedAnswers)
-        const selectedLevel = computed(()=> state.value.selectedLevel)
-        const answersCountState = computed(()=> state.value.answersCount)
-        const quizCountState = computed(()=> state.value.quizesCount)
-          const ranking = computed(() => state.value.ranking);
+        const answersByQuestion = computed(() => state.value.answersByQuestion)
+        const quizBySystem = computed(() => state.value.quizBySystem)
+        const markedAnswers = computed(() => state.value.markedAnswers)
+        const selectedLevel = computed(() => state.value.selectedLevel)
+        const answersCountState = computed(() => state.value.answersCount)
+        const quizCountState = computed(() => state.value.quizesCount)
+        const ranking = computed(() => state.value.ranking);
 
 
-        const countSavedAnswers = computed(()=> {
+        const countSavedAnswers = computed(() => {
             const correctAnswers = state.value.savedAnswers.filter(s => s.correct == true)
             return correctAnswers.length
         })
-        
-        
+
+
         /**
          * Fetches post data.
          * @async
          * @function getPosts
          */
 
-          const getRanking = async (level) => {
-    state.value.loading = true;
-    try {
-      state.value.ranking = await QuizService.getRanking(level);
-    } catch (error) {
-      state.value.error = error;
-    } finally {
-      state.value.loading = false;
-    }
-  };
+        const getRanking = async (level) => {
+            state.value.loading = true;
+            try {
+                state.value.ranking = await QuizService.getRanking(level);
+            } catch (error) {
+                state.value.error = error;
+            } finally {
+                state.value.loading = false;
+            }
+        };
         const getQuiz = async (page) => {
             state.value.loading = true;
             try {
@@ -100,17 +100,17 @@ export const useQuizStore = defineStore("quiz",
             }
         };
 
-         const getAllQuizes = async () => {
+        const getAllQuizes = async () => {
             state.value.loading = true;
             try {
-              const response = await QuizService.getAllQuizes();
-              state.value.allQuizes = response;
+                const response = await QuizService.getAllQuizes();
+                state.value.allQuizes = response;
             } catch (error) {
-              state.value.error = error;
+                state.value.error = error;
             } finally {
-              state.value.loading = false;
+                state.value.loading = false;
             }
-          };
+        };
 
         const getQuizById = async (quiz_id) => {
             state.value.loading = true;
@@ -157,7 +157,7 @@ export const useQuizStore = defineStore("quiz",
             try {
                 const response = await QuizService.getQuizBySystem(system_id, level)
                 state.value.quizBySystem = response
-                
+
             } catch (error) {
                 state.value.error = error
             } finally {
@@ -169,8 +169,8 @@ export const useQuizStore = defineStore("quiz",
         const getAnswersByQuestion = async (id) => {
             state.value.loading = true;
             try {
-                    state.value.answersByQuestion = await QuizService.getAnswersByQuestion(id)
-                
+                state.value.answersByQuestion = await QuizService.getAnswersByQuestion(id)
+
             } catch (error) {
                 state.value.error = error
             } finally {
@@ -182,19 +182,19 @@ export const useQuizStore = defineStore("quiz",
         const getMarkedAnswers = () => {
             for (let i = 0; i < quizBySystem.value.length; i++) {
                 const response = {
-                        id: quizBySystem.value[i].id,
-                        correct: false,
-                        answered: false,
+                    id: quizBySystem.value[i].id,
+                    correct: false,
+                    answered: false,
                 }
                 state.value.markedAnswers.push(response)
-                }
-                
-                
             }
-        
-        
 
-        
+
+        }
+
+
+
+
         /**
          * Creates a new post.
          * @async
@@ -236,7 +236,7 @@ export const useQuizStore = defineStore("quiz",
                 state.value.loading = false;
             }
         };
-        
+
         /**
          * Updates an existing post.
          * @async
@@ -245,7 +245,7 @@ export const useQuizStore = defineStore("quiz",
          */
         const updateQuiz = async (quiz) => {
             state.value.loading = true;
-            try { 
+            try {
                 const index = state.value.quiz.findIndex((s) => s.id === quiz.id);
                 return state.value.quiz[index] = await QuizService.updateQuiz(quiz);
             } catch (error) {
@@ -256,19 +256,19 @@ export const useQuizStore = defineStore("quiz",
         };
 
         const updateAnswers = async (answer) => {
-    console.log('chega')
-    state.value.loading = true;
-    try {
-       const response = await QuizService.updateAnswers(answer)
-       return response
-    } catch (error) {
-        console.log('erro?', error);
-        state.value.error = error;
-        return error;
-    } finally {
-        state.value.loading = false;
-    }
-};
+            console.log('chega')
+            state.value.loading = true;
+            try {
+                const response = await QuizService.updateAnswers(answer)
+                return response
+            } catch (error) {
+                console.log('erro?', error);
+                state.value.error = error;
+                return error;
+            } finally {
+                state.value.loading = false;
+            }
+        };
 
 
         /**
@@ -277,12 +277,12 @@ export const useQuizStore = defineStore("quiz",
          * @function deletePosts
          * @param {number} id - The ID of the Posts to delete.
         */
-       const deleteQuiz = async (id) => {
-           state.value.loading = true;
-           try {
-               const index = state.value.quiz.findIndex((s) => s.id === id);
-               state.value.quiz.splice(index, 1);
-               await QuizService.deleteQuiz(id);
+        const deleteQuiz = async (id) => {
+            state.value.loading = true;
+            try {
+                const index = state.value.quiz.findIndex((s) => s.id === id);
+                state.value.quiz.splice(index, 1);
+                await QuizService.deleteQuiz(id);
             } catch (error) {
                 state.value.error = error;
             } finally {
@@ -296,13 +296,68 @@ export const useQuizStore = defineStore("quiz",
                 const index = state.value.answers.findIndex((s) => s.id === id);
                 state.value.answers.splice(index, 1);
                 await QuizService.deleteAnswers(id);
-             } catch (error) {
-                 state.value.error = error;
-             } finally {
-                 state.value.loading = false;
-             }
-         };
+            } catch (error) {
+                state.value.error = error;
+            } finally {
+                state.value.loading = false;
+            }
+        };
+
+// computed
+const scores = computed(() => state.value.scores)
+        const selectedScore = computed(() => state.value.selectedScore)
+
+        // actions
+        const createScore = async (newScore) => {
+            state.value.loading = true
+            try {
+                const response = await QuizService.createScore(newScore)
+                state.value.scores.push(response)
+                return response
+            } catch (error) {
+                state.value.error = error
+                throw error
+            } finally {
+                state.value.loading = false
+            }
+        };
+
+        const getScores = async (params) => {
+            state.value.loading = true
+            try {
+                const response = await QuizService.getScores(params)
+                state.value.scores = response.results || response
+            } catch (error) {
+                state.value.error = error
+            } finally {
+                state.value.loading = false
+            }
+        };
         
+        const getScoreById = async (id) => {
+            state.value.loading = true
+            try {
+                state.value.selectedScore = await QuizService.getScoreById(id)
+            } catch (error) {
+                state.value.error = error
+            } finally {
+                state.value.loading = false
+            }
+        };
+
+        const deleteScore = async (id) => {
+            state.value.loading = true
+            try {
+                await QuizService.deleteScore(id)
+                state.value.scores = state.value.scores.filter(s => s.id !== id)
+            } catch (error) {
+                state.value.error = error
+            } finally {
+                state.value.loading = false
+            }
+        };
+
+
         return {
             state,
             isLoading,
@@ -337,7 +392,13 @@ export const useQuizStore = defineStore("quiz",
             updateAnswers,
             deleteQuiz,
             deleteAnswers,
+            scores,
+            selectedScore,
+            createScore,
+            getScores,
+            getScoreById,
+            deleteScore,
         };
-        
+
     }
 )
