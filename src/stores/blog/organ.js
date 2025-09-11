@@ -62,6 +62,19 @@ export const useOrganStore = defineStore('organ', () => {
     }
   }
 
+  const getOrgansBySearch = async (search) => {
+    state.value.loading = true
+    try {
+      const response = await OrganService.getOrgansBySearch(search)
+      state.value.organs = response
+    } catch (error) {
+      state.value.error = error
+    } finally {
+      state.value.loading = false
+      state.value.connection = true
+    }
+  }
+
   const getAllOrgans = async (page) => {
     state.value.loading = true
     try {
@@ -81,10 +94,24 @@ export const useOrganStore = defineStore('organ', () => {
    * @async
    * @function getOrgansBySystem
    */
-   const getOrgansBySystem = async (systemId) => {
+   const getOrgansBySystem = async (systemId, page = '') => {
     state.value.loading = true
     try {
-      const response = await OrganService.getOrgansBySystem(systemId)   
+      const response = await OrganService.getOrgansBySystem(systemId, page)   
+      state.value.organsBySystem = response
+      return response
+    } catch (error) {
+      state.value.error = error
+    } finally {
+      state.value.loading = false
+      state.value.connection = true
+    }
+  }
+
+   const getAllOrgansBySystem = async (systemId) => {
+    state.value.loading = true
+    try {
+      const response = await OrganService.getAllOrgansBySystem(systemId)   
       state.value.organsBySystem = response
       return response
     } catch (error) {
@@ -178,8 +205,10 @@ export const useOrganStore = defineStore('organ', () => {
     count,
     getAllOrgans,
     getOrgansBySystem,
+    getAllOrgansBySystem,
     getOrgans,
     getOrgansById,
+    getOrgansBySearch,
     createOrgan,
     updateOrgan,
     deleteOrgan

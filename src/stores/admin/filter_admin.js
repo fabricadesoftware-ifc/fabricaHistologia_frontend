@@ -76,6 +76,7 @@ const handleFilterAction = (item) => {
 
 
 const changeActive = (index, itens) => {
+  console.log(index, itens)
     itens.forEach(item => {
         item.active = false
     })
@@ -84,11 +85,22 @@ const changeActive = (index, itens) => {
     handleFilterAction(itens[index].nome)
 }
 
+const changeActiveMobile = (itens) => {
+  const selected = itens.itens[itens.index]
+
+  // desmarca todos
+  itens.itens.forEach(item => { item.active = false })
+  selected.active = true 
+
+  // sempre chama handleFilterAction (mesmo que já fosse ativo antes)
+  handleFilterAction(selected.nome)
+}
+
 const activeSearch = ref(false)
 
 
 return {
-  generalFilterData, changeActive, handleFilterAction, activeSearch
+  generalFilterData, changeActive, changeActiveMobile, handleFilterAction, activeSearch
 }
 }
 

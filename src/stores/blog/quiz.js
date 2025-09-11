@@ -100,7 +100,21 @@ export const useQuizStore = defineStore("quiz",
             }
         };
 
-        const getAllQuizes = async () => {
+
+        const getQuizBySearch = async (search) => {
+            state.value.loading = true;
+            try {
+                const response = await QuizService.getQuizBySearch(search);
+                state.value.quiz = response;
+            } catch (error) {
+                state.value.error = error;
+            } finally {
+                state.value.loading = false;
+                state.value.connection = true;
+            }
+        };
+
+         const getAllQuizes = async () => {
             state.value.loading = true;
             try {
                 const response = await QuizService.getAllQuizes();
@@ -117,6 +131,7 @@ export const useQuizStore = defineStore("quiz",
             try {
                 const response = await QuizService.getQuizById(quiz_id);
                 state.value.selectedQuiz = response;
+                return response;
             } catch (error) {
                 state.value.error = error;
             } finally {
@@ -250,6 +265,7 @@ export const useQuizStore = defineStore("quiz",
                 return state.value.quiz[index] = await QuizService.updateQuiz(quiz);
             } catch (error) {
                 state.value.error = error;
+                throw error;
             } finally {
                 state.value.loading = false;
             }
@@ -386,6 +402,7 @@ const scores = computed(() => state.value.scores)
             getAnswers,
             getQuizBySystem,
             getAnswersByQuestion,
+            getQuizBySearch,
             createQuiz,
             createAnswers,
             updateQuiz,

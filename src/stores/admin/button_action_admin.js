@@ -50,7 +50,7 @@ export const useActionSelectorStore = defineStore('actionSelector', () => {
     users: {
       label: 'Usuário',
       options: {
-        'Usuário': '/users/create', // < modificar futuramente
+        'Dados Pessoais': '/admin/users/add-personal',
       }
     }
   }

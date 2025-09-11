@@ -1,22 +1,21 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useSystemStore, useAuthStore, useQuizStore } from '@/stores'
 import {
-  NavLateralAdmin,
-  ButtonActionAdmin,
-  InputDateAdmin,
-  InputImageAdmin,
-  InputSelectAdmin,
-  InputStringAdmin,
   AdminGlobalContainer,
+  InputStringAdmin,
+  InputSelectAdmin,
   BtnDefault,
   SucessModalAdmin,
+  LoadingSpinner
 } from '@/components/index'
 import router from '@/router'
 
 const systemStore = useSystemStore()
 const authStore = useAuthStore()
 const quizStore = useQuizStore()
+
+const loading = ref(false)
 
 const newQuiz = reactive({
   title: '',
@@ -31,78 +30,75 @@ const levelOptions = [
   { name: 'Difícil', id: 3 }
 ]
 
-onMounted(async () => {
-  await systemStore.getAllSystems()
-  console.log(authStore.userInfo)
-
-  console.log('Dados iniciais do quiz:', newQuiz)
-})
-
+// Modais e mensagens
 const showSuccessModal = ref(false)
 const showErrorModal = ref(false)
-const errorMessage = ref("")
+const errorMessage = ref('')
 
-const send = async () => {
+// Inicialização
+onMounted(async () => {
+  loading.value = true
   try {
-    console.log(newQuiz)
-    await quizStore.createQuiz(newQuiz)
+    await systemStore.getAllSystems()
+  } catch (err) {
+    console.error('Erro ao carregar sistemas:', err)
+    errorMessage.value = 'Erro ao carregar sistemas. Tente novamente.'
+    showErrorModal.value = true
+  } finally {
+    loading.value = false
+  }
+})
 
+// Envio do formulário
+const send = async () => {
+  loading.value = true
+  try {
+    await quizStore.createQuiz(newQuiz)
     showSuccessModal.value = true
-    setTimeout(()=> {
-    router.push('/admin/quiz')
-    },1000)
+    setTimeout(() => router.push('/admin/quiz'), 1000)
   } catch (err) {
     console.error('Erro ao criar o quiz:', err)
-    console.error('Erro ao fazer upload da imagem:', err)
-    errorMessage.value = err?.message || "Erro inesperado ao cadastrar Pergunta."
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = err?.message || "Erro inesperado ao cadastrar Pergunta."
+    }
     showErrorModal.value = true
+  } finally {
+    loading.value = false
   }
 }
 
-function closeErrorModal() {
-  showErrorModal.value = false
-}
+const closeErrorModal = () => { showErrorModal.value = false }
 </script>
 
 <template>
   <AdminGlobalContainer>
-    <div class="w-[90%] mx-auto space-y-6">
-      <form class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
-        <InputStringAdmin
-          label="Titulo"
-          :modelValue="newQuiz.title"
-          @action="newQuiz.title = $event"
-        />
+    <!-- Overlay de loading -->
+    <LoadingSpinner v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50"/>
 
-        <InputStringAdmin
-          label="Pergunta"
-          :modelValue="newQuiz.question"
-          @action="newQuiz.question = $event"
-        />
-
-        <InputSelectAdmin
-          label="Sistema"
-          :modelValue="newQuiz.system"
-          :options="systemStore.systems"
-          @action="newQuiz.system = $event"
-        />
-
-        <InputSelectAdmin
-          label="Nível"
-          :modelValue="newQuiz.level"
-          :options="levelOptions"
-          @action="newQuiz.level = $event"
-        />
-
-        <BtnDefault class="mb-10" text="Cadastrar" background="bg-[#29AC96]" :hasLink="false" />
-      </form>
+    <div v-else class="w-[90%] mx-auto space-y-6">
+      <div class="flex flex-col gap-10 w-full">
+        <InputStringAdmin label="Título" :modelValue="newQuiz.title" @action="newQuiz.title = $event"/>
+        <InputStringAdmin label="Pergunta" :modelValue="newQuiz.question" @action="newQuiz.question = $event"/>
+        <InputSelectAdmin label="Sistema" :modelValue="newQuiz.system" :options="systemStore.systems" @action="newQuiz.system = $event"/>
+        <InputSelectAdmin label="Nível" :modelValue="newQuiz.level" :options="levelOptions" @action="newQuiz.level = $event"/>
+        <BtnDefault class="mb-10" text="Cadastrar" background="bg-[#29AC96]" :hasLink="false" @click="send"/>
+      </div>
     </div>
   </AdminGlobalContainer>
-  
-    <SucessModalAdmin
+
+  <!-- Modal de sucesso -->
+  <SucessModalAdmin
     :show="showSuccessModal"
     subtitle="Sucesso!"
-    title="Pergunta cadastrado"
+    title="Pergunta cadastrada"
+    :duration="1"
+    confirm-label=""
+    cancel-label=""
   />
 
   <!-- Modal de erro -->

@@ -26,7 +26,7 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      meta: { activeUser: true },
+      meta: { verifiedUser: true },
       children: [
         {
           path: '',
@@ -36,11 +36,11 @@ const router = createRouter({
         {
           path: 'systems',
           name: 'Sistemas',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
-              name: '',
+              name: 'systems-admin-home',
               component: () => import('@/views/admin/portal/systems/SystemsView.vue')
             },
             {
@@ -58,11 +58,11 @@ const router = createRouter({
         {
           path: 'species',
           name: 'Espécies',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
-              name: '',
+              name: 'species-admin-home',
               component: () => import('@/views/admin/portal/species/SpeciesView.vue')
 
             },
@@ -87,11 +87,11 @@ const router = createRouter({
         {
           path: 'quiz',
           name: 'Quiz',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
-              name: '',
+              name: 'quiz-admin-home',
               component: () => import('@/views/admin/quiz/QuizesView.vue')
             },
             {
@@ -119,11 +119,11 @@ const router = createRouter({
         {
           path: 'supporting',
           name: 'Materiais de Apoio',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
-              name: '',
+              name: 'supporting-admin-home',
               component: () => import('@/views/admin/supporting_material/SupportingMaterialsView.vue')
             },
             {
@@ -139,13 +139,45 @@ const router = createRouter({
           ]
         },
         {
-          path: 'organs',
-          name: 'Órgãos',
-          meta: { activeUser: true },
+          path: 'users',
+          name: 'Usuários',
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
-              name: '',
+              name: 'users-admin-home',
+              component: () => import('@/views/admin/users/UsersView.vue')
+            },
+            {
+              path: 'add-personal',
+              name: '> Cadastrar Dados Pessoais',
+              component: () => import('@/views/admin/users/AddPersonalDataView.vue')
+            },
+            {
+              path: ':id',
+              name: '> Atualizar Dados Pessoais',
+              component: () => import('@/views/admin/users/PersonalDataView.vue')
+            },
+            //  {
+            //   path: 'add-address',
+            //   name: '> Cadastrar Endereço',
+            //   component: () => import('@/views/admin/users/AddAddressView.vue')
+            // },
+            // {
+            //   path: 'address/:id',
+            //   name: '> Atualizar Endereço',
+            //   component: () => import('@/views/admin/users/AdressView.vue')
+            // },
+          ]
+        },
+        {
+          path: 'organs',
+          name: 'Órgãos',
+          meta: { verifiedUser: true },
+          children: [
+            {
+              path: '',
+              name: 'organs-admin-home',
               component: () => import('@/views/admin/portal/organs/OrgansView.vue')
             },
             {
@@ -163,11 +195,11 @@ const router = createRouter({
         {
           path: 'posts',
           name: 'Lâmina',
-          meta: { activeUser: true },
+          meta: { verifiedUser: true },
           children: [
             {
               path: '',
-              name: '',
+              name: 'posts-admin-home',
               component: () => import('@/views/admin/portal/posts/PostsView.vue'),
             },
             {
@@ -198,7 +230,6 @@ const router = createRouter({
     {
       path: '/portal',
       name: 'portal',
-      meta: { activeUser: true },
       children: [
         {
           path: '',
@@ -259,5 +290,18 @@ const router = createRouter({
     },
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const verified = sessionStorage.getItem('verified_user') === 'true'
+
+  const requiresVerify = to.matched.some(record => record.meta.verifiedUser)
+
+  if (requiresVerify && !verified) {
+    next({ name: 'login' })
+  } else {
+    next()
+  }
+})
+
 
 export default router

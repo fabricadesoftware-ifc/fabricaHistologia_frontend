@@ -1,7 +1,5 @@
 <script setup>
-
 import { onBeforeMount, ref, computed, watch } from 'vue'
-
 import { useSystemStore } from '@/stores'
 import {
   TableFilterContainer,
@@ -15,20 +13,19 @@ import {
 } from '@/components/index'
 
 import { useAdmin } from '@/stores/admin/filter_admin'
+import { useDebounceFn } from '@vueuse/core'
 
 // Stores
 const systemStore = useSystemStore()
-const { changeActive } = useAdmin()
+const { changeActive, changeActiveMobile } = useAdmin()
 
-// Estado de carregamento
+// Estados
 const loading = ref(true)
-
-// Controle de paginação
+const searchLoading = ref(false)
 const currentPage = ref(1)
 const itemsPerPage = 10
-
-// Filtros
 const filters = ref([])
+const searchText = ref("")
 
 // Dados formatados
 const systemsWithCategory = computed(() =>
@@ -39,68 +36,97 @@ const systemsWithCategory = computed(() =>
 )
 
 // Carregar dados iniciais
-onBeforeMount(async () => {
+const loadInitialData = async () => {
   try {
+    loading.value = true
     await systemStore.getSystems(1)
     const categories = [...new Set(systemStore.systems.map(s => s.category || 'Sem Categoria'))]
     filters.value = [
       { nome: 'Geral', active: true },
-      ...categories.map(cat => ({
-        nome: cat,
-        active: false
-      }))
+      ...categories.map(cat => ({ nome: cat, active: false }))
     ]
   } finally {
     loading.value = false
   }
-})
+}
+
+onBeforeMount(loadInitialData)
 
 // Filtro ativo
 const activeFilter = computed(() =>
   filters.value.find(f => f.active)?.nome
 )
 
-// Dados filtrados
+// Lista filtrada
 const filteredSystems = computed(() => {
-  if (!activeFilter.value || activeFilter.value === 'Geral') {
-    return systemsWithCategory.value
+  let data = systemsWithCategory.value
+  if (activeFilter.value && activeFilter.value !== 'Geral') {
+    data = data.filter(s => s.category === activeFilter.value)
   }
-  return systemsWithCategory.value.filter(system => system.category === activeFilter.value)
+  if (searchText.value) {
+    data = data.filter(s => s.name.toLowerCase().includes(searchText.value.toLowerCase()))
+  }
+  return data
 })
 
-// Paginação (API já retorna paginado)
+// Paginação
 const paginatedSystems = computed(() => filteredSystems.value)
-
-// Total de páginas
 const totalPages = computed(() =>
   Math.max(1, Math.ceil((systemStore.count || filteredSystems.value.length) / itemsPerPage))
 )
 
 // Atualiza dados ao mudar de página
 watch(currentPage, async (newPage) => {
-  loading.value = true
-  await systemStore.getSystems(newPage)
-  loading.value = false
+  if (!searchText.value) {
+    loading.value = true
+    await systemStore.getSystems(newPage)
+    loading.value = false
+  } else {
+    searchLoading.value = true
+    await systemStore.getSystemsBySearch(searchText.value)
+    searchLoading.value = false
+  }
 })
 
 // Resetar para página 1 ao mudar filtro
 watch(activeFilter, async () => {
   currentPage.value = 1
-  loading.value = true
-  await systemStore.getSystems(1)
-  loading.value = false
+  if (!searchText.value) {
+    loading.value = true
+    await systemStore.getSystems(1)
+    loading.value = false
+  } else {
+    searchLoading.value = true
+    await systemStore.getSystemsBySearch(searchText.value)
+    searchLoading.value = false
+  }
 })
+
+// Função de search com debounce
+const _onSearch = async (text) => {
+  searchText.value = text
+  currentPage.value = 1
+  if (!text) {
+    loading.value = true
+    await systemStore.getSystems(1)
+    loading.value = false
+  } else {
+    searchLoading.value = true
+    await systemStore.getSystemsBySearch(text)
+    searchLoading.value = false
+  }
+}
+const onSearch = useDebounceFn(_onSearch, 400)
 </script>
 
 <template>
   <AdminGlobalContainer>
-
-    <!-- Loading -->
-    <LoadingSpinner v-if="loading" class="my-10" />
+    <!-- Loading global -->
+    <LoadingSpinner v-if="loading && !searchLoading" class="my-10" />
 
     <template v-else>
       <!-- Gráfico -->
-      <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
+      <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center sm:flex-col justify-between">
         <ButtonActionAdmin />
         <DataGraph
           title="Sistemas"
@@ -115,7 +141,12 @@ watch(activeFilter, async () => {
       <section>
         <div class="flex flex-col w-[90%] mx-auto">
           <p class="text-xl font-medium mb-10">Cadastros Gerais</p>
-          <TableFilterContainer :items="filters" :amount="filters.length">
+          <TableFilterContainer
+            @filter="changeActiveMobile"
+            @search-text="onSearch"
+            :items="filters"
+            :amount="filters.length"
+          >
             <TableFilterCard
               v-for="(filter, index) in filters"
               :key="index"
@@ -128,7 +159,11 @@ watch(activeFilter, async () => {
 
         <!-- Tabela -->
         <section class="mt-10 w-[90%] mx-auto flex flex-col items-center mb-10">
+          <!-- Loading da busca -->
+          <p v-if="searchLoading" class="text-gray-500 mt-6">Buscando...</p>
+
           <ListTableAdmin
+            v-else-if="paginatedSystems.length"
             :rows="paginatedSystems"
             :columns="[
               { key: 'id', label: 'ID' },
@@ -140,15 +175,16 @@ watch(activeFilter, async () => {
             @update:cell="(e) => console.log('editou', e)"
           />
 
+          <p v-else class="text-gray-500 mt-6">Nenhum resultado encontrado</p>
+
           <!-- Paginação -->
           <TablePagination
-            :currentPage="currentPage"
+            :current-page="currentPage"
             :total-pages="totalPages"
-            @page-change="(page) => (currentPage = page)"
+            @page-change="(page) => currentPage = page"
           />
         </section>
       </section>
     </template>
-
   </AdminGlobalContainer>
 </template>

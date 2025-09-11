@@ -37,8 +37,21 @@ const loading = ref(false)
 
 onMounted(async () => {
   loading.value = true
-  await systemStore.getAllSystems()
-  loading.value = false
+  try {
+    await systemStore.getAllSystems()
+  } catch (err) {
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = "Erro inesperado ao carregar sistemas."
+    }
+    showErrorModal.value = true
+  } finally {
+    loading.value = false
+  }
 })
 
 const send = async () => {
@@ -67,14 +80,15 @@ const send = async () => {
     }, 1000)
 
   } catch (err) {
-  if (err?.response?.data) {
-    // Concatena todas as mensagens de erro em uma string legível
-
-    errorMessage.value = err?.response?.data
-  } else {
-    errorMessage.value = "Erro inesperado ao cadastrar o Órgão."
-  }
-  showErrorModal.value = true
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = "Erro inesperado ao cadastrar o órgão."
+    }
+    showErrorModal.value = true
   } finally {
     loading.value = false
   }
@@ -85,13 +99,14 @@ function closeErrorModal() {
 }
 </script>
 
+
 <template>
   <AdminGlobalContainer>
     <div class="w-[90%] mx-auto space-y-6">
 
       <LoadingSpinner v-if="loading" class="mt-20" />
 
-      <form v-else class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
+      <form v-else class="flex flex-col md:grid-cols-2 gap-10 w-full" @submit.prevent="send">
         <InputStringAdmin label="Nome" :modelValue="newOrgan.name" @action="newOrgan.name = $event"/>
         <InputTextAdmin label="Descrição" :modelValue="newOrgan.description" @action="newOrgan.description = $event"/>
         <InputSelectAdmin label="Sistema" :modelValue="newOrgan.system" :options="systemStore.systems" @action="newOrgan.system = $event"/>

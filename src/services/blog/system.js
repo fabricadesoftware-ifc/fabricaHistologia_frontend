@@ -20,6 +20,17 @@ class SystemService {
         }
     }
 
+    async getSystemsBySearch (search) {
+        try {
+            const {data} = await api.get(`/systems/?name=${search}`);
+            console.log(data)
+            return data.results;
+        } catch (error) {
+            console.log("error in getSystemsBySearch", error);
+            throw error;
+        }
+    }
+
       async getAllSystems () {
         try {
             const {data} = await api.get(`/systems/?page_size=0`);
@@ -38,9 +49,7 @@ class SystemService {
     */
     async getSystemById (id) {
         try {
-            console.log(id)
             const {data} = await api.get('/systems/' + id + '/');
-            console.log(data)
             return data;
         } catch (error) {
             console.log("error in getSystem", error);

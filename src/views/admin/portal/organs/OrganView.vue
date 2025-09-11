@@ -106,30 +106,32 @@ onMounted(async () => {
 })
 
 // Atualiza órgão
+
 const send = async () => {
   try {
     organ.image = organ.image?.attachment_key
     await organStore.updateOrgan(organ)
     successAction.value = 'edit'
     showSuccessModal.value = true
-    // setTimeout(() => {
-    //   router.push('/admin/organs')
-    // }, 1000)
+      setTimeout(() => {
+      router.push('/admin/organs')
+    }, 1000)
   } catch (err) {
     console.error('Erro ao editar órgão:', err)
-    errorMessage.value = err?.response?.data || 'Erro inesperado ao atualizar o órgão.'
+    if (err?.response?.data) {
+      const data = err.response.data
+      // transforma valores das chaves em string legível
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = 'Erro inesperado ao atualizar o órgão.'
+    }
     showErrorModal.value = true
   }
 }
 
-// Tenta excluir órgão
-
-const tryDelete = () => {
-  showDeleteConfirm.value = true
-}
-
 // Confirma exclusão
-
 const confirmDelete = async () => {
   try {
     await organStore.deleteOrgan(organId)
@@ -141,10 +143,24 @@ const confirmDelete = async () => {
     }, 1000)
   } catch (err) {
     console.error('Erro ao deletar órgão:', err)
-    errorMessage.value = err?.message || 'Erro inesperado ao deletar o órgão.'
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = err?.message || 'Erro inesperado ao deletar o órgão.'
+    }
     showDeleteConfirm.value = false
     showErrorModal.value = true
   }
+}
+
+
+// Tenta excluir órgão
+
+const tryDelete = () => {
+  showDeleteConfirm.value = true
 }
 
 // Fecha modal de erro
@@ -179,7 +195,7 @@ function closeErrorModal() {
         />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <div class="flex flex-col gap-10 w-full">
         <!-- Nome -->
         <InputStringAdmin
           label="Nome"

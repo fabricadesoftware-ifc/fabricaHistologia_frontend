@@ -50,7 +50,7 @@ const toggle = () => {
     </button>
 
     <transition name="dropdown">
-      <ul v-if="isOpen" class="absolute z-10 mt-1 bg-white border border-gray-300 rounded-md shadow-md w-40 overflow-hidden">
+      <ul v-if="isOpen" class="absolute sm:relative sm:left-5 z-10 mt-1 bg-white border border-gray-300 rounded-md shadow-md w-40 overflow-hidden">
         <li v-for="option in props.options" :key="option" @click="selectOption(option)" class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
           {{ option }}
         </li>

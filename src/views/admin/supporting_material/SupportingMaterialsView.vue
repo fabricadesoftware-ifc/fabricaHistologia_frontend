@@ -9,24 +9,27 @@ import {
   ListTableAdmin,
   DataGraph,
   LoadingSpinner,
-  TablePagination
+  TablePagination,
+  SucessModalAdmin
 } from '@/components/index'
 
 import { useAdmin } from '@/stores/admin/filter_admin'
+import { useDebounceFn } from '@vueuse/core'
 
 // Stores
 const supportingStore = useSupportingStore()
-const { changeActive } = useAdmin()
+const { changeActive, changeActiveMobile } = useAdmin()
 
-// Estado de carregamento
+// Estados
 const loading = ref(true)
-
-// Controle de paginação
+const searchLoading = ref(false)
 const currentPage = ref(1)
 const itemsPerPage = 10
-
-// Filtros dinâmicos
 const filters = ref([])
+const searchText = ref("")
+const error = ref(null)
+const showErrorModal = ref(false)
+const closeErrorModal = () => { showErrorModal.value = false }
 
 // Dados tratados para incluir nome do sistema
 const materialsWithSystem = computed(() =>
@@ -36,23 +39,6 @@ const materialsWithSystem = computed(() =>
   }))
 )
 
-// Carrega dados iniciais
-onBeforeMount(async () => {
-  try {
-    await supportingStore.getMaterials(1)
-    const systems = [...new Set(supportingStore.materials.map(m => m.system?.name || 'Sem Sistema'))]
-    filters.value = [
-      { nome: 'Geral', active: true },
-      ...systems.map(sys => ({
-        nome: sys,
-        active: false
-      }))
-    ]
-  } finally {
-    loading.value = false
-  }
-})
-
 // Filtro ativo
 const activeFilter = computed(() =>
   filters.value.find(f => f.active)?.nome
@@ -60,44 +46,79 @@ const activeFilter = computed(() =>
 
 // Dados filtrados
 const filteredMaterials = computed(() => {
-  if (!activeFilter.value || activeFilter.value === 'Geral') {
-    return materialsWithSystem.value
+  let data = materialsWithSystem.value
+  if (activeFilter.value && activeFilter.value !== 'Geral') {
+    data = data.filter(m => m.systemName === activeFilter.value)
   }
-  return materialsWithSystem.value.filter(material => material.systemName === activeFilter.value)
+  if (searchText.value) {
+    data = data.filter(m =>
+      m.name.toLowerCase().includes(searchText.value.toLowerCase()) ||
+      (m.description?.toLowerCase().includes(searchText.value.toLowerCase()))
+    )
+  }
+  return data
 })
 
-// Paginação (API já paginada)
+// Paginação
 const paginatedMaterials = computed(() => filteredMaterials.value)
-
-// Total de páginas
 const totalPages = computed(() =>
   Math.max(1, Math.ceil((supportingStore.count || filteredMaterials.value.length) / itemsPerPage))
 )
 
-// Atualiza ao mudar de página
-watch(currentPage, async (newPage) => {
-  loading.value = true
-  await supportingStore.getMaterials(newPage)
-  loading.value = false
+// Função para carregar materiais
+const loadMaterials = async (page = 1, search = "") => {
+  try {
+    if (search) searchLoading.value = true
+    else loading.value = true
+
+    if (search === "") {
+    await supportingStore.getMaterials(page, search)
+    } else {
+    await supportingStore.getMaterialsBySearch(search)
+
+    }
+    console.log('Materiais carregados:', supportingStore.materials)
+    // Atualiza filtros
+    const systems = [...new Set(supportingStore.materials.map(m => m.system?.name || 'Sem Sistema'))]
+    filters.value = [
+      { nome: 'Geral', active: true },
+      ...systems.map(sys => ({ nome: sys, active: false }))
+    ]
+  } catch (err) {
+    console.error('Erro ao carregar materiais:', err)
+    error.value = err?.message || 'Erro inesperado ao carregar materiais.'
+    showErrorModal.value = true
+  } finally {
+    loading.value = false
+    searchLoading.value = false
+  }
+}
+
+// Carrega dados iniciais
+onBeforeMount(() => loadMaterials(1))
+
+// Watchers
+watch(currentPage, (newPage) => loadMaterials(newPage, searchText.value))
+watch(activeFilter, () => {
+  currentPage.value = 1
+  loadMaterials(1, searchText.value)
 })
 
-// Reset página ao trocar filtro
-watch(activeFilter, async () => {
+// Função de busca com debounce
+const _onSearch = async (text) => {
+  searchText.value = text
   currentPage.value = 1
-  loading.value = true
-  await supportingStore.getMaterials(1)
-  loading.value = false
-})
+  await loadMaterials('', text) // busca a página 1 com filtro
+}
+const onSearch = useDebounceFn(_onSearch, 400)
 </script>
 
 <template>
   <AdminGlobalContainer>
-    <!-- Loading -->
-    <LoadingSpinner v-if="loading" class="my-10" />
+    <LoadingSpinner v-if="loading && !searchLoading" class="my-10" />
 
     <template v-else>
-      <!-- Gráfico -->
-      <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center justify-between">
+      <div class="flex gap-5 mr-[5%] mt-10 mb-10 h-56 items-center sm:flex-col sm:mx-auto sm:w-[90%] justify-between">
         <ButtonActionAdmin />
         <DataGraph
           title="Materiais de Apoio"
@@ -108,11 +129,10 @@ watch(activeFilter, async () => {
         />
       </div>
 
-      <!-- Filtros -->
       <section>
-        <div class="flex flex-col w-[90%] mx-auto">
+        <div class="flex flex-col w-[90%] mx-auto sm:mt-24">
           <p class="text-xl font-medium mb-10">Cadastros Gerais</p>
-          <TableFilterContainer :items="filters" :amount="filters.length">
+          <TableFilterContainer @filter="changeActiveMobile" @search-text="onSearch" :items="filters" :amount="filters.length">
             <TableFilterCard
               v-for="(filter, index) in filters"
               :key="index"
@@ -123,9 +143,11 @@ watch(activeFilter, async () => {
           </TableFilterContainer>
         </div>
 
-        <!-- Tabela -->
         <section class="mt-10 w-[90%] mx-auto flex flex-col items-center mb-10">
+          <p v-if="searchLoading" class="text-gray-500 mt-6">Buscando...</p>
+
           <ListTableAdmin
+            v-else-if="paginatedMaterials.length"
             :rows="paginatedMaterials"
             :columns="[
               { key: 'name', label: 'Nome', editable: true },
@@ -136,14 +158,26 @@ watch(activeFilter, async () => {
             @update:cell="(e) => console.log('editou', e)"
           />
 
-          <!-- Paginação -->
+          <p v-else class="text-gray-500 mt-6">Nenhum resultado encontrado</p>
+
           <TablePagination
-            :currentPage="currentPage"
+            :current-page="currentPage"
             :total-pages="totalPages"
             @page-change="(page) => (currentPage = page)"
           />
         </section>
       </section>
     </template>
+
+    <SucessModalAdmin
+      :show="showErrorModal"
+      subtitle="Erro!"
+      :title="error"
+      message="Não foi possível carregar os materiais. Tente novamente."
+      confirm-label="Fechar"
+      :cancel-label="null"
+      confirm-class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-xl"
+      @confirm="closeErrorModal"
+    />
   </AdminGlobalContainer>
 </template>

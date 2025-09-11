@@ -15,6 +15,18 @@ class OrganService {
     }
   }
 
+    async getOrgansBySearch(search) {
+    try {
+      const { data } = await api.get(`/organs/?name=${search}`)
+      console.log(data)
+      return data.results
+    } catch (error) {
+      console.log('error in getOrgansBySearch', error)
+      throw error
+    }
+  }
+
+
   async getAllOrgans() {
     try {
       const { data } = await api.get(`/organs/?page_size=0`)
@@ -25,10 +37,20 @@ class OrganService {
     }
   }
 
-  async getOrgansBySystem(systemId) {
+  async getOrgansBySystem(systemId, page = '') {
     try {
-      const { data } = await api.get(`/organs/?page=1&system_id=${systemId}`)
+      const { data } = await api.get(`/organs/?page=1&system_id=${systemId}&page=${page}`)
       return data.results
+    } catch (error) {
+      console.log('error in getOrgansBySystem', error)
+      throw error
+    }
+  }
+
+  async getAllOrgansBySystem(systemId) {
+    try {
+      const { data } = await api.get(`/organs/?page=1&system_id=${systemId}&page_size=0`)
+      return data
     } catch (error) {
       console.log('error in getOrgansBySystem', error)
       throw error
@@ -59,7 +81,6 @@ class OrganService {
 
   async updateOrgans(organ) {
     try {
-      console.log('chegou longe')
       const { data } = await api.put(`/organs/${organ.id}/`, organ, {
         headers: { authorization: `Bearer ${token}` }
       })

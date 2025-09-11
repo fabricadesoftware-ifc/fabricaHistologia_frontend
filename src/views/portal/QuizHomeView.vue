@@ -15,7 +15,6 @@ const defineLevel = async(item) => {
     await quizStore.getQuizBySystem('', item)
     quizStore.state.selectedLevel = item
     throwQuizes()
-    console.log('atualizou')
     router.push('/portal/quiz/random'); 
 }
 

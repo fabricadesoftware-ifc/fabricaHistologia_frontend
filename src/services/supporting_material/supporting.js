@@ -9,9 +9,21 @@ class SupportingMaterialService {
   async getMaterials(page = "") {
     try {
       const { data } = await api.get(`/supporting-material/?page=${page}`)
+      console.log(data)
       return data
     } catch (error) {
       console.log('error in getMaterials', error)
+      throw error
+    }
+  }
+
+  async getMaterialsBySearch(search) {
+    try {
+      const { data } = await api.get(`/supporting-material/?name=${search}`)
+      console.log(data)
+      return data
+    } catch (error) {
+      console.log('error in getMaterialsBySearch', error)
       throw error
     }
   }
@@ -32,6 +44,16 @@ class SupportingMaterialService {
       return data.results
     } catch (error) {
       console.log('error in getMaterialsBySystem', error)
+      throw error
+    }
+  }
+
+   async getAllMaterialsBySystem(systemId) {
+    try {
+      const { data } = await api.get(`/supporting-material/?system_id=${systemId}&page_size=0`)
+      return data
+    } catch (error) {
+      console.log('error in getAllMaterialsBySystem', error)
       throw error
     }
   }

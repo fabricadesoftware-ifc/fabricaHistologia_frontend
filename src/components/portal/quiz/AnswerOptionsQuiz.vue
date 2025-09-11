@@ -2,6 +2,7 @@
 import {computed, ref} from 'vue'
 import { useQuizStore } from '@/stores/blog/quiz';
 import { selectAnswer, filterAnswer, watchAnswered, showRight, setBackground } from '@/utils/quiz';
+const emits = defineEmits(['answerSelected'])
 const quizStore = useQuizStore()
 const props = defineProps({
   data_answer: {
@@ -18,14 +19,15 @@ const transform = (number) => {
 }
 
 const verifyAnswered = (answer) => {
-  const getsaved =  quizStore.savedAnswers.filter(s => s.question_id == answer.question)
+  const getsaved =  quizStore.savedAnswers.filter(s => s.question_id.question == answer.question.question)
   return getsaved.length == 0 ? false : true
+
 }
 
 </script>
 
-<template>
-        <div v-for="(item, index) in props.data_answer" :key="index" class="flex flex-nowrap w-[100%] h-auto items-center gap-4 rounded-full sm:rounded-2xl py-1 px-3 cursor-pointer" :class="filterAnswer(item, quizStore) == undefined ? '' : item.correct ? 'bg-green-400' : 'bg-red-400'" @click="!verifyAnswered(item) ? selectAnswer(item, quizStore) : '', answered = true" :style="setBackground(item, verifyAnswered(item), quizStore)">
+<template>    
+        <div v-for="(item, index) in props.data_answer" :key="index" class="flex flex-nowrap w-[100%] h-auto items-center gap-4 rounded-full sm:rounded-2xl py-1 px-3 cursor-pointer" :class="filterAnswer(item, quizStore) == undefined ? '' : item.correct ? 'bg-green-400' : 'bg-red-400'" @click="!verifyAnswered(item) ? selectAnswer(item, quizStore) : '', answered = true, emits('answerSelected', quizStore.savedAnswers.filter(s => s.question_id.question == item.question.question))" :style="setBackground(item, verifyAnswered(item), quizStore)">
 
           <div class="size-8 rounded-full bg-black/30 flex items-center justify-center text-white">
             {{ transform(index) }}

@@ -22,10 +22,42 @@ class PointService {
         }
     }
 
+        async getAllPoints() {
+        try {
+            const { data } = await api.get(`/points/?page_size=0`);
+            console.log( "Service: GetPost - return success")
+            return data;
+        } catch (error) {
+            console.log("Service: GetPost - return error", error);
+            throw error;
+        }
+    }
+
+    async getPointsBySearch(search) {
+        try {
+            const { data } = await api.get(`/points/?label_title=${search}`);
+            console.log( "Service: GetPost - return success")
+            return data;
+        } catch (error) {
+            console.log("Service: GetPost - return error", error);
+            throw error;
+        }
+    }
+
     async getPointsByPost(post_id) {
         try {
             const {data} = await api.get(`/points/?posts_id=${post_id}`);
             return data.results
+        } catch (error) {
+            console.log('Error in getPointsByPost', error);
+            throw error;
+        }
+    }
+
+        async getAllPointsByPost(post_id) {
+        try {
+            const {data} = await api.get(`/points/?posts_id=${post_id}&page_size=0`);
+            return data
         } catch (error) {
             console.log('Error in getPointsByPost', error);
             throw error;

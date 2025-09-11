@@ -52,10 +52,10 @@ export const useSupportingStore = defineStore('supporting', () => {
    * @async
    * @function getSpecies
    */
-  const getMaterials = async (page) => {
+  const getMaterials = async (page, search) => {
     state.loading = true
     try {
-      const response = await SupportingMaterialService.getMaterials(page)
+      const response = await SupportingMaterialService.getMaterials(page, search)
       state.materials = response.results
       state.count = response.count
       return response
@@ -94,11 +94,39 @@ export const useSupportingStore = defineStore('supporting', () => {
     }
   }
 
+  const getAllMaterialsBySystem = async (systemId) => {
+    state.loading = true
+    try {
+      const response = await SupportingMaterialService.getAllMaterialsBySystem(systemId) 
+      state.materialsBySystem = response
+      return response;
+    } catch (error) {
+      state.error = error
+      throw error
+    } finally {
+      state.loading = false
+      state.connection = true
+    }
+  }
+
   const getMaterialsById = async (id) => {
     state.loading = true
     try {
       const response = await SupportingMaterialService.getMaterialsById(id)
       state.selectedMaterial = response
+    } catch (error) {
+      state.error = error
+    } finally {
+      state.loading = false
+      state.connection = true
+    }
+  }
+
+  const getMaterialsBySearch = async (search) => {
+    state.loading = true
+    try {
+      const response = await SupportingMaterialService.getMaterialsBySearch(search)
+      state.materials = response.results
     } catch (error) {
       state.error = error
     } finally {
@@ -187,9 +215,12 @@ export const useSupportingStore = defineStore('supporting', () => {
     history,
     selectedMaterial,
     materialById,
+    count,
     getMaterialsBySystem,
+    getAllMaterialsBySystem,
     getMaterials,
     getMaterialsById,
+    getMaterialsBySearch,
     createMaterial,
     updateMaterial,
     deleteMaterial,

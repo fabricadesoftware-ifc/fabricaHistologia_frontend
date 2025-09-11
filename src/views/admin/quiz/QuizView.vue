@@ -11,7 +11,8 @@ import {
   InputSelectAdmin,
   AdminGlobalContainer,
   BtnDefault,
-  SucessModalAdmin
+  SucessModalAdmin,
+  LoadingSpinner,
 } from '@/components/index'
 
 const quizStore = useQuizStore()
@@ -22,7 +23,13 @@ const route = useRoute()
 const router = useRouter()
 const quizId = route.params.id
 
-const loading = ref(true)
+// Estado reativo
+const loading = ref(false)
+const showSuccessModal = ref(false)
+const showErrorModal = ref(false)
+const showDeleteConfirm = ref(false)
+const errorMessage = ref('')
+const successAction = ref('edit')
 
 // Modelo de quiz
 const quiz = reactive({
@@ -33,14 +40,14 @@ const quiz = reactive({
   autor_user: Number(authStore.userInfo?.id || 0)
 })
 
-// Opções de nível (exemplo)
+// Opções fixas para níveis
 const levelOptions = [
   { name: 'Fácil', id: 1 },
   { name: 'Médio', id: 2 },
   { name: 'Difícil', id: 3 }
 ]
 
-// Opções de sistemas (carregadas do store)
+// Opções para sistemas
 const systemOptions = computed(() =>
   systemStore.systems?.map(system => ({
     name: system.name,
@@ -48,33 +55,32 @@ const systemOptions = computed(() =>
   })) || []
 )
 
-const showSuccessModal = ref(false)
-const showErrorModal = ref(false)
-const showDeleteConfirm = ref(false)
-const errorMessage = ref('')
-
-const successAction = ref('edit')
+// Título dinâmico do modal de sucesso
 const successTitle = computed(() =>
   successAction.value === 'delete' ? 'Quiz Excluído' : 'Quiz Atualizado'
 )
 
 onMounted(async () => {
+  loading.value = true
   try {
-    loading.value = true
     await Promise.all([
       quizStore.getQuizById(quizId),
       quizStore.getAnswersByQuestion(quizId),
       systemStore.getAllSystems()
     ])
 
-    console.log(quizStore.answersByQuestion)
-
     Object.assign(quiz, quizStore.selectedQuiz)
     quiz.system = quizStore.selectedQuiz.system?.id || ''
     quiz.level = quizStore.selectedQuiz.level || ''
   } catch (err) {
-    console.error('Erro ao carregar quiz:', err)
-    errorMessage.value = 'Erro ao carregar os dados do quiz.'
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = 'Erro inesperado ao carregar os dados do quiz.'
+    }
     showErrorModal.value = true
   } finally {
     loading.value = false
@@ -82,6 +88,7 @@ onMounted(async () => {
 })
 
 const send = async () => {
+  loading.value = true
   try {
     await quizStore.updateQuiz(quiz, quizId)
     successAction.value = 'edit'
@@ -90,9 +97,17 @@ const send = async () => {
       router.push('/admin/quiz')
     }, 1000)
   } catch (err) {
-    console.error('Erro ao atualizar quiz:', err)
-    errorMessage.value = err?.message || 'Erro inesperado ao atualizar o quiz.'
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = 'Erro inesperado ao atualizar o quiz.'
+    }
     showErrorModal.value = true
+  } finally {
+    loading.value = false
   }
 }
 
@@ -101,6 +116,7 @@ const tryDelete = () => {
 }
 
 const confirmDelete = async () => {
+  loading.value = true
   try {
     await quizStore.deleteQuiz(quizId)
     successAction.value = 'delete'
@@ -110,10 +126,18 @@ const confirmDelete = async () => {
       router.push('/admin/quiz')
     }, 1000)
   } catch (err) {
-    console.error('Erro ao deletar quiz:', err)
-    errorMessage.value = err?.message || 'Erro inesperado ao deletar o quiz.'
+    if (err?.response?.data) {
+      const data = err.response.data
+      errorMessage.value = Object.values(data)
+        .map(v => Array.isArray(v) ? v.join(', ') : v)
+        .join('\n')
+    } else {
+      errorMessage.value = 'Erro inesperado ao deletar o quiz.'
+    }
     showDeleteConfirm.value = false
     showErrorModal.value = true
+  } finally {
+    loading.value = false
   }
 }
 
@@ -125,9 +149,7 @@ function closeErrorModal() {
 <template>
   <AdminGlobalContainer>
     <!-- Loading Overlay -->
-    <div v-if="loading" class="fixed inset-0 bg-white/70 flex items-center justify-center z-50">
-      <div class="animate-spin rounded-full h-16 w-16 border-4 border-[#29AC96] border-t-transparent"></div>
-    </div>
+    <LoadingSpinner v-if="loading" class="mt-20" />
 
     <div v-else class="w-[90%] mx-auto space-y-6">
       <!-- Botões Editar / Excluir -->
@@ -148,8 +170,8 @@ function closeErrorModal() {
         />
       </div>
 
-      <!-- Form -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+      <!-- Formulário -->
+      <div class="flex flex-col gap-10 w-full">
         <InputStringAdmin label="Título" :modelValue="quiz.title" @action="quiz.title = $event" />
         <InputStringAdmin label="Questão" :modelValue="quiz.question" @action="quiz.question = $event" />
 
@@ -167,22 +189,24 @@ function closeErrorModal() {
           @action="quiz.system = $event"
         />
       </div>
+
+      <!-- Lista de Respostas -->
       <div v-if="quizStore.answersByQuestion.length > 0">
         <h2 class="font-semibold text-lg mb-2 mt-4 text-[#267A7A]">Respostas da Pergunta</h2>
-        <ul >
+        <ul>
           <li
             v-for="(answer, index) in quizStore.answersByQuestion"
-            @click="router.push(`/admin/quiz/answer/${answer.id}`)"
             :key="index"
+            @click="router.push(`/admin/quiz/answer/${answer.id}`)"
             class="cursor-pointer mb-5 bg-[#F5F5F5] hover:bg-[#29AC96]/90 transition-colors duration-150 rounded-lg px-4 py-3 shadow-sm flex items-center gap-2 group"
           >
             <span class="mdi mdi-map-marker text-[#267A7A] group-hover:text-white text-xl"></span>
-            <span class="font-medium text-[#267A7A] group-hover:text-white">{{
-              answer.option
-            }}</span>
+            <span class="font-medium text-[#267A7A] group-hover:text-white">
+              {{ answer.option }}
+            </span>
           </li>
         </ul>
-        </div>
+      </div>
     </div>
   </AdminGlobalContainer>
 
@@ -194,6 +218,7 @@ function closeErrorModal() {
     message="Alterações salvas com sucesso."
     :cancel-label="null"
     :confirm-label="null"
+    :duration="1"
   />
 
   <!-- Modal Erro -->

@@ -22,6 +22,17 @@ class PostService {
         }
     }
 
+    async getPostsBySearch(search) {
+        try {
+            const { data } = await api.get(`/posts/?name=${search}`);
+            console.log(data)
+            return data.results;
+        } catch (error) {
+            console.log("Service: GetPost - return error", error);
+            throw error;
+        }
+    }
+
      async getAllPosts() {
         try {
             const { data } = await api.get(`/posts/?page_size=0`);
@@ -54,10 +65,31 @@ class PostService {
         }
     }
 
+        async getAllPostsByOrganId(organId) {
+        try {
+            const {data} = await api.get(`/posts/?organ_id=${organId}&page_size=0`)
+            return data;
+        } catch (error) {
+            console.log("Service: GetPostByOrganId - return error", error)
+            throw error
+        }
+    }
+
     async getPostsByOrganByTypeAndSpecie(organ_id, type_post, specie_id) {
         try {
             const {data} = await api.get(`/posts/?organ_id=${organ_id}&species_id=${specie_id}&type_post=${type_post}`);
         return data.results
+        } catch (error) {
+            console.log('Error in getPostsbyOrgan', error);
+            throw error;
+        }
+    }
+
+        async getAllPostsByOrganByTypeAndSpecie(organ_id, type_post, specie_id) {
+        try {
+            const {data} = await api.get(`/posts/?organ_id=${organ_id}&species_id=${specie_id}&type_post=${type_post}&page_size=0`);
+            console.log(data)
+        return data;
         } catch (error) {
             console.log('Error in getPostsbyOrgan', error);
             throw error;

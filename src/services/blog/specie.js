@@ -20,6 +20,16 @@ class SpecieService {
         }
     }
 
+    async getSpeciesBySearch(search) {
+        try {
+            const { data } = await api.get(`/species/?name=${search}`);
+            return data;
+        } catch (error) {
+            console.log("error in getSpeciesBySearch", error);
+            throw error;
+        }
+    }
+
     async getAllSpecies() {
         try {
             const { data } = await api.get(`/species/?page_size=0`);
