@@ -11,41 +11,52 @@ import { useQuizStore } from '@/stores/index'
 
 const quizStore = useQuizStore()
 
-// estado local
-const currentPage = ref(1)
-const totalPages = ref(1)
+// dificuldade selecionada
 const selectedDifficulty = ref('Fácil')
 
-// mapeamento string -> valor esperado pelo back
+// mapeamento de dificuldade -> backend
 const difficultyMap = {
   'Fácil': 1,
   'Médio': 2,
   'Difícil': 3
 }
 
-// busca ranking via store (agora usando getScores)
+// busca ranking via store
 async function fetchRanking() {
   try {
     await quizStore.getScores({
       level: difficultyMap[selectedDifficulty.value],
-      ordering: 'answer_time', // exemplo de ordenação
+      ordering: 'answer_time'
     })
-    totalPages.value = Math.ceil((quizStore.scores.length || 0) / 10) || 1
   } catch (error) {
     console.error("Erro ao buscar ranking:", error)
   }
 }
 
-// troca de página
-function changePage(page) {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page
-  }
-}
-
-// reatividade
 onMounted(fetchRanking)
 watch([selectedDifficulty], fetchRanking)
+
+// 🔹 Dados de ranking de exemplo (mock)
+const ranking = [
+  { pos: 1, name: 'Henrique', time: 42, correct: 10 },
+  { pos: 2, name: 'Lucas', time: 48, correct: 9 },
+  { pos: 3, name: 'Marina', time: 51, correct: 8 },
+  { pos: 4, name: 'Beatriz', time: 55, correct: 7 },
+  { pos: 5, name: 'Rafael', time: 60, correct: 7 },
+  { pos: 6, name: 'Gabriel', time: 63, correct: 6 },
+  { pos: 7, name: 'João', time: 70, correct: 6 },
+  { pos: 8, name: 'Lívia', time: 74, correct: 5 },
+  { pos: 9, name: 'Eduarda', time: 79, correct: 4 },
+  { pos: 10, name: 'Pedro', time: 85, correct: 3 }
+]
+
+const userPosition = ref({
+  pos: 27,
+  name: 'Davi',
+  time: 102,
+  correct: 6
+})
+
 </script>
 
 <template>
@@ -55,16 +66,8 @@ watch([selectedDifficulty], fetchRanking)
     <!-- Botões de filtro -->
     <ButtonsRanking @difficulty-change="(val) => selectedDifficulty = val" />
 
-    <!-- Tabela com ranking -->
-    <TableRanking :data="quizStore.scores.slice((currentPage-1)*10, currentPage*10)" />
-
-    <!-- Paginação -->
-    <TablePagination
-      class="custom-pagination mt-6"
-      :current-page="currentPage"
-      :total-pages="totalPages"
-      @page-change="changePage"
-    />
+    <!-- Tabela de ranking -->
+    <TableRanking :data="ranking" :userPosition="userPosition" />
 
     <Footer />
   </div>
