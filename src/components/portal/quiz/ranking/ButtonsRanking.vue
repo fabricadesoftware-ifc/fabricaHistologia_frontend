@@ -1,34 +1,57 @@
 <script setup>
 import { ButtonFilterRanking } from '@/components/index'
-import { ref, watch } from 'vue'
+import { computed } from 'vue'
 
-const difficulties = ['Fácil', 'Médio', 'Difícil']
-const selectedDifficulty = ref('Fácil')
-
-// função que troca dificuldade
-function changeDifficulty(difficulty) {
-  selectedDifficulty.value = difficulty
-}
-
-// emitir para o pai
-const emit = defineEmits(['difficulty-change'])
-watch(selectedDifficulty, (newVal) => {
-  emit('difficulty-change', newVal)
+/**
+ * Props:
+ * - mode: 'geral' | 'especifico'
+ * - modelValue: String -> para v-model do dropdown
+ */
+const props = defineProps({
+  mode: {
+    type: String,
+    default: 'geral',
+  },
+  modelValue: {
+    type: String,
+    default: 'Fácil'
+  }
 })
+
+// Emits
+const emit = defineEmits(['update:modelValue', 'mode-change'])
+
+// Difficulties
+const difficulties = ['Fácil', 'Médio', 'Difícil']
+
+// Computed para exibir o rótulo correto
+const modeLabel = computed(() => props.mode === 'geral' ? 'Geral' : 'Específico')
+
+// Atualiza o valor do v-model
+function updateDifficulty(val) {
+  emit('update:modelValue', val)
+}
 </script>
 
 <template>
-  <div class="flex justify-end p-2 gap-2 w-full">
-    <!-- Label Geral -->
-    <span class="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
-      Geral
+  <div class="flex justify-end p-2 gap-2 w-full items-center">
+    <!-- Label do modo -->
+    <span
+      class="text-white px-4 py-1 rounded-full text-sm font-semibold"
+      :class="{
+        'bg-blue-500': props.mode === 'geral',
+        'bg-purple-600': props.mode === 'especifico',
+      }"
+    >
+      {{ modeLabel }}
     </span>
 
-    <!-- Botão com Dropdown -->
+    <!-- Dropdown só aparece no modo 'geral' -->
     <ButtonFilterRanking
+      v-if="props.mode === 'geral'"
       :options="difficulties"
-      :modelValue="selectedDifficulty"
-      @update:modelValue="changeDifficulty"
+      :modelValue="props.modelValue"
+      @update:modelValue="updateDifficulty"
     />
   </div>
 </template>
