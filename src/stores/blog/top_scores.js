@@ -10,15 +10,16 @@ export const useScoreStore = defineStore("score", () => {
 
   /**
    * Busca o ranking e posição do usuário
-   * @param {number} level - 1=Fácil, 2=Médio, 3=Difícil
+   * @param {number|null} level - 1=Fácil, 2=Médio, 3=Difícil (usado apenas se type=1)
    * @param {number} type - 1=Geral, 2=Sistema
    */
-  async function fetchTopScores(level, type = 1) {
+  async function fetchTopScores(level = null, type = 1) {
     loading.value = true
     try {
+      // 🔹 Chamada já adapta conforme o tipo
       const data = await getTopScores.getTopScores(level, type)
 
-      // 🔹 Padroniza ranking principal
+      // 🔹 Ranking principal
       topScores.value = (data?.results || []).map((item, index) => ({
         pos: item.pos || index + 1,
         email: item.email || `Usuário ${index + 1}`,
@@ -27,7 +28,7 @@ export const useScoreStore = defineStore("score", () => {
         score: item.score ?? 0,
       }))
 
-      // 🔹 Monta o score do usuário logado (mesmo fora do top 10)
+      // 🔹 Posição e dados do usuário autenticado
       if (data?.user_score_data) {
         userScore.value = {
           pos: data.user_score_data.pos,
@@ -49,7 +50,7 @@ export const useScoreStore = defineStore("score", () => {
       }
 
       if (!topScores.value.length) {
-        console.log("Nenhum resultado encontrado para este nível.")
+        console.log("Nenhum resultado encontrado para este tipo/nível.")
       }
     } catch (error) {
       console.error("[ScoreStore] Erro ao buscar ranking:", error)
