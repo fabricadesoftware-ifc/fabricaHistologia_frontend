@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, watch } from "vue"
-import { useScoreStore } from "@/stores/blog/top_scores"
+import { useScoreStore } from "@/stores/index"
 import { ButtonsRanking, TableRanking, TitleRanking, Footer } from "@/components/index"
 
 const scoreStore = useScoreStore()

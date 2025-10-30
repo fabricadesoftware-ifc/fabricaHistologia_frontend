@@ -18,11 +18,36 @@ export const useScoreStore = defineStore("score", () => {
     try {
       const data = await getTopScores.getTopScores(level, type)
 
-      // padroniza nomes para consistência
-      topScores.value = data?.top_scores || data?.top10 || []
-      userScore.value = data?.user_score || data?.user_rank || null
+      // 🔹 Padroniza ranking principal
+      topScores.value = (data?.results || []).map((item, index) => ({
+        pos: item.pos || index + 1,
+        email: item.email || `Usuário ${index + 1}`,
+        answer_time: item.answer_time ?? 0,
+        correct: item.correct ?? 0,
+        score: item.score ?? 0,
+      }))
 
-      // opcional: feedback de sucesso
+      // 🔹 Monta o score do usuário logado (mesmo fora do top 10)
+      if (data?.user_score_data) {
+        userScore.value = {
+          pos: data.user_score_data.pos,
+          email: data.user_score_data.email || "Você",
+          answer_time: data.user_score_data.answer_time ?? 0,
+          correct: data.user_score_data.correct ?? 0,
+          score: data.user_score_data.score ?? 0,
+        }
+      } else if (data?.user_score) {
+        userScore.value = {
+          pos: data.user_score,
+          email: "Você",
+          answer_time: 0,
+          correct: 0,
+          score: 0,
+        }
+      } else {
+        userScore.value = null
+      }
+
       if (!topScores.value.length) {
         console.log("Nenhum resultado encontrado para este nível.")
       }

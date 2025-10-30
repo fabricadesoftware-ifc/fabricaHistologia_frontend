@@ -56,9 +56,10 @@ const getColor = (pos) => {
             </template>
             <span v-else>#{{ player.pos }}</span>
           </td>
-          <td class="p-4 font-medium text-start">{{ player.name }}</td>
-          <td class="p-4 font-semibold text-center" :class="getColor(player.pos)">{{ player.time }}</td>
-          <td class="p-4 font-semibold text-center" :class="getColor(player.pos)">{{ player.correct }}</td>
+          <td class="p-4 font-medium text-start">{{ player.email }}</td>
+          <td class="p-4 font-semibold text-center" :class="getColor(player.pos)">{{ player.answer_time }}s
+          </td>
+          <td class="p-4 font-semibold text-center" :class="getColor(player.pos)">{{ player.score }}/30</td>
         </tr>
       </tbody>
 
@@ -76,12 +77,12 @@ const getColor = (pos) => {
             </template>
             <span v-else>#{{ userPosition.pos }}</span>
           </td>
-          <td class="p-4 font-medium text-start">{{ userPosition.name }}</td>
+          <td class="p-4 font-medium text-start">{{ userPosition.email }}</td>
           <td class="p-4 font-semibold text-center" :class="getColor(userPosition.pos)">
-            {{ userPosition.time }}
+            {{ userPosition.answer_time }}s
           </td>
           <td class="p-4 font-semibold text-center" :class="getColor(userPosition.pos)">
-            {{ userPosition.correct }}
+            {{ userPosition.score }}/30
           </td>
         </tr>
       </tfoot>
