@@ -19,11 +19,6 @@ const router = createRouter({
       component: () => import('@/views/auth/LoginView.vue')
     },
     {
-      path: '/ranking',
-      name: '> Ranking de Usuários',
-      component: () => import('@/views/portal/RakingQuiz.vue')
-    },
-    {
       path: '/admin',
       name: 'admin',
       meta: { verifiedUser: true },
@@ -285,7 +280,27 @@ const router = createRouter({
           path: 'quiz/random',
           name: 'quiz-random',
           component: () => import('@/views/portal/QuizRandomView.vue')
-        }
+        },
+        {
+          path: 'quiz/ranking-geral',
+          name: 'ranking-geral',
+          component: () => import('@/views/portal/RakingQuiz.vue'),
+          props: { 
+            label: "geral" ,
+            title: "Ranking de Conhecimentos Gerais",
+          }
+        },
+       {
+  path: 'quiz/ranking/:id',
+  name: 'ranking-especifico',
+  component: () => import('@/views/portal/RakingQuiz.vue'),
+  props: route => ({
+    label: "especifico",
+    title: "Ranking Específico do Sistema",
+    id: Number(route.params.id),
+  }),
+}
+
       ]
     },
   ]

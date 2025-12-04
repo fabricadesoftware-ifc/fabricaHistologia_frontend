@@ -10,16 +10,17 @@ export const useScoreStore = defineStore("score", () => {
 
   /**
    * Busca o ranking e posição do usuário
-   * @param {number|null} level - 1=Fácil, 2=Médio, 3=Difícil (usado apenas se type=1)
+   * @param {number|null} level - Usado apenas se type=1
    * @param {number} type - 1=Geral, 2=Sistema
+   * @param {number|null} systemId - Apenas para type=2
    */
-  async function fetchTopScores(level = null, type = 1) {
+  async function fetchTopScores(level = null, type = 1, systemId = null) {
     loading.value = true
     try {
-      // 🔹 Chamada já adapta conforme o tipo
-      const data = await getTopScores.getTopScores(level, type)
+      // 🔥 Envia systemId para o service corretamente
+      const data = await getTopScores.getTopScores(level, type, systemId)
 
-      // 🔹 Ranking principal
+      // Lista de ranking
       topScores.value = (data?.results || []).map((item, index) => ({
         pos: item.pos || index + 1,
         email: item.email || `Usuário ${index + 1}`,
@@ -28,7 +29,7 @@ export const useScoreStore = defineStore("score", () => {
         score: item.score ?? 0,
       }))
 
-      // 🔹 Posição e dados do usuário autenticado
+      // Dados do usuário autenticado
       if (data?.user_score_data) {
         userScore.value = {
           pos: data.user_score_data.pos,
@@ -37,23 +38,15 @@ export const useScoreStore = defineStore("score", () => {
           correct: data.user_score_data.correct ?? 0,
           score: data.user_score_data.score ?? 0,
         }
-      } else if (data?.user_score) {
-        userScore.value = {
-          pos: data.user_score,
-          email: "Você",
-          answer_time: 0,
-          correct: 0,
-          score: 0,
-        }
       } else {
         userScore.value = null
       }
 
       if (!topScores.value.length) {
-        console.log("Nenhum resultado encontrado para este tipo/nível.")
+        console.log("Nenhum resultado encontrado para este tipo/nível/sistema.")
       }
-    } catch (error) {
-      console.error("[ScoreStore] Erro ao buscar ranking:", error)
+    } catch (err) {
+      console.error("[ScoreStore] Erro ao buscar ranking:", err)
     } finally {
       loading.value = false
     }

@@ -9,6 +9,11 @@ const props = defineProps({
     type: String,
     default: "geral", // ou "especifico"
   },
+  title: {
+    type: String,
+    default: "Ranking de Conhecimentos Gerais",
+  },
+  id: { type: Number, default: null } 
 })
 
 // Store
@@ -24,8 +29,9 @@ const difficultyMap = { "Fácil": 1, "Médio": 2, "Difícil": 3 }
 // Busca dados do ranking
 const fetchRanking = async () => {
   const level = type.value === 1 ? difficultyMap[selectedDifficulty.value] : null
-  await scoreStore.fetchTopScores(level, type.value)
+  await scoreStore.fetchTopScores(level, type.value, props.id)
 }
+
 
 // Observa mudanças de nível (somente geral)
 watch(selectedDifficulty, fetchRanking)
@@ -38,11 +44,7 @@ onMounted(fetchRanking)
   <div class="w-[50%] flex flex-col gap-4 items-center justify-center h-full mx-auto">
     <!-- 🔹 Título dinâmico -->
     <TitleRanking
-      :title="
-        props.label === 'geral'
-          ? 'Ranking de Conhecimentos Gerais'
-          : 'Ranking Específico do Sistema'
-      "
+      :title="title"
     />
 
     <!-- 🔹 Botões de dificuldade (apenas no modo geral) -->
