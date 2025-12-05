@@ -2,11 +2,35 @@
 import { ref } from "vue"
 import { defineStore } from "pinia"
 import getTopScores from "@/services/top_scores"
+import systemsService from "@/services/blog/system"
 
 export const useScoreStore = defineStore("score", () => {
   const topScores = ref([])
   const userScore = ref(null)
   const loading = ref(false)
+
+  // 🔥 nova parte adicionada (lista de sistemas)
+  const systems = ref([])
+  const systemsLoading = ref(false)
+
+  /**
+   * Busca os sistemas para o dropdown
+   */
+  async function fetchSystems() {
+    systemsLoading.value = true
+    try {
+      const data = await systemsService.getSystems()
+
+      systems.value = (data?.results || []).map(item => ({
+        id: item.id,
+        name: item.name
+      }))
+    } catch (err) {
+      console.error("[ScoreStore] Erro ao buscar sistemas:", err)
+    } finally {
+      systemsLoading.value = false
+    }
+  }
 
   /**
    * Busca o ranking e posição do usuário
@@ -17,7 +41,6 @@ export const useScoreStore = defineStore("score", () => {
   async function fetchTopScores(level = null, type = 1, systemId = null) {
     loading.value = true
     try {
-      // 🔥 Envia systemId para o service corretamente
       const data = await getTopScores.getTopScores(level, type, systemId)
 
       // Lista de ranking
@@ -30,21 +53,16 @@ export const useScoreStore = defineStore("score", () => {
       }))
 
       // Dados do usuário autenticado
-      if (data?.user_score_data) {
-        userScore.value = {
-          pos: data.user_score_data.pos,
-          email: data.user_score_data.email || "Você",
-          answer_time: data.user_score_data.answer_time ?? 0,
-          correct: data.user_score_data.correct ?? 0,
-          score: data.user_score_data.score ?? 0,
-        }
-      } else {
-        userScore.value = null
-      }
+      userScore.value = data?.user_score_data
+        ? {
+            pos: data.user_score_data.pos,
+            email: data.user_score_data.email || "Você",
+            answer_time: data.user_score_data.answer_time ?? 0,
+            correct: data.user_score_data.correct ?? 0,
+            score: data.user_score_data.score ?? 0,
+          }
+        : null
 
-      if (!topScores.value.length) {
-        console.log("Nenhum resultado encontrado para este tipo/nível/sistema.")
-      }
     } catch (err) {
       console.error("[ScoreStore] Erro ao buscar ranking:", err)
     } finally {
@@ -53,9 +71,15 @@ export const useScoreStore = defineStore("score", () => {
   }
 
   return {
+    // ranking
     topScores,
     userScore,
     loading,
     fetchTopScores,
+
+    // sistemas
+    systems,
+    systemsLoading,
+    fetchSystems,
   }
 })
