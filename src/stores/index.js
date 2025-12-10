@@ -12,6 +12,7 @@ import { useAuthStore } from "./auth/auth.js";
 import { useNavigationStore } from "./blog/navigation.js";
 import { useQuizStore } from "./blog/quiz.js";
 import { useUploadStore } from "./uploader/uploader.js";
+import { useScoreStore } from "./blog/top_scores.js";
 export {
     useSpecieStore,
     useSlideStore,
@@ -24,5 +25,6 @@ export {
     useAuthStore,
     useNavigationStore,
     useQuizStore,
-    useUploadStore
+    useUploadStore,
+    useScoreStore,
 }
