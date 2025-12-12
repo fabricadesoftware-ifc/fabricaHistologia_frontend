@@ -50,6 +50,7 @@ export const useScoreStore = defineStore("score", () => {
         answer_time: item.answer_time ?? 0,
         correct: item.correct ?? 0,
         score: item.score ?? 0,
+        total_questions: item.total_questions ?? 0,
       }))
 
       // Dados do usuário autenticado
@@ -60,6 +61,7 @@ export const useScoreStore = defineStore("score", () => {
             answer_time: data.user_score_data.answer_time ?? 0,
             correct: data.user_score_data.correct ?? 0,
             score: data.user_score_data.score ?? 0,
+            total_questions: data.user_score_data.total_questions ?? 0,
           }
         : null
 
