@@ -17,6 +17,8 @@ const currentQuestion = ref(0)
 const actual = ref(null)
 const keepCompAlive = ref(true)
 
+const startTime = Date.now()
+
 // 🔵 Loading global e 🟢 Loading da questão
 const loadingPage = ref(false)
 const loadingQuestion = ref(false)
@@ -96,17 +98,42 @@ const saveAnswer = async (data) => {
   const step = (interval / totalTime) * 100
 
   return new Promise((resolve) => {
-    const timer = setInterval(() => {
+    const timer = setInterval(async () => {
       redirect.value += step
       if (redirect.value >= 100) {
         clearInterval(timer)
         redirect.value = 0
+
+        // --- TRECHO QUE VOCÊ PEDIU ---
+        if (answeredAll.value) {
+          const correct = quizStore.countSavedAnswers
+          const total = quizStore.quizBySystem.length
+          const level = quizStore.selectedLevel
+          const system_id = null   // QuizView NÃO é por sistema
+          const type = 1           // tipo 1 = quiz geral (presumo)
+
+          const totalMs = Date.now() - startTime
+          const timeFormatted = Math.floor(totalMs / 1000)
+
+    await quizStore.createScore({
+  level,
+  system: system_id,
+  type,
+  answer_time: timeFormatted,
+  score: correct,
+  total_questions: total,
+})
+
+        }
+        // --- FIM DO TRECHO ---
+
         nextSection()
         resolve()
       }
     }, interval)
   })
 }
+
 
 
 watch(
