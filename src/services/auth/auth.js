@@ -1,19 +1,31 @@
-import axios from 'axios';
-const authToken = localStorage.getItem('psg_auth_token');
-const apiUrl = import.meta.env.VITE_API_URL;
+import api from '@/plugins/api'
 
 class AuthService {
-  async getUser(token) {
-    const response = await axios.get(apiUrl + '/users/me/', {headers: {'authorization': `Bearer ${token}`}});
-    return response.data; 
+  async login(email, password) {
+    const { data } = await api.post('/token/', { email, password })
+    return data
   }
 
-   async getUsers() {
-    const response = await axios.get(apiUrl + '/users/', {headers: {'authorization': `Bearer ${authToken}`}});
-    return response.results; 
+  async register(email, password) {
+    const { data } = await api.post('/users/register/', { email, password })
+    return data
+  }
+
+  async refreshToken(refresh) {
+    const { data } = await api.post('/token/refresh/', { refresh })
+    return data
+  }
+
+  async getUser() {
+    const { data } = await api.get('/users/me/')
+    return data
+  }
+
+  async getUsers() {
+    const { data } = await api.get('/users/')
+    return data.results
   }
 }
-
 
 export default new AuthService()
 

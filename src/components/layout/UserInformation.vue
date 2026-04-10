@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore, useCollaboratorsStore } from '@/stores';
 const authStore = useAuthStore()
@@ -15,10 +15,7 @@ const props = defineProps({
         default: 'right-0 md2:mr-0 sm:mr-[-20px]'
     }
 })
-const userName = ref(null)
-onMounted(()=>{
-    userName.value = localStorage.getItem('psg_last_login')
-})
+const userName = computed(() => authStore.userInfo?.email || localStorage.getItem('last_login_email') || '')
 
 const reduceEmail = (email) => {
     if (email){

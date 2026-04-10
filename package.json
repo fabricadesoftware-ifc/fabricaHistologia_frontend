@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-   "engines": {
-  "node": "20.x",
-  "npm": "10.x"
-},
+  "engines": {
+    "node": "20.x",
+    "npm": "10.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -16,9 +16,6 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
-    "@passageidentity/passage-auth": "^0.1.0-beta.28",
-    "@passageidentity/passage-elements": "^1.21.6",
-    "@passageidentity/passage-js": "^4.1.2",
     "@vueuse/core": "^11.1.0",
     "axios": "^1.7.2",
     "pinia": "^2.1.7",
@@ -42,9 +39,7 @@
     "vite-plugin-vue-devtools": "^7.3.1"
   },
   "overrides": {
-  "@types/node": "24.3.1",
-  "undici-types": "7.10.0"
-}
-
-  
+    "@types/node": "24.3.1",
+    "undici-types": "7.10.0"
+  }
 }

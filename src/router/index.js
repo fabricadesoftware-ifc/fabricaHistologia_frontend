@@ -19,6 +19,11 @@ const router = createRouter({
       component: () => import('@/views/auth/LoginView.vue')
     },
     {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/auth/RegisterView.vue')
+    },
+    {
       path: '/admin',
       name: 'admin',
       meta: { verifiedUser: true },
@@ -308,10 +313,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const verified = sessionStorage.getItem('verified_user') === 'true'
+  const verifiedFromStorage = localStorage.getItem('verified_user') === 'true'
 
   const requiresVerify = to.matched.some(record => record.meta.verifiedUser)
 
-  if (requiresVerify && !verified) {
+  if (requiresVerify && !verified && !verifiedFromStorage) {
     next({ name: 'login' })
   } else {
     next()
