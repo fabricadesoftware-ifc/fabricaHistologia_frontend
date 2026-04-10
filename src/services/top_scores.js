@@ -2,7 +2,7 @@ import api from "@/plugins/api"
 
 async function getTopScores(level, type, systemId = null) {
   try {
-    const token = localStorage.getItem("psg_auth_token")
+    const token = localStorage.getItem("access_token")
 
     // 🔥 converte para número sempre
     const t = Number(type)
