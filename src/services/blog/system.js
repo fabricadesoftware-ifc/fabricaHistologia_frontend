@@ -1,5 +1,5 @@
 import api from "@/plugins/api";
-const authToken = localStorage.getItem('psg_auth_token'); 
+const authToken = localStorage.getItem('access_token'); 
 
 /**
  * Service class for handling systems related operations.

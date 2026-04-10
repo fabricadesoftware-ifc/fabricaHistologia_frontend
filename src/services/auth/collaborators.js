@@ -1,7 +1,5 @@
 import api from '../../plugins/api'
 
-const token = localStorage.getItem('psg_auth_token')
-
 class CollaboratorsService{
     /**
      * Retrieves all Collaborators personal data.
@@ -11,7 +9,7 @@ class CollaboratorsService{
 
     async getCollaborators() {
         try {
-            const { data } = await api.get('/personal', {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.get('/personal')
             return data.results
         } catch (error) {
             console.log('error in getCollaborators', error)
@@ -21,7 +19,7 @@ class CollaboratorsService{
 
     async getCollaboratorsBySearch(search) {
         try {
-            const { data } = await api.get(`/personal/?user=${search}`, {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.get(`/personal/?user=${search}`)
             return data.results
         } catch (error) {
             console.log('error in getCollaboratorsBySearch', error)
@@ -31,7 +29,7 @@ class CollaboratorsService{
 
     async getUsers() {
         try {
-            const { data } = await api.get('/users', {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.get('/users')
             return data.results
         } catch (error) {
             console.log('error in getUsers', error)
@@ -41,7 +39,7 @@ class CollaboratorsService{
 
         async getUsersBySearch(search) {
         try {
-            const { data } = await api.get(`/users/?email=${search}`, {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.get(`/users/?email=${search}`)
             return data.results
         } catch (error) {
             console.log('error in getUsersBySearch', error)
@@ -51,7 +49,7 @@ class CollaboratorsService{
 
       async getAddress() {
         try {
-            const { data } = await api.get('/address', {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.get('/address')
             return data.results
         } catch (error) {
             console.log('error in getAddress', error)
@@ -61,7 +59,7 @@ class CollaboratorsService{
 
       async getAddressBySearch(search) {
         try {
-            const { data } = await api.get(`/address/?city=${search}`, {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.get(`/address/?city=${search}`)
             return data.results
         } catch (error) {
             console.log('error in getAddressBySearch', error)
@@ -71,7 +69,7 @@ class CollaboratorsService{
 
      async getAddressById(id) {
         try {
-            const { data } = await api.get(`/address/${id}`, {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.get(`/address/${id}`)
             return data
         } catch (error) {
             console.log('error in getAddressById', error)
@@ -81,7 +79,7 @@ class CollaboratorsService{
 
     async getCollaboratorsByUser(UserId) {
         try {
-            const { data } = await api.get(`/personal/?user_id=${UserId}`, {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.get(`/personal/?user_id=${UserId}`)
             return data.results
         } catch (error) {
             console.log('error in getCollaborators', error)
@@ -91,7 +89,7 @@ class CollaboratorsService{
 
     async PostCollaborators(newData) {
         try {
-            const { data } = await api.post('/personal/', newData, {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.post('/personal/', newData)
             return data.results
         } catch (error) {
             console.log('error in getCollaborators', error)
@@ -101,7 +99,7 @@ class CollaboratorsService{
 
      async PostAddress(newData) {
         try {
-            const { data } = await api.post('/address/', newData, {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.post('/address/', newData)
             console.log(data)
             return data
         } catch (error) {
@@ -112,7 +110,7 @@ class CollaboratorsService{
 
     async updateCollaborators(personalData) {
         try {
-            const { data } = await api.put(`/personal/${personalData.id}`, personalData, {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.put(`/personal/${personalData.id}`, personalData)
             return data.results
         } catch (error) {
             console.log('error in getCollaborators', error)
@@ -122,7 +120,7 @@ class CollaboratorsService{
 
     async updateUsers(users) {
         try {
-            const { data } = await api.put(`/users/${users.id}`, users, {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.put(`/users/${users.id}`, users)
             return data.results
         } catch (error) {
             console.log('error in updateUsers', error)
@@ -142,7 +140,7 @@ class CollaboratorsService{
 
     async deleteAddress(id) {
         try {
-            const { data } = await api.delete(`/address/${id}/`, {headers: {'authorization': `Bearer ${token}`}})
+            const { data } = await api.delete(`/address/${id}/`)
             return data
         } catch (error) {
             console.log('error in getAddress', error)

@@ -26,6 +26,8 @@ const currentQuestion = ref(0)
 const actual = ref(null)
 const keepCompAlive = ref(true)
 
+const startTime = Date.now()
+
 const loadingPage = ref(false) // 🔵 Loading global
 const loadingQuestion = ref(false) // 🟢 Loading do QuizQuestion
 const redirect = ref(0)
@@ -98,18 +100,44 @@ const saveAnswer = async (data) => {
   const totalTime = 2000 // 2 segundos
   const step = (interval / totalTime) * 100
 
-  return new Promise((resolve) => {
-    const timer = setInterval(() => {
+  return new Promise(async (resolve) => {
+    const timer = setInterval(async () => {
       redirect.value += step
+
       if (redirect.value >= 100) {
         clearInterval(timer)
         redirect.value = 0
+
         nextSection()
+
+        // 🟢 AQUI ENTRA A POHA QUE TU MANDOU
+        if (answeredAll.value) {
+          const correct = quizStore.countSavedAnswers
+          const total = quizStore.quizBySystem.length
+          const level = quizStore.selectedLevel
+          const system_id = quizStore.quizBySystem[0].system.id
+          const type = 2 // quiz por sistema
+
+          const totalMs = Date.now() - startTime
+          const timeFormatted = Math.floor(totalMs / 1000)
+
+              await quizStore.createScore({
+  level,
+  system: system_id,
+  type,
+  answer_time: timeFormatted,
+  score: correct,
+  total_questions: total,
+})
+        }
+        // 🔵 FIM DO TRECHO QUE VOCÊ PEDIU
+
         resolve()
       }
     }, interval)
   })
 }
+
 
 watch(
   () => quizStore.quizBySystem,

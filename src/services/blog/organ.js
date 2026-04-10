@@ -1,5 +1,5 @@
 import api from '../../plugins/api'
-const token = localStorage.getItem('psg_auth_token')
+const token = localStorage.getItem('access_token')
 
 /**
  * Service class for handling organs related operations.

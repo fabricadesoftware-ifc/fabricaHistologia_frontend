@@ -1,88 +1,162 @@
-import { computed, reactive, ref } from 'vue';
-import { defineStore } from 'pinia';
-import AuthService from '../../services/auth/auth';
-import router from '@/router';
-import { useStorage } from '@vueuse/core';
+import { computed } from 'vue'
+import { defineStore } from 'pinia'
+import AuthService from '../../services/auth/auth'
+import router from '@/router'
+import { useStorage } from '@vueuse/core'
 
 
 
 export const useAuthStore = defineStore('auth', () => {
-  const active = useStorage('activated', {
+  const active = useStorage('auth_state', {
     active: false,
     user: {},
     users: [],
+    accessToken: '',
+    refreshToken: '',
   })
 
-  const users = computed(()=> active.value.users)
-  
-  
-  const verifyUser = () => {
-    const authToken = localStorage.getItem('psg_auth_token');
-    if (active.value.user.is_verified) {
-      sessionStorage.setItem('verified_user', true)
-    } else {
-      sessionStorage.setItem('verified_user', false)
+  const users = computed(() => active.value.users)
+  const email = computed(() => (active.value.user ? active.value.user.email : ''))
+  const activeUser = computed(() => active.value.active)
+  const userInfo = computed(() => active.value.user)
+
+  const syncSessionFlags = () => {
+    const verified = !!active.value.user?.is_verified
+    sessionStorage.setItem('verified_user', String(verified))
+    sessionStorage.setItem('active_user', String(!!active.value.active))
+    localStorage.setItem('verified_user', String(verified))
+  }
+
+  const setTokens = (access, refresh = '') => {
+    if (access) {
+      localStorage.setItem('access_token', access)
+      active.value.accessToken = access
     }
-    if (authToken) {
-      active.value.active = true
-      sessionStorage.setItem('active_user', true)
-      return true
-    } else {
+
+    if (refresh) {
+      localStorage.setItem('refresh_token', refresh)
+      active.value.refreshToken = refresh
+    }
+  }
+
+  const clearTokens = () => {
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    localStorage.removeItem('verified_user')
+    localStorage.removeItem('last_login_email')
+    active.value.accessToken = ''
+    active.value.refreshToken = ''
+  }
+
+  const fetchCurrentUser = async () => {
+    const userData = await AuthService.getUser()
+    active.value.user = userData || {}
+    active.value.active = !!userData
+    syncSessionFlags()
+    return userData
+  }
+
+  const initializeAuth = async () => {
+    const accessToken = localStorage.getItem('access_token')
+    const refreshToken = localStorage.getItem('refresh_token')
+
+    if (!accessToken) {
       active.value.active = false
-      sessionStorage.setItem('active_user', false)
+      active.value.user = {}
+      syncSessionFlags()
+      return false
+    }
+
+    active.value.accessToken = accessToken
+    active.value.refreshToken = refreshToken || ''
+
+    try {
+      await fetchCurrentUser()
+      return true
+    } catch (error) {
+      clearTokens()
+      active.value.active = false
+      active.value.user = {}
+      syncSessionFlags()
       return false
     }
   }
 
+  const login = async ({ email, password }) => {
+    const response = await AuthService.login(email, password)
+    setTokens(response.access, response.refresh)
+
+    active.value.user = response.user || {}
+    active.value.active = true
+    await fetchCurrentUser()
+    localStorage.setItem('last_login_email', active.value.user?.email || email)
+    syncSessionFlags()
+
+    return active.value.user
+  }
+
+  const register = async ({ email, password }) => {
+    return AuthService.register(email, password)
+  }
+
+  const refreshAccessToken = async () => {
+    const refresh = localStorage.getItem('refresh_token') || active.value.refreshToken
+
+    if (!refresh) {
+      throw new Error('refresh token not found')
+    }
+
+    const response = await AuthService.refreshToken(refresh)
+    setTokens(response.access)
+    return response.access
+  }
+
+  const verifyUser = () => {
+    const authToken = localStorage.getItem('access_token')
+    active.value.active = !!authToken
+    syncSessionFlags()
+    return active.value.active
+  }
+
   const getUser = async () => {
-    const authToken = localStorage.getItem('psg_auth_token');
-  
-    const userData = await AuthService.getUser(authToken);
-  
-    active.value.user = userData
-    active.value.user ? active.value.active = true : active.value.active = false
+    return fetchCurrentUser()
   }
 
   const getUsers = async () => {
     try {
-      const response = await AuthService.getUsers();
+      const response = await AuthService.getUsers()
       active.value.users = response
       return response
     } catch (error) {
       console.error('Error fetching users:', error)
-      throw error;
+      throw error
     }
   }
 
-  const email = computed(() => active.value.user ? active.value.user.email : '')
-
-  const activeUser = computed(() => active.value.active )
-
-  const userInfo = computed(()=> active.value.user)
-
-  // const token = localStorage.getItem('psg_auth_token')
-
-  // const verifyTokenExpires = computed(()=> {
-  //   if (!token) {
-  //     active.value.active = false
-  //     console.log('was false', token)
-  //   } else {
-  //     active.value = true
-  //     console.log('was true', token)
-  //   }
-    
-  // })
-
   const logout = () => {
-    active.value.user = {};
-    localStorage.removeItem('psg_auth_token')
-    localStorage.removeItem('psg_last_login')
-    router.push('/')
+    active.value.user = {}
     active.value.active = false
-    setTimeout(()=>{
+    active.value.users = []
+    clearTokens()
+    syncSessionFlags()
+    router.push('/')
+    setTimeout(() => {
       window.location.reload()
-    },800)
+    }, 500)
   }
 
-  return { email, users, getUsers, getUser, verifyUser, logout, activeUser, userInfo };
-});
+  return {
+    email,
+    users,
+    getUsers,
+    getUser,
+    verifyUser,
+    logout,
+    activeUser,
+    userInfo,
+    initializeAuth,
+    login,
+    register,
+    refreshAccessToken,
+  }
+})

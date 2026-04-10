@@ -12,7 +12,11 @@ defineProps({
   userPosition: {
     type: Object,
     default: null
-  }
+  },
+  maxQuestions: {
+    type: Number,
+    default: 0
+  },
 })
 
 // Função para decidir medalha
@@ -59,7 +63,7 @@ const getColor = (pos) => {
           <td class="p-4 font-medium text-start">{{ player.email }}</td>
           <td class="p-4 font-semibold text-center" :class="getColor(player.pos)">{{ player.answer_time }}s
           </td>
-          <td class="p-4 font-semibold text-center" :class="getColor(player.pos)">{{ player.score }}/30</td>
+          <td class="p-4 font-semibold text-center" :class="getColor(player.pos)">{{ player.score }}/{{player.total_questions}}</td>
         </tr>
       </tbody>
 
@@ -82,7 +86,7 @@ const getColor = (pos) => {
             {{ userPosition.answer_time }}s
           </td>
           <td class="p-4 font-semibold text-center" :class="getColor(userPosition.pos)">
-            {{ userPosition.score }}/30
+            {{ userPosition.score }}/{{userPosition.total_questions}}
           </td>
         </tr>
       </tfoot>

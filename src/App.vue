@@ -1,13 +1,11 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import { useAuthStore } from './stores';
-import { onMounted } from 'vue';
+import { useAuthStore } from './stores'
+import { onMounted } from 'vue'
 const authStore = useAuthStore()
 
-onMounted(async()=> {
-  if(authStore.verifyUser()) {
-    await authStore.getUser()
-  }
+onMounted(async () => {
+  await authStore.initializeAuth()
 })
 </script>
 
