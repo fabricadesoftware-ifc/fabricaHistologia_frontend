@@ -25,6 +25,16 @@ class AuthService {
     const { data } = await api.get('/users/')
     return data.results
   }
+
+  async forgetPassword(email) {
+    const { data } = await api.post('/users/forget/', { email })
+    return data
+  }
+
+  async recoverPassword(email, code, password) {
+    const { data } = await api.post('/users/recover/', { email, code, password })
+    return data
+  }
 }
 
 export default new AuthService()
