@@ -70,6 +70,16 @@ const submit = async () => {
           />
         </label>
 
+        <div class="flex justify-end">
+          <button
+            type="button"
+            @click="router.push('/forgot-password')"
+            class="text-sm text-slate-600 hover:text-slate-900 hover:underline"
+          >
+            Esqueceu a senha?
+          </button>
+        </div>
+
         <p v-if="errorMessage" class="text-sm text-red-600">{{ errorMessage }}</p>
 
         <button
